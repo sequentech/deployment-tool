@@ -1,0 +1,26 @@
+---
+- name: Updating packages
+  sudo: true
+  action: apt update_cache=yes
+- name: Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - git
+    - curl
+    - postgresql
+    - postgresql-server-dev-all
+    - mercurial
+    - nginx
+    - supervisor
+    - node
+    - libffi-dev
+    - uwsgi
+    - uwsgi-plugin-python
+    - virtualenvwrapper
+    - libjpeg8-dev
+    - libpq-dev
+    - python-psycopg2
+    - build-essential
+    - python-dev
+    - vim
