@@ -1,4 +1,0 @@
----
-- name: Hello task
-  sudo: true
-  shell: echo {{ config.host }} > /tmp/test.txt
