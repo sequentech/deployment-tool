@@ -15,8 +15,6 @@
     - supervisor
     - node
     - libffi-dev
-    - uwsgi
-    - uwsgi-plugin-python
     - virtualenvwrapper
     - libjpeg8-dev
     - libpq-dev

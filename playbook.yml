@@ -10,3 +10,4 @@
     - include: users.yml
     - include: commands.yml
     - include: verificatum.yml
+    - include: eorchestra.yml

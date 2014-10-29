@@ -1,0 +1,14 @@
+#!/bin/bash
+HOME=/home/eorchestra
+
+source $HOME/venv/bin/activate
+export FRESTQ_SETTINGS="base_settings.py"
+
+# https://stackoverflow.com/questions/9090683/supervisord-stopping-child-processes
+# This kills the entire process group when the main script exits, such as when it is killed by supervisord.
+# One of the processes that is usually left hanging is verificatum.
+# Note that this is suposedly already handled by supervisor, but we do it also
+# here just in case.
+trap "kill -9 -- -$$" EXIT
+
+$HOME/venv/bin/uwsgi --ini $HOME/election-orchestra/auth.ini
