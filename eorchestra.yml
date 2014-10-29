@@ -44,6 +44,8 @@
 - name: eorchestra directories creation
   sudo: true
   file: path=/srv/election-orchestra/server1/public/ recurse=yes state=directory owner=eorchestra group=users
+- name: eorchestra directories creation
+  sudo: true
   file: path=/srv/certs/ recurse=yes state=directory owner=eorchestra group=users
 
 - name: eorchestra copying certs
