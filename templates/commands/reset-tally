@@ -1,0 +1,33 @@
+#!/bin/bash
+
+SERVER_PATH=/srv/election-orchestra/server1/public
+
+if [ $1 ]
+then
+    if [ ! -d $SERVER_PATH/$1 ]
+    then
+      echo "No election dir starting name $1"
+      exit 1
+    fi
+    if [ -f ${SERVER_PATH}/$1/tally.tar.gz ]
+    then
+        rm ${SERVER_PATH}/$1/tally.tar.gz ${SERVER_PATH}/$1/tally.tar.gz.sha512
+        echo "Removed tally: ${SERVER_PATH}/$1/tally.tar.gz"
+        exit 0
+    fi
+elif [ -d $SERVER_PATH ]
+then
+    echo "Listing last tallied elections by election id:"
+    for i in $(ls -t $SERVER_PATH)
+    do
+        if [ -f ${SERVER_PATH}/${i}/tally.tar.gz ]
+        then
+            tdate=$(stat -c%y ${SERVER_PATH}/${i})
+            echo " * $i (last modified: $tdate)"
+        fi
+    done
+    exit 0
+fi
+
+echo "Not found any tally to remove"
+exit 1

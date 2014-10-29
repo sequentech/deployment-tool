@@ -1,0 +1,33 @@
+---
+- name: creating files
+  sudo: true
+  file: path={{item.path}} owner={{ item.owner }} group={{ item.group }} state={{ item.state }}
+  with_items:
+    - { path: "/srv/eotests", owner: "eorchestra", group: "users", state: directory }
+
+- name: commands
+  sudo: true
+  template: src=templates/commands/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  with_items:
+    - { script: backup_password, dest: /root/.backup_password, owner: "root", mode: "0600" }
+    - { script: create_backup.sh, dest: /usr/bin/create_backup.sh, owner: "root", mode: "0755" }
+    - { script: restore_backup.sh, dest: /usr/bin/restore_backup.sh, owner: "root", mode: "0755" }
+    - { script: eopeers, dest: /usr/bin/eopeers, owner: "root", mode: "0755" }
+    - { script: reset-tally, dest: /usr/bin/reset-tally, owner: "root", mode: "0755" }
+    - { script: eolog, dest: /usr/bin/eolog, owner: "root", mode: "0755" }
+    - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0755" }
+    - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0755" }
+    - { script: setup_agora.sh, dest: /tmp/setupa.sh, owner: "root", mode: "0755" }
+    - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0755" }
+    - { script: eotest.py, dest: /usr/bin/eotest.py, owner: "root", mode: "0755" }
+    - { script: eotasks, dest: /usr/bin/eotasks, owner: "root", mode: "0755" }
+    - { script: eotasks.py, dest: /usr/bin/eotasks.py, owner: "root", mode: "0755" }
+
+# Needed for encrypt.js
+- name: Setup agora ciudadana
+  sudo: true
+  shell: /tmp/setupa.sh
+
+- name: encrypt.js
+  sudo: true
+  template: src=templates/commands/encrypt.js dest=/srv/eotests/encrypt.js owner=root mode=0755

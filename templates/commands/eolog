@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LOG=$(ls -t /var/log/supervisor/eorchestra-stdout*.log | head -n 1)
+
+tail -n 100 -F $LOG

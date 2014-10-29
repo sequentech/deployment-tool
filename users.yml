@@ -1,0 +1,4 @@
+---
+- name: Creating eorchestra user
+  sudo: true
+  user: name=eorchestra shell=/bin/bash home=/home/eorchestra

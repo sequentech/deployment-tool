@@ -1,0 +1,3 @@
+#!/bin/bash
+source /home/eorchestra/venv/bin/activate
+/usr/bin/eotest.py $@

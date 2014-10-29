@@ -1,0 +1,26 @@
+#!/bin/bash
+
+EOPATH=/home/eorchestra/election-orchestra
+SETTINGS=$EOPATH/base_settings.py
+
+[ $(whoami) == "root" ] || (echo "Execute this as root" && exit 1)
+
+if [ "$1" == "true" ]
+then
+    grep "AUTOACCEPT_REQUESTS = True" $SETTINGS >/dev/null && echo "Autoaccepting requests is already set to TRUE, not doing anything" && exit 0
+
+    sed -i 's/AUTOACCEPT_REQUESTS = False/AUTOACCEPT_REQUESTS = True/g' $EOPATH/base_settings.py
+    echo "Autoaccepting requests set to TRUE. Restarting eorchestra.."
+    supervisorctl restart eorchestra
+    exit 0
+elif [ "$1" == "false" ]
+then
+    grep "AUTOACCEPT_REQUESTS = False" $SETTINGS >/dev/null && echo "Autoaccepting requests is already set to False, not doing anything" && exit 0
+
+    sed -i 's/AUTOACCEPT_REQUESTS = True/AUTOACCEPT_REQUESTS = False/g' $EOPATH/base_settings.py
+    echo "Autoaccepting requests set to FALSE. Restarting eorchestra.."
+    supervisorctl restart eorchestra
+    exit 0
+fi
+
+grep "AUTOACCEPT_REQUESTS = False" $SETTINGS >/dev/null && echo "Autoaccepting requests is set to FALSE" || echo "Autoaccepting requests is set to TRUE"

@@ -1,0 +1,265 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import json
+import shutil
+import subprocess
+
+PEER_LIST = "/etc/eopeers"
+VERSION = 1
+PUBLIC_IP_ADDRESS = "{{ config.public_ipaddress }}"
+PRIVATE_IP_ADDRESS = "{{ config.private_ipaddress }}"
+HOSTNAME = "{{ config.host }}"
+PORT = {{ config.port }}
+
+def _validate_package(el_json):
+    '''
+    Validates a package
+    '''
+    check_list = [
+        dict(
+            key="ssl_certificate",
+            existence="required",
+            checks=[
+                lambda val: isinstance(val, basestring) and len(val) < 10000
+            ]
+        ),
+        dict(
+            key="ip_address",
+            existence="required",
+            checks=[
+                lambda val: isinstance(val, basestring) and len(val) < 100
+            ]
+        ),
+        dict(
+            key="hostname",
+            existence="required",
+            checks=[
+                lambda val: isinstance(val, basestring) and len(val) < 100
+            ]
+        ),
+        dict(
+            key="port",
+            existence="optional",
+            checks=[
+                lambda val: isinstance(val, int) and val > 0 and val < 65536
+            ]
+        ),
+        dict(
+            key="version",
+            existence="optional",
+            checks=[
+                lambda val: isinstance(val, int) and val > 0 and val < 10000,
+                lambda val: val <= VERSION or\
+                    "Package from a incompatible version (package is version "\
+                    "%d, eopeers is version %d)" % (VERSION, val)
+            ]
+        )
+    ]
+    valid_keys = set([check['key'] for check in check_list])
+    unknown_keys = valid_keys.difference(set(el_json.keys()))
+
+    if len(unknown_keys) > 0:
+        print("Unknown keys: %s" % ", ".join(list(unknown_keys)))
+
+    for check in check_list:
+        if check['key'] not in el_json.keys():
+            if check['existence'] == 'required':
+                print("missing required key: %s" % check['key'])
+                exit(1)
+            else:
+                continue
+        data = el_json[check['key']]
+        for check_f in check['checks']:
+            check_ret = check_f(data)
+            if check_ret == True:
+                continue
+            if isinstance(check_ret, basestring):
+                print(check_ret)
+                exit(1)
+            else:
+                print("Invalid data for key %s: %s" % (check['key'], str(data)[:100]))
+                exit(1)
+
+def install(PEER_LIST, path):
+    '''
+    install the peer package by path
+    '''
+    if not os.path.exists(PEER_LIST):
+        os.mkdir(PEER_LIST)
+
+    if not os.path.isfile(path):
+        print("Could not read file: %s" % path)
+        exit(1)
+    try:
+        with open(path, 'r') as f:
+            el_json = json.loads(f.read())
+        _validate_package(el_json)
+    except:
+        print("error loading file: %s" % path)
+        import traceback
+        traceback.print_exc()
+        exit(1)
+
+    # check it's not already installed
+    bname = el_json['hostname']
+    if os.path.exists(os.path.join(PEER_LIST, bname)):
+        print("package for hostname %s already installed" % bname)
+        exit(1)
+
+    # add to hosts if needed
+    with open("/etc/hosts", "r") as f:
+        hosts_data = f.read()
+    hostline = "\n%s %s" % (el_json['ip_address'], el_json["hostname"])
+    if hostline not in hosts_data:
+        subprocess.call("echo '%s' >> /etc/hosts" % hostline, shell=True)
+
+    # add to ssl certs
+    with open("/srv/certs/selfsigned/calist", "r") as f:
+        calist_data = f.read().strip()
+    if el_json["ssl_certificate"] not in calist_data:
+        subprocess.call("echo '%s' >> /srv/certs/selfsigned/calist" %
+            el_json["ssl_certificate"], shell=True)
+
+    shutil.copyfile("/srv/certs/selfsigned/calist", "/home/eorchestra/election-orchestra/certs/selfsigned/calist")
+
+    # save peer package
+    path = os.path.join(PEER_LIST, el_json['hostname'] + ".package")
+    with open(path, 'w') as f:
+        f.write(json.dumps(el_json))
+
+def uninstall(PEER_LIST, hostname):
+    '''
+    uninstall the peer package by hostname
+    '''
+    # check it's not already installed
+    path = os.path.join(PEER_LIST, hostname + ".package")
+    if not os.path.exists(path):
+        print("package for hostname %s is not installed" % hostname)
+        exit(1)
+    try:
+        with open(path, 'r') as f:
+            el_json = json.loads(f.read())
+        _validate_package(el_json)
+    except:
+        print("error loading file: %s" % path)
+        import traceback
+        traceback.print_exc()
+        exit(1)
+
+    # remove hostname from hosts
+    with open('/etc/hosts', 'r') as f:
+        data = f.read()
+    hostline = "\n%s %s" % (el_json['ip_address'], el_json["hostname"])
+    data = data.replace(hostline, "")
+    with open('/etc/hosts', 'w') as f:
+        f.write(data)
+
+    # remove from ssl certs
+    with open('/srv/certs/selfsigned/calist', 'r') as f:
+        data = f.read()
+    data = data.replace(el_json["ssl_certificate"], "")
+    with open('/srv/certs/selfsigned/calist', 'w') as f:
+        f.write(data)
+
+    shutil.copyfile("/srv/certs/selfsigned/calist", "/home/eorchestra/election-orchestra/certs/selfsigned/calist")
+
+    # finally remove the package
+    os.unlink(path)
+
+def showmine(pargs):
+    '''
+    install the peer package by path
+    '''
+    with open('/srv/certs/selfsigned/cert.pem', 'r') as f:
+        ssl_certificate =  f.read()
+    ip = PRIVATE_IP_ADDRESS if pargs.private_ip else PUBLIC_IP_ADDRESS
+    us = {
+        "ssl_certificate": ssl_certificate,
+        "ip_address": ip,
+        "hostname": HOSTNAME,
+        "port": PORT,
+        "version": VERSION
+    }
+    print(json.dumps(us))
+
+def listall(PEER_LIST):
+    '''
+    return a list of peer packagers loaded in json
+    '''
+    if not os.path.isdir(PEER_LIST):
+        return []
+
+    l = os.listdir(PEER_LIST)
+    if len(l) == 0:
+        return []
+
+    ret = []
+    for el in l:
+        path = os.path.join(PEER_LIST, el)
+        try:
+            with open(path, 'r') as f:
+                ret.append(json.loads(f.read()))
+        except:
+            print("error loading: %s" % el)
+            import traceback
+            traceback.print_exc()
+            exit(1)
+    return ret
+
+def show_pkg(hostname):
+    '''
+    show the content of a peer package referred by hostname
+    '''
+    # check it's not already installed
+    path = os.path.join(PEER_LIST, hostname + ".package")
+    if not os.path.exists(path):
+        print("package for hostname %s is not installed" % hostname)
+        exit(1)
+    try:
+        with open(path, 'r') as f:
+            print(f.read())
+    except:
+        print("error loading file: %s" % path)
+        import traceback
+        traceback.print_exc()
+        exit(1)
+
+def main():
+    '''
+    Main function
+    '''
+    parser = argparse.ArgumentParser(prog='eopeers')
+    parser.add_argument("--list", help="list installed peer packages by hostname", action="store_true")
+    parser.add_argument('--install', nargs='+', help='install a peer package')
+    parser.add_argument('--uninstall', nargs='+', help='uninstall peer package(s) by hostname')
+    parser.add_argument('--show-mine', help='show our peer package', action="store_true")
+    parser.add_argument('--private-ip', help='together with --show-mine, uses '
+                        'private ip instead of the public one', action="store_true")
+    parser.add_argument('--show', help="show the content of an installed package "
+                        "by hostname")
+
+    pargs = parser.parse_args()
+
+    if pargs.list:
+        l = listall(PEER_LIST)
+        if len(l) == 0:
+            print("No peer package installed.")
+            exit(0)
+        print("Packages in %s:" % PEER_LIST)
+        for el in l:
+            print(" * %s" % el['hostname'])
+    elif pargs.install:
+        for path in pargs.install:
+            install(PEER_LIST, path)
+    elif pargs.uninstall:
+        for path in pargs.uninstall:
+            uninstall(PEER_LIST, path)
+    elif pargs.show_mine:
+        showmine(pargs)
+    elif pargs.show:
+        show_pkg(pargs.show)
+
+if __name__ == "__main__":
+    main()
