@@ -82,7 +82,8 @@ def grabAuthData(eopeers_dir, mypeerpkg, eopeers):
     l = os.listdir(eopeers_dir)
     if len(l) == 0:
         print("%s is an empty directory" % eopeers_dir)
-        exit(1)
+        print("one authority")
+        #exit(1)
 
     auths_data = [mypeerpkg]
     for fname in os.listdir(eopeers_dir):
