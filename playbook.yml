@@ -9,3 +9,4 @@
     - include: packages.yml
     - include: users.yml
     - include: commands.yml
+    - include: verificatum.yml

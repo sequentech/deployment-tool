@@ -24,3 +24,6 @@
     - build-essential
     - python-dev
     - vim
+    - libgmp-dev
+    - make
+    - m4
