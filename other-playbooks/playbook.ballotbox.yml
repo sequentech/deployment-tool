@@ -1,0 +1,10 @@
+---
+- hosts: all
+
+  tasks:
+    - include_vars: config.yml
+
+    - include: packages.yml
+    - include: users.yml
+    - include: agora-api.yml
+

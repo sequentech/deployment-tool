@@ -17,5 +17,5 @@
  * Agora authority:
    * election-orchestra
    * verificatum
- * Agora voting box
-   * agora-api (not yet)
+ * Agora ballotbox
+   * agora-api

@@ -1,0 +1,12 @@
+---
+- hosts: all
+
+  tasks:
+    - include_vars: config.yml
+
+    - include: java.yml
+    - include: packages.yml
+    - include: users.yml
+    - include: commands.yml
+    - include: verificatum.yml
+    - include: eorchestra.yml
