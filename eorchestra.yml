@@ -27,6 +27,10 @@
     - { f: base_settings.py, dest: /tmp/base_settings.py, owner: "eorchestra", mode: "0755" }
     - { f: setup.sh, dest: /tmp/esetup.sh, owner: "root", mode: "0755" }
 
+- name: eorchestra perms
+  sudo: true
+  file: path=/home/eorchestra group=users owner=eorchestra recurse=yes
+
 - name: eorchestra setup
   sudo: true
   sudo_user: eorchestra
