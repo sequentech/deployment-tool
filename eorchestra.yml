@@ -29,6 +29,7 @@
 
 - name: eorchestra setup
   sudo: true
+  sudo_user: eorchestra
   shell: /tmp/esetup.sh
 
 # post inst files
