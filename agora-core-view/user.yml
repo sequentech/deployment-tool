@@ -1,0 +1,4 @@
+---
+- name: AgoraCoreView, Creating default user
+  sudo: true
+  user: name=agoracore shell=/bin/bash

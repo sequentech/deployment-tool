@@ -1,0 +1,14 @@
+---
+- name: AgoraCoreView, Updating packages
+  sudo: true
+  action: apt update_cache=yes
+- name: AuthApi,  Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - wget
+    - gcc
+    - g++
+    - binutils
+    #- nodejs
+    #- npm

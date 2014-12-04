@@ -19,3 +19,5 @@
    * verificatum
  * Agora ballotbox
    * agora-api
+   * agora-core-view
+   * agoraapi

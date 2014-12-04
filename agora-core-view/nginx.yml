@@ -1,0 +1,8 @@
+---
+- name: AgoraCoreView,  Creating nginx conf
+  sudo: true
+  template: src=agora-core-view/templates/nginx.conf dest=/etc/nginx/conf.d/agoracore.conf owner="root" mode=0644
+
+- name: Restarting nginx
+  sudo: true
+  service: name=nginx state=restarted
