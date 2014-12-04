@@ -1,0 +1,7 @@
+---
+- include: packages.yml
+- include: postgres.yml
+- include: user.yml
+- include: repo.yml
+- include: supervisor.yml
+- include: nginx.yml
