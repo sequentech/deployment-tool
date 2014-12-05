@@ -1,0 +1,12 @@
+---
+- name: Downloading go (1.3.3)
+  sudo: true
+  shell: wget https://storage.googleapis.com/golang/go1.3.3.linux-amd64.tar.gz -O /tmp/go.tar.gz
+
+- name: Unzip go (1.3.3)
+  sudo: true
+  shell: tar -C /usr/local -xzf go.tar.gz chdir=/tmp/
+
+- name: Modifying PATH
+  sudo: true
+  lineinfile: dest=/etc/profile line="export PATH=$PATH:/usr/local/go/bin" state=present

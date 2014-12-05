@@ -25,4 +25,3 @@
     - libgmp-dev
     - make
     - m4
-    - golang

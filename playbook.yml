@@ -10,6 +10,7 @@
     - include: commands.yml
     - include: verificatum.yml
     - include: eorchestra.yml
+    #- include: go.yml
     #- include: agora-api.yml
     #- include: authapi/main.yml
     #- include: agora-core-view/main.yml
