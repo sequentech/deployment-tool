@@ -5,6 +5,7 @@
     - include_vars: config.yml
 
     - include: packages.yml
+    - include: go.yml
     - include: users.yml
     - include: agora-api.yml
 
