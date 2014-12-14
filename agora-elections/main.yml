@@ -55,7 +55,7 @@
 # Admin tool setup
 - name: AgoraElections, Admin chmod
   sudo: true
-  file: /home/agoraelections/agora-elections/admin/admin mode="u+x"
+  shell: chmod u+x /home/agoraelections/agora-elections/admin/admin
 - name: AgoraElections, Admin setup (1)
   sudo: true
   lineinfile: dest=/home/agoraelections/agora-elections/admin/admin
