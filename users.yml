@@ -10,8 +10,3 @@
 - name: Creating eorchestra nginx user
   sudo: true
   user: name=nginx shell=/bin/false home=/nonexistent group=nginx
-
-# Agora api user
-- name: Creating agoraapi user
-  sudo: true
-  user: name=agoraapi shell=/bin/bash home=/home/agoraapi

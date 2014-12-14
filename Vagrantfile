@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
 
         # for development setup
-        #config.vm.network "private_network", ip: "192.168.50.2"
+        config.vm.network "private_network", ip: "192.168.50.3"
     else
         config.vm.box = "dummy"
         config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
@@ -51,5 +51,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
+    ansible.verbose = "v"
   end
 end

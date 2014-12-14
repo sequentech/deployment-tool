@@ -18,6 +18,6 @@
    * election-orchestra
    * verificatum
  * Agora ballotbox
-   * agora-api
+   * auth-api
    * agora-core-view
-   * agoraapi
+   * agora-elections

@@ -1,0 +1,73 @@
+---
+- include: packages.yml
+
+- name: AgoraElections, Creating default user
+  sudo: true
+  user: name=agoraelections shell=/bin/bash
+
+# Installing play framework
+- name: AgoraElections, Installing play framework
+  sudo: true
+  get_url: url=http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
+           dest=/home/agoraelections/activator.zip
+
+- name: AgoraElections, Installing play framework (unzip)
+  sudo: true
+  shell: unzip /home/agoraelections/activator.zip
+         chdir=/home/agoraelections
+
+- name: AgoraElections, Installing play framework (PATH)
+  sudo: true
+  lineinfile: dest=/home/agoraelections/.bashrc line="export PATH=$PATH:~/activator-1.2.12-minimal" state=present
+
+
+# Getting the repo
+- name: AgoraElections, Git clone
+  sudo: true
+  sudo_user: agoraelections
+  git: repo=https://github.com/agoravoting/agora_elections.git
+       dest=/home/agoraelections/agora-elections
+
+- include: postgres.yml
+
+# Config files
+- name: AgoraElections, Default conf
+  sudo: true
+  template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
+- name: AgoraElections, Test conf
+  sudo: true
+  template: src=agora-elections/templates/test.local.conf dest=/home/agoraelections/agora-elections/conf/test.local.conf owner="agoraelections" mode=0644
+
+# Key store set up
+- name: AgoraElections, Key store setup (1)
+  sudo: true
+  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:supersecret"
+         chdir=/home/agoraelections/
+- name: AgoraElections, Key store setup (2)
+  sudo: true
+  shell: keytool -importkeystore -deststorepass supersecret -destkeypass supersecret -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass supersecret -alias client
+         chdir=/home/agoraelections/
+#- name: AgoraElections, Key store setup (3)
+#  sudo: true
+#  shell: yes | keytool -import -file /home/eorchestra/election-orchestra/certs/selfsigned/cert.pem -keystore keystore.jks -storepass supersecret
+#         chdir=/home/agoraelections/
+
+# Admin tool setup
+- name: AgoraElections, Admin chmod
+  sudo: true
+  file: /home/agoraelections/agora-elections/admin/admin mode="u+x"
+- name: AgoraElections, Admin setup (1)
+  sudo: true
+  lineinfile: dest=/home/agoraelections/agora-elections/admin/admin
+              line="shared_secret = '<PASSWORD>'" state=present
+- name: AgoraElections, Admin setup (2)
+  sudo: true
+  lineinfile: dest=/home/agoraelections/agora-elections/admin/admin
+              line="shared_secret = 'hohoho'" state=absent
+
+# Run script
+- name: AgoraElections, Run script
+  sudo: true
+  template: src=agora-elections/templates/run.sh dest=/home/agoraelections/run.sh owner="agoraelections" mode=0744
+
+#- include: nginx.yml
