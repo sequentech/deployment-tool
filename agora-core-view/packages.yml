@@ -2,7 +2,7 @@
 - name: AgoraCoreView, Updating packages
   sudo: true
   action: apt update_cache=yes
-- name: AuthApi,  Installing packages
+- name: AgoraCoreView, Installing packages
   sudo: true
   action: apt pkg={{item}} state=installed
   with_items:
