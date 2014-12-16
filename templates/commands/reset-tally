@@ -11,7 +11,7 @@ then
     fi
     if [ -f ${SERVER_PATH}/$1/tally.tar.gz ]
     then
-        rm ${SERVER_PATH}/$1/tally.tar.gz ${SERVER_PATH}/$1/tally.tar.gz.sha512
+        rm ${SERVER_PATH}/$1/tally.tar.gz ${SERVER_PATH}/$1/tally.tar.gz.sha256
         echo "Removed tally: ${SERVER_PATH}/$1/tally.tar.gz"
         exit 0
     fi
