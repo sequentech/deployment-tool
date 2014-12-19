@@ -23,14 +23,16 @@ C=ES
 ST=Madrid
 L=Madrid
 O=Agoravoting
-OU=CongresoTransparente
+OU=Agora_Voting_SL
 HOST=${1:-`hostname`}
 CN=${1:-`hostname`}
-EMAIL=info@congresotransparente.com
+EMAIL=agora@agoravoting.com
 
-rm $EORCHESTRA_DIR/election-orchestra/certs/selfsigned/*
 cd $EORCHESTRA_DIR/election-orchestra/certs/selfsigned/
-openssl req -nodes -x509 -newkey rsa:4096 -keyout key-nopass.pem -out cert.pem -days 365 <<EOF
+
+if [ ! -f $EORCHESTRA_DIR/election-orchestra/certs/selfsigned/cert.pem ]
+then
+  openssl req -nodes -x509 -newkey rsa:4096 -keyout key-nopass.pem -out cert.pem -days 365 <<EOF
 ${C}
 ${ST}
 ${L}
@@ -39,5 +41,7 @@ ${OU}
 ${CN}
 ${EMAIL}
 EOF
+fi
 
 cp cert.pem calist
+

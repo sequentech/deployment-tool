@@ -8,16 +8,19 @@
 # Installing play framework
 - name: AgoraElections, Installing play framework
   sudo: true
+  sudo_user: agoraelections
   get_url: url=http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
            dest=/home/agoraelections/activator.zip
 
 - name: AgoraElections, Installing play framework (unzip)
   sudo: true
-  shell: unzip /home/agoraelections/activator.zip
+  sudo_user: agoraelections
+  shell: rm -rf /home/agoraelections/activator-1.2.12-minimal; unzip /home/agoraelections/activator.zip
          chdir=/home/agoraelections
 
 - name: AgoraElections, Installing play framework (PATH)
   sudo: true
+  sudo_user: agoraelections
   lineinfile: dest=/home/agoraelections/.bashrc line="export PATH=$PATH:~/activator-1.2.12-minimal" state=present
 
 
@@ -33,41 +36,56 @@
 # Config files
 - name: AgoraElections, Default conf
   sudo: true
+  sudo_user: agoraelections
   template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
 - name: AgoraElections, Test conf
   sudo: true
+  sudo_user: agoraelections
   template: src=agora-elections/templates/test.local.conf dest=/home/agoraelections/agora-elections/conf/test.local.conf owner="agoraelections" mode=0644
 
 # Key store set up
 - name: AgoraElections, Key store setup (1)
   sudo: true
+  sudo_user: agoraelections
   shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:supersecret"
          chdir=/home/agoraelections/
 - name: AgoraElections, Key store setup (2)
   sudo: true
-  shell: keytool -importkeystore -deststorepass supersecret -destkeypass supersecret -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass supersecret -alias client
+  sudo_user: agoraelections
+  shell: yes | keytool -importkeystore -deststorepass supersecret -destkeypass supersecret -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass supersecret -alias client
          chdir=/home/agoraelections/
-#- name: AgoraElections, Key store setup (3)
-#  sudo: true
-#  shell: yes | keytool -import -file /home/eorchestra/election-orchestra/certs/selfsigned/cert.pem -keystore keystore.jks -storepass supersecret
-#         chdir=/home/agoraelections/
 
 # Admin tool setup
 - name: AgoraElections, Admin chmod
   sudo: true
-  shell: chmod u+x /home/agoraelections/agora-elections/admin/admin
+  sudo_user: agoraelections
+  shell: chmod u+x /home/agoraelections/agora-elections/admin/admin.py
 - name: AgoraElections, Admin setup (1)
   sudo: true
-  lineinfile: dest=/home/agoraelections/agora-elections/admin/admin
-              line="shared_secret = '<PASSWORD>'" state=present
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
+              regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections_shared_secret}}'"
 - name: AgoraElections, Admin setup (2)
   sudo: true
-  lineinfile: dest=/home/agoraelections/agora-elections/admin/admin
-              line="shared_secret = 'hohoho'" state=absent
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
+              regexp="db_password = .*$" replace="db_password = '{{config.agora_elections_db_password}}'"
+
 
 # Run script
 - name: AgoraElections, Run script
   sudo: true
+  sudo_user: agoraelections
   template: src=agora-elections/templates/run.sh dest=/home/agoraelections/run.sh owner="agoraelections" mode=0744
 
-#- include: nginx.yml
+- include: nginx.yml
+
+- name: AgoraElections, supervisor file
+  sudo: true
+  template: src=agora-elections/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  with_items:
+    - { f: agora-elections.conf, dest: /etc/supervisor/conf.d/agora-elections.conf, owner: "root", mode: "0644" }
+
+- name: AgoraElections, restarting supervisor
+  sudo: true
+  service: name=supervisor state=restarted

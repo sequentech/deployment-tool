@@ -2,7 +2,7 @@
 - name: AgoraElections, Create Database User
   sudo: true
   sudo_user: postgres
-  postgresql_user: user=agora_elections password=agora_elections port=5432
+  postgresql_user: user=agora_elections password="{{config.agora_elections_db_password}}" port=5432
 
 - name: AgoraElections, Create Database
   sudo: true
