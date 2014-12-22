@@ -7,5 +7,5 @@
     - include: packages.yml
     - include: go.yml
     - include: users.yml
-    - include: agora-api.yml
+    - include: agora-elections.yml
 

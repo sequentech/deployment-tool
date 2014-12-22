@@ -5,4 +5,4 @@
 
 - name: Restarting supervisord
   sudo: true
-  service: name=supervisor state=restarted
+  service: name=supervisor state=restarted sleep=2

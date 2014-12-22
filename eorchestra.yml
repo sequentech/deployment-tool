@@ -63,7 +63,7 @@
 
 - name: restarting services
   sudo: true
-  service: name={{ item }} state=restarted
+  service: name={{ item }} state=restarted sleep=2
   with_items:
     - supervisor
     - nginx
