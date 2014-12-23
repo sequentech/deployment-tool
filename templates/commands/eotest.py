@@ -57,7 +57,7 @@ def getTallyData(mypeerpkg):
         "callback_url": "http://" + localServer + ":" + str(localPort) + "/receive_tally",
         "extra": [],
         "votes_url": "http://" + localServer + ":" + str(localPort) + "/",
-        "votes_hash": "sha512://"
+        "votes_hash": "khmac:///sha-256;"
     }
 
 

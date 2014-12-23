@@ -43,6 +43,21 @@
   sudo_user: agoraelections
   template: src=agora-elections/templates/test.local.conf dest=/home/agoraelections/agora-elections/conf/test.local.conf owner="agoraelections" mode=0644
 
+- name: AgoraElections, datastore dir
+  sudo: true
+  sudo_user: agoraelections
+  file: path=/home/agoraelections/datastore state=directory owner=agoraelections group=agoraelections
+
+- name: AgoraElections, public datastore dir
+  sudo: true
+  sudo_user: agoraelections
+  file: path=/home/agoraelections/datastore/public state=directory owner=agoraelections group=agoraelections recurse=true
+
+- name: AgoraElections, private datastore dir
+  sudo: true
+  sudo_user: agoraelections
+  file: path=/home/agoraelections/datastore/private state=directory owner=agoraelections group=agoraelections
+
 # Key store set up
 - name: AgoraElections, Key store setup (1)
   sudo: true
@@ -54,6 +69,11 @@
   sudo_user: agoraelections
   shell: yes | keytool -importkeystore -deststorepass supersecret -destkeypass supersecret -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass supersecret -alias client
          chdir=/home/agoraelections/
+
+- name: AgoraElections, Key store setup (3)
+  sudo: true
+  sudo_user: agoraelections
+  shell: echo "supersecret" | keytool -import -file /srv/certs/selfsigned/cert.pem -keystore keystore.jks; echo
 
 # Admin tool setup
 - name: AgoraElections, Admin chmod
@@ -71,6 +91,11 @@
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
               regexp="db_password = .*$" replace="db_password = '{{config.agora_elections_db_password}}'"
 
+# Package
+- name: AgoraElections, activator clean & stage
+  sudo: true
+  sudo_user: agoraelections
+  shell: /home/agoraelections/activator-1.2.12-minimal/activator clean; /home/agoraelections/activator-1.2.12-minimal/activator stage chdir=/home/agoraelections/agora-elections
 
 # Run script
 - name: AgoraElections, Run script

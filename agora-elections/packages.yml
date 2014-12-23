@@ -2,8 +2,19 @@
 - name: AgoraElections, Updating packages
   sudo: true
   action: apt update_cache=yes
+
 - name: AgoraElections, Installing packages
   sudo: true
   action: apt pkg={{item}} state=installed
   with_items:
     - unzip
+
+- name: AgoraElections,  Creating admin virtualenv
+  sudo: true
+  sudo_user: agoraelections
+  shell: virtualenv -p /usr/bin/python2 /home/agoraelections/env
+
+- name: AgoraElections, installing admin requirements
+  sudo: true
+  sudo_user: agoraelections
+  shell: /home/agoraelections/env/bin/pip install -r requirements.txt chdir=/home/agoraelections/agora-elections/admin
