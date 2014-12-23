@@ -41,7 +41,7 @@ ${OU}
 ${CN}
 ${EMAIL}
 EOF
+  cp cert.pem calist
 fi
 
-cp cert.pem calist
 
