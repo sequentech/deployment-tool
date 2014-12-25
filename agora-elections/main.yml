@@ -31,6 +31,16 @@
   git: repo=https://github.com/agoravoting/agora_elections.git
        dest=/home/agoraelections/agora-elections
 
+- name: AgoraElections,  Creating admin virtualenv
+  sudo: true
+  sudo_user: agoraelections
+  shell: virtualenv -p /usr/bin/python2 /home/agoraelections/env
+
+- name: AgoraElections, installing admin requirements
+  sudo: true
+  sudo_user: agoraelections
+  shell: /home/agoraelections/env/bin/pip install -r requirements.txt chdir=/home/agoraelections/agora-elections/admin
+
 - include: postgres.yml
 
 # Config files
