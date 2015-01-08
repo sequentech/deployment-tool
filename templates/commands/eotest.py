@@ -3,6 +3,7 @@
 import requests
 import json
 import time
+import random
 
 import BaseHTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
@@ -129,22 +130,26 @@ def getStartData(eopeers_dir, mypeerpkg, eopeers):
         "title": "Test election",
         "url": "https://example.com/election/url",
         "description": "election description",
-        "questions_data": [{
-            "question": "Who Should be President?",
-            "tally_type": "ONE_CHOICE",
-            # "answers": ["Alice", "Bob"],
+        "questions": [{
+            "title": "Who Should be President?",
+            "description": "Who Should be President?",
+            "tally_type": "plurality-at-large",
             "answers": [
                 {'a': 'ballot/answer',
                 'details': '',
-                'value': 'Alice'},
+                'id': 0,
+                'urls': [],
+                'text': 'Alice'},
                 {'a': 'ballot/answer',
                 'details': '',
-                'value': 'Bob'}
+                'id': 1,
+                'urls': [],
+                'text': 'Bob'}
             ],
             "max": 1, "min": 0
         }],
-        "voting_start_date": "2013-12-06T18:17:14.457000",
-        "voting_end_date": "2013-12-09T18:17:14.457000",
+        "start_date": "2013-12-06T18:17:14.457000",
+        "end_date": "2013-12-09T18:17:14.457000",
         "authorities": grabAuthData(eopeers_dir, mypeerpkg, eopeers)
     }
 
@@ -240,8 +245,8 @@ def startServer(port):
     thread.start()
 
 def startElection(electionId, url, data):
-    data['election_id'] = electionId
-    print("> Creating election " + electionId)
+    data['id'] = electionId
+    print("> Creating election %s" % electionId)
     cv.done = False
     r = requests.post(url, data=json.dumps(data), verify=False, cert=(CERT, KEY))
     print("> " + str(r))
@@ -442,7 +447,7 @@ full: does the whole process''')
     command = args.command[0]
     if hasattr(__main__, command):
         if(command == 'create') or (command == 'full'):
-            args.electionId = str(time.time()).replace(".", "")
+            args.electionId = random.randint(100, 10000)
         elif(len(args.command) == 2):
             args.electionId = args.command[1]
         else:
