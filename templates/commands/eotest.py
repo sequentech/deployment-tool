@@ -5,6 +5,9 @@ import json
 import time
 import random
 
+from functools import partial
+from base64 import urlsafe_b64encode
+
 import BaseHTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
@@ -58,7 +61,7 @@ def getTallyData(mypeerpkg):
         "callback_url": "http://" + localServer + ":" + str(localPort) + "/receive_tally",
         "extra": [],
         "votes_url": "http://" + localServer + ":" + str(localPort) + "/",
-        "votes_hash": "khmac:///sha-256;"
+        "votes_hash": "ni:///sha-256;"
     }
 
 
@@ -194,12 +197,13 @@ def hash_file(file_path):
     Returns the hexdigest of the hash of the contents of a file, given the file
     path.
     '''
-    hash = hashlib.sha512()
+    hash = hashlib.sha256()
     f = open(os.path.join(DATA_DIR, file_path), 'r')
-    for chunk in f.read(BUF_SIZE):
+    for chunk in iter(partial(f.read, BUF_SIZE), b''):
         hash.update(chunk)
     f.close()
-    return hash.hexdigest()
+    return urlsafe_b64encode(hash.digest())
+
 
 def writeVotes(votesData, fileName):
     # forms/election.py:save
@@ -245,7 +249,7 @@ def startServer(port):
     thread.start()
 
 def startElection(electionId, url, data):
-    data['id'] = electionId
+    data['id'] = int(electionId)
     print("> Creating election %s" % electionId)
     cv.done = False
     r = requests.post(url, data=json.dumps(data), verify=False, cert=(CERT, KEY))
@@ -274,7 +278,7 @@ def waitForPublicKey():
 def doTally(electionId, url, data, votesFile, hash):
     data['votes_url'] = data['votes_url'] + votesFile
     data['votes_hash'] = data['votes_hash'] + hash
-    data['election_id'] = electionId
+    data['election_id'] = int(electionId)
     # print("> Tally post with " + json.dumps(data))
     print("> Requesting tally..")
     cv.done = False
@@ -447,7 +451,7 @@ full: does the whole process''')
     command = args.command[0]
     if hasattr(__main__, command):
         if(command == 'create') or (command == 'full'):
-            args.electionId = random.randint(100, 10000)
+            args.electionId = str(random.randint(100, 10000))
         elif(len(args.command) == 2):
             args.electionId = args.command[1]
         else:
