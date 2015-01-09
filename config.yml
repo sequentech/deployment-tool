@@ -15,9 +15,9 @@ config:
   agora_elections_db_password: '<PASSWORD>'
   agora_elections_shared_secret: '<PASSWORD>'
   agora_elections_expiry: 60000
-  agora_elections_domain: agoravoting.dev
+  agora_elections_domain: dev.agoravoting.com
   agora_elections_port: 14443
 
   # agora-core-view
-  agora_core_view_domain: agoravoting.dev2
+  agora_core_view_domain: dev.agoravoting.com
   agora_core_view_port: 14444

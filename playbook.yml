@@ -11,5 +11,5 @@
     - include: verificatum.yml
     - include: eorchestra.yml
     - include: agora-elections/main.yml
-    #- include: authapi/main.yml
+    - include: authapi/main.yml
     - include: agora-core-view/main.yml
