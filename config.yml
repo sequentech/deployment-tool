@@ -17,6 +17,7 @@ config:
   agora_elections_expiry: 60000
   agora_elections_domain: dev.agoravoting.com
   agora_elections_port: 14443
+  keystore_pass: supersecret
 
   # agora-core-view
   agora_core_view_domain: dev.agoravoting.com

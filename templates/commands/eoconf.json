@@ -4,5 +4,6 @@
     "PUBLIC_IP_ADDRESS": "{{ config.public_ipaddress }}",
     "PRIVATE_IP_ADDRESS": "{{ config.private_ipaddress }}",
     "HOSTNAME": "{{ config.host }}",
-    "PORT": {{ config.port }}
+    "PORT": {{ config.port }},
+    "KEYSTORE_PASS": {{ config.keystore_pass }}
 }

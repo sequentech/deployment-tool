@@ -72,18 +72,18 @@
 - name: AgoraElections, Key store setup (1)
   sudo: true
   sudo_user: agoraelections
-  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:supersecret"
+  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.keystore_pass }}"
          chdir=/home/agoraelections/
 - name: AgoraElections, Key store setup (2)
   sudo: true
   sudo_user: agoraelections
-  shell: yes | keytool -importkeystore -deststorepass supersecret -destkeypass supersecret -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass supersecret -alias client
+  shell: yes | keytool -importkeystore -deststorepass {{ config.keystore_pass }} -destkeypass {{ config.keystore_pass }} -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass {{ config.keystore_pass }} -alias client
          chdir=/home/agoraelections/
 
 #- name: AgoraElections, Key store setup (3)
 #  sudo: true
 #  sudo_user: agoraelections
-#  shell: echo "supersecret" | keytool -import -file /srv/certs/selfsigned/cert.pem -keystore keystore.jks; echo
+#  shell: echo "{{ config.keystore_pass }}" | keytool -import -file /srv/certs/selfsigned/cert.pem -keystore keystore.jks; echo
 
 # Admin tool setup
 - name: AgoraElections, Admin chmod
