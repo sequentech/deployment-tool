@@ -1,0 +1,8 @@
+{
+    "PEER_LIST": "/etc/eopeers",
+    "VERSION": 1,
+    "PUBLIC_IP_ADDRESS": "{{ config.public_ipaddress }}",
+    "PRIVATE_IP_ADDRESS": "{{ config.private_ipaddress }}",
+    "HOSTNAME": "{{ config.host }}",
+    "PORT": {{ config.port }}
+}
