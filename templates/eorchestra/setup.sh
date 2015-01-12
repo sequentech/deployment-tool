@@ -3,12 +3,7 @@
 EORCHESTRA_DIR=/home/eorchestra
 VENV_DIR=$EORCHESTRA_DIR/venv
 
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-
-cd $EORCHESTRA_DIR 
-git clone https://github.com/agoravoting/frestq
-git clone https://github.com/agoravoting/election-orchestra
+cd $EORCHESTRA_DIR
 source $VENV_DIR/bin/activate
 pip install setuptools==2.2
 cd $EORCHESTRA_DIR/frestq

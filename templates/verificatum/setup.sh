@@ -2,8 +2,6 @@
 
 EORCHESTRA_DIR=/home/eorchestra
 
-cd $EORCHESTRA_DIR 
-sudo -u eorchestra git clone https://github.com/agoravoting/verificatum
 cd $EORCHESTRA_DIR/verificatum
 sudo -u eorchestra make clean
 # TODO: we need a real fix for this, in the future when we have more time..

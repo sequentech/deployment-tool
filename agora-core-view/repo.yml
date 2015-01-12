@@ -34,7 +34,7 @@
 - name: AgoraCoreView, Git clone
   sudo: true
   sudo_user: agoracore
-  git: repo=https://github.com/agoravoting/agora-core-view.git
+  git: repo={{ repos.agoracore.repo }} version={{ repos.agoracore.version }}
        dest=/home/agoracore/agora-core-view
 
 - name: AgoraCoreView, npm install

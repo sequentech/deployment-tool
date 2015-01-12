@@ -28,7 +28,7 @@
 - name: AgoraElections, Git clone
   sudo: true
   sudo_user: agoraelections
-  git: repo=https://github.com/agoravoting/agora_elections.git
+  git: repo={{ repos.aelections.repo }} version={{ repos.aelections.version }}
        dest=/home/agoraelections/agora-elections
 
 - name: AgoraElections,  Creating admin virtualenv

@@ -1,7 +1,7 @@
 ---
 - name: Downloading agora-tools
   sudo: true
-  git: repo=https://github.com/agoravoting/agora-tools.git
+  git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
        dest=/srv/agora-tools
 
 - name: copying tools to /usr/bin
@@ -30,15 +30,15 @@
     - { script: eolog, dest: /usr/bin/eolog, owner: "root", mode: "0755" }
     - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0755" }
     - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0755" }
-    - { script: setup_agora.sh, dest: /tmp/setupa.sh, owner: "root", mode: "0755" }
     - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0755" }
     - { script: eotasks, dest: /usr/bin/eotasks, owner: "root", mode: "0755" }
     - { script: eopeers, dest: /usr/bin/eopeers, owner: "root", mode: "0755" }
 
 # Needed for encrypt.js
-- name: Setup agora ciudadana
+- name: Setup agora ciuadana
   sudo: true
-  shell: /tmp/setupa.sh
+  git: repo={{ repos.aciudadana.repo }} version={{ repos.aciudadana.version }}
+       dest=/srv/eotests/agora-ciudadana
 
 - name: encrypt.js
   sudo: true

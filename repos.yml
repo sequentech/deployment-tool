@@ -1,0 +1,26 @@
+---
+repos:
+    agoracore:
+        repo: https://github.com/agoravoting/agora-core-view.git
+        version: master
+    aelections:
+        repo: https://github.com/agoravoting/agora_elections.git
+        version: master
+    authapi:
+        repo: https://github.com/agoravoting/authapi.git
+        version: master
+    atools:
+        repo: https://github.com/agoravoting/agora-tools.git
+        version: master
+    fresq:
+        repo: https://github.com/agoravoting/frestq
+        version: master
+    eorchestra:
+        repo: https://github.com/agoravoting/election-orchestra
+        version: master
+    aciudadana:
+        repo: https://github.com/agoravoting/agora-ciudadana.git
+        version: security
+    verificatum:
+        repo: https://github.com/agoravoting/verificatum
+        version: master

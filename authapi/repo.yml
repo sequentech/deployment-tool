@@ -2,7 +2,8 @@
 - name: AuthApi,  Downloading the project
   sudo: true
   sudo_user: authapi
-  git: repo=https://github.com/agoravoting/authapi.git dest=/home/authapi/authapi accept_hostkey=True
+  git: repo={{ repos.authapi.repo }} version={{ repos.authapi.version }}
+       dest=/home/authapi/authapi
 
 - name: AuthApi,  Creating the virtualenv
   sudo: true

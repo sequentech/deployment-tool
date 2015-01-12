@@ -18,8 +18,15 @@
   sudo: true
   shell: /tmp/rsetup.sh
 
-# setup
+- name: Downloading fresq and election-orchestra
+  sudo: true
+  git: repo={{ item.repo.repo }} version={{ item.repo.version }}
+       dest=/home/eorchestra/{{ item.dest }}
+  with_items:
+    - { repo: { repo: "{{ repos.fresq.repo }}", version: "{{ repos.fresq.version }}" }, dest: fresq }
+    - { repo: { repo: "{{ repos.eorchestra.repo }}", version: "{{ repos.eorchestra.version }}" }, dest: election-orchestra }
 
+# setup
 - name: eorchestra setup files
   sudo: true
   template: src=templates/eorchestra/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
