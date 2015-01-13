@@ -1,13 +1,13 @@
 #!/bin/bash
 
-C=ES
-ST=Madrid
-L=Madrid
-O=Agoravoting
-OU=Agora_Voting_SL
+C={{ config.cert.C }}
+ST={{ config.cert.ST }}
+L={{ config.cert.L }}
+O={{ config.cert.O }}
+OU={{ config.cert.OU }}
 HOST=${1:-`hostname`}
 CN=${1:-`hostname`}
-EMAIL=agora@agoravoting.com
+EMAIL={{ config.cert.EMAIL }}
 
 cd /srv/certs/selfsigned/
 CERT_PATH=/srv/certs/selfsigned/cert.pem

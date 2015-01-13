@@ -22,3 +22,11 @@ config:
   # agora-core-view
   agora_core_view_domain: dev.agoravoting.com
   agora_core_view_port: 14444
+
+  cert:
+    C: ES
+    ST: Madrid
+    L: Madrid
+    O: Agoravoting
+    OU: Agora_Voting_SL
+    EMAIL: agora@agoravoting.com
