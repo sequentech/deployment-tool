@@ -1,9 +1,9 @@
 ---
 - include: users.yml
+- include: commands.yml
+- include: postgres.yml
 - include: repo.yml
 - include: verificatum.yml
-- include: postgres.yml
-- include: commands.yml
 
 - name: eorchestra extra package
   sudo: true
