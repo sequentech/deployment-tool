@@ -1,5 +1,5 @@
 ---
-- name: Downloading fresq and election-orchestra
+- name: Downloading fresq, election-orchestra and verificatum
   sudo: true
   sudo_user: eorchestra
   git: repo={{ item.repo.repo }} version={{ item.repo.version }}
@@ -7,6 +7,7 @@
   with_items:
     - { repo: { repo: "{{ repos.fresq.repo }}", version: "{{ repos.fresq.version }}" }, dest: fresq }
     - { repo: { repo: "{{ repos.eorchestra.repo }}", version: "{{ repos.eorchestra.version }}" }, dest: election-orchestra }
+    - { repo: { repo: "{{ repos.verificatum.repo }}", version: "{{ repos.verificatum.version }}" }, dest: verificatum }
 
 # Needed for encrypt.js eotest for eotest
 # TODO remove this dependency

@@ -1,10 +1,4 @@
 ---
-- name: Cloning verificatum
-  sudo: true
-  sudo_user: eorchestra
-  git: repo={{ repos.verificatum.repo }} version={{ repos.verificatum.version }}
-       dest=/home/eorchestra/verificatum
-
 - name: verificatum vsetup.sh
   sudo: true
   template: src=eorchestra/templates/verificatum/setup.sh dest=/tmp/vsetup.sh owner=root mode=0755
