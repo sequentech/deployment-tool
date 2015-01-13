@@ -7,6 +7,14 @@
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
 
+- name: Creating nginx group
+  sudo: true
+  group: name=nginx state=present
+
+- name: Creating nginx user
+  sudo: true
+  user: name=nginx shell=/bin/false home=/nonexistent group=nginx
+
 - name: cert directories creation
   sudo: true
   file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users

@@ -2,11 +2,3 @@
 - name: Creating eorchestra user
   sudo: true
   user: name=eorchestra shell=/bin/bash home=/home/eorchestra
-
-#- name: Creating eorchestra nginx group
-#  sudo: true
-#  group: name=nginx state=present
-#
-#- name: Creating eorchestra nginx user
-#  sudo: true
-#  user: name=nginx shell=/bin/false home=/nonexistent group=nginx
