@@ -23,13 +23,8 @@
   sudo_user: agoraelections
   lineinfile: dest=/home/agoraelections/.bashrc line="export PATH=$PATH:~/activator-1.2.12-minimal" state=present
 
-
 # Getting the repo
-- name: AgoraElections, Git clone
-  sudo: true
-  sudo_user: agoraelections
-  git: repo={{ repos.aelections.repo }} version={{ repos.aelections.version }}
-       dest=/home/agoraelections/agora-elections
+- include: repo.yml
 
 - name: AgoraElections,  Creating admin virtualenv
   sudo: true
@@ -79,11 +74,6 @@
   sudo_user: agoraelections
   shell: yes | keytool -importkeystore -deststorepass {{ config.keystore_pass }} -destkeypass {{ config.keystore_pass }} -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass {{ config.keystore_pass }} -alias client
          chdir=/home/agoraelections/
-
-#- name: AgoraElections, Key store setup (3)
-#  sudo: true
-#  sudo_user: agoraelections
-#  shell: echo "{{ config.keystore_pass }}" | keytool -import -file /srv/certs/selfsigned/cert.pem -keystore keystore.jks; echo
 
 # Admin tool setup
 - name: AgoraElections, Admin chmod
