@@ -3,10 +3,10 @@
 
   tasks:
     - include_vars: config.yml
+    - include_vars: repos.yml
 
     - include: java.yml
     - include: packages.yml
-    - include: users.yml
-    - include: commands.yml
-    - include: verificatum.yml
-    - include: eorchestra.yml
+    - include: system.yml
+    - include: agora-tools/main.yml
+    - include: eorchestra/main.yml

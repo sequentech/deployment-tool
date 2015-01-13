@@ -26,8 +26,8 @@ PUBLIC_DATA_PATH = '/srv/election-orchestra/server1/public'
 PUBLIC_DATA_BASE_URL = 'https://{{ config.host }}:{{ config.port }}/public_data'
 
 # security configuration
-SSL_CERT_PATH = '%s/certs/selfsigned/cert.pem' % ROOT_PATH
-SSL_KEY_PATH = '%s/certs/selfsigned/key-nopass.pem' % ROOT_PATH
+SSL_CERT_PATH = '/srv/certs/selfsigned/cert.pem'
+SSL_KEY_PATH = '/srv/certs/selfsigned/key-nopass.pem'
 ALLOW_ONLY_SSL_CONNECTIONS = True
 AUTOACCEPT_REQUESTS = {{ config.auto_mode }}
 

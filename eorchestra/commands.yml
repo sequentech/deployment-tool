@@ -1,0 +1,19 @@
+---
+- name: commands
+  sudo: true
+  template: src=eorchestra/templates/commands/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  with_items:
+    - { script: create_backup.sh, dest: /usr/bin/create_backup.sh, owner: "root", mode: "0755" }
+    - { script: restore_backup.sh, dest: /usr/bin/restore_backup.sh, owner: "root", mode: "0755" }
+    - { script: reset-tally, dest: /usr/bin/reset-tally, owner: "root", mode: "0755" }
+    - { script: eolog, dest: /usr/bin/eolog, owner: "root", mode: "0755" }
+    - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0755" }
+    - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0755" }
+
+- name: creating /srv/eotests
+  sudo: true
+  file: path="/srv/eotests" owner="eorchestra" group="users" state=directory
+
+- name: encrypt.js
+  sudo: true
+  template: src=eorchestra/templates/commands/encrypt.js dest=/srv/eotests/encrypt.js owner=root mode=0755

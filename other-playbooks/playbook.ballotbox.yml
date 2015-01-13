@@ -4,8 +4,8 @@
   tasks:
     - include_vars: config.yml
 
+    - include: system.yml
+    - include: java.yml
     - include: packages.yml
-    - include: go.yml
-    - include: users.yml
-    - include: agora-elections.yml
-
+    - include: agora-tools/main.yml
+    - include: agora-elections/main.yml

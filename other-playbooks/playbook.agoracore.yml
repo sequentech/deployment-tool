@@ -3,5 +3,7 @@
 
   tasks:
     - include_vars: config.yml
+    - include_vars: repos.yml
 
+    - include: system.yml
     - include: agora-core-view/main.yml

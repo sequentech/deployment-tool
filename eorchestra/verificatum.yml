@@ -7,7 +7,7 @@
 
 - name: verificatum vsetup.sh
   sudo: true
-  template: src=templates/verificatum/setup.sh dest=/tmp/vsetup.sh owner=root mode=0755
+  template: src=eorchestra/templates/verificatum/setup.sh dest=/tmp/vsetup.sh owner=root mode=0755
 
 - name: Verificatum install
   sudo: true

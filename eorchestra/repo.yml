@@ -1,0 +1,17 @@
+---
+- name: Downloading fresq and election-orchestra
+  sudo: true
+  sudo_user: eorchestra
+  git: repo={{ item.repo.repo }} version={{ item.repo.version }}
+       dest=/home/eorchestra/{{ item.dest }}
+  with_items:
+    - { repo: { repo: "{{ repos.fresq.repo }}", version: "{{ repos.fresq.version }}" }, dest: fresq }
+    - { repo: { repo: "{{ repos.eorchestra.repo }}", version: "{{ repos.eorchestra.version }}" }, dest: election-orchestra }
+
+# Needed for encrypt.js eotest for eotest
+# TODO remove this dependency
+- name: Agora ciudadana repo clone
+  sudo: true
+  sudo_user: eorchestra
+  git: repo={{ repos.aciudadana.repo }} version={{ repos.aciudadana.version }}
+       dest=/srv/eotests/agora-ciudadana

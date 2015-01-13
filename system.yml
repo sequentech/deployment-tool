@@ -1,0 +1,23 @@
+---
+- name: hostname
+  sudo: true
+  hostname: name={{ config.host }}
+
+- name: private ip in /etc/hosts
+  sudo: true
+  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
+
+- name: cert directories creation
+  sudo: true
+  file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users
+
+- name: self-signed certificate creation
+  sudo: true
+  template: src=templates/cert.sh
+            dest=/root/cert.sh
+            owner=root mode=0755
+
+- name: self-signed certificate creation
+  sudo: true
+  shell: "/root/cert.sh"
+

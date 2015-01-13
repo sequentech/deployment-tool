@@ -1,0 +1,61 @@
+---
+- include: users.yml
+- include: verificatum.yml
+- include: postgres.yml
+- include: commands.yml
+- include: repo.yml
+
+- name: eorchestra extra package
+  sudo: true
+  sudo_user: eorchestra
+  pip: name={{item}} virtualenv=/home/eorchestra/venv state=present
+  with_items:
+    - uwsgi
+    - setuptools
+
+- name: fresq python packages
+  sudo: true
+  sudo_user: eorchestra
+  pip: virtualenv=/home/eorchestra/venv state=present
+       requirements=/home/eorchestra/fresq/requirements.txt
+
+- name: eorchestra python packages
+  sudo: true
+  sudo_user: eorchestra
+  pip: virtualenv=/home/eorchestra/venv state=present
+       requirements=/home/eorchestra/election-orchestra/requirements.txt
+
+- name: eorchestra settings
+  sudo: true
+  template: src=eorchestra/templates/base_settings.py
+            dest=/home/eorchestra/election-orchestra/base_settings.py
+            owner=eorchestra mode=0755
+
+- name: eorchestra createdb
+  sudo: true
+  sudo_user: eorchestra
+  shell: export FRESTQ_SETTINGS=base_settings.py; /home/eorchestra/venv/bin/python app.py --createdb
+         chdir=/home/eorchestra/election-orchestra
+
+# post inst files
+- name: eorchestra postinst files
+  sudo: true
+  template: src=eorchestra/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  with_items:
+    - { f: auth.ini, dest: /home/eorchestra/election-orchestra/auth.ini, owner: "eorchestra", mode: "0644" }
+    - { f: launch.sh, dest: /home/eorchestra/launch.sh, owner: "eorchestra", mode: "0755" }
+    - { f: nginx.conf, dest: /etc/nginx/nginx.conf, owner: "root", mode: "0644" }
+    - { f: election-orchestra.conf, dest: /etc/supervisor/conf.d/election-orchestra.conf, owner: "root", mode: "0644" }
+
+- name: eorchestra directories creation
+  sudo: true
+  file: path={{ item }} recurse=yes state=directory owner=eorchestra group=users
+  with_items:
+    - /srv/election-orchestra/server1/public/
+
+- name: restarting services
+  sudo: true
+  service: name={{ item }} state=restarted sleep=2
+  with_items:
+    - supervisor
+    - nginx
