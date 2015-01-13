@@ -27,22 +27,30 @@
  * Modify the config.yml
  * use the auth playbook:
 
+```
     $ cp other-playbooks/playbook.auth.yml playbook.yml
+```
 
  * Run the ansible (with vagrant or with an inventory):
 
+```
     $ vagrant up
+```
 
  * ssh to your deployed auth and link with other authorities with eopeers:
 
+```
     $ vagrant ssh
     # eopeers --show-mine
     # eopeers --install authx.pkg
     # eopeers --list
+```
 
  * Run the eotest to check that authorities are well connected:
 
+```
     # eotest full --vmnd --vcount 100
+```
 
  * If all is ok you should get an output like this:
 ```
