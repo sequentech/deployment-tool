@@ -3,6 +3,10 @@
   sudo: true
   template: src=authapi/templates/supervisor.conf dest=/etc/supervisor/conf.d/authapi.conf owner="root" mode=0644
 
+- name: Creating celery supervisord conf
+  sudo: true
+  template: src=authapi/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/authapi_celery.conf owner="root" mode=0644
+
 - name: Restarting supervisord
   sudo: true
   service: name=supervisor state=restarted sleep=2
