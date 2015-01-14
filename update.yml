@@ -1,0 +1,12 @@
+---
+- hosts: all
+
+  tasks:
+    - include_vars: config.yml
+    - include_vars: repos.yml
+
+    #- include: agora-tools/update.yml
+    #- include: eorchestra/update.yml
+    #- include: agora-elections/update.yml
+    - include: authapi/update.yml
+    - include: agora-core-view/update.yml
