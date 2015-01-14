@@ -1,0 +1,15 @@
+---
+- name: AgoraCoreView, npm install
+  sudo: true
+  sudo_user: agoracore
+  shell: npm install chdir=/home/agoracore/agora-core-view
+
+- name: AgoraCoreView, bower install
+  sudo: true
+  sudo_user: agoracore
+  shell: bower install chdir=/home/agoracore/agora-core-view
+
+- name: AgoraCoreView, grunt build
+  sudo: true
+  sudo_user: agoracore
+  shell: grunt build chdir=/home/agoracore/agora-core-view
