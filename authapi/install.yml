@@ -1,0 +1,40 @@
+---
+- include: repo.yml
+
+- name: AuthApi,  Creating deploy settings
+  sudo: true
+  template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi owner=authapi mode=0644
+
+- name: AuthApi,  Creating uwsgi settings
+  sudo: true
+  template: src=authapi/templates/uwsgi.ini dest=/home/authapi/uwsgi.ini owner=authapi mode=0644
+
+- name: AuthApi,  Admin user
+  sudo: true
+  template: src=authapi/templates/admin.json dest=/home/authapi/admin.json owner=authapi mode=0644
+
+- name: AuthApi, Creates webstatic directory
+  sudo: true
+  sudo_user: authapi
+  file: path=/home/authapi/webstatic state=directory
+
+- name: AuthApi, Creating the virtualenv
+  sudo: true
+  sudo_user: authapi
+  shell: virtualenv -p /usr/bin/python3 /home/authapi/env
+
+- name: AuthApi, Installing python uwsgi, psycopg2
+  sudo: true
+  sudo_user: authapi
+  shell: /home/authapi/env/bin/pip install uwsgi psycopg2
+
+- include: djangoapp.yml
+
+- name: AuthApi,  Admin user (2)
+  sudo: true
+  sudo_user: authapi
+  django_manage: command=loaddata fixtures=/home/authapi/admin.json
+  args:
+    app_path: /home/authapi/authapi/authapi
+    virtualenv: /home/authapi/env
+    settings: "authapi.deploy"

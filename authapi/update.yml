@@ -1,0 +1,10 @@
+---
+- include: repo.yml
+- include: djangoapp.yml
+
+- name: Restarting service
+  sudo: true
+  supervisorctl: name={{ item }} state=restarted
+  with_items:
+    - authapi
+    - authapi_celery
