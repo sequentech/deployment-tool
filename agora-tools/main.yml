@@ -1,16 +1,6 @@
 ---
-- name: Downloading agora-tools
-  sudo: true
-  git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
-       dest=/srv/agora-tools
-
-- name: copying tools to /usr/bin
-  sudo: true
-  shell: cp /srv/agora-tools/{{item}} /usr/bin/ && chmod a+x /usr/bin/{{item}}
-  with_items:
-    - eotasks.py
-    - eotest.py
-    - eopeers.py
+- include: repo.yml
+- include: copy.yml
 
 - name: commands
   sudo: true

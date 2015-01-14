@@ -1,0 +1,8 @@
+---
+- name: copying tools to /usr/bin
+  sudo: true
+  shell: cp /srv/agora-tools/{{item}} /usr/bin/ && chmod a+x /usr/bin/{{item}}
+  with_items:
+    - eotasks.py
+    - eotest.py
+    - eopeers.py

@@ -1,0 +1,5 @@
+---
+- name: Downloading agora-tools
+  sudo: true
+  git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
+       dest=/srv/agora-tools
