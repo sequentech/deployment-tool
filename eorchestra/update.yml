@@ -1,0 +1,9 @@
+---
+- include: repo.yml
+- include: app.yml
+
+- name: Restarting eorchestra service
+  sudo: true
+  supervisorctl: name={{ item }} state=restarted
+  with_items:
+    - eorchestra

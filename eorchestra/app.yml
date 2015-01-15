@@ -1,0 +1,13 @@
+---
+- name: fresq python packages
+  sudo: true
+  sudo_user: eorchestra
+  pip: virtualenv=/home/eorchestra/venv state=present
+       requirements=/home/eorchestra/fresq/requirements.txt
+
+- name: eorchestra python packages
+  sudo: true
+  sudo_user: eorchestra
+  pip: virtualenv=/home/eorchestra/venv state=present
+       requirements=/home/eorchestra/election-orchestra/requirements.txt
+
