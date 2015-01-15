@@ -1,0 +1,20 @@
+---
+# Installing play framework
+- name: AgoraElections, Installing play framework
+  sudo: true
+  sudo_user: agoraelections
+  get_url: url=http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
+           dest=/home/agoraelections/activator.zip
+
+- name: AgoraElections, Installing play framework (unzip)
+  sudo: true
+  sudo_user: agoraelections
+  shell: rm -rf /home/agoraelections/activator-1.2.12-minimal; unzip /home/agoraelections/activator.zip
+         chdir=/home/agoraelections
+
+- name: AgoraElections, Installing play framework (PATH)
+  sudo: true
+  sudo_user: agoraelections
+  lineinfile: dest=/home/agoraelections/.bashrc line="export PATH=$PATH:~/activator-1.2.12-minimal" state=present
+
+

@@ -1,0 +1,7 @@
+---
+# Package
+- name: AgoraElections, activator clean & stage
+  sudo: true
+  sudo_user: agoraelections
+  shell: /home/agoraelections/activator-1.2.12-minimal/activator clean; /home/agoraelections/activator-1.2.12-minimal/activator stage
+         chdir=/home/agoraelections/agora-elections

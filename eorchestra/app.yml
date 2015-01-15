@@ -10,4 +10,3 @@
   sudo_user: eorchestra
   pip: virtualenv=/home/eorchestra/venv state=present
        requirements=/home/eorchestra/election-orchestra/requirements.txt
-

@@ -5,38 +5,10 @@
   sudo: true
   user: name=agoraelections shell=/bin/bash
 
-# Installing play framework
-- name: AgoraElections, Installing play framework
-  sudo: true
-  sudo_user: agoraelections
-  get_url: url=http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
-           dest=/home/agoraelections/activator.zip
-
-- name: AgoraElections, Installing play framework (unzip)
-  sudo: true
-  sudo_user: agoraelections
-  shell: rm -rf /home/agoraelections/activator-1.2.12-minimal; unzip /home/agoraelections/activator.zip
-         chdir=/home/agoraelections
-
-- name: AgoraElections, Installing play framework (PATH)
-  sudo: true
-  sudo_user: agoraelections
-  lineinfile: dest=/home/agoraelections/.bashrc line="export PATH=$PATH:~/activator-1.2.12-minimal" state=present
-
-# Getting the repo
-- include: repo.yml
-
-- name: AgoraElections,  Creating admin virtualenv
-  sudo: true
-  sudo_user: agoraelections
-  shell: virtualenv -p /usr/bin/python2 /home/agoraelections/env
-
-- name: AgoraElections, installing admin requirements
-  sudo: true
-  sudo_user: agoraelections
-  shell: /home/agoraelections/env/bin/pip install -r requirements.txt chdir=/home/agoraelections/agora-elections/admin
-
+- include: playframework.yml
 - include: postgres.yml
+- include: repo.yml
+- include: admin.yml
 
 # Config files
 - name: AgoraElections, Default conf
@@ -91,11 +63,7 @@
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
               regexp="db_password = .*$" replace="db_password = '{{config.agora_elections_db_password}}'"
 
-# Package
-- name: AgoraElections, activator clean & stage
-  sudo: true
-  sudo_user: agoraelections
-  shell: /home/agoraelections/activator-1.2.12-minimal/activator clean; /home/agoraelections/activator-1.2.12-minimal/activator stage chdir=/home/agoraelections/agora-elections
+- include: app.yml
 
 # Run script
 - name: AgoraElections, Run script

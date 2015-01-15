@@ -1,0 +1,6 @@
+---
+- name: AgoraElections, installing admin requierements
+  sudo: true
+  sudo_user: agoraelections
+  pip: virtualenv=/home/agoraelections/env state=present
+       requirements=/home/agoraelections/agora-elections/admin/requirements.txt
