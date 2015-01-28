@@ -1,0 +1,20 @@
+---
+- name: AgoraResults, Git clone
+  sudo: true
+  sudo_user: agoraelections
+  git: repo={{ repos.results.repo }} version={{ repos.results.version }}
+       dest=/home/agoraelections/agora-results
+
+- name: AgoraResults virtualenv
+  sudo: true
+  sudo_user: agoraelections
+  pip: executable=pip3
+       virtualenv=/home/agoraelections/renv
+       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
+       requirements=/home/agoraelections/agora-results/requirements.txt
+
+- name: AgoraResults, results.sh
+  sudo: true
+  template: src=agora-elections/templates/results.sh
+            dest=/home/agoraelections/agora-elections/admin/results.sh
+            owner="agoraelections" mode=0755

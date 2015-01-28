@@ -6,6 +6,9 @@ repos:
     aelections:
         repo: https://github.com/agoravoting/agora_elections.git
         version: master
+    results:
+        repo: https://github.com/agoravoting/agora-results.git
+        version: master
     authapi:
         repo: https://github.com/agoravoting/authapi.git
         version: master

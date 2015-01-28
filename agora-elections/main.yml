@@ -9,6 +9,7 @@
 - include: postgres.yml
 - include: repo.yml
 - include: admin.yml
+- include: results.yml
 
 # Config files
 - name: AgoraElections, Default conf
