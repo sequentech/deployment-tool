@@ -1,0 +1,29 @@
+---
+- name: authapi url config
+  sudo: true
+  sudo_user: authapi
+
+- name: authapi url config
+  sudo: true
+  lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py
+              line="ROOT_URLCONF = 'custom_urls'"
+              state=present
+
+- name: Restarting authapi service
+  sudo: true
+  supervisorctl: name={{ item }} state=restarted
+  with_items:
+    - authapi
+    - authapi_celery
+
+- name: authapi custom_urls.py
+  sudo: true
+  template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
+
+- name: All in one nginx
+  sudo: true
+  template: src=oneserver/templates/oneserver.conf dest=/etc/nginx/conf.d/oneserver.conf owner="root" mode=0644
+
+- name: Restarting nginx
+  sudo: true
+  service: name=nginx state=restarted
