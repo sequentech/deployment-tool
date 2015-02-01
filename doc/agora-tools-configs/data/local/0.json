@@ -1,0 +1,57 @@
+{
+    "authorities": [
+        "local-auth2"
+    ],
+    "description": "(Test) \n\nTest election",
+    "director": "local-auth1",
+    "end_date": "2015-01-27T16:00:00.001",
+    "id": 0,
+    "layout": "",
+    "presentation": {
+        "share_text": "",
+        "theme": "default",
+        "theme_css": "",
+        "urls": []
+    },
+    "questions": [
+        {
+            "answer_total_votes_percentage": "over-total-valid-votes",
+            "answers": [
+                {
+                    "category": "",
+                    "details": "",
+                    "id": 0,
+                    "sort_order": 0,
+                    "text": "Option A",
+                    "urls": []
+                },
+                {
+                    "category": "",
+                    "details": "",
+                    "id": 1,
+                    "sort_order": 1,
+                    "text": "Option B",
+                    "urls": []
+                },
+                {
+                    "category": "",
+                    "details": "",
+                    "id": 2,
+                    "sort_order": 2,
+                    "text": "Option C",
+                    "urls": []
+                }
+            ],
+            "description": "(Test) \n\nTest question",
+            "layout": "simple",
+            "max": 1,
+            "min": 1,
+            "num_winners": 1,
+            "randomize_answer_order": true,
+            "tally_type": "plurality-at-large",
+            "title": "This is a test question"
+        }
+    ],
+    "start_date": "2015-01-26T16:00:00.001",
+    "title": "(Test) Test Election"
+}
