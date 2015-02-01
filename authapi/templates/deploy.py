@@ -17,3 +17,5 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+SHARED_SECRET = b'{{config.agora_elections_shared_secret}}'
