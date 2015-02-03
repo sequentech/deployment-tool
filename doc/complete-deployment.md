@@ -55,9 +55,9 @@ Now we've three basic ubuntu machines connected with this ips:
 
 So you should add this to your /etc/hosts to be able to access:
 
-echo "192.168.50.2 local-auth1" >> /etc/hosts
-echo "192.168.50.3 local-auth2" >> /etc/hosts
-echo "192.168.50.4 agora" >> /etc/hosts
+    echo "192.168.50.2 local-auth1" >> /etc/hosts
+    echo "192.168.50.3 local-auth2" >> /etc/hosts
+    echo "192.168.50.4 agora" >> /etc/hosts
 
 ## Authorities server
 
