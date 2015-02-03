@@ -114,14 +114,15 @@ To test the authorities real connection there's a tool installed, so after
 the certificate installation you can run the test command:
 
     $ cd auth1
-    auth1 $ eotest full --vmnd --vcount 100
+    auth1 $ vagrant ssh
+    local-auth1 $ eotest full --vmnd --vcount 100
 
 To view the software working in the other authority you can use the eolog
 in other terminal.
 
     $ cd auth2
     auth2 $ vagrant ssh
-    auth2 $ sudo eolog
+    local-auth2 $ sudo eolog
 
 ## Agora server
 
@@ -175,7 +176,7 @@ authorities to our eopeers.
     agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/root/auth1.pkg
     agora $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/root/auth2.pkg
     agora $ vagrant ssh
-    agora $ sudo eopeers --install /root/auth1.pkg
+    agora $ sudo eopeers --install /root/auth1.pkg --keystore /home/agoraelections/keystore.jks
     agora $ sudo eopeers --install /root/auth2.pkg
     agora $ sudo /etc/init.d/nginx restart
     agora $ exit
