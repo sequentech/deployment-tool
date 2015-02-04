@@ -146,7 +146,7 @@ authorities to our eopeers.
     $ cd auth1
     auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
     auth1 $ vagrant ssh
-    local-auth1 $ sudo eopeers --install home/vagrant/agora.pkg
+    local-auth1 $ sudo eopeers --install /home/vagrant/agora.pkg
     local-auth1 $ sudo service nginx restart
     local-auth1 $ exit
 
