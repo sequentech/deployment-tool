@@ -124,7 +124,7 @@ in other terminal.
     auth2 $ vagrant ssh
     local-auth2 $ sudo eolog
 
-## Agora server
+## Agora server (part 1)
 
     $ cd agora
     agora $ cp doc/agora.config.yml config.yml
@@ -133,21 +133,6 @@ in other terminal.
 
     agora $ vagrant ssh
     agora $ sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null
-
-    agora $ sudo supervisorctl stop agora-elections
-    agora $ sudo su - agoraelections
-    agora $ cd /home/agoraelections/agora-elections
-    agora $ ../activator-1.2.12-minimal/activator run
-
-Then you should go to the following url in your local browser:
-http://agora/elections/api/election/1
-Then the agora\_elections database will be created and we can continue
-configuring this server.
-
-    agora $ ../activator-1.2.12-minimal/activator clean stage
-    agora $ sudo supervisorctl start agora-elections
-    agora $ exit
-
     agora $ exit
 
     agora $ scp -F vagrant.ssh.config default:/home/vagrant/agora.pkg agora.pkg
@@ -166,9 +151,9 @@ authorities to our eopeers.
     local-auth1 $ exit
 
     $ cd auth2
-    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:home/vagrant/agora.pkg
+    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
     auth2 $ vagrant ssh
-    local-auth2 $ sudo eopeers --install home/vagrant/agora.pkg
+    local-auth2 $ sudo eopeers --install /home/vagrant/agora.pkg
     local-auth2 $ sudo service nginx restart
     local-auth2 $ exit
 
@@ -179,6 +164,28 @@ authorities to our eopeers.
     agora $ sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks
     agora $ sudo eopeers --install /home/vagrant/auth2.pkg
     agora $ sudo service nginx restart
+    agora $ exit
+
+
+## Agora server (part 2)
+
+    cd agora
+    agora $ vagrant ssh
+    agora $ sudo supervisorctl stop agora-elections
+    agora $ sudo su - agoraelections
+    agora $ cd /home/agoraelections/agora-elections
+    agora $ ../activator-1.2.12-minimal/activator run
+
+Then you should go to the following url in your local browser:
+
+    http://agora:9000/elections/api/election/1
+
+It should return a 404, but that will also create the agora\_elections database
+and we can continue configuring this server.
+
+    agora $ ../activator-1.2.12-minimal/activator clean stage
+    agora $ exit
+    agora $ sudo supervisorctl start agora-elections
     agora $ exit
 
 There we go, so currently we've a complete agora-voting installation and
@@ -193,13 +200,14 @@ Download agora-tools and make it work:
 
     $ git clone https://github.com/agoravoting/agora-tools.git
     $ cd agora-tools
-    agora-tools $ mkvirtualenv -p /usr/bin/python3 atools
+    agora-tools $ mkvirtualenv -p $(which python3) agora-tools
     agora-tools $ pip install -r requirements.txt
-    agora-tools $ cp ../agora-dev-box/doc/agora-tools-configs/ localconfs
+    agora-tools $ cp -r ../agora-dev-box/doc/agora-tools-configs/ localconfs
 
 Then you can edit the local election data, be sure to change at least the
-census file localconfs/data/local/0.census and add real emails.
-agora-tools $ ./agora-admin.py -C localconfs/local.email.json -c localconfs/data/local/
+census file localconfs/data/local/0.census.json and add real emails.
+
+    agora-tools $ ./agora-admin.py -C localconfs/local.email.json -c localconfs/data/local/
 
 This should create the election and will give you the election id. The
 first time the election id should be 1.
@@ -207,7 +215,7 @@ first time the election id should be 1.
 Then you can open your broswer and make the rest of the election using the
 admin:
 
-http://agora/#/admin/login
+    http://agora/#/admin/login
 
 Use the default credentials:
 
