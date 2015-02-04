@@ -7,6 +7,7 @@
   action: apt pkg={{item}} state=installed
   with_items:
     - git
+    - htop
     - curl
     - postgresql
     - postgresql-server-dev-all
