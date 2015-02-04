@@ -115,7 +115,7 @@ the certificate installation you can run the test command:
 
     $ cd auth1
     auth1 $ vagrant ssh
-    local-auth1 $ eotest full --vmnd --vcount 100
+    local-auth1 $ sudo eotest full --vmnd --vcount 100
 
 To view the software working in the other authority you can use the eolog
 in other terminal.
