@@ -69,7 +69,7 @@ same for deploy this two authorities.
     auth1 $ cp doc/auth.playbook.yml playbook.yml
     auth1 $ vagrant provision
     auth1 $ vagrant ssh
-    local-auth1 $ sudo eopeers --show-mine > /root/auth1.pkg
+    local-auth1 $ sudo sh -c "eopeers --show-mine > /root/auth1.pkg"
     local-auth1 $ exit
     auth1 $ scp -F vagrant.ssh.config default:/root/auth1.pkg auth1.pkg
 
@@ -78,7 +78,7 @@ same for deploy this two authorities.
     auth2 $ cp doc/auth.playbook.yml playbook.yml
     auth2 $ vagrant provision
     auth2 $ vagrant ssh
-    local-auth2 $ sudo eopeers --show-mine > /root/auth2.pkg
+    local-auth2 $ sudo sh -c "eopeers --show-mine > /root/auth2.pkg"
     local-auth2 $ exit
     auth2 $ scp -F vagrant.ssh.config default:/root/auth2.pkg auth2.pkg
 
@@ -132,7 +132,7 @@ in other terminal.
     agora $ vagrant provision
 
     agora $ vagrant ssh
-    agora $ sudo eopeers --show-mine > /root/agora.pkg
+    agora $ sudo sh -c "eopeers --show-mine > /root/agora.pkg"
 
     agora $ sudo supervisorctl stop agora-elections
     agora $ sudo su - agoraelections
