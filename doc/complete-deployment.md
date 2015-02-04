@@ -100,13 +100,13 @@ certificate sharing with eopeers tool.
     auth1 $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/home/vagrant/auth2.pkg
     auth1 $ vagrant ssh
     auth1 $ sudo eopeers --install /home/vagrant/auth2.pkg
-    auth1 $ sudo /etc/init.d/nginx restart
+    auth1 $ sudo service nginx restart
 
     $ cd auth2
     auth2 $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/home/vagrant/auth1.pkg
     auth2 $ vagrant ssh
     auth2 $ sudo eopeers --install /home/vagrant/auth1.pkg
-    auth2 $ sudo /etc/init.d/nginx restart
+    auth2 $ sudo service nginx restart
 
 ### Test the authorities connection
 
@@ -162,14 +162,14 @@ authorities to our eopeers.
     auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
     auth1 $ vagrant ssh
     local-auth1 $ sudo eopeers --install home/vagrant/agora.pkg
-    local-auth1 $ sudo /etc/init.d/nginx restart
+    local-auth1 $ sudo service nginx restart
     local-auth1 $ exit
 
     $ cd auth2
     auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:home/vagrant/agora.pkg
     auth2 $ vagrant ssh
     local-auth2 $ sudo eopeers --install home/vagrant/agora.pkg
-    local-auth2 $ sudo /etc/init.d/nginx restart
+    local-auth2 $ sudo service nginx restart
     local-auth2 $ exit
 
     $ cd agora
@@ -178,7 +178,7 @@ authorities to our eopeers.
     agora $ vagrant ssh
     agora $ sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks
     agora $ sudo eopeers --install /home/vagrant/auth2.pkg
-    agora $ sudo /etc/init.d/nginx restart
+    agora $ sudo service nginx restart
     agora $ exit
 
 There we go, so currently we've a complete agora-voting installation and
