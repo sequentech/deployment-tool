@@ -69,18 +69,18 @@ same for deploy this two authorities.
     auth1 $ cp doc/auth.playbook.yml playbook.yml
     auth1 $ vagrant provision
     auth1 $ vagrant ssh
-    local-auth1 $ sudo sh -c "eopeers --show-mine > /root/auth1.pkg"
+    local-auth1 $ sudo eopeers --show-mine | tee /home/vagrant/auth1.pkg >/dev/null
     local-auth1 $ exit
-    auth1 $ scp -F vagrant.ssh.config default:/root/auth1.pkg auth1.pkg
+    auth1 $ scp -F vagrant.ssh.config default:/home/vagrant/auth1.pkg auth1.pkg
 
     $ cd auth2
     auth2 $ cp doc/auth2.config.yml config.yml
     auth2 $ cp doc/auth.playbook.yml playbook.yml
     auth2 $ vagrant provision
     auth2 $ vagrant ssh
-    local-auth2 $ sudo sh -c "eopeers --show-mine > /root/auth2.pkg"
+    local-auth2 $ sudo eopeers --show-mine | tee /home/vagrant/auth2.pkg >/dev/null
     local-auth2 $ exit
-    auth2 $ scp -F vagrant.ssh.config default:/root/auth2.pkg auth2.pkg
+    auth2 $ scp -F vagrant.ssh.config default:/home/vagrant/auth2.pkg auth2.pkg
 
 Then we've these two servers running with all authority software installed
 and running.
@@ -97,15 +97,15 @@ The deployment script creates a certificate for each authority in
 certificate sharing with eopeers tool.
 
     $ cd auth1
-    auth1 $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/root/auth2.pkg
+    auth1 $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/home/vagrant/auth2.pkg
     auth1 $ vagrant ssh
-    auth1 $ sudo eopeers --install /root/auth2.pkg
+    auth1 $ sudo eopeers --install /home/vagrant/auth2.pkg
     auth1 $ sudo /etc/init.d/nginx restart
 
     $ cd auth2
-    auth2 $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/root/auth1.pkg
+    auth2 $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/home/vagrant/auth1.pkg
     auth2 $ vagrant ssh
-    auth2 $ sudo eopeers --install /root/auth1.pkg
+    auth2 $ sudo eopeers --install /home/vagrant/auth1.pkg
     auth2 $ sudo /etc/init.d/nginx restart
 
 ### Test the authorities connection
@@ -132,7 +132,7 @@ in other terminal.
     agora $ vagrant provision
 
     agora $ vagrant ssh
-    agora $ sudo sh -c "eopeers --show-mine > /root/agora.pkg"
+    agora $ sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null
 
     agora $ sudo supervisorctl stop agora-elections
     agora $ sudo su - agoraelections
@@ -150,7 +150,7 @@ configuring this server.
 
     agora $ exit
 
-    agora $ scp -F vagrant.ssh.config default:/root/agora.pkg agora.pkg
+    agora $ scp -F vagrant.ssh.config default:/home/vagrant/agora.pkg agora.pkg
 
 ### Connecting agora server with authorities
 
@@ -159,25 +159,25 @@ user local-auth1 as the director authority, but we need to add all
 authorities to our eopeers.
 
     $ cd auth1
-    auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/root/agora.pkg
+    auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
     auth1 $ vagrant ssh
-    local-auth1 $ sudo eopeers --install /root/agora.pkg
+    local-auth1 $ sudo eopeers --install home/vagrant/agora.pkg
     local-auth1 $ sudo /etc/init.d/nginx restart
     local-auth1 $ exit
 
     $ cd auth2
-    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/root/agora.pkg
+    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:home/vagrant/agora.pkg
     auth2 $ vagrant ssh
-    local-auth2 $ sudo eopeers --install /root/agora.pkg
+    local-auth2 $ sudo eopeers --install home/vagrant/agora.pkg
     local-auth2 $ sudo /etc/init.d/nginx restart
     local-auth2 $ exit
 
     $ cd agora
-    agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/root/auth1.pkg
-    agora $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/root/auth2.pkg
+    agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/home/vagrant/auth1.pkg
+    agora $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/home/vagrant/auth2.pkg
     agora $ vagrant ssh
-    agora $ sudo eopeers --install /root/auth1.pkg --keystore /home/agoraelections/keystore.jks
-    agora $ sudo eopeers --install /root/auth2.pkg
+    agora $ sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks
+    agora $ sudo eopeers --install /home/vagrant/auth2.pkg
     agora $ sudo /etc/init.d/nginx restart
     agora $ exit
 
