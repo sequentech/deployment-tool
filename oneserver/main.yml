@@ -1,10 +1,6 @@
 ---
 - name: authapi url config
   sudo: true
-  sudo_user: authapi
-
-- name: authapi url config
-  sudo: true
   lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py
               line="ROOT_URLCONF = 'custom_urls'"
               state=present
