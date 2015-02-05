@@ -4,3 +4,21 @@
   sudo_user: agoracore
   git: repo={{ repos.agoracore.repo }} version={{ repos.agoracore.version }}
        dest=/home/agoracore/agora-core-view
+
+- name: AgoraCoreView, config setup (baseUrl)
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="baseUrl: \"[^\"]+\"" replace="baseUrl: \"http://{{config.agora_elections_domain}}/elections/api/\""'
+
+- name: AgoraCoreView, config setup (authAPI)
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="authAPI: \"[^\"]+\"" replace="authAPI: \"http://{{config.agora_elections_domain}}/authapi/api/\""'
+
+- name: AgoraCoreView, config setup (electionsAPI)
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="electionsAPI: \"[^\"]+\"" replace="electionsAPI: \"http://{{config.agora_elections_domain}}/elections/api/\""'
