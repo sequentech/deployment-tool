@@ -219,7 +219,7 @@ admin:
 
 Use the default credentials:
 
-    email: agora@agoravoting.com
+    email: admin@agoravoting.com
     password: 123
 
 Then you should view the list of elections you have. You can go to the
