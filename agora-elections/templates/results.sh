@@ -2,8 +2,9 @@
 # ./results.sh -t tally.tar.gz -c config.json -s
 
 # fixes errors on non-ascii characters
-declare -x LANG="en_GB.UTF-8"
-declare -x LANGUAGE="en_GB:en"
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
 AGORA_RESULTS=/home/agoraelections/agora-results
 VENV=/home/agoraelections/renv
