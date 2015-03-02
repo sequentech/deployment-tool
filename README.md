@@ -82,3 +82,33 @@ using the following authorities:
 > Downloading tally from https://agoravoting-eovm3:5000/public_data/1880/tally.tar.gz
 > Downloading to /srv/eotest/data/1880.tar.gz
 ```
+
+
+# License
+
+Copyright (C) 2015 Agora Voting SL and/or its subsidiary(-ies).
+Contact: legal@agoravoting.com
+
+This file is part of the agora-core-view module of the Agora Voting project.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+Commercial License Usage
+Licensees holding valid commercial Agora Voting project licenses may use this
+file in accordance with the commercial license agreement provided with the
+Software or, alternatively, in accordance with the terms contained in
+a written agreement between you and Agora Voting SL. For licensing terms and
+conditions and further information contact us at legal@agoravoting.com .
+
+GNU Affero General Public License Usage
+Alternatively, this file may be used under the terms of the GNU Affero General
+Public License version 3 as published by the Free Software Foundation and
+appearing in the file LICENSE.AGPL3 included in the packaging of this file, or
+alternatively found in <http://www.gnu.org/licenses/>.
+
+External libraries
+This program distributes libraries from external sources. If you follow the
+compilation process you'll download these libraries and their respective
+licenses, which are compatible with our licensing.
