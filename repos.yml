@@ -9,6 +9,12 @@ repos:
     results:
         repo: https://github.com/agoravoting/agora-results.git
         version: master
+    openstv:
+        repo: https://github.com/agoravoting/openstv.git
+        version: master
+    tally:
+        repo: https://github.com/agoravoting/agora-tally.git
+        version: master
     authapi:
         repo: https://github.com/agoravoting/authapi.git
         version: master

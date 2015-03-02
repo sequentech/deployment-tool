@@ -18,6 +18,8 @@
 - include: admin.yml
 - include: app.yml
 
+- include: results.yml
+
 - name: Restarting agora-elections service
   sudo: true
   supervisorctl: name={{ item }} state=restarted

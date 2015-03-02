@@ -1,0 +1,2 @@
+-e git+{{ repos.openstv.repo }}@{{ repos.openstv.version }}#egg=openstv
+-e git+{{ repos.tally.repo }}@{{ repos.tally.version }}#egg=agora-tally
