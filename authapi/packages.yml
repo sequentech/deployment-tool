@@ -8,6 +8,7 @@
   with_items:
     - nginx
     - git
+    - libfreetype6-dev
     - virtualenvwrapper
     - postgresql
     - supervisor
