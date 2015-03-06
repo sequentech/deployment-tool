@@ -9,7 +9,7 @@
  * Remote server:
     * Create a inventory file with one server per line
       (http://docs.ansible.com/intro_inventory.html)
-    * Run the playbook:
+    * Run the playbook (NOTE: it requires at least ansible version 1.7.2!):
     $ ansible-playbook -i inventory playbook.yml
 
 ## This script deploys:
