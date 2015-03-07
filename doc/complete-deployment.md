@@ -85,6 +85,34 @@ same for deploy this two authorities.
 Then we've these two servers running with all authority software installed
 and running.
 
+### Reconfiguring locales
+
+This step is only needed if you found an error on the previous step when executing 'vagrant provision'. If when you executed 'vagrant provision' you got this kind of error:
+
+    TASK: [Election orchestra, Create Database User] ****************************** 
+    failed: [default] => {"failed": true}
+    msg: unable to connect to database: could not connect to server: No such file or directory
+            Is the server running locally and accepting
+            connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?
+            
+Then you should reconfigure the locales configuration:
+
+    vagrant ssh
+    sudo su
+    locale
+
+That command will show you all the locales you need to install, then you will do something similar to:
+
+    locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
+    dpkg-reconfigure locales
+    psql --version
+    pg_createcluster 9.3 main
+    /etc/init.d/postgresql start
+    exit
+    exit
+
+Now you should be able to execute 'vagrant provision' without errors.
+
 ### Connecting auth1 with auth2
 
 Authorities talks to other authorities using ssl and client certificate so
