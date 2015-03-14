@@ -1,8 +1,11 @@
-[
-    {
-        "email": "emailone@test.com"
-    },
-    {
-        "email": "emailtwo@test.com"
-    }
-]
+{
+    "census":
+        [
+            {
+                "email": "emailone@test.com"  
+            },
+            { 
+                "email": "emailtwo@test.com"  
+            }
+        ]
+}
