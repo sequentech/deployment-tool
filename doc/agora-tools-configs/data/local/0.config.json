@@ -1,5 +1,6 @@
 {
     "auth_method": "email",
     "auth_method_config": {},
+    "census": "open",
     "extra_fields": []
 }

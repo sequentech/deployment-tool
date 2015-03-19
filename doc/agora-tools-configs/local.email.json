@@ -18,8 +18,10 @@
   "agora_elections_private_datastore_path": "/home/agoraelections/agora-elections/datastore/private/",
   "global_prechanges": [],
   "authapi": {
-    "username": "admin",
-    "password": "123",
+    "credentials": {
+      "username": "admin",
+      "password": "123"
+    },
     "event-id": 0,
     "url": "http://agora/authapi/api/",
     "auth_code_message": "Hello:\n\nUse the following link to vote: \n%(url)s\n",
@@ -29,6 +31,7 @@
             "subject": "Vote in %(title)s",
             "msg": ""
       },
+      "census": "open",
       "extra_fields": []
     }
   }
