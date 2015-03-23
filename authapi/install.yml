@@ -3,7 +3,7 @@
 
 - name: AuthApi,  Creating deploy settings
   sudo: true
-  template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi owner=authapi mode=0644
+  template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644
 
 - name: AuthApi,  Creating uwsgi settings
   sudo: true
