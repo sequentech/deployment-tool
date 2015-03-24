@@ -82,4 +82,4 @@
 
 - name: AgoraElections, restarting supervisor
   sudo: true
-  service: name=supervisor state=restarted sleep=2
+  service: name=supervisor state=restarted sleep=4
