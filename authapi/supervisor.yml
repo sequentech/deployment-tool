@@ -7,6 +7,9 @@
   sudo: true
   template: src=authapi/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/authapi_celery.conf owner="root" mode=0644
 
-- name: Restarting supervisord
+- name: Stopping supervisord
   sudo: true
-  service: name=supervisor state=restarted sleep=2
+  service: name=supervisor state=stopped sleep=2
+- name: Starting supervisord
+  sudo: true
+  service: name=supervisor state=started sleep=2
