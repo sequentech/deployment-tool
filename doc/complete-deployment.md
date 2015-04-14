@@ -9,6 +9,11 @@ First of all we need to download the ansible deployment project:
 
     $ git clone https://github.com/agoravoting/agora-dev-box.git
 
+Note: sometimes the 'next' branch has important updates. In case you want
+to use the 'next' branch, do:
+
+    $ git checkout next
+
 ## Servers
 
 We need at least 3 servers to deploy a secure environment. We'll have two
@@ -101,7 +106,7 @@ Then you should reconfigure the locales configuration:
     sudo su
     locale
 
-That command will show you all the locales you need to install, then you will do something similar to:
+That command will show you all the locales you need to install, then you will need to do something similar to:
 
     locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
     dpkg-reconfigure locales
@@ -111,7 +116,7 @@ That command will show you all the locales you need to install, then you will do
     exit
     exit
 
-Now you should be able to execute 'vagrant provision' without errors.
+Now you should be able to execute 'vagrant provision' without errors. A cleaner option is to do the locale-gen and dpkg-reconfigure just after the 'vagrant up --no-provision' command, avoiding getting an error before the first vagrant provision.
 
 ### Connecting auth1 with auth2
 
@@ -228,6 +233,14 @@ Download agora-tools and make it work:
 
     $ git clone https://github.com/agoravoting/agora-tools.git
     $ cd agora-tools
+
+Note: sometimes the 'next' branch has important updates. In case you want
+to use the 'next' branch, do:
+
+    $ git checkout next
+    
+Make it work:
+
     agora-tools $ mkvirtualenv -p $(which python3) agora-tools
     agora-tools $ pip install -r requirements.txt
     agora-tools $ cp -r ../agora-dev-box/doc/agora-tools-configs/ localconfs
@@ -240,6 +253,23 @@ census file localconfs/data/local/0.census.json and add real emails.
 This should create the election and will give you the election id. The
 first time the election id should be 1.
 
+Now we need to configure authapi, open the browser and enter this webpage:
+
+   http://agora/authapi/admin/
+
+Use the default credentials (or the ones you set on local.email.json):
+
+    username: admin
+    password: 123
+    
+Once you are in you need need to fix the event for the admin to 1. Click on 'User datas' below 'Api' and select admin. If you see that the selected Event is '--------'  you need to click on the drop'down list and select '1 - open' instead and then click Save.
+
+Go back to the main authapi configuration page and click on 'Codes' under 'Authmethods', then click on 'add code'. On the Add code page, use the following and then click Save (you can change the code):
+
+    User: admin
+    Code: qwerty
+    Auth event id: 1
+
 Then you can open your broswer and make the rest of the election using the
 admin:
 
@@ -248,7 +278,7 @@ admin:
 Use the default credentials:
 
     email: admin@agoravoting.com
-    password: 123
+    password: qwerty
 
 Then you should view the list of elections you have. You can go to the
 dashboard clicking on the green engine in the list.
@@ -258,4 +288,4 @@ election is started you can click in the paper plane button, look in your
 spam folder), stop the election, make the tally and view the results.
 
 The admin interface is currently in development so the're a lot of buttons
-that shouldn't work.
+that might not work.
