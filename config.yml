@@ -23,6 +23,9 @@ config:
   agora_core_view_domain: dev.agoravoting.com
   agora_core_view_port: 14444
 
+  # dnie config
+  dnie_host: cert.agora-auth5
+
   cert:
     C: ES
     ST: Madrid
