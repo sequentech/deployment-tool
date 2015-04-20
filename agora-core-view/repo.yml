@@ -22,3 +22,9 @@
   sudo_user: agoracore
   replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
            regexp="electionsAPI: \"[^\"]+\"" replace="electionsAPI: \"http://{{config.agora_elections_domain}}/elections/api/\""'
+
+- name: AgoraCoreView, config setup (publicURL)
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="publicURL: \"[^\"]+\"" replace="publicURL: \"http://{{config.agora_elections_domain}}/elections/public/\""'
