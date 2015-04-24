@@ -10,3 +10,4 @@
     - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0755" }
     - { script: eotasks, dest: /usr/bin/eotasks, owner: "root", mode: "0755" }
     - { script: eopeers, dest: /usr/bin/eopeers, owner: "root", mode: "0755" }
+    - { script: screenrc, dest: /root/.screenrc, owner: "root", mode: "0644" }
