@@ -3,7 +3,7 @@
 - include: commands.yml
 - include: postgres.yml
 - include: repo.yml
-- include: verificatum.yml
+- include: vfork.yml
 
 - name: eorchestra extra package
   sudo: true

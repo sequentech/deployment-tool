@@ -1,56 +1,56 @@
 ---
-- name: Verificatum check Makefile
-  stat: path=/home/eorchestra/verificatum/Makefile
+- name: Vfork check Makefile
+  stat: path=/home/eorchestra/vfork/Makefile
   register: Makefile
 
-- name: Verificatum clean
+- name: vfork clean
   sudo: true
   sudo_user: eorchestra
   shell: make clean
-         chdir=/home/eorchestra/verificatum
+         chdir=/home/eorchestra/vfork
   when: Makefile.stat.exists == True
 
 # TODO: we need a real fix for this, in the future when we have more time...
-- name: Verificatum fix
+- name: vfork fix
   sudo: true
   sudo_user: eorchestra
-  file: path=/home/eorchestra/verificatum/{{ item }} state=absent
+  file: path=/home/eorchestra/vfork/{{ item }} state=absent
   with_items:
-    - verificatum/classes/verificatum/protocol/Protocol.class
-    - verificatum/classes/verificatum/protocol/mixnet/MixNetElGamalInterfaceJSON.class
+    - vfork/classes/vfork/protocol/Protocol.class
+    - vfork/classes/vfork/protocol/mixnet/MixNetElGamalInterfaceJSON.class
 
-- name: Verificatum configure
+- name: vfork configure
   sudo: true
   sudo_user: eorchestra
   shell: ./configure --enable-jgmpmee --enable-jecn
-         chdir=/home/eorchestra/verificatum
+         chdir=/home/eorchestra/vfork
 
-- name: Verificatum make
+- name: vfork make
   sudo: true
   sudo_user: eorchestra
   shell: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make
-         chdir=/home/eorchestra/verificatum
+         chdir=/home/eorchestra/vfork
 
 # fix wikstrom special o screwing things up
 # http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding/623036#623036
 # alternatively modify the makefile.am and makefile.in files
-- name: Verificatum make install
+- name: vfork make install
   sudo: true
   shell: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make install
-         chdir=/home/eorchestra/verificatum
+         chdir=/home/eorchestra/vfork
 
-- name: Verificatum copy .verificatum_env
+- name: vfork copy .verificatum_env
   sudo: true
   sudo_user: eorchestra
   shell: cp .verificatum_env /home/eorchestra
-         chdir=/home/eorchestra/verificatum
+         chdir=/home/eorchestra/vfork
 
-- name: Verificatum bashrc line
+- name: vfork bashrc line
   sudo: true
   lineinfile: dest=/home/eorchestra/.bashrc line="source /home/eorchestra/.verificatum_env" state=present
 
-- name: Verificatum init random device
+- name: vfork init random device
   sudo: true
   sudo_user: eorchestra
   shell: bash -l -c "source /home/eorchestra/.verificatum_env && vog -rndinit RandomDevice /dev/urandom"
-         chdir=/home/eorchestra/verificatum
+         chdir=/home/eorchestra/vfork
