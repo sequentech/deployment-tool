@@ -3,7 +3,7 @@
 
 - name: AuthApi,  Creating deploy settings
   sudo: true
-  template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi owner=authapi mode=0644
+  template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644
 
 - name: AuthApi,  Creating uwsgi settings
   sudo: true
@@ -12,6 +12,10 @@
 - name: AuthApi,  Admin user
   sudo: true
   template: src=authapi/templates/admin.json dest=/home/authapi/admin.json owner=authapi mode=0644
+
+- name: AuthApi,  launchshell.sh
+  sudo: true
+  template: src=authapi/templates/launchshell.sh dest=/home/authapi/launchshell.sh owner=authapi mode=0744
 
 - name: AuthApi, Creates webstatic directory
   sudo: true

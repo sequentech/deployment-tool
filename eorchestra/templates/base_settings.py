@@ -4,16 +4,16 @@ DEBUG = False
 ROOT_URL = 'https://{{ config.host }}:{{ config.port }}/api/queues'
 
 # URL to our HTTP server
-VERIFICATUM_SERVER_URL = 'http://{{ config.host }}'
+VFORK_SERVER_URL = 'http://{{ config.host }}'
 
-VERIFICATUM_SERVER_PORT_RANGE = {{ config.verificatum_server_ports }}
+VFORK_SERVER_PORT_RANGE = {{ config.vfork_server_ports }}
 
 # Socket address given as <hostname>:<port> to our hint server.
 # A hint server is a simple UDP server that reduces latency and
 # traffic on the HTTP servers.
-VERIFICATUM_HINT_SERVER_SOCKET = '{{ config.host }}'
+VFORK_HINT_SERVER_SOCKET = '{{ config.host }}'
 
-VERIFICATUM_HINT_SERVER_PORT_RANGE = {{ config.verificatum_hint_server_ports }}
+VFORK_HINT_SERVER_PORT_RANGE = {{ config.vfork_hint_server_ports }}
 
 import os
 ROOT_PATH = os.path.split(os.path.abspath(__file__))[0]
@@ -31,10 +31,10 @@ SSL_KEY_PATH = '/srv/certs/selfsigned/key-nopass.pem'
 ALLOW_ONLY_SSL_CONNECTIONS = True
 AUTOACCEPT_REQUESTS = {{ config.auto_mode }}
 
-KILL_ALL_VERIFICATUM_BEFORE_START_NEW = True
+KILL_ALL_VFORK_BEFORE_START_NEW = True
 
 QUEUES_OPTIONS = {
-    'verificatum_queue': {
+    'vfork_queue': {
         'max_threads': 1,
     }
 }

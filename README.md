@@ -16,7 +16,7 @@
 
  * Agora authority:
    * election-orchestra
-   * verificatum
+   * vfork
  * Agora ballotbox
    * auth-api
    * agora-core-view

@@ -30,6 +30,6 @@ repos:
     aciudadana:
         repo: https://github.com/agoravoting/agora-ciudadana.git
         version: security
-    verificatum:
-        repo: https://github.com/agoravoting/verificatum
+    vfork:
+        repo: https://github.com/agoravoting/vfork
         version: master

@@ -9,7 +9,15 @@
   sudo_user: agoracore
   shell: bower install chdir=/home/agoracore/agora-core-view
 
-- name: AgoraCoreView, grunt build
+- name: AgoraCoreView,  Creating build.sh
+  sudo: true
+  template: src=agora-core-view/templates/build.sh dest=/home/agoracore/agora-core-view/build.sh owner="agoracore" group="agoracore" mode=0744
+
+- name: AgoraCoreView, creating dist dir
+  sudo: true
+  file: path="/home/agoracore/dist" owner="agoracore" group="agoracore" state=directory
+
+- name: AgoraCoreView, building
   sudo: true
   sudo_user: agoracore
-  shell: grunt build chdir=/home/agoracore/agora-core-view
+  shell: build.sh chdir=/home/agoracore/agora-core-view

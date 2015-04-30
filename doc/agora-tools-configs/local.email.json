@@ -31,7 +31,6 @@
             "subject": "Vote in %(title)s",
             "msg": ""
       },
-      "census": "open",
       "extra_fields": []
     }
   }
