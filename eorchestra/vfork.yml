@@ -39,18 +39,18 @@
   shell: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make install
          chdir=/home/eorchestra/vfork
 
-- name: vfork copy .verificatum_env
+- name: vfork copy .vfork_env
   sudo: true
   sudo_user: eorchestra
-  shell: cp .verificatum_env /home/eorchestra
+  shell: cp .vfork_env /home/eorchestra
          chdir=/home/eorchestra/vfork
 
 - name: vfork bashrc line
   sudo: true
-  lineinfile: dest=/home/eorchestra/.bashrc line="source /home/eorchestra/.verificatum_env" state=present
+  lineinfile: dest=/home/eorchestra/.bashrc line="source /home/eorchestra/.vfork_env" state=present
 
 - name: vfork init random device
   sudo: true
   sudo_user: eorchestra
-  shell: bash -l -c "source /home/eorchestra/.verificatum_env && vog -rndinit RandomDevice /dev/urandom"
+  shell: bash -l -c "source /home/eorchestra/.vfork_env && vog -rndinit RandomDevice /dev/urandom"
          chdir=/home/eorchestra/vfork
