@@ -20,4 +20,4 @@
 - name: AgoraCoreView, building
   sudo: true
   sudo_user: agoracore
-  shell: build.sh chdir=/home/agoracore/agora-core-view
+  shell: ./build.sh chdir=/home/agoracore/agora-core-view
