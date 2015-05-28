@@ -31,9 +31,9 @@ each config file to use your currently real ips.
 First of all we'll create the three servers we need with vagrant, copy the
 agora-dev-box folder three times with different names, one for each server:
 
-    $ cp agora-dev-box auth1
-    $ cp agora-dev-box auth2
-    $ cp agora-dev-box agora
+    $ cp -r agora-dev-box auth1
+    $ cp -r agora-dev-box auth2
+    $ cp -r agora-dev-box agora
 
 Then we can create each Vagrant machine:
 
