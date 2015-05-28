@@ -289,5 +289,5 @@ From the dashboard you can start the voting, send the auth codes (once the
 election is started you can click in the paper plane button, look in your
 spam folder), stop the election, make the tally and view the results.
 
-The admin interface is currently in development so the're a lot of buttons
+The admin interface is currently in development so there're a lot of buttons
 that might not work.
