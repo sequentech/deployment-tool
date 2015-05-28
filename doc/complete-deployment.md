@@ -264,7 +264,7 @@ Use the default credentials (or the ones you set on local.email.json):
     username: admin
     password: 123
     
-Once you are in you need need to fix the event for the admin to 1. Click on 'User datas' below 'Api' and select admin. If you see that the selected Event is '--------'  you need to click on the drop'down list and select '1 - open' instead and then click Save.
+Once you are here, you need to fix the event for the admin to 1. Click on 'User datas' below 'Api' and select admin. If you see that the selected Event is '--------'  you need to click on the drop'down list and select '1 - open' instead and then click Save.
 
 Go back to the main authapi configuration page and click on 'Codes' under 'Authmethods', then click on 'add code'. On the Add code page, use the following and then click Save (you can change the code):
 
