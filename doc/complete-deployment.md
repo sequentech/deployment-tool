@@ -269,7 +269,7 @@ Once you are here, you need to fix the event for the admin to 1. Click on 'User 
 Go back to the main authapi configuration page and click on 'Codes' under 'Authmethods', then click on 'add code'. On the Add code page, use the following and then click Save (you can change the code):
 
     User: admin
-    Code: qwerty
+    Code: qwerty33
     Auth event id: 1
 
 Then you can open your broswer and make the rest of the election using the
@@ -280,7 +280,7 @@ admin:
 Use the default credentials:
 
     email: admin@agoravoting.com
-    password: qwerty
+    password: qwerty33
 
 Then you should view the list of elections you have. You can go to the
 dashboard clicking on the green engine in the list.
