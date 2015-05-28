@@ -35,7 +35,9 @@ agora-dev-box folder three times with different names, one for each server:
     $ cp -r agora-dev-box auth2
     $ cp -r agora-dev-box agora
 
-Then we can create each Vagrant machine:
+Then we can create each Vagrant machine. Note: if we want to assign more memory or number of cpu to
+vagrant machine for a faster installation, we can edit Vagrantfile and change v.memory (memory in
+MB) and v.cpus (number of cpu):
 
     $ cd auth1
     auth1 $ cp doc/Vagrantfile.auth1 Vagrantfile
