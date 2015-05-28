@@ -257,7 +257,7 @@ first time the election id should be 1.
 
 Now we need to configure authapi, open the browser and enter this webpage:
 
-   http://agora/authapi/admin/
+    http://agora/authapi/admin/
 
 Use the default credentials (or the ones you set on local.email.json):
 
