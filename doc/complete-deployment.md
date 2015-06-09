@@ -229,7 +229,7 @@ authorities to our eopeers.
 
 ## Agora server (part 2)
 
-    cd agora
+    $ cd agora
     agora $ vagrant ssh
     agora $ sudo supervisorctl stop agora-elections
     agora $ sudo su - agoraelections
