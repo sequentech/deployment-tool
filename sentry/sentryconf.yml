@@ -1,0 +1,26 @@
+---
+- name: Sentry, creating sentryconf.py
+  sudo: true
+  sudo_user: sentry
+  template: src=sentry/templates/sentryconf.py dest=/home/sentry/sentryconf.py owner="sentry" mode=0744
+
+# sentryconf.py creates default project and set the dsn in a file
+- name: Sentry, running sentryconf.py
+  sudo: true
+  sudo_user: sentry
+  shell: /home/sentry/venv/bin/python /home/sentry/sentryconf.py chdir=/home/sentry/
+
+- name: Sentry-AuthApi install raven
+  sudo: true
+  sudo_user: authapi
+  shell: /home/authapi/env/bin/pip install raven
+
+- name: Sentry, Configuring authapi
+  sudo: true
+  sudo_user: root
+  shell: cat /tmp/authapi.sentry >> /home/authapi/authapi/authapi/authapi/deploy.py
+
+# restarting authapi
+- name: Sentry-AuthApi restarting authapi
+  sudo: true
+  supervisorctl: name=authapi state=restarted

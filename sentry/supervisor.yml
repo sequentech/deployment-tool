@@ -1,0 +1,16 @@
+---
+- name: Sentry, Creating supervisord conf
+  sudo: true
+  template: src=sentry/templates/supervisor.conf dest=/etc/supervisor/conf.d/sentry.conf owner="root" mode=0644
+
+- name: Sentry, Creating celery supervisord conf
+  sudo: true
+  template: src=sentry/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/sentry_celery.conf owner="root" mode=0644
+
+- name: Restarting supervisord
+  sudo: true
+  service: name=supervisor state=stopped
+
+- name: Restarting supervisord
+  sudo: true
+  service: name=supervisor state=started
