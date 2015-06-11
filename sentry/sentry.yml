@@ -1,0 +1,29 @@
+---
+- name: Sentry Installation
+  sudo: true
+  sudo_user: sentry
+  pip: name=sentry[postgres] virtualenv=/home/sentry/venv
+
+- name: Sentry, Creating conf
+  sudo: true
+  template: src=sentry/templates/sentry.conf.py dest=/home/sentry/sentry.conf.py owner="sentry" mode=0644
+
+- name: Sentry, Create Database User
+  sudo: true
+  sudo_user: postgres
+  postgresql_user: user=sentry password=sentry port=5432
+
+- name: Sentry, Create Database
+  sudo: true
+  sudo_user: postgres
+  postgresql_db: name=sentry owner=sentry
+
+- name: Sentry upgrade
+  sudo: true
+  sudo_user: sentry
+  shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py upgrade --noinput
+
+- name: Sentry, creating the first user
+  sudo: true
+  sudo_user: sentry
+  shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email=admin@agoravoting.com --superuser --password=admin

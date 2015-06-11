@@ -33,3 +33,6 @@ config:
     O: Agoravoting
     OU: Agora_Voting_SL
     EMAIL: agora@agoravoting.com
+
+  # sentry
+  sentry_port: 9090
