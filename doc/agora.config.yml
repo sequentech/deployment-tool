@@ -30,3 +30,6 @@ config:
     O: Wadobo
     OU: Wadobo
     EMAIL: info@wadobo.com
+
+  # sentry
+  sentry_port: 9090
