@@ -2,6 +2,9 @@
 config:
   backup_password: '<PASSWORD>'
 
+  # global config. Note: currently some other keys are used as global conf
+  global_secret_key: '<PASSWORD>'
+
   # election-orchestra
   port: 5000
   host: agora-auth5
@@ -36,3 +39,5 @@ config:
 
   # sentry
   sentry_port: 9090
+  sentry_db_password: '<PASSWORD>'
+  sentry_admin_password: '<PASSWORD>'

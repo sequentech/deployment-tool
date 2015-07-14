@@ -19,3 +19,5 @@ DATABASES = {
 }
 
 SHARED_SECRET = b'{{config.agora_elections_shared_secret}}'
+
+SECRET_KEY = '{{ config.global_secret_key }}'
