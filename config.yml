@@ -4,6 +4,7 @@ config:
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
+  cloudflare: True
 
   # election-orchestra
   port: 5000
