@@ -42,3 +42,19 @@ config:
   sentry_port: 9090
   sentry_db_password: '<PASSWORD>'
   sentry_admin_password: '<PASSWORD>'
+
+  # Authorities
+
+  authorities:
+    - id: "auth1"
+      name: "Agora Voting"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+    - id: "auth2"
+      name: "Agora Voting 1"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+  director: 'auth1'
+  auths: "['auth2']"
