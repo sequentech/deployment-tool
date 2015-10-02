@@ -37,9 +37,10 @@ agora-dev-box folder three times with different names, one for each server:
     $ cp -r agora-dev-box auth2
     $ cp -r agora-dev-box agora
 
-Then we can create each Vagrant machine. Note: if we want to assign more memory or a different number of cpus to the
-vagrant machines for a faster installation, we can edit Vagrantfile and change v.memory (memory in
-MB) and v.cpus (number of cpus):
+Then we can create each Vagrant machine. Note: if we want to assign more
+memory or a different number of cpus to the vagrant machines for a faster
+installation, we can edit Vagrantfile and change v.memory (memory in MB)
+and v.cpus (number of cpus):
 
     $ cd auth1
     auth1 $ cp doc/Vagrantfile.auth1 Vagrantfile
@@ -79,8 +80,8 @@ If you receive the message `/etc/hosts: Permission denied` try:
 
 ## Authorities server
 
-We need to deploy the two authorities and connect them. The deployment process is the
-same for both authorities.
+We need to deploy the two authorities and connect them. The deployment
+process is the same for both authorities.
 
     $ cd auth1
     auth1 $ cp doc/auth1.config.yml config.yml
@@ -107,21 +108,24 @@ and running.
 
 ### Reconfiguring locales
 
-This step is only needed if you found an error on the previous step when executing 'vagrant provision'. If when you executed 'vagrant provision' you got this kind of error:
+This step is only needed if you found an error on the previous step when
+executing 'vagrant provision'. If when you executed 'vagrant provision' you
+got this kind of error:
 
-    TASK: [Election orchestra, Create Database User] ****************************** 
+    TASK: [Election orchestra, Create Database User] ******************************
     failed: [default] => {"failed": true}
     msg: unable to connect to database: could not connect to server: No such file or directory
             Is the server running locally and accepting
             connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?
-            
+
 Then you should reconfigure the locales configuration:
 
     vagrant ssh
     sudo su
     locale
 
-That command will show you all the locales you need to install, then you will need to do something similar to:
+That command will show you all the locales you need to install, then you
+will need to do something similar to:
 
     locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
     dpkg-reconfigure locales
@@ -131,13 +135,17 @@ That command will show you all the locales you need to install, then you will ne
     exit
     exit
 
-Now you should be able to execute 'vagrant provision' without errors. A cleaner option is to do the locale-gen and dpkg-reconfigure just after the 'vagrant up --no-provision' command, avoiding getting an error before the first vagrant provision.
+Now you should be able to execute 'vagrant provision' without errors. A
+cleaner option is to do the locale-gen and dpkg-reconfigure just after the
+'vagrant up --no-provision' command, avoiding getting an error before the
+first vagrant provision.
 
 ### Connecting auth1 with auth2
 
-Authorities communicate with other authorities using ssl and client certificates so
-the authority server doesn't accept queries from unknown servers. In a
-real election system it's a good idea to not publish the ips and ports of the authorities to avoid malicious attacks.
+Authorities communicate with other authorities using ssl and client
+certificates so the authority server doesn't accept queries from unknown
+servers. In a real election system it's a good idea to not publish the ips
+and ports of the authorities to avoid malicious attacks.
 
 The deployment script creates a certificate for each authority in
 /srv/cert/selfsigned/ and we manage the authority communication and
@@ -159,8 +167,8 @@ certificate sharing with the eopeers tool.
 
 ### Test the connection between the authorities
 
-A tool is installed to test the real connection between the authorities. Open two terminal windows.
-Open eolog in one of the terminal windows:
+A tool is installed to test the real connection between the authorities.
+Open two terminal windows.  Open eolog in one of the terminal windows:
 
     $ cd auth2
     auth2 $ vagrant ssh
@@ -172,7 +180,8 @@ Run eotest in the other terminal window from the other auth server:
     auth1 $ vagrant ssh
     local-auth1 $ sudo eotest full --vmnd --vcount 100
 
-You should see the software working as eolog output will appear in the first terminal window.
+You should see the software working as eolog output will appear in the
+first terminal window.
 
 Close the second terminal window.
 Exit the auth2 server:
@@ -265,7 +274,7 @@ Note: sometimes the 'next' branch has important updates. In case you want
 to use the 'next' branch, do:
 
     $ git checkout next
-    
+
 You must have Python 3 installed to complete the following steps.
 
 Install dependencies:
@@ -284,16 +293,21 @@ first time the election id should be 1.
 
 Now we need to configure authapi. Open the browser and enter this url:
 
-    http://agora/authapi/admin/
+    https://agora/authapi/admin/
 
 Use the default credentials (or the ones you set in local.email.json):
 
     username: admin
     password: 123
-    
-Once you are here, you need to fix the event for the admin to 1. Click on 'User datas' below 'Api' and select admin. If you see that the selected Event is '--------'  you need to click on the drop'down list and select '1 - open' instead and then click Save.
 
-Go back to the main authapi configuration page and click on 'Codes' under 'Authmethods', then click on 'add code'. On the Add code page, use the following and then click Save (you can change the code):
+Once you are here, you need to fix the event for the admin to 1. Click on
+'User datas' below 'Api' and select admin. If you see that the selected
+Event is '--------'  you need to click on the drop'down list and select
+'1 - open' instead and then click Save.
+
+Go back to the main authapi configuration page and click on 'Codes' under
+'Authmethods', then click on 'add code'. On the Add code page, use the
+following and then click Save (you can change the code):
 
     User: admin
     Code: QWERTY33
@@ -302,7 +316,7 @@ Go back to the main authapi configuration page and click on 'Codes' under 'Authm
 Then you can open your broswer and make the rest of the election using the
 admin:
 
-    http://agora/#/admin/login
+    https://agora/#/admin/login
 
 Use the default credentials:
 
