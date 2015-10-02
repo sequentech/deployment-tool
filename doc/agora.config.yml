@@ -26,6 +26,9 @@ config:
   # agora-core-view
   agora_core_view_domain: agora
   agora_core_view_port: 14444
+  
+  # dnie config
+  dnie_host: cert.agora-auth5
 
   # dnie config
   dnie_host: cert.agora-auth5
