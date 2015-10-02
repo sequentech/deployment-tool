@@ -14,3 +14,4 @@
     - include: authapi/main.yml
     - include: agora-core-view/main.yml
     - include: sentry/main.yml
+    - include: oneserver/main.yml

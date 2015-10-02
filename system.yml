@@ -7,6 +7,10 @@
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
 
+- name: domain in /etc/hosts
+  sudo: true
+  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections_domain }}" state=present
+
 - name: Creating nginx group
   sudo: true
   group: name=nginx state=present

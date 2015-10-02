@@ -28,3 +28,36 @@
   sudo_user: agoracore
   replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
            regexp="publicURL: \"[^\"]+\"" replace="publicURL: \"http://{{config.agora_elections_domain}}/elections/public/\""'
+
+- name: AgoraCoreView, director
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="director: \"[^\"]+\"" replace="director: \"{{ config.director }}\""'
+
+- name: AgoraCoreView, authorities
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="authorities: \[[^\]]+\]" replace="authorities: {{ config.auths }}"'
+
+- name: AgoraCoreView, setting default lang
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="\/\/ language: \"[^\"]+\"" replace="language: \"{{ config.agora_core_lang }}\""'
+  when: config.agora_core_lang is defined
+
+- name: AgoraCoreView, setting default lang 2
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="\/\/ lng: \"[^\"]+\"" replace="lng: \"{{ config.agora_core_lang }}\""'
+  when: config.agora_core_lang is defined
+
+- name: AgoraCoreView, setting default lang 3
+  sudo: true
+  sudo_user: agoracore
+  replace: 'dest=/home/agoracore/agora-core-view/avConfig.js
+           regexp="\/\/ detectLngQS:" replace="detectLngQS:"'
+  when: config.agora_core_lang is defined

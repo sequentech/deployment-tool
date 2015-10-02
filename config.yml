@@ -2,6 +2,10 @@
 config:
   backup_password: '<PASSWORD>'
 
+  # global config. Note: currently some other keys are used as global conf
+  global_secret_key: '<PASSWORD>'
+  cloudflare: True
+
   # election-orchestra
   port: 5000
   host: agora-auth5
@@ -22,6 +26,7 @@ config:
   # agora-core-view
   agora_core_view_domain: dev.agoravoting.com
   agora_core_view_port: 14444
+  agora_core_lang: es
 
   # dnie config
   dnie_host: cert.agora-auth5
@@ -36,3 +41,21 @@ config:
 
   # sentry
   sentry_port: 9090
+  sentry_db_password: '<PASSWORD>'
+  sentry_admin_password: '<PASSWORD>'
+
+  # Authorities
+
+  authorities:
+    - id: "auth1"
+      name: "Agora Voting"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+    - id: "auth2"
+      name: "Agora Voting 1"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+  director: 'auth1'
+  auths: "['auth2']"

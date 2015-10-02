@@ -2,6 +2,9 @@
 config:
   backup_password: 'secret-auth1-backup'
 
+  # global config. Note: currently some other keys are used as global conf
+  global_secret_key: 'SECRET-KEY'
+
   # election-orchestra
   port: 5000
   host: local-auth1

@@ -22,7 +22,7 @@ SENTRY_USE_BIG_INTS = True
 # the beacon documentation for more information. This **must** be a string.
 
 # SENTRY_ADMIN_EMAIL = 'your.name@example.com'
-SENTRY_ADMIN_EMAIL = ''
+SENTRY_ADMIN_EMAIL = 'agora@agoravoting.com'
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
@@ -37,7 +37,7 @@ DATABASES = {
 
         'NAME': 'sentry',
         'USER': 'sentry',
-        'PASSWORD': 'sentry',
+        'PASSWORD': '{{ config.sentry_db_password }}',
         'HOST': '',
         'PORT': '5432',
     }
@@ -141,8 +141,10 @@ SENTRY_FILESTORE_OPTIONS = {
 # Web Server #
 ##############
 
+ALLOWED_HOSTS = ['*']
+
 # You MUST configure the absolute URI root for Sentry:
-SENTRY_URL_PREFIX = 'http://{{ config.private_ipaddress }}:{{ config.sentry_port }}'  # No trailing slash!
+SENTRY_URL_PREFIX = 'http://{{ config.agora_elections_domain }}:{{ config.sentry_port }}'  # No trailing slash!
 
 # If you're using a reverse proxy, you should enable the X-Forwarded-Proto
 # header and uncomment the following settings
@@ -183,4 +185,4 @@ MAILGUN_API_KEY = ''
 
 # If this file ever becomes compromised, it's important to regenerate your SECRET_KEY
 # Changing this value will result in all current sessions being invalidated
-SECRET_KEY = 'bnbEin13h1Wh5ULLJQkG51BWGBz90gSwdMZRoZBwpkV/ytV0KBErCw=='
+SECRET_KEY = '{{ config.global_secret_key }}'
