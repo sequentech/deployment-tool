@@ -7,7 +7,7 @@
 - name: AgoraCoreView, bower install
   sudo: true
   sudo_user: agoracore
-  shell: bower install chdir=/home/agoracore/agora-core-view
+  shell: bower install --config.interactive=false chdir=/home/agoracore/agora-core-view
 
 - name: AgoraCoreView,  Creating build.sh
   sudo: true
