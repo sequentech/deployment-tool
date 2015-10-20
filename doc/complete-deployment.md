@@ -154,15 +154,17 @@ certificate sharing with the eopeers tool.
     $ cd auth1
     auth1 $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/home/vagrant/auth2.pkg
     auth1 $ vagrant ssh
-    auth1 $ sudo eopeers --install /home/vagrant/auth2.pkg
-    auth1 $ sudo service nginx restart
+    local-auth1 $ sudo eopeers --install /home/vagrant/auth2.pkg
+    local-auth1 $ sudo service nginx restart
+    local-auth1 $ exit
     auth1 $ cd ..
 
     $ cd auth2
     auth2 $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/home/vagrant/auth1.pkg
     auth2 $ vagrant ssh
-    auth2 $ sudo eopeers --install /home/vagrant/auth1.pkg
-    auth2 $ sudo service nginx restart
+    local-auth2 $ sudo eopeers --install /home/vagrant/auth1.pkg
+    local-auth2 $ sudo service nginx restart
+    local-auth2 $ exit
     auth2 $ cd ..
 
 ### Test the connection between the authorities
@@ -197,8 +199,8 @@ Exit the auth2 server:
     agora $ vagrant provision
 
     agora $ vagrant ssh
-    agora $ sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null
-    agora $ exit
+    local-agora $ sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null
+    local-agora $ exit
 
     agora $ scp -F vagrant.ssh.config default:/home/vagrant/agora.pkg agora.pkg
     agora $ cd ..
@@ -229,10 +231,10 @@ authorities to our eopeers.
     agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/home/vagrant/auth1.pkg
     agora $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/home/vagrant/auth2.pkg
     agora $ vagrant ssh
-    agora $ sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks
-    agora $ sudo eopeers --install /home/vagrant/auth2.pkg
-    agora $ sudo service nginx restart
-    agora $ exit
+    local-agora $ sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks
+    local-agora $ sudo eopeers --install /home/vagrant/auth2.pkg
+    local-agora $ sudo service nginx restart
+    local-agora $ exit
     agora $ cd ..
 
 
@@ -240,10 +242,10 @@ authorities to our eopeers.
 
     $ cd agora
     agora $ vagrant ssh
-    agora $ sudo supervisorctl stop agora-elections
-    agora $ sudo su - agoraelections
-    agora $ cd /home/agoraelections/agora-elections
-    agora $ ../activator-1.2.12-minimal/activator run
+    local-agora $ sudo supervisorctl stop agora-elections
+    local-agora $ sudo su - agoraelections
+    local-agora $ cd /home/agoraelections/agora-elections
+    local-agora $ ../activator-1.2.12-minimal/activator run
 
 Then you should go to the following url in your local browser:
 
@@ -252,10 +254,10 @@ Then you should go to the following url in your local browser:
 It should return a 404, but that will also create the agora\_elections database
 and we can continue configuring this server.
 
-    agora $ ../activator-1.2.12-minimal/activator clean stage
-    agora $ exit
-    agora $ sudo supervisorctl start agora-elections
-    agora $ exit
+    local-agora $ ../activator-1.2.12-minimal/activator clean stage
+    local-agora $ exit
+    local-agora $ sudo supervisorctl start agora-elections
+    local-agora $ exit
     agora $ cd ..
 
 Having completed these steps, we now have a complete agora-voting installation.
