@@ -237,29 +237,6 @@ authorities to our eopeers.
     local-agora $ exit
     agora $ cd ..
 
-
-## Agora server (part 2)
-
-    $ cd agora
-    agora $ vagrant ssh
-    local-agora $ sudo supervisorctl stop agora-elections
-    local-agora $ sudo su - agoraelections
-    local-agora $ cd /home/agoraelections/agora-elections
-    local-agora $ ../activator-1.2.12-minimal/activator run
-
-Then you should go to the following url in your local browser:
-
-    http://agora:9000/elections/api/election/1
-
-It should return a 404, but that will also create the agora\_elections database
-and we can continue configuring this server.
-
-    local-agora $ ../activator-1.2.12-minimal/activator clean stage
-    local-agora $ exit
-    local-agora $ sudo supervisorctl start agora-elections
-    local-agora $ exit
-    agora $ cd ..
-
 Having completed these steps, we now have a complete agora-voting installation.
 
 ### Complete election test with agora-tools

@@ -1,5 +1,11 @@
 ---
-# Package
+# this is needed to get the database tables created
+- name: AgoraElections, creating tables
+  sudo: true
+  sudo_user: agoraelections
+  shell: expect -c "spawn ../activator-1.2.12-minimal/activator run; sleep 30; close $spawn_id"& sleep 15; wget http://localhost:9000/elections/api/election/1/; [ $? -eq 8 ] && echo "OK"
+         chdir=/home/agoraelections/agora-elections
+
 - name: AgoraElections, activator clean & stage
   sudo: true
   sudo_user: agoraelections

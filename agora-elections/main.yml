@@ -5,6 +5,10 @@
   sudo: true
   user: name=agoraelections shell=/bin/bash
 
+- name: Creating /etc/eopeers
+  sudo: true
+  file: path=/etc/eopeers state=directory mode=0755
+
 - include: playframework.yml
 - include: postgres.yml
 - include: repo.yml
