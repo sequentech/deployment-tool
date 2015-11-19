@@ -60,7 +60,7 @@ and v.cpus (number of cpus):
     agora $ vagrant ssh-config > ./vagrant.ssh.config
     agora $ cd ..
 
-Now we've three basic ubuntu machines connected with these ips:
+Now we've three basic Ubuntu 14.04.3 LTS (Trusty Tahr) machines connected with these ips:
 
  * auth1: 192.168.50.2
  * auth2: 192.168.50.3
