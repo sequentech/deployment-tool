@@ -2,34 +2,34 @@
 repos:
     agoracore:
         repo: https://github.com/agoravoting/agora-core-view.git
-        version: master
+        version: next
     aelections:
         repo: https://github.com/agoravoting/agora_elections.git
-        version: master
+        version: next
     results:
         repo: https://github.com/agoravoting/agora-results.git
-        version: master
+        version: next
     openstv:
         repo: https://github.com/agoravoting/openstv.git
-        version: master
+        version: next
     tally:
         repo: https://github.com/agoravoting/agora-tally.git
-        version: master
+        version: next
     authapi:
         repo: https://github.com/agoravoting/authapi.git
-        version: master
+        version: next
     atools:
         repo: https://github.com/agoravoting/agora-tools.git
-        version: master
+        version: next
     fresq:
         repo: https://github.com/agoravoting/frestq
-        version: master
+        version: next
     eorchestra:
         repo: https://github.com/agoravoting/election-orchestra
-        version: master
+        version: next
     aciudadana:
         repo: https://github.com/agoravoting/agora-ciudadana.git
         version: security
     vfork:
         repo: https://github.com/agoravoting/vfork
-        version: master
+        version: next
