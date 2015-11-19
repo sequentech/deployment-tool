@@ -1,0 +1,27 @@
+---
+- name: AgoraGui, npm install
+  sudo: true
+  sudo_user: agoragui
+  shell: npm install chdir=/home/agoragui/{{ item }}
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, bower install
+  sudo: true
+  sudo_user: agoragui
+  shell: bower install --config.interactive=false chdir=/home/agoragui/{{ item }}
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui,  Creating build.sh
+  sudo: true
+  template: src=agora-gui/templates/build.sh dest=/home/agoragui/build.sh owner="agoragui" group="agoragui" mode=0744
+
+- name: AgoraGui, building
+  sudo: true
+  sudo_user: agoragui
+  shell: ./build.sh chdir=/home/agoragui/

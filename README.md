@@ -19,7 +19,7 @@
    * vfork
  * Agora ballotbox
    * auth-api
-   * agora-core-view
+   * agora-gui
    * agora-elections
 
 ## How to deploy an Auth:
@@ -89,7 +89,7 @@ using the following authorities:
 Copyright (C) 2015 Agora Voting SL and/or its subsidiary(-ies).
 Contact: legal@agoravoting.com
 
-This file is part of the agora-core-view module of the Agora Voting project.
+This file is part of the agora-dev-box module of the Agora Voting project.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
