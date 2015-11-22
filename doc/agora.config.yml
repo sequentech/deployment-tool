@@ -23,10 +23,12 @@ config:
   agora_elections_port: 14443
   keystore_pass: supersecret
 
-  # agora-core-view
-  agora_core_view_domain: agora
-  agora_core_view_port: 14444
-  agora_core_lang: es
+  # agora-gui
+  agora_gui_domain: agora
+  agora_gui_admin_port: 10090
+  agora_gui_booth_port: 10091
+  agora_gui_elections_port: 10092
+  agora_gui_lang: es
 
   # dnie config
   dnie_host: cert.agora-auth5

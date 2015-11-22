@@ -1,8 +1,5 @@
 ---
 repos:
-    agoracore:
-        repo: https://github.com/agoravoting/agora-core-view.git
-        version: next
     aelections:
         repo: https://github.com/agoravoting/agora_elections.git
         version: next
@@ -32,4 +29,16 @@ repos:
         version: security
     vfork:
         repo: https://github.com/agoravoting/vfork
+        version: next
+    guicommon:
+        repo: https://github.com/agoravoting/agora-gui-common.git
+        version: next
+    guiadmin:
+        repo: https://github.com/agoravoting/agora-gui-admin.git
+        version: next
+    guibooth:
+        repo: https://github.com/agoravoting/agora-gui-booth.git
+        version: next
+    guielections:
+        repo: https://github.com/agoravoting/agora-gui-elections.git
         version: next

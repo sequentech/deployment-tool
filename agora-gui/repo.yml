@@ -1,0 +1,95 @@
+---
+- name: AgoraGuiCommon, Git clone
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guicommon.repo }} version={{ repos.guicommon.version }}
+       dest=/home/agoragui/agora-gui-common
+
+- name: AgoraGuiAdmin, Git clone
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guiadmin.repo }} version={{ repos.guiadmin.version }}
+       dest=/home/agoragui/agora-gui-admin
+
+- name: AgoraGuiElections, Git clone
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guielections.repo }} version={{ repos.guielections.version }}
+       dest=/home/agoragui/agora-gui-elections
+
+- name: AgoraGuiBooth, Git clone
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guibooth.repo }} version={{ repos.guibooth.version }}
+       dest=/home/agoragui/agora-gui-booth
+
+- name: Creating avConfig.js file
+  sudo: true
+  sudo_user: agoragui
+  shell: cp /home/agoragui/agora-gui-common/avConfig.js /home/agoragui/avConfig.js
+
+- name: AgoraGui, config setup (baseUrl)
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="baseUrl: \"[^\"]+\"" replace="baseUrl: \"http://{{config.agora_elections_domain}}/elections/api/\""'
+
+- name: AgoraGui, config setup (authAPI)
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="authAPI: \"[^\"]+\"" replace="authAPI: \"http://{{config.agora_elections_domain}}/authapi/api/\""'
+
+- name: AgoraGui, config setup (electionsAPI)
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="electionsAPI: \"[^\"]+\"" replace="electionsAPI: \"http://{{config.agora_elections_domain}}/elections/api/\""'
+
+- name: AgoraGui, config setup (publicURL)
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="publicURL: \"[^\"]+\"" replace="publicURL: \"http://{{config.agora_elections_domain}}/elections/public/\""'
+
+- name: AgoraGui, director
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="director: \"[^\"]+\"" replace="director: \"{{ config.director }}\""'
+
+- name: AgoraGui, authorities
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="authorities: \[[^\]]+\]" replace="authorities: {{ config.auths }}"'
+
+- name: AgoraGui, setting default lang
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="\/\/ language: \"[^\"]+\"" replace="language: \"{{ config.agora_gui_lang }}\""'
+  when: config.agora_gui_lang is defined
+
+- name: AgoraGui, setting default lang 2
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="\/\/ lng: \"[^\"]+\"" replace="lng: \"{{ config.agora_gui_lang }}\""'
+  when: config.agora_gui_lang is defined
+
+- name: AgoraGui, setting default lang 3
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="\/\/ detectLngQS:" replace="detectLngQS:"'
+  when: config.agora_gui_lang is defined
+
+- name: AgoraGui, linking avConfig.js in all agora-gui-*
+  sudo: true
+  sudo_user: agoragui
+  file: src=/home/agoragui/avConfig.js dest=/home/agoragui/{{ item }}/avConfig.js state=link
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth

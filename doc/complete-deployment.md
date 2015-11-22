@@ -20,7 +20,7 @@ to use the 'next' branch, do:
 
 We need at least 3 servers to deploy a secure environment. We'll have two
 authorities and then another server with the authentication (authapi), the
-web interface (agora-core-view) and the ballot box (aogra\_elections).
+web interface (agora-gui) and the ballot box (aogra\_elections).
 
 The deployment is tested with ubuntu/trusty64, it should work with other
 ubuntu distributions, but maybe the deployment needs some tweaks.
