@@ -239,61 +239,9 @@ authorities to our eopeers.
 
 Having completed these steps, we now have a complete agora-voting installation.
 
-### Complete election test with agora-tools
+### Complete election test
 
-Currently there's no election creation form, but you can create an
-election using agora-admin.py in agora-tools.
-
-Download and configure agora-tools:
-
-    $ git clone https://github.com/agoravoting/agora-tools.git
-    $ cd agora-tools
-
-Note: sometimes the 'next' branch has important updates. In case you want
-to use the 'next' branch, do:
-
-    $ git checkout next
-
-You must have Python 3 installed to complete the following steps.
-
-Install dependencies:
-
-    agora-tools $ mkvirtualenv -p $(which python3) agora-tools
-    agora-tools $ pip install -r requirements.txt
-    agora-tools $ cp -r ../agora-dev-box/doc/agora-tools-configs/ localconfs
-
-Then you can edit the local election data, be sure to change at least the
-census file localconfs/data/local/0.census.json and add real emails.
-
-    agora-tools $ ./agora-admin.py -C localconfs/local.email.json -c localconfs/data/local/
-
-This should create the election and will give you the election id. The
-first time the election id should be 1.
-
-Now we need to configure authapi. Open the browser and enter this url:
-
-    https://agora/authapi/admin/
-
-Use the default credentials (or the ones you set in local.email.json):
-
-    username: admin
-    password: 123
-
-Once you are here, you need to fix the event for the admin to 1. Click on
-'User datas' below 'Api' and select admin. If you see that the selected
-Event is '--------'  you need to click on the drop'down list and select
-'1 - open' instead and then click Save.
-
-Go back to the main authapi configuration page and click on 'Codes' under
-'Authmethods', then click on 'add code'. On the Add code page, use the
-following and then click Save (you can change the code):
-
-    User: admin
-    Code: QWERTY33
-    Auth event id: 1
-
-Then you can open your broswer and make the rest of the election using the
-admin:
+You can open your broswer and make the rest of the election using the admin:
 
     https://agora/#/admin/login
 

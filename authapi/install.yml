@@ -9,10 +9,6 @@
   sudo: true
   template: src=authapi/templates/uwsgi.ini dest=/home/authapi/uwsgi.ini owner=authapi mode=0644
 
-- name: AuthApi,  Admin user
-  sudo: true
-  template: src=authapi/templates/admin.json dest=/home/authapi/admin.json owner=authapi mode=0644
-
 - name: AuthApi,  launchshell.sh
   sudo: true
   template: src=authapi/templates/launchshell.sh dest=/home/authapi/launchshell.sh owner=authapi mode=0744
@@ -37,7 +33,7 @@
 - name: AuthApi,  Admin user (2)
   sudo: true
   sudo_user: authapi
-  django_manage: command=loaddata fixtures=/home/authapi/admin.json
+  django_manage: command=loaddata fixtures=/home/authapi/authapi/authapi/api/fixtures/initial.json
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env
