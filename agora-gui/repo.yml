@@ -32,25 +32,25 @@
   sudo: true
   sudo_user: agoragui
   replace: 'dest=/home/agoragui/avConfig.js
-           regexp="baseUrl: \"[^\"]+\"" replace="baseUrl: \"http://{{config.agora_elections_domain}}/elections/api/\""'
+           regexp="baseUrl: \"[^\"]+\"" replace="baseUrl: \"https://{{config.agora_elections_domain}}/elections/api/\""'
 
 - name: AgoraGui, config setup (authAPI)
   sudo: true
   sudo_user: agoragui
   replace: 'dest=/home/agoragui/avConfig.js
-           regexp="authAPI: \"[^\"]+\"" replace="authAPI: \"http://{{config.agora_elections_domain}}/authapi/api/\""'
+           regexp="authAPI: \"[^\"]+\"" replace="authAPI: \"https://{{config.agora_elections_domain}}/authapi/api/\""'
 
 - name: AgoraGui, config setup (electionsAPI)
   sudo: true
   sudo_user: agoragui
   replace: 'dest=/home/agoragui/avConfig.js
-           regexp="electionsAPI: \"[^\"]+\"" replace="electionsAPI: \"http://{{config.agora_elections_domain}}/elections/api/\""'
+           regexp="electionsAPI: \"[^\"]+\"" replace="electionsAPI: \"https://{{config.agora_elections_domain}}/elections/api/\""'
 
 - name: AgoraGui, config setup (publicURL)
   sudo: true
   sudo_user: agoragui
   replace: 'dest=/home/agoragui/avConfig.js
-           regexp="publicURL: \"[^\"]+\"" replace="publicURL: \"http://{{config.agora_elections_domain}}/elections/public/\""'
+           regexp="publicURL: \"[^\"]+\"" replace="publicURL: \"https://{{config.agora_elections_domain}}/elections/public/\""'
 
 - name: AgoraGui, director
   sudo: true
