@@ -250,28 +250,17 @@ authorities to our eopeers.
 
     $ cd auth1
     auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
-    auth1 $ vagrant ssh
-    local-auth1 $ sudo eopeers --install /home/vagrant/agora.pkg
-    local-auth1 $ sudo service nginx restart
-    local-auth1 $ exit
+    auth1 $ vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
     auth1 $ cd ..
 
     $ cd auth2
     auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
-    auth2 $ vagrant ssh
-    local-auth2 $ sudo eopeers --install /home/vagrant/agora.pkg
-    local-auth2 $ sudo service nginx restart
-    local-auth2 $ exit
+    auth2 $ vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
     auth2 $ cd ..
 
     $ cd agora
-    agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg default:/home/vagrant/auth1.pkg
-    agora $ scp -F vagrant.ssh.config ../auth2/auth2.pkg default:/home/vagrant/auth2.pkg
-    agora $ vagrant ssh
-    local-agora $ sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks
-    local-agora $ sudo eopeers --install /home/vagrant/auth2.pkg
-    local-agora $ sudo service nginx restart
-    local-agora $ exit
+    agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg ../auth2/auth2.pkg default:/home/vagrant/
+    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart"
     agora $ cd ..
 
 Having completed these steps, we now have a complete agora-voting installation.
@@ -280,7 +269,7 @@ Having completed these steps, we now have a complete agora-voting installation.
 
 You can open your broswer and make the rest of the election using the admin:
 
-    https://agora/#/admin/login
+    https://agora/admin/login
 
 Use the default credentials:
 
@@ -296,3 +285,53 @@ spam folder), stop the election, make the tally and view the results.
 
 The admin interface is currently in development so there're a lot of buttons
 that might not work.
+
+Once you have tested the election test, you should take a snapshot of your
+three machines, as a base working condition:
+
+    $ cd auth1
+    auth1 $ vagrant snapshot take working-base
+    auth1 $ cd  ..
+
+    $ cd auth2
+    auth2 $ vagrant snapshot take working-base
+    auth2 $ cd  ..
+
+    $ cd agora
+    agora $ vagrant snapshot take working-base
+    agora $ cd  ..
+
+### Troubleshooting
+
+#### Supervisor trouble
+
+If the we loads but the form doesn't show up, and when you analyze traffic some
+queries (for example  https://agora/authapi/api/auth-event/1/) return
+"502 Bad Gateway", this might be because supervisor might be dead. This is a bug
+that we don't know how to fix yet but has a simple solution: restart supervisor:
+
+You can check that supervisor is down when this happens:
+
+
+    $ cd agora
+    agora $ vagrant ssh -c "sudo supervisorctl status"
+
+        unix:///var/run/supervisor.sock no such file
+        Connection to 127.0.0.1 closed.
+
+If that's the case, restart it:
+
+    $ cd agora
+    agora $ vagrant ssh -c "sudo /etc/init.d/supervisor* restart"
+
+Afterwards, supervisor status should return something like this, which is ok:
+
+    $ cd agora
+    agora $ vagrant ssh -c "sudo supervisorctl status"
+
+        agora-elections                  RUNNING    pid 7665, uptime 0:00:04
+        authapi                          RUNNING    pid 7663, uptime 0:00:04
+        authapi_celery                   RUNNING    pid 7667, uptime 0:00:04
+        sentry                           RUNNING    pid 7664, uptime 0:00:04
+        sentry_celery                    RUNNING    pid 7666, uptime 0:00:04
+        Connection to 127.0.0.1 closed.
