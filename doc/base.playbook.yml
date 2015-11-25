@@ -1,0 +1,10 @@
+---
+- hosts: all
+
+  tasks:
+    - include_vars: config.yml
+    - include_vars: repos.yml
+
+    - include: java.yml
+    - include: packages.yml
+    - include: system.yml
