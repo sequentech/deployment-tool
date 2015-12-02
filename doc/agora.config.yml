@@ -46,6 +46,13 @@ config:
   sentry_db_password: 'secret-password'
   sentry_admin_password: 'secret-password'
 
+  # Sending the code sms and email log to an email
+  sentry_msg_log: False
+  # the log receiver
+  sentry_msg_log_email: log@agoravoting.com
+  # the log sender
+  authapi_server_email: log@agoravoting.com
+
   # Authorities
 
   authorities:

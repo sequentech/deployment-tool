@@ -36,6 +36,11 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'raven.contrib.django.raven_compat',
 )
 
+{% if config.sentry_msg_log %}
+ADMINS = ( ('msg log', '{{ config.sentry_msg_log_email }}'), )
+SERVER_EMAIL = '{{ config.authapi_server_email }}'
+{% endif %}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -49,6 +54,12 @@ LOGGING = {
         },
     },
     'handlers': {
+{% if config.sentry_msg_log %}
+        'mail_admins': {
+            'level': 'INFO',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+{% endif %}
         'sentry': {
             'level': 'INFO',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
@@ -70,6 +81,13 @@ LOGGING = {
             'handlers': ['sentry'],
             'propagate': False,
         },
+{% if config.sentry_msg_log %}
+        'authapi.notify': {
+            'level': 'INFO',
+            'handlers': ['sentry', 'mail_admins'],
+            'propagate': False,
+        },
+{% endif %}
         'raven': {
             'level': 'DEBUG',
             'handlers': ['console'],
