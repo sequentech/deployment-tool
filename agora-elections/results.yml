@@ -3,7 +3,7 @@
   sudo: true
   sudo_user: agoraelections
   git: repo={{ repos.results.repo }} version={{ repos.results.version }}
-       dest=/home/agoraelections/agora-results
+       dest=/home/agoraelections/agora-results force={{ repos.results.force }}
 
 - name: AgoraResults, req.txt
   sudo: true

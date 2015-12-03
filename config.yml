@@ -6,9 +6,10 @@ config:
   global_secret_key: '<PASSWORD>'
   cloudflare: True
 
+  host: agora-auth5
+
   # election-orchestra
   port: 5000
-  host: agora-auth5
   public_ipaddress: 192.168.0.11
   private_ipaddress: 192.168.0.11
   vfork_server_ports: [4081, 4083]
