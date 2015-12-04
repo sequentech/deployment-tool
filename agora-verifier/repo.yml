@@ -1,0 +1,58 @@
+---
+- name: AgoraVerifier, Downloading agora-verifier repo
+  sudo: true
+  sudo_user: agoraverifier
+  git:
+    repo={{ repos.averifier.repo }}
+    version={{ repos.averifier.version }}
+    dest=/home/agoraverifier/agora-verifier
+    force=yes
+
+- name: AgoraVerifier, Downloading agora-tally repo
+  sudo: true
+  sudo_user: agoraverifier
+  git:
+    repo={{ repos.tally.repo }}
+    version={{ repos.tally.version }}
+    dest=/home/agoraverifier/agora-tally
+    force=yes
+
+- name: AgoraVerifier, Downloading agora-results repo
+  sudo: true
+  sudo_user: agoraverifier
+  git:
+    repo={{ repos.results.repo }}
+    version={{ repos.results.version }}
+    dest=/home/agoraverifier/agora-results
+    force=yes
+
+- name: AgoraVerifier, symbolic links
+  sudo: true
+  sudo_user: agoraverifier
+  file:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    state=link
+    owner=agoraverifier
+  with_items:
+    - src: '/home/agoraverifier/agora-tally/agora_tally'
+      dest: '/home/agoraverifier/agora-verifier/agora_tally'
+
+    - src: '/home/agoraverifier/agora-results/agora_results'
+      dest: '/home/agoraverifier/agora-verifier/agora_results'
+
+    - src: '/home/agoraverifier/agora-results/agora-results'
+      dest: '/home/agoraverifier/agora-verifier/agora-results'
+
+- name: AgoraVerifier, executable bits
+  sudo: true
+  sudo_user: agoraverifier
+  file:
+    path={{ item }}
+    state=file
+    mode=0744
+    owner=agoraverifier
+  with_items:
+      - /home/agoraverifier/agora-verifier/package.sh
+      - /home/agoraverifier/agora-verifier/pverify.sh
+      - /home/agoraverifier/agora-verifier/vmnc.sh

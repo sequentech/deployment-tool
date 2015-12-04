@@ -10,3 +10,4 @@
     - include: system.yml
     - include: agora-tools/main.yml
     - include: eorchestra/main.yml
+    - include: agora-verifier/main.yml

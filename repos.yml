@@ -24,6 +24,9 @@ repos:
     vfork:
         repo: https://github.com/agoravoting/vfork
         version: next
+    averifier:
+        repo: https://github.com/agoravoting/agora-verifier.git
+        version: openstv
     guicommon:
         repo: https://github.com/agoravoting/agora-gui-common.git
         version: next
