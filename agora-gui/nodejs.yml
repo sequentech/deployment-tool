@@ -1,37 +1,38 @@
 ---
-- stat: path=/usr/bin/local/node --version
+- name: AgoraGui, Check if node is installed
+  shell: /usr/local/bin/node --version
   register: node_version
   ignore_errors: True
 
 - name: AgoraGui, Install Nodejs 1/5
   sudo: true
   sudo_user: agoragui
-  when: node_version.rc == 0 and 'v0.10.31' in node_version.stdout
+  when: node_version.rc != 0 or 'v0.10.31' not in node_version.stdout
   shell: wget http://nodejs.org/dist/v0.10.31/node-v0.10.31.tar.gz -O /home/agoragui/node.0.10.31.tar.gz
 
 - name: AgoraGui, Install Nodejs 2/5
   sudo: true
   sudo_user: agoragui
-  when: node_version.rc == 0 and 'v0.10.31' in node_version.stdout
+  when: node_version.rc != 0 or 'v0.10.31' not in node_version.stdout
   shell: tar -xzvf /home/agoragui/node.0.10.31.tar.gz
          chdir=/home/agoragui/
 
 - name: AgoraGui, Install Nodejs 3/5
   sudo: true
   sudo_user: agoragui
-  when: node_version.rc == 0 and 'v0.10.31' in node_version.stdout
+  when: node_version.rc != 0 or 'v0.10.31' not in node_version.stdout
   shell: ./configure && make
          chdir=/home/agoragui/node-v0.10.31
 
 - name: AgoraGui, Install Nodejs 4/5
   sudo: true
-  when: node_version.rc == 0 and 'v0.10.31' in node_version.stdout
+  when: node_version.rc != 0 or 'v0.10.31' not in node_version.stdout
   shell: make install
          chdir=/home/agoragui/node-v0.10.31
 
-- name: AgoraGui, Install Nodejs 5/51
+- name: AgoraGui, Install Nodejs 5/5
   sudo: true
-  when: node_version.rc == 0 and 'v0.10.31' in node_version.stdout
+  when: node_version.rc != 0 or 'v0.10.31' not in node_version.stdout
   npm: name={{item}} global=yes state=present
   with_items:
     - grunt-cli
