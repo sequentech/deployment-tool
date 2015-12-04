@@ -2,9 +2,18 @@
 - name: EOrchestra, Downloading frestq, election-orchestra and vfork
   sudo: true
   sudo_user: eorchestra
-  git: repo={{ item.repo.repo }} version={{ item.repo.version }}
-       dest=/home/eorchestra/{{ item.dest }} force={{ item.repo.force }}
+  git: repo={{ item.repo }} version={{ item.version }}
+       dest=/home/eorchestra/{{ item.dest }} force={{ item.force }}
   with_items:
-    - { repo: { repo: "{{ repos.frestq.repo }}", version: "{{ repos.frestq.version }}" }, force: "{{ repos.frestq.force }}" }, dest: frestq }
-    - { repo: { repo: "{{ repos.eorchestra.repo }}", version: "{{ repos.eorchestra.version }}" }, force: "{{ repos.eorchestra.force }}" }, dest: election-orchestra }
-    - { repo: { repo: "{{ repos.vfork.repo }}", version: "{{ repos.vfork.version }}" }, force: "{{ repos.vfork.force }}" }, dest: vfork }
+    - repo: "{{ repos.frestq.repo }}"
+      version: "{{ repos.frestq.version }}"
+      force: "{{ repos.frestq.force }}"
+      dest: frestq
+    - repo: "{{ repos.eorchestra.repo }}"
+      version: "{{ repos.eorchestra.version }}"
+      force: "{{ repos.eorchestra.force }}"
+      dest: election-orchestra
+    - repo: "{{ repos.vfork.repo }}"
+      version: "{{ repos.vfork.version }}"
+      force: "{{ repos.vfork.force }}"
+      dest: vfork

@@ -47,5 +47,5 @@
   sudo: true
   service: name={{ item.name }} state=restarted sleep={{ item.sleep }}
   with_items:
-    - { name: supervisor, sleep: {{ params.sleep.slow }} }
-    - { name: nginx, sleep: {{ params.sleep.fast }} }
+    - { name: supervisor, sleep: "{{ params.sleep.slow }}" }
+    - { name: nginx, sleep: "{{ params.sleep.fast }}" }
