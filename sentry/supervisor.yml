@@ -9,8 +9,4 @@
 
 - name: Restarting supervisord
   sudo: true
-  service: name=supervisor state=stopped
-
-- name: Restarting supervisord
-  sudo: true
-  service: name=supervisor state=started
+  service: name=supervisor state=stopped sleep=6

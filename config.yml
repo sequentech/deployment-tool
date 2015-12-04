@@ -43,8 +43,16 @@ config:
 
   # sentry
   sentry_port: 9090
+  sentry_admin_user: 'admin@agoravoting.com'
   sentry_db_password: '<PASSWORD>'
   sentry_admin_password: '<PASSWORD>'
+
+  # Sending the code sms and email log to an email
+  sentry_msg_log: False
+  # the log receiver
+  sentry_msg_log_email: log@agoravoting.com
+  # the log sender
+  authapi_server_email: log@agoravoting.com
 
   # Authorities
 
