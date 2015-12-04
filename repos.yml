@@ -6,9 +6,6 @@ repos:
     results:
         repo: https://github.com/agoravoting/agora-results.git
         version: next
-    openstv:
-        repo: https://github.com/agoravoting/openstv.git
-        version: next
     tally:
         repo: https://github.com/agoravoting/agora-tally.git
         version: next
