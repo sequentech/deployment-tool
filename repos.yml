@@ -11,6 +11,7 @@ repos:
     tally:
         repo: https://github.com/agoravoting/agora-tally.git
         version: next
+        force: yes
     authapi:
         repo: https://github.com/agoravoting/authapi.git
         version: next
@@ -26,6 +27,7 @@ repos:
     eorchestra:
         repo: https://github.com/agoravoting/election-orchestra
         version: next
+        force: yes
     vfork:
         repo: https://github.com/agoravoting/vfork
         version: next
