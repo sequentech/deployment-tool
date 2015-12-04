@@ -24,9 +24,6 @@ repos:
     eorchestra:
         repo: https://github.com/agoravoting/election-orchestra
         version: next
-    aciudadana:
-        repo: https://github.com/agoravoting/agora-ciudadana.git
-        version: security
     vfork:
         repo: https://github.com/agoravoting/vfork
         version: next

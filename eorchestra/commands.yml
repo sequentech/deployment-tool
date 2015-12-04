@@ -15,6 +15,25 @@
   sudo: true
   file: path="/srv/eotests" owner="eorchestra" group="users" state=directory
 
+- name: creating /srv/eotests/encrypt-deps
+  sudo: true
+  file: path="/srv/eotests/encrypt-deps" owner="eorchestra" group="users" state=directory
+
+- name: encrypt.js deps
+  sudo: true
+  get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/
+  with_items:
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn2.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/bigint.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/class.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/elgamal.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/random.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sha1.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sha2.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sjcl.js
+    - http://momentjs.com/downloads/moment.js
+
 - name: encrypt.js
   sudo: true
   template: src=eorchestra/templates/commands/encrypt.js dest=/srv/eotests/encrypt.js owner=root mode=0755
