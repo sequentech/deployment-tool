@@ -2,7 +2,7 @@
 - name: AgoraGui, npm install
   sudo: true
   sudo_user: agoragui
-  npm: name={{item}} path=/home/agoragui/ state=latest
+  npm: path=/home/agoragui/{{ item }}
   with_items:
     - agora-gui-admin
     - agora-gui-elections
