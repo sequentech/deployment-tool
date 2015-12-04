@@ -1,5 +1,5 @@
 ---
-- name: Sentry, Installing packages
+- name: Sentry, apt-cache update
   sudo: true
   action: apt update_cache=yes
   
