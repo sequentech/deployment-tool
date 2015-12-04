@@ -2,7 +2,7 @@
 - name: AgoraGui, npm install
   sudo: true
   sudo_user: agoragui
-  shell: npm install chdir=/home/agoragui/{{ item }}
+  npm: name={{item}} path=/home/agoragui/ state=latest
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -17,7 +17,7 @@
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui,  Creating build.sh
+- name: AgoraGui, Creating build.sh
   sudo: true
   template: src=agora-gui/templates/build.sh dest=/home/agoragui/build.sh owner="agoragui" group="agoragui" mode=0744
 
