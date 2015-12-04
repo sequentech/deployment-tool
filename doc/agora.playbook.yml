@@ -15,3 +15,4 @@
     - include: agora-gui/main.yml
     - include: sentry/main.yml
     - include: oneserver/main.yml
+    - include: agora-verifier/main.yml

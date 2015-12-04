@@ -1,0 +1,10 @@
+---
+- name: AgoraVerifier, building agora-verifier
+  sudo: true
+  sudo_user: agoraverifier
+  command: /usr/bin/sbt clean proguard:proguard chdir=/home/agoraverifier/agora-verifier
+
+- name: AgoraVerifier, package agora-verifier
+  sudo: true
+  sudo_user: agoraverifier
+  command: sh ./package.sh chdir=/home/agoraverifier/agora-verifier
