@@ -2,6 +2,7 @@
 - name: Sentry, Installing packages
   sudo: true
   action: apt update_cache=yes
+  
 - name: Sentry, Installing packages
   sudo: true
   action: apt pkg={{item}} state=installed

@@ -1,36 +1,36 @@
 ---
-- name: authapi url config
+- name: OneServer, authapi url config
   sudo: true
   lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py
               line="ROOT_URLCONF = 'custom_urls'"
               state=present
 
-- name: Restarting authapi service
+- name: OneServer, Restarting authapi service
   sudo: true
   supervisorctl: name={{ item }} state=restarted
   with_items:
     - authapi
     - authapi_celery
 
-- name: authapi custom_urls.py
+- name: OneServer, authapi custom_urls.py
   sudo: true
   template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
 
-- name: All in one nginx
+- name: OneServer, All in one nginx
   sudo: true
   template: src=oneserver/templates/oneserver.conf dest=/etc/nginx/conf.d/oneserver.conf owner="root" mode=0644
 
 # dnie & fnmt certs
-- name: DNIE and FNMT ca in nginx
+- name: OneServer, DNIE and FNMT ca in nginx
   sudo: true
   template: src=oneserver/templates/dnie.conf dest=/etc/nginx/conf.d/dnie.conf owner="root" mode=0644
   when: config.dnie_host is defined
 
-- name: DNIE and FNMT ca
+- name: OneServer, DNIE and FNMT ca
   sudo: true
   template: src=oneserver/templates/ca.crt dest=/srv/certs/dnie.ca.crt
   when: config.dnie_host is defined
 
-- name: Restarting nginx
+- name: OneServer, Restarting nginx
   sudo: true
   service: name=nginx state=restarted

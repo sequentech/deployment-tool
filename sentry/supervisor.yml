@@ -7,6 +7,6 @@
   sudo: true
   template: src=sentry/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/sentry_celery.conf owner="root" mode=0644
 
-- name: Restarting supervisord
+- name: Sentry, Restarting supervisord
   sudo: true
   service: name=supervisor state=stopped sleep={{ params.sleep.slow }}

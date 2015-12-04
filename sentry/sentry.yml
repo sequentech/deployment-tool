@@ -1,5 +1,5 @@
 ---
-- name: Sentry Installation
+- name: Sentry, Sentry installation
   sudo: true
   sudo_user: sentry
   pip: name=sentry[postgres] virtualenv=/home/sentry/venv

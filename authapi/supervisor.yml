@@ -1,13 +1,13 @@
 ---
-- name: Creating supervisord conf
+- name: AuthApi, Creating supervisord conf
   sudo: true
   template: src=authapi/templates/supervisor.conf dest=/etc/supervisor/conf.d/authapi.conf owner="root" mode=0644
 
-- name: Creating celery supervisord conf
+- name: AuthApi, Creating celery supervisord conf
   sudo: true
   template: src=authapi/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/authapi_celery.conf owner="root" mode=0644
 
-- name: Restarting supervisord
+- name: AuthApi, Restarting supervisord
   sudo: true
   service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
 

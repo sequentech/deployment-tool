@@ -5,7 +5,7 @@
   sudo: true
   user: name=agoraelections shell=/bin/bash
 
-- name: Creating /etc/eopeers
+- name: AgoraElections, Creating /etc/eopeers
   sudo: true
   file: path=/etc/eopeers state=directory mode=0755
 
@@ -20,6 +20,7 @@
   sudo: true
   sudo_user: agoraelections
   template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
+
 - name: AgoraElections, Test conf
   sudo: true
   sudo_user: agoraelections
@@ -46,6 +47,7 @@
   sudo_user: agoraelections
   shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.keystore_pass }}"
          chdir=/home/agoraelections/
+
 - name: AgoraElections, Key store setup (2)
   sudo: true
   sudo_user: agoraelections
@@ -57,6 +59,7 @@
   sudo: true
   sudo_user: agoraelections
   shell: chmod u+x /home/agoraelections/agora-elections/admin/admin.py
+
 - name: AgoraElections, Admin setup (1)
   sudo: true
   sudo_user: agoraelections

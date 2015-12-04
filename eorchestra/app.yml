@@ -1,11 +1,11 @@
 ---
-- name: frestq python packages
+- name: EOrchestra, frestq python packages
   sudo: true
   sudo_user: eorchestra
   pip: virtualenv=/home/eorchestra/venv state=present
        requirements=/home/eorchestra/frestq/requirements.txt
 
-- name: eorchestra python packages
+- name: EOrchestra, eorchestra python packages
   sudo: true
   sudo_user: eorchestra
   pip: virtualenv=/home/eorchestra/venv state=present

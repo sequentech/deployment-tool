@@ -1,5 +1,5 @@
 ---
-- name: Downloading frestq, election-orchestra and vfork
+- name: EOrchestra, Downloading frestq, election-orchestra and vfork
   sudo: true
   sudo_user: eorchestra
   git: repo={{ item.repo.repo }} version={{ item.repo.version }}

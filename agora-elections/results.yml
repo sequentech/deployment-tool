@@ -11,7 +11,7 @@
             dest=/home/agoraelections/agora-results/results.req.txt
             owner="agoraelections" mode=0655
 
-- name: AgoraResults virtualenv
+- name: AgoraResults, virtualenv
   sudo: true
   sudo_user: agoraelections
   pip: executable=pip3

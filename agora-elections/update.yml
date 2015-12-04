@@ -1,6 +1,6 @@
 ---
 # git stash
-- name: agora-elections git stash
+- name: AgoraElections, git stash
   sudo: true
   sudo_user: agoraelections
   shell: git stash
@@ -9,7 +9,7 @@
 - include: repo.yml
 
 # git stash pop
-- name: agora-elections git stash pop
+- name: AgoraElections, git stash pop
   sudo: true
   sudo_user: agoraelections
   shell: git stash pop
@@ -20,7 +20,7 @@
 
 - include: results.yml
 
-- name: Restarting agora-elections service
+- name: AgoraElections, Restarting agora-elections service
   sudo: true
   supervisorctl: name={{ item }} state=restarted
   with_items:

@@ -1,29 +1,29 @@
 ---
-- name: AgoraGuiCommon, Git clone
+- name: AgoraGui, Git clone agora-gui-common
   sudo: true
   sudo_user: agoragui
   git: repo={{ repos.guicommon.repo }} version={{ repos.guicommon.version }}
        dest=/home/agoragui/agora-gui-common force={{ repos.guicommon.force }}
 
-- name: AgoraGuiAdmin, Git clone
+- name: AgoraGui, Git clone agora-gui-admin
   sudo: true
   sudo_user: agoragui
   git: repo={{ repos.guiadmin.repo }} version={{ repos.guiadmin.version }}
        dest=/home/agoragui/agora-gui-admin force={{ repos.guiadmin.force }}
 
-- name: AgoraGuiElections, Git clone
+- name: AgoraGui, Git clone agora-gui-elections
   sudo: true
   sudo_user: agoragui
   git: repo={{ repos.guielections.repo }} version={{ repos.guielections.version }}
        dest=/home/agoragui/agora-gui-elections force={{ repos.guielections.force }}
 
-- name: AgoraGuiBooth, Git clone
+- name: AgoraGui, Git clone agora-gui-booth
   sudo: true
   sudo_user: agoragui
   git: repo={{ repos.guibooth.repo }} version={{ repos.guibooth.version }}
        dest=/home/agoragui/agora-gui-booth force={{ repos.guibooth.force }}
 
-- name: Creating avConfig.js file
+- name: AgoraGui, Creating avConfig.js file
   sudo: true
   sudo_user: agoragui
   shell: cp /home/agoragui/agora-gui-common/avConfig.js /home/agoragui/avConfig.js

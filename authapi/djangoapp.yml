@@ -1,10 +1,10 @@
 ---
-- name: AuthApi,  Installing python pacakges
+- name: AuthApi, Installing python pacakges
   sudo: true
   sudo_user: authapi
   shell: /home/authapi/env/bin/pip install -r /home/authapi/authapi/requirements.txt
 
-- name: AuthApi,  Migrate
+- name: AuthApi, Migrate
   sudo: true
   sudo_user: authapi
   django_manage: command=migrate
