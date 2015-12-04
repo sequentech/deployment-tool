@@ -90,4 +90,4 @@
 
 - name: AgoraElections, restarting supervisor
   sudo: true
-  service: name=supervisor state=restarted sleep=4
+  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}

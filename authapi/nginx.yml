@@ -1,5 +1,5 @@
 ---
-- name: AuthApi,  Creating nginx conf
+- name: AuthApi, Creating nginx conf
   sudo: true
   template: src=authapi/templates/nginx.conf dest=/etc/nginx/conf.d/authapi.conf owner="root" mode=0644
 

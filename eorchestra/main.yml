@@ -43,9 +43,9 @@
   with_items:
     - /srv/election-orchestra/server1/public/
 
-- name: restarting services
+- name: restarting supervisor
   sudo: true
-  service: name={{ item }} state=restarted sleep=2
+  service: name={{ item.name }} state=restarted sleep={{ item.sleep }}
   with_items:
-    - supervisor
-    - nginx
+    - { name: supervisor, sleep: {{ params.sleep.slow }} }
+    - { name: nginx, sleep: {{ params.sleep.fast }} }
