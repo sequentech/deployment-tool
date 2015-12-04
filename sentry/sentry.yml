@@ -28,4 +28,6 @@
   sudo_user: sentry
   shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email='{{ config.sentry_admin_user }}' --superuser --password='{{ config.sentry_admin_password }}'
   register: command_result
-  failed_when: "'already exists' not in command_result.stderr"
+  failed_when:
+    - "'already exists' not in command_result.stderr"
+    - "command_result.rc != 0"
