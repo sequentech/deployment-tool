@@ -27,6 +27,7 @@ repos:
     averifier:
         repo: https://github.com/agoravoting/agora-verifier.git
         version: openstv
+        force: yes
     guicommon:
         repo: https://github.com/agoravoting/agora-gui-common.git
         version: next
