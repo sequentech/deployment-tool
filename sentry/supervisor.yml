@@ -9,4 +9,4 @@
 
 - name: Sentry, Restarting supervisord
   sudo: true
-  service: name=supervisor state=stopped sleep={{ params.sleep.slow }}
+  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
