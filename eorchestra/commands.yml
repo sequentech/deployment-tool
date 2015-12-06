@@ -1,5 +1,5 @@
 ---
-- name: commands
+- name: EOrchestra, creating commands
   sudo: true
   template: src=eorchestra/templates/commands/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
   with_items:
@@ -11,15 +11,15 @@
     - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0755" }
     - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0755" }
 
-- name: creating /srv/eotests
+- name: EOrchestra, creating /srv/eotests
   sudo: true
   file: path="/srv/eotests" owner="eorchestra" group="users" state=directory
 
-- name: creating /srv/eotests/encrypt-deps
+- name: EOrchestra, creating /srv/eotests/encrypt-deps
   sudo: true
   file: path="/srv/eotests/encrypt-deps" owner="eorchestra" group="users" state=directory
 
-- name: encrypt.js deps
+- name: EOrchestra, encrypt.js deps
   sudo: true
   get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/
   with_items:
@@ -34,6 +34,6 @@
     - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sjcl.js
     - http://momentjs.com/downloads/moment.js
 
-- name: encrypt.js
+- name: EOrchestra, encrypt.js
   sudo: true
   template: src=eorchestra/templates/commands/encrypt.js dest=/srv/eotests/encrypt.js owner=root mode=0755

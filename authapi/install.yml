@@ -1,15 +1,15 @@
 ---
 - include: repo.yml
 
-- name: AuthApi,  Creating deploy settings
+- name: AuthApi, Creating deploy settings
   sudo: true
   template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644
 
-- name: AuthApi,  Creating uwsgi settings
+- name: AuthApi, Creating uwsgi settings
   sudo: true
   template: src=authapi/templates/uwsgi.ini dest=/home/authapi/uwsgi.ini owner=authapi mode=0644
 
-- name: AuthApi,  launchshell.sh
+- name: AuthApi, launchshell.sh
   sudo: true
   template: src=authapi/templates/launchshell.sh dest=/home/authapi/launchshell.sh owner=authapi mode=0744
 
@@ -30,7 +30,7 @@
 
 - include: djangoapp.yml
 
-- name: AuthApi,  Admin user (2)
+- name: AuthApi, Admin user (2)
   sudo: true
   sudo_user: authapi
   django_manage: command=loaddata fixtures=/home/authapi/authapi/authapi/api/fixtures/initial.json

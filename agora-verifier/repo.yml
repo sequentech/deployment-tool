@@ -15,7 +15,7 @@
     repo={{ repos.tally.repo }}
     version={{ repos.tally.version }}
     dest=/home/agoraverifier/agora-tally
-    force=yes # TODO: parametrice
+    force={{ repos.tally.force }}
 
 - name: AgoraVerifier, Downloading agora-results repo
   sudo: true
@@ -24,7 +24,7 @@
     repo={{ repos.results.repo }}
     version={{ repos.results.version }}
     dest=/home/agoraverifier/agora-results
-    force=yes # TODO: parametrice
+    force={{ repos.results.force }}
 
 - name: AgoraVerifier, symbolic links
   sudo: true

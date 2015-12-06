@@ -26,10 +26,10 @@
   sudo_user: authapi
   lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py line="import authapi.deploy_sentry; authapi.deploy_sentry.update(globals())" state=present
 
-- name: Sentry-AuthApi restarting authapi
+- name: Sentry, restarting authapi
   sudo: true
   supervisorctl: name=authapi state=restarted
 
-- name: Sentry-AuthApi restarting authapi_celery
+- name: Sentry, restarting authapi_celery
   sudo: true
   supervisorctl: name=authapi_celery state=restarted

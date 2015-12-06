@@ -1,10 +1,10 @@
 ---
-- name: AuthApi,  Create Database User
+- name: AuthApi, Create Database User
   sudo: true
   sudo_user: postgres
   postgresql_user: user=authapi password=authapi port=5432
 
-- name: AuthApi,  Create Database
+- name: AuthApi, Create Database
   sudo: true
   sudo_user: postgres
   postgresql_db: name=authapi owner=authapi

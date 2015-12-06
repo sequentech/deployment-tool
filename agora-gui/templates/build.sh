@@ -2,15 +2,38 @@
 base=/home/agoragui
 guib=/home/agoragui
 
-rm -rf $base/dist-admin
-rm -rf $base/dist-booth
-rm -rf $base/dist-elections
-
+# compile all the modules, one by one. stop if they don't build, because
+# otherwise we would put in production a non-working version of the software
 cd $guib/agora-gui-admin/
-grunt build && cp -r dist $base/dist-admin
+grunt build
+if [ $? -ne 0 ]
+then
+  echo "build error in agora-gui-admin"
+  exit 1
+fi
 
 cd $guib/agora-gui-booth/
-grunt build && cp -r dist $base/dist-booth
+grunt build
+if [ $? -ne 0 ]
+then
+  echo "build error in agora-gui-booth"
+  exit 1
+fi
 
 cd $guib/agora-gui-elections/
-grunt build && cp -r dist $base/dist-elections
+grunt build
+if [ $? -ne 0 ]
+then
+  echo "build error in agora-gui-elections"
+  exit 1
+fi
+
+# only switch to the new build if everything was built correctly
+[ -d $base/dist-admin ] && rm -rf $base/dist-admin
+cp -r $guib/agora-gui-admin/dist $base/dist-admin
+
+[ -d $base/dist-booth ] && rm -rf $base/dist-booth
+cp -r $guib/agora-gui-booth/dist $base/dist-booth
+
+[ -d $base/dist-elections ] && rm -rf $base/dist-elections
+cp -r $guib/agora-gui-elections/dist $base/dist-elections

@@ -2,6 +2,7 @@
 - name: AgoraGui, Updating packages
   sudo: true
   action: apt update_cache=yes
+
 - name: AgoraGui, Installing packages
   sudo: true
   action: apt pkg={{item}} state=installed
@@ -10,5 +11,3 @@
     - gcc
     - g++
     - binutils
-    #- nodejs
-    #- npm

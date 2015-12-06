@@ -3,7 +3,7 @@
   sudo: true
   sudo_user: agoraelections
   git: repo={{ repos.results.repo }} version={{ repos.results.version }}
-       dest=/home/agoraelections/agora-results
+       dest=/home/agoraelections/agora-results force={{ repos.results.force }}
 
 - name: AgoraResults, req.txt
   sudo: true
@@ -11,7 +11,7 @@
             dest=/home/agoraelections/agora-results/results.req.txt
             owner="agoraelections" mode=0655
 
-- name: AgoraResults virtualenv
+- name: AgoraResults, virtualenv
   sudo: true
   sudo_user: agoraelections
   pip: executable=pip3

@@ -1,8 +1,9 @@
 ---
-- name: Updating packages
+- name: Packages, Updating packages
   sudo: true
   action: apt update_cache=yes
-- name: Installing packages
+
+- name: Packages, Installing packages
   sudo: true
   action: apt pkg={{item}} state=installed
   with_items:
