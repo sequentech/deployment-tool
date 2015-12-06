@@ -5,7 +5,7 @@ params:
   # here exactly how many seconds it should wait.
   sleep:
     fast: 2
-    slow: 6
+    slow: 15
 
 config:
   backup_password: '<PASSWORD>'
