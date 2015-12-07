@@ -29,10 +29,32 @@
     ssh_key_bits=4096
     ssh_key_file=.ssh/id_rsa
 
-- name: High Availability & Load Balancing [master], Authorizing slave key
+- name: High Availability & Load Balancing [master], Authorizing agoraelections slave keys
   sudo: true
   when: config.load_balancing.is_master
   authorized_key:
     user=agoraelections
     key="{{ item }}"
-  with_items: config.load_balancing.master.slave_ssh_keys
+  with_items: config.load_balancing.master.slave_agoraelections_ssh_keys
+
+- name: High Availability & Load Balancing [master], Authorizing postgres slave keys
+  sudo: true
+  when: config.load_balancing.is_master
+  authorized_key:
+    user=postgres
+    key="{{ item }}"
+  with_items: config.load_balancing.master.slave_postgres_ssh_keys
+
+- name: High Availability & Load Balancing [slave], Authorizing postgres slave keys
+  sudo: true
+  sudo_user: postgres
+  when: not config.load_balancing.is_master
+  shell: |
+    expect -c '
+    spawn ssh postgres@{{config.load_balancing.slave.master_hostname}} echo hola
+    expect {
+    yes/no { send yes\r ; exp_continue}
+    }'
+  register: command_result
+  failed_when: "'hola' not in command_result.stdout"
+

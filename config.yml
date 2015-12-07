@@ -107,12 +107,17 @@ config:
       # The list of keys in here will be accepted  to login as agoraelections.
       # This is used for rsync synchronization.
       #
-      # The trust model is "you trust your slave machines to login as
-      # agoraelections'.
-      #
       # The ssh key you need to put here can be found in the file
       # /home/agoraelections/.ssh/id_rsa.pub in the slave machines.
-      slave_ssh_keys:
+      slave_agoraelections_ssh_keys:
+        - 'ssh-rsa whatever ansible-generated'
+
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /var/lib/postgresql/.ssh/id_rsa.pub in the slave machines.
+      slave_postgres_ssh_keys:
         - 'ssh-rsa whatever ansible-generated'
 
       # CIDR block address slaves' used to specify:
