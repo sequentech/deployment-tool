@@ -123,6 +123,7 @@
 - name: High Availability & Load Balancing [master], checking repmgr cluster state
   sudo: true
   sudo_user: postgres
+  ignore_errors: true
   register: repmgr_cluster_show
   shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
 
