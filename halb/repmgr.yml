@@ -1,4 +1,8 @@
 ---
+- name: High Availability & Load Balancing, Start postgresql
+  sudo: true
+  service: name=postgresql status=started
+
 - name: High Availability & Load Balancing, Create repmgr user
   sudo: true
   user: name=repmgr shell=/bin/bash home=/home/repmgr
