@@ -1,0 +1,20 @@
+---
+- name: High Availability & Load Balancing, Creating syncdirs_from_master.conf
+  sudo: true
+  template:
+    src=halb/templates/syncdirs_from_master.conf
+    dest=/etc/supervisor/conf.d/syncdirs_from_master.conf
+    owner="root"
+    mode=0644
+
+- name: High Availability & Load Balancing, Creating syncdirs_from_master.sh
+  sudo: true
+  template:
+    src=halb/templates/syncdirs_from_master.sh
+    dest=/usr/bin/syncdirs_from_master.sh
+    owner="root"
+    mode=0744
+
+- name: High Availability & Load Balancing, Restarting supervisord
+  sudo: true
+  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}

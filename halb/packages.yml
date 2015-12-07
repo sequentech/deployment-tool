@@ -1,0 +1,38 @@
+---
+- name: High Availability & Load Balancing, Updating packages
+  sudo: true
+  action: apt update_cache=yes
+
+- name: High Availability & Load Balancing, Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - memcached
+    - rsync
+    - libedit-dev
+    - libpam-dev
+
+- name: High Availability & Load Balancing, non-local memcached.conf
+  lineinfile:
+    dest=dest=/etc/sudoers
+    state=absent
+    line="-l 127.0.0.1"
+
+- name: High Availability & Load Balancing, Restart memcached
+  service: name=memcached state=restarted
+
+- name: High Availability & Load Balancing, Create ssh key for agoraelections
+  sudo: true
+  user:
+    name=agoraelections
+    generate_ssh_key=yes
+    ssh_key_bits=4096
+    ssh_key_file=.ssh/id_rsa
+
+- name: High Availability & Load Balancing [master], Authorizing slave key
+  sudo: true
+  when: config.load_balancing.is_master
+  authorized_key:
+    user=agoraelections
+    key="{{ item }}"
+  with_items: config.load_balancing.master.slave_ssh_keys

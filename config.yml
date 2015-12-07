@@ -78,3 +78,43 @@ config:
       image: "/docs/logo_agora.png"
   director: 'auth1'
   auths: "['auth2']"
+
+  #
+  # Load Balancing & High Availability configuration details
+  #
+  load_balancing:
+    is_master: false
+
+    # Id of the node. Both master and slaves require to have a unique id.
+    # This is used by repmgr.
+    repmgr_node_id: 1
+
+    # Configuration needed when the machine is configured to be a slave i.e.
+    # 'is_master' is set to 'false'
+    slave:
+      # hostname of the master. Used to:
+      # - connect via rsync
+      # - connect via postgresql
+      master_hostname: 'localhost'
+
+      # specifies the update frequency of the rsync of dirs from master.
+      # rsync is done of /etc/eopeers/ and /home/agoraelections/datastore
+      rsync_update_secs: 600
+
+    # Configuration needed when the machine is configured to be a master i.e.
+    # 'is_master' is set to 'true'
+    master:
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The trust model is "you trust your slave machines to login as
+      # agoraelections'.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /home/agoraelections/.ssh/id_rsa.pub in the slave machines.
+      slave_ssh_keys:
+        - 'ssh-rsa whatever ansible-generated'
+
+      # CIDR block address slaves' used to specify:
+      #  - which machines can access to postgresql
+      slave_cidr_address: '192.168.50.4/24'
