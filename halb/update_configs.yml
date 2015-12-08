@@ -8,7 +8,7 @@
   stat: path=/home/authapi/authapi/authapi/authapi/deploy.py
   register: st_authapi
 
-  - name: High Availability & Load Balancing, check authapi conf file
+- name: High Availability & Load Balancing, check authapi conf file
   stat: path=/home/sentry/sentry.conf.py
   register: st_sentry
 
