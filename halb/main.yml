@@ -2,3 +2,4 @@
 - include: packages.yml
 - include: rsync.yml
 - include: repmgr.yml
+- include: update_configs.yml
