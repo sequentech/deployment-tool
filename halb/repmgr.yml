@@ -164,7 +164,7 @@
 - name: High Availability & Load Balancing [slave], register the standby
   sudo: true
   sudo_user: postgres
-  when: not config.load_balancing.is_master
+  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.host}} user=repmgr dbname=repmgr') == -1
   shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf standby register
 
 - name: High Availability & Load Balancing, configure agora-elections
