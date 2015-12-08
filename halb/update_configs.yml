@@ -1,33 +1,50 @@
 ---
+
+- name: High Availability & Load Balancing, check agora-elections conf file
+  stat: path=/home/agoraelections/agora-elections/conf/application.local.conf
+  register: st_agoraelections
+
+- name: High Availability & Load Balancing, check authapi conf file
+  stat: path=/home/authapi/authapi/authapi/authapi/deploy.py
+  register: st_authapi
+
+  - name: High Availability & Load Balancing, check authapi conf file
+  stat: path=/home/sentry/sentry.conf.py
+  register: st_sentry
+
 - name: High Availability & Load Balancing, configure agora-elections, authapi, sentry db
   sudo: true
-  sudo_user: agoraelections
+  when: "{{item.var}}.stat.exists"
   lineinfile:
     dest="{{item.path}}"
     line="{{item.line}}"
     regexp="{{item.rx}}"
     state=present
   with_items:
-    - line: "db.default.url=\\\"jdbc:postgresql://{{ load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}:5432/agora_elections\\\""
+    - line: "db.default.url=\\\"jdbc:postgresql://{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}:5432/agora_elections\\\""
       rx: "db.default.url[ \t]*="
       path: /home/agoraelections/agora-elections/conf/application.local.conf
+      var: st_agoraelections
 
-    - line: "memcached.host=\\\"{{ load_balancing.slave.master_hostname if not config.load_balancing.is_master else '127.0.0.1' }}:11211\\\""
+    - line: "memcached.host=\\\"{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else '127.0.0.1' }}:11211\\\""
       rx: "memcached.host[ \t]*="
       path: /home/agoraelections/agora-elections/conf/application.local.conf
+      var: st_agoraelections
 
-    - line: "        'HOST': '{{ load_balancing.slave.master_hostname if not config.load_balancing.is_master else '127.0.0.1' }}',"
+    - line: "        'HOST': '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else '127.0.0.1' }}',"
       rx: "        'HOST': '"
-      path: /home/authapi/authapi/authapi/auhapi/deploy.py
+      path: /home/authapi/authapi/authapi/authapi/deploy.py
+      var: st_authapi
 
-    - line: "        'HOST': '{{ load_balancing.slave.master_hostname if not config.load_balancing.is_master else '127.0.0.1' }}',"
+    - line: "        'HOST': '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else '127.0.0.1' }}',"
       rx: "        'HOST': '"
       path: /home/sentry/sentry.conf.py
+      var: st_sentry
 
 
-- name: High Availability & Load Balancing, restarting agora-elections
+- name: High Availability & Load Balancing, restarting services
   sudo: true
-  supervisorctl: name=agora-elections state=restarted
+  supervisorctl: name={{item}} state=restarted
   with_items:
     - authapi
     - authapi_celery
