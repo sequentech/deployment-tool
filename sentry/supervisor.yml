@@ -1,4 +1,12 @@
 ---
+- name: AuthApi, Creating sentry.sh
+  sudo: true
+  template: src=sentry/templates/authapi.sh dest=/home/sentry/sentry.sh owner="sentry" mode=0744
+
+- name: AuthApi, Creating sentry_celery.sh
+  sudo: true
+  template: src=sentry/templates/authapi.sh dest=/home/sentry/sentry_celery.sh owner="sentry" mode=0744
+
 - name: Sentry, Creating supervisord conf
   sudo: true
   template: src=sentry/templates/supervisor.conf dest=/etc/supervisor/conf.d/sentry.conf owner="root" mode=0644
