@@ -38,7 +38,7 @@ DATABASES = {
         'NAME': 'sentry',
         'USER': 'sentry',
         'PASSWORD': '{{ config.sentry_db_password }}',
-        'HOST': '',
+        'HOST': '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}',
         'PORT': '5432',
     }
 }

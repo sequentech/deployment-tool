@@ -2,9 +2,11 @@
 - name: AgoraElections, Create Database User
   sudo: true
   sudo_user: postgres
+  when: config.load_balancing.is_master
   postgresql_user: user=agora_elections password="{{config.agora_elections_db_password}}" port=5432
 
 - name: AgoraElections, Create Database
   sudo: true
   sudo_user: postgres
+  when: config.load_balancing.is_master
   postgresql_db: name=agora_elections owner=agora_elections

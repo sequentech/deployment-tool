@@ -1,18 +1,20 @@
 ---
 # global non-agora related configuration variables
 params:
-  # Sometimes services like supervisor take quite a while to restart. Configure
-  # here exactly how many seconds it should wait.
+  # Sometimes services like supervisor take quite a while to restart and some
+  # others don't. Configure here exactly how many seconds it should wait for
+  # processes that restart slowly or and those that are fast.
   sleep:
     fast: 2
     slow: 15
 
+# global configuration
 config:
   backup_password: '<PASSWORD>'
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
-  cloudflare: True
+  cloudflare: true
 
   host: agora-auth5
 
@@ -22,18 +24,19 @@ config:
   private_ipaddress: 192.168.0.11
   vfork_server_ports: [4081, 4083]
   vfork_hint_server_ports: [8081, 8083]
+  eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
   # agora-elections
   agora_elections_db_password: '<PASSWORD>'
   agora_elections_shared_secret: '<PASSWORD>'
   agora_elections_expiry: 60000
-  agora_elections_domain: dev.agoravoting.com
+  agora_elections_domain: agora
   agora_elections_port: 14443
-  keystore_pass: supersecret
+  keystore_pass: '<PASSWORD>'
 
   # agora-gui
-  agora_gui_domain: dev.agoravoting.com
+  agora_gui_domain: agora
   agora_gui_admin_port: 10090
   agora_gui_booth_port: 10091
   agora_gui_elections_port: 10092
@@ -43,36 +46,36 @@ config:
   dnie_host: cert.agora-auth5
 
   cert:
-    C: ES
-    ST: Madrid
-    L: Madrid
-    O: Agoravoting
-    OU: Agora_Voting_SL
-    EMAIL: agora@agoravoting.com
+    C: EN
+    ST: Ney York
+    L: Ney York
+    O: Example
+    OU: Example
+    EMAIL: info@example.com
 
   # sentry
   sentry_port: 9090
-  sentry_admin_user: 'admin@agoravoting.com'
+  sentry_admin_user: 'admin@example.com'
   sentry_db_password: '<PASSWORD>'
   sentry_admin_password: '<PASSWORD>'
 
   # Sending the code sms and email log to an email
   sentry_msg_log: False
   # the log receiver
-  sentry_msg_log_email: log@agoravoting.com
+  sentry_msg_log_email: log@example.com
   # the log sender
-  authapi_server_email: log@agoravoting.com
+  authapi_server_email: log@example.com
 
   # Authorities
 
   authorities:
     - id: "auth1"
-      name: "Agora Voting"
+      name: "Agora Voting 1"
       description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
       url: "https://agoravoting.com"
       image: "/docs/logo_agora.png"
     - id: "auth2"
-      name: "Agora Voting 1"
+      name: "Agora Voting 2"
       description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
       url: "https://agoravoting.com"
       image: "/docs/logo_agora.png"
@@ -83,7 +86,7 @@ config:
   # Load Balancing & High Availability configuration details
   #
   load_balancing:
-    is_master: false
+    is_master: true
 
     # Id of the node. Both master and slaves require to have a unique id.
     # This is used by repmgr.
@@ -122,4 +125,4 @@ config:
 
       # CIDR block address slaves' used to specify:
       #  - which machines can access to postgresql
-      slave_cidr_address: '192.168.50.4/24'
+      slave_cidr_address: '192.168.0.0/24'

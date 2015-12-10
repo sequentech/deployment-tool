@@ -1,11 +1,11 @@
 ---
-- name: AuthApi, Creating authapi.sh
-  sudo: true
-  template: src=authapi/templates/authapi.sh dest=/home/authapi/authapi.sh owner="authapi" mode=0744
-
 - name: AuthApi, Creating authapi_celery.sh
   sudo: true
   template: src=authapi/templates/authapi_celery.sh dest=/home/authapi/authapi_celery.sh owner="authapi" mode=0744
+
+- name: AuthApi, Creating authapi.sh
+  sudo: true
+  template: src=authapi/templates/authapi.sh dest=/home/authapi/authapi.sh owner="authapi" mode=0744
 
 - name: AuthApi, Creating supervisord conf
   sudo: true
