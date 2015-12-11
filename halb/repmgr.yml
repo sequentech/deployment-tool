@@ -12,6 +12,37 @@
     - "host    replication     repmgr  {{config.load_balancing.master.slave_cidr_address}}         trust"
     - "host    agora_elections agora_elections {{config.load_balancing.master.slave_cidr_address}}         md5"
 
+- name: High Availability & Load Balancing [master], configure postgresql.conf
+  sudo: true
+  sudo_user: postgres
+  when: config.load_balancing.is_master
+  lineinfile:
+    dest=/etc/postgresql/9.3/main/postgresql.conf
+    line="{{item.line}}"
+    regexp="{{item.rx}}"
+    state="{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
+  with_items:
+    - line: "listen_addresses = '*'"
+      rx: "listen[ \t]*="
+
+    - line: "hot_standby = on"
+      rx: "hot_standby[ \t]*="
+
+    - line: "wal_level = 'hot_standby'"
+      rx: "wal_level[ \t]*="
+
+    - line: "max_wal_senders = 10"
+      rx: "max_wal_senders[ \t]*="
+
+    - line: "wal_keep_segments = 5000"
+      rx: "wal_keep_segments[ \t]*="
+
+    - line: "archive_mode = on"
+      rx: "archive_mode[ \t]*="
+
+    - line: "archive_command = 'cd .'"
+      rx: "archive_command[ \t]*="
+
 - name: High Availability & Load Balancing, Start postgresql
   sudo: true
   service: name=postgresql state=restarted
@@ -95,36 +126,6 @@
     - "conninfo='host={{config.host}} user=repmgr dbname=repmgr'"
     - "pg_bindir=/usr/lib/postgresql/9.3/bin"
 
-- name: High Availability & Load Balancing [master], configure postgresql.conf
-  sudo: true
-  sudo_user: postgres
-  when: config.load_balancing.is_master
-  lineinfile:
-    dest=/etc/postgresql/9.3/main/postgresql.conf
-    line="{{item.line}}"
-    regexp="{{item.rx}}"
-    state="{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
-  with_items:
-    - line: "listen_addresses = '*'"
-      rx: "listen[ \t]*="
-
-    - line: "hot_standby = on"
-      rx: "hot_standby[ \t]*="
-
-    - line: "wal_level = 'hot_standby'"
-      rx: "wal_level[ \t]*="
-
-    - line: "max_wal_senders = 10"
-      rx: "max_wal_senders[ \t]*="
-
-    - line: "wal_keep_segments = 5000"
-      rx: "wal_keep_segments[ \t]*="
-
-    - line: "archive_mode = on"
-      rx: "archive_mode[ \t]*="
-
-    - line: "archive_command = 'cd .'"
-      rx: "archive_command[ \t]*="
 
 - name: High Availability & Load Balancing [master], checking repmgr cluster state
   sudo: true
