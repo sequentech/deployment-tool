@@ -1,4 +1,8 @@
 ---
+- name: AgoraElections, Start postgresql
+  sudo: true
+  service: name=postgresql state=started
+
 - name: AgoraElections, Create Database User
   sudo: true
   sudo_user: postgres
