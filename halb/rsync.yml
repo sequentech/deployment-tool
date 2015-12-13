@@ -12,7 +12,7 @@
   template:
     src=halb/templates/syncdirs_from_master.sh
     dest=/usr/bin/syncdirs_from_master.sh
-    owner="root"
+    owner="agoraelections"
     mode=0744
 
 - name: High Availability & Load Balancing, Restarting supervisord
