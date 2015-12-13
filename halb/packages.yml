@@ -21,13 +21,19 @@
 - name: High Availability & Load Balancing, Restart memcached
   service: name=memcached state=restarted
 
-- name: High Availability & Load Balancing, Create ssh key for agoraelections
+- name: High Availability & Load Balancing, Create ssh key for agoraelections, postgres
   sudo: true
   user:
-    name=agoraelections
+    name={{item}}
     generate_ssh_key=yes
+    state=present
+    ssh_key_type=rsa
+    ssh_key_comment="{{ item }}@{{ ansible_nodename }}/ansible-generated"
     ssh_key_bits=4096
     ssh_key_file=.ssh/id_rsa
+  with_items:
+   - agoraelections
+   - postgres
 
 - name: High Availability & Load Balancing [master], Authorizing agoraelections slave keys
   sudo: true
