@@ -27,3 +27,18 @@
     - libgmp-dev
     - make
     - m4
+
+- name: Packages, Generate UTF-8 locales
+  sudo: true
+  shell: locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
+
+- name: Packages, Configure locales
+  sudo: true
+  shell: dpkg-reconfigure locales
+
+- name: Packages, Create postgresql cluster
+  sudo: true
+  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.3 main
+  register: cmdoutput
+  failed_when: "'Error: cluster configuration already exists' not in cmdoutput.stderr and cmdoutput.rc != 0"
+
