@@ -81,11 +81,17 @@
   when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout
   shell: make USE_PGXS=1 install chdir=/home/repmgr/repmgr-3.0.2/
 
+- name: High Availability & Load Balancing [master], check if repmgr postgres user exists
+  sudo: true
+  sudo_user: postgres
+  register: repmgr_user_exists
+  shell: psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='repmgr'"
+
 - name: High Availability & Load Balancing [master], create repmgr postgres user
   sudo: true
   sudo_user: postgres
-  when: config.load_balancing.is_master
-  postgresql_user: name=repmgr role_attr_flags=SUPERUSER
+  when: "config.load_balancing.is_master and '1' not in repmgr_user_exists.stdout"
+  postgresql_user: name=repmgr role_attr_flags=SUPERUSER state=present
 
 - name: High Availability & Load Balancing [master], create repmgr postgres db
   sudo: true
@@ -131,7 +137,6 @@
     - "conninfo='host={{config.host}} user=repmgr dbname=repmgr'"
     - "pg_bindir=/usr/lib/postgresql/9.3/bin"
 
-
 - name: High Availability & Load Balancing [master], checking repmgr cluster state
   sudo: true
   sudo_user: postgres
@@ -144,11 +149,13 @@
   sudo_user: postgres
   when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('* master  | host=') == -1
   shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf master register
+  register: register_master_cmd
+  failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
 
 - name: High Availability & Load Balancing [master], promote to master
   sudo: true
   sudo_user: postgres
-  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('* master  | host=') != -1 and repmgr_cluster_show.stdout.find('* master  | host={{config.host}} ') == -1
+  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.host}} ') == -1
   shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
