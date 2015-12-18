@@ -1,4 +1,9 @@
 ---
+params:
+  sleep:
+    fast: 2
+    slow: 6
+
 config:
   backup_password: 'secret-auth1-backup'
 
