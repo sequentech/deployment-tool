@@ -47,8 +47,8 @@ config:
 
   cert:
     C: EN
-    ST: Ney York
-    L: Ney York
+    ST: Ney_York
+    L: Ney_York
     O: Example
     OU: Example
     EMAIL: info@example.com
@@ -65,6 +65,10 @@ config:
   sentry_msg_log_email: log@example.com
   # the log sender
   authapi_server_email: log@example.com
+
+  # administration interface
+  authapi_admin_email: 'admin@agoravoting.com'
+  authapi_admin_password: '<PASSWORD>'
 
   # Authorities
 
