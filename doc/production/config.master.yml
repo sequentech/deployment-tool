@@ -1,0 +1,128 @@
+---
+# global non-agora related configuration variables
+params:
+  # Sometimes services like supervisor take quite a while to restart and some
+  # others don't. Configure here exactly how many seconds it should wait for
+  # processes that restart slowly or and those that are fast.
+  sleep:
+    fast: 2
+    slow: 15
+
+# global configuration
+config:
+  backup_password: '<PASSWORD>'
+
+  # global config. Note: currently some other keys are used as global conf
+  global_secret_key: '<PASSWORD>'
+  cloudflare: false
+
+  host: agora-auth5
+
+  # election-orchestra
+  port: 5000
+  public_ipaddress: 192.168.50.4
+  private_ipaddress: 192.168.50.4
+  vfork_server_ports: [4081, 4083]
+  vfork_hint_server_ports: [8081, 8083]
+  eorchestra_password: '<PASSWORD>'
+  auto_mode: true
+
+  # agora-elections
+  agora_elections_db_password: '<PASSWORD>'
+  agora_elections_shared_secret: '<PASSWORD>'
+  agora_elections_expiry: 60000
+  agora_elections_domain: agora
+  agora_elections_port: 14443
+  keystore_pass: '<PASSWORD>'
+
+  # agora-gui
+  agora_gui_domain: agora
+  agora_gui_admin_port: 10090
+  agora_gui_booth_port: 10091
+  agora_gui_elections_port: 10092
+  agora_gui_lang: es
+
+  # dnie config
+  dnie_host: cert.agora-auth5
+
+  cert:
+    C: EN
+    ST: Ney York
+    L: Ney York
+    O: Example
+    OU: Example
+    EMAIL: info@example.com
+
+  # sentry
+  sentry_port: 9090
+  sentry_admin_user: 'admin@example.com'
+  sentry_db_password: '<PASSWORD>'
+  sentry_admin_password: '<PASSWORD>'
+
+  # Sending the code sms and email log to an email
+  sentry_msg_log: False
+  # the log receiver
+  sentry_msg_log_email: log@example.com
+  # the log sender
+  authapi_server_email: log@example.com
+
+  # Authorities
+
+  authorities:
+    - id: "auth1"
+      name: "Agora Voting 1"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+    - id: "auth2"
+      name: "Agora Voting 2"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+  director: 'auth1'
+  auths: "['auth2']"
+
+  #
+  # Load Balancing & High Availability configuration details
+  #
+  load_balancing:
+    is_master: true
+
+    # Id of the node. Both master and slaves require to have a unique id.
+    # This is used by repmgr.
+    repmgr_node_id: 1
+
+    # Configuration needed when the machine is configured to be a slave i.e.
+    # 'is_master' is set to 'false'
+    slave:
+      # hostname of the master. Used to:
+      # - connect via rsync
+      # - connect via postgresql
+      master_hostname: 'localhost'
+
+      # specifies the update frequency of the rsync of dirs from master.
+      # rsync is done of /etc/eopeers/ and /home/agoraelections/datastore
+      rsync_update_secs: 600
+
+    # Configuration needed when the machine is configured to be a master i.e.
+    # 'is_master' is set to 'true'
+    master:
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /home/agoraelections/.ssh/id_rsa.pub in the slave machines.
+      slave_agoraelections_ssh_keys: []
+      #  - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChqdkxOwcZasOpW8b6FPULMLYozOG4GKioFVmH+zT8l7fO/+SSeqEePJT5DDdvhuFuatStRvkrlRns4PoB3AeOsjnk+PIe+nIRXx1o7Wyjtn8AzWq55X8XWNHuh6QsVbVWFD6AzbFb2kiAx8sRe2+suLbW2DuSoCBWoildWe0ipMW1//qv477jfOZKdYlVAvRu/vbhoBwvmnlI/7N06oDkhyBJ+WUlY8T72FCTWhA3U6Q3CHRryNOG8sRIvVcq9m30dY3x8BvmRDbEQRjOnLTvW+Ua1KLnq9azVBjYvvbkTWVkiLMLhKEqgjXrNvL1sPVjmyqJ9PPNxaztW3JAVmJkTQk40K32z4G+pq1Hfy5vuOhnCubyRf5b4KWFxGUbZX9vM1+U8o5w7HOspGM+60e4NASVXIUYJmdwXL3w2ERwn3qvMhhEvqgtan9+3Lu5lpKMcaax0/GhxYREzdN4njRpXAkUIf2TjRTohx6s+6QCTrXpaQm/sLUITH8fRJqG6JVkp7f6Dldo9PesxnwWdmYcamTyhPpnuk+vA6sXPQmSpxhUTObXir0o/VZmacUbU193884MS72/hmk7m7J1u0EU95fW80WjdordrjI3Zj9TvWRo1tSbKbzc6Gan8mVXeMa22yRlvL4ZcxkKgAcDuz1zdCrlV8pZcsRdBobQwdf2mw== agoraelections@agora-slave/ansible-generated'
+
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /var/lib/postgresql/.ssh/id_rsa.pub in the slave machines.
+      slave_postgres_ssh_keys: []
+      #  - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3dzOI4ZV6h0lv5KtUSRgGNBcCLv0+CSwsO7JDcUeTIcmzpAecsBR9d2SikKpoB4tKxDUFOCvmBak1mjaROdqRCIHJZTlEVy22hCeVD0Twdq2H+teGnXdoJ5yI1VgZllLMgOIXuDqKJMsIxn7gtPrqdJQS0/iMTR4nsrB95Ybh/hdJBzo8dgg/KAu1uDsy9R2TWY1mPIF10VlHjcVrbtLcTAR9Vg/Yg21mh3MqG0m/ymnRE4DXfpbauW2d8B6YPoMxrnnquUDVh5NMn7GYDaPjXk42zpMOmTAxvzQ94qRGWxr5SgaeBHdENmOTX0Yg0jkkiODPl3a9hHgjU/ueo7TjKB38vmm178I8pEDqLMo+DTtY2VYBhhvmAbfDyFbPgjDq4urMNJFY3T2RSF6os+Q6B/W2kygaEAFjJQeaXh+TAb56vJOwdRJgGiAvlyWwjF5WIojDCFYVV5M2KJuKzNGTJwfWmNnkK1EP0TxwUG1af7TGmJoNEMSgv6usk2m34MFsGE5MYhR4bvT/6jYwcrSeYu993wYpCl+k+L4PgQ39NU0SixdNoXLzMkiZFrVmqVsve6mgnvTQ4B6jE2YgzBwLqEt9zh1LlxV7/f/0y1pnq8x4M5mJgBudWMnMO5nvIK+L8ziD3LN/1r9Yyv8jJy3PNzNUjlQzlys9Wjyjf7Z/LQ== postgres@agora-slave/ansible-generated'
+
+      # CIDR block address slaves' used to specify:
+      #  - which machines can access to postgresql
+      slave_cidr_address: '192.168.50.4/24'

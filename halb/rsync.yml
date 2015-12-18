@@ -7,6 +7,10 @@
     owner="root"
     mode=0644
 
+- name: High Availability & Load Balancing, Changing permissions of the shared certificate
+  sudo: true
+  file: path=/srv/certs/selfsigned/ recurse=yes owner=agoraelections group=users
+
 - name: High Availability & Load Balancing, Creating syncdirs_from_master.sh
   sudo: true
   template:
