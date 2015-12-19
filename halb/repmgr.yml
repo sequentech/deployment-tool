@@ -11,6 +11,8 @@
     - "host    repmgr          repmgr  {{config.load_balancing.master.slave_cidr_address}}         trust"
     - "host    replication     repmgr  {{config.load_balancing.master.slave_cidr_address}}         trust"
     - "host    agora_elections agora_elections {{config.load_balancing.master.slave_cidr_address}}         md5"
+    - "host    authapi authapi {{config.load_balancing.master.slave_cidr_address}}         md5"
+    - "host    sentry sentry {{config.load_balancing.master.slave_cidr_address}}         md5"
 
 - name: High Availability & Load Balancing [master], configure postgresql.conf
   sudo: true

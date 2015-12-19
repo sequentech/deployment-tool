@@ -64,3 +64,15 @@
   register: command_result
   failed_when: "'hola' not in command_result.stdout"
 
+- name: High Availability & Load Balancing [slave], Authorizing agoraelections slave keys
+  sudo: true
+  sudo_user: agoraelections
+  when: not config.load_balancing.is_master
+  shell: |
+    expect -c '
+    spawn ssh agoraelections@{{config.load_balancing.slave.master_hostname}} echo hola
+    expect {
+    yes/no { send yes\r ; exp_continue}
+    }'
+  register: command_result
+  failed_when: "'hola' not in command_result.stdout"
