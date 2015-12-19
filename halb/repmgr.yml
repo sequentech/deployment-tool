@@ -23,7 +23,7 @@
     state="{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
   with_items:
     - line: "listen_addresses = '*'"
-      rx: "listen[ \t]*="
+      rx: "listen_addresses[ \t]*="
 
     - line: "hot_standby = on"
       rx: "hot_standby[ \t]*="
@@ -156,7 +156,7 @@
   sudo: true
   sudo_user: postgres
   when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.host}} ') == -1
-  shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose standby promote
+  shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
   sudo: true
@@ -178,4 +178,4 @@
   sudo: true
   sudo_user: postgres
   when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.host}} user=repmgr dbname=repmgr') == -1
-  shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf standby register
+  shell: /usr/lib/postgresql/9.3/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register

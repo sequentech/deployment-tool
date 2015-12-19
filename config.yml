@@ -86,6 +86,14 @@ config:
   director: 'auth1'
   auths: "['auth2']"
 
+  # populates the /etc/hosts file. Sometimes this is needed, for example when
+  # deploying with vagrant, the name of other machines might not be
+  # automatically known by others, for example the name of the master might not
+  # be known by the slave machine.
+  hosts: []
+  #  - hostname: agora-auth5
+  #    ip: 192.168.50.4
+
   #
   # Load Balancing & High Availability configuration details
   #
