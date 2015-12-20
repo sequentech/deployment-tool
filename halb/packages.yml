@@ -62,7 +62,7 @@
     yes/no { send yes\r ; exp_continue}
     }'
   register: command_result
-  failed_when: "'hola' not in command_result.stdout"
+  failed_when: "'hola' not in command_result.stdout or 'password:' in command_result.stdout"
 
 - name: High Availability & Load Balancing [slave], Authorizing agoraelections slave keys
   sudo: true
@@ -75,4 +75,4 @@
     yes/no { send yes\r ; exp_continue}
     }'
   register: command_result
-  failed_when: "'hola' not in command_result.stdout"
+  failed_when: "'hola' not in command_result.stdout or 'password:' in command_result.stdout"
