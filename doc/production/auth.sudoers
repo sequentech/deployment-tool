@@ -1,7 +1,7 @@
 User_Alias     AGORA_USER = agora
 Runas_Alias    AGORA_OP = root
 Runas_Alias    AGORA_USERS = eorchestra, postgres
-Cmnd_Alias     AGORA_COMMANDS = /usr/bin/apt-get, /usr/bin/apt-add-repository, /usr/bin/ansible, /usr/sbin/service, /usr/bin/supervisorctl, /usr/bin/eopeers, /usr/bin/eolog, /usr/bin/eotest, /sbin/shutdown
+Cmnd_Alias     AGORA_COMMANDS = /usr/bin/apt-get, /usr/bin/apt-add-repository, /usr/bin/ansible-playbook, /usr/sbin/service, /usr/bin/supervisorctl, /usr/bin/eopeers, /usr/bin/eolog, /usr/bin/eotest, /sbin/shutdown
 
 # dependencies
 AGORA_USER ALL=(AGORA_OP) NOPASSWD: AGORA_COMMANDS
