@@ -133,6 +133,34 @@ the credentials you specified in the config.yml file.
 We recommend to use the /etc/hosts file to change the ip address of the
 webserver from agora1 to agora2 ip easily for testing purposes.
 
+# Configure agora2 as a slave
+
+To configure agora2 as a slave, we need to import the ssh keys from the
+agoraelections and postgres users in ***agora1*** to add them in ***agora2**.
+
+To get the keys execute these commands in ***agora2***:
+
+    agora@agora2:~/agora-dev-box/ $ sudo -u agoraelections cat /home/agoraelections/.ssh/id_rsa.pub
+    agora@agora2:~/agora-dev-box/ $ sudo -u postgres cat /var/lib/postgresql/.ssh/id_rsa.pub
+
+Copy those keys and set them in the **agora1** **config.yml** file in
+the variables **config.load_balancing.master.slave_agoraelections_ssh_keys**
+and **config.load_balancing.master.slave_postgres_ssh_keys**.
+
+Then, execute again ansible in ***agora1*** to apply the changes:
+
+    agora@agora1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+
+After that, then you can change the **config.yml** for **agora2** to set
+the variable **config.load_balancing.is_master** to **false** and
+**config.load_balancing.slave.master_hostname** to the hostname of **agora1**.
+Then you can run again ansible in **agora2** to apply the changes, using the
+slave specific playbook, which can only work after having executed
+**playbook.agora.yml**:
+
+    agora@agora2:~/agora-dev-box/ $ cp doc/production/playbook.slave.yml playbook.yml
+    agora@agora2:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+
 # Deployment of authorities [auth1, auth2]
 
 The following steps should be executed in both election authorities. Download
@@ -201,16 +229,93 @@ The following commands should be executed in both **agora1** and **agora2**
 machines:
 
 Create **auth1.pkg** and **auth2.pkg** files with the configuration of both
-authorities. Then install them in the agora server:
+authorities. Then install them:
 
     agora@agora:~ $ sudo eopeers --install auth1.pkg --keystore /home/agoraelections/keystore.jks
     agora@agora:~ $ sudo eopeers --install auth2.pkg
     agora@agora:~ $ sudo service nginx restart
 
-Before completion, the installation of the agora certificate should be installed
-in the
+Before completion, the installation of the certificate of the **agora1** and
+**agora2** servers needs to be installed in the election authorities, because
+even though i'ts the same TLS cert, they have different hostnames. So copy
+them (get it with "eopeers --show-mine") to the authorities and install them:
 
-    $ cd agora
-    agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg ../auth2/auth2.pkg default:/home/vagrant/
-    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart"
-    agora $ cd ..
+    agora@agora:~ $ sudo eopeers --install agora1.pkg
+    agora@agora:~ $ sudo eopeers --install agora2.pkg
+    agora@agora:~ $ sudo service nginx restart
+
+### Create a test election
+
+Go to https://agora1/admin/login and create a test election. Then execute
+the following to create some votes. Change '2' in the following commands with
+your election number:
+
+    agora@agora1:~ $ sudo -u agoraelections
+    agoraelections@agora1:~ $ source ~/env/bin/activate
+    agoraelections@agora1:~ $ cd ~/agora-elections/admin
+    agoraelections@agora1:~ $ export ELECTION_ID=2
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py dump_pks $ELECTION_ID
+    agoraelections@agora1:~/agora-elections/admin/ $ echo '[1,0]' > votes.json
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py encrypt $ELECTION_ID
+
+start the election, cast the votes, stop it and tally it:
+
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py start $ELECTION_ID
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py cast_votes $ELECTION_ID
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py count_votes $ELECTION_ID
+    2 (2)
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py stop $ELECTION_ID
+    agoraelections@agora1:~/agora-elections/admin/ $ ./admin.py tally $ELECTION_ID
+
+### Check high availability and load balancing
+
+The high availability configuration in this configuration basically means that
+**agora2** is a server that is replicating in a hot standby mode the database of
+**agora1**. **agora2** has also replicated everything needed to be able to
+change the server from slave to master at any time.
+
+To test that **agora2** is correctly deployed as a slave, you can directly
+connect to https://agora2/admin/login and it should allow you to access and work
+normally, because **agora2** is a slave that also works as a web server
+(authapi, agora-elections) connected directly to the **agora1** master database
+server.
+
+If you list the files inside the datastore and the server certificate in
+both **agora1** and **agora2**, it should list the same files:
+
+    agora@agora:~ $ sudo -u agoraelections find /home/agoraelections/datastore/ -type f | xargs md5sum
+    05b76ec89dd7a32b76427d389a5778c1  /home/agoraelections/datastore/public/2/pks
+
+    agora@agora:~ $ find /srv/certs/selfsigned/ -type f | xargs md5sum
+    d811c3e92162ade25f21f1d782f32c6e  /srv/certs/selfsigned/calist
+    54a67dfe2a9fde364a833135d9bfdd3b  /srv/certs/selfsigned/key-nopass.pem
+    a9bf327511b67100c096aebed5b46c94  /srv/certs/selfsigned/cert.pem
+
+### Test changing a slave to be a master and do a tally
+
+This requires to create an election in **agora1** and cast some votes, then
+launch the tally successfully from within the authorities.
+
+To promote **agora2** to be a master, change set to **true** the config.yml
+config variable **config.load_balancing.is_master**, then execute again ansible:
+
+    agora@agora2:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+
+To be able to receive successfully the tally, agora2 needs to "impersonate"
+agora1 in the director election authority. This can be done by:
+
+1. removing the agora1 eopeer package:
+
+    agora@auth1:~ $ sudo eopeers --remove agora1
+
+2. adding an alias to /etc/hosts in **auth1** config.yml variable **config.hosts**,
+   setting it to something like:
+
+    hosts:
+    - hostname: agora1
+      ip: 192.168.50.14
+
+3. re-executing ansible in **auth1**:
+
+    agora@auth1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+
