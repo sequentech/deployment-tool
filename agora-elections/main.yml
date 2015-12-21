@@ -71,6 +71,18 @@
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
               regexp="db_password = .*$" replace="db_password = '{{config.agora_elections_db_password}}'"
 
+- name: AgoraElections, Admin setup (3)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
+              regexp="IVY=.*$" replace="IVY=$HOME/.ivy2/cache"
+
+- name: AgoraElections, Admin setup (4)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
+              regexp="AGORA_HOME=.*$" replace="AGORA_HOME=$HOME/agora-elections"
+
 - include: app.yml
 
 # Run script
