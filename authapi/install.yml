@@ -33,7 +33,7 @@
 - name: AuthApi, Creating the virtualenv
   sudo: true
   sudo_user: authapi
-  shell: '[ -d "/home/authapi/env" ] || virtualenv -p /usr/bin/python3 /home/authapi/env --no-pip'
+  shell: '[ -d "/home/authapi/env" ] || virtualenv -p /usr/bin/python3 /home/authapi/env'
 
 - name: AuthApi, Installing python uwsgi, psycopg2
   sudo: true

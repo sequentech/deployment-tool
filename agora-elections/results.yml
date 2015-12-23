@@ -16,7 +16,7 @@
   sudo_user: agoraelections
   pip: executable=pip3
        virtualenv=/home/agoraelections/renv
-       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3 --no-pip"
+       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
        requirements=/home/agoraelections/agora-results/results.req.txt
 
 - name: AgoraResults, results.sh
