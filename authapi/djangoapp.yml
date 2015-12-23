@@ -2,7 +2,10 @@
 - name: AuthApi, Installing python pacakges
   sudo: true
   sudo_user: authapi
-  shell: /home/authapi/env/bin/pip install -r /home/authapi/authapi/requirements.txt
+  pip:
+    virtualenv=/home/authapi/env
+    requirements=/home/authapi/authapi/requirements.txt
+    state=present
 
 - name: AuthApi, Migrate
   sudo: true
