@@ -5,6 +5,7 @@
 
 - name: Java, Install PPA repository
   sudo: true
+  when: not config.has_https_proxy
   apt_repository: repo='ppa:webupd8team/java'
 
 - name: Java, apt-get update

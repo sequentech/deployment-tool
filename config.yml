@@ -86,6 +86,11 @@ config:
   director: 'auth1'
   auths: "['auth2']"
 
+  # set to true if the environment where you are going to deploy the machine,
+  # it uses an https_proxy, which is not supported in ansible. If that is the
+  # case, then you need to manually add any repository
+  has_https_proxy: false
+
   # populates the /etc/hosts file. Sometimes this is needed, for example when
   # deploying with vagrant, the name of other machines might not be
   # automatically known by others, for example the name of the master might not

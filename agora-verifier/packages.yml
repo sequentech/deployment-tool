@@ -9,6 +9,7 @@
   get_url:
     url="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb"
     dest="/tmp/sbt-0.13.7.deb"
+    validate_certs={{ not config.has_https_proxy }}
   when: sbt_check_deb.rc == 1
 
 - name: AgoraVerifier, Install sbt-0.13.7.deb

@@ -67,6 +67,7 @@
     url=https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
     sha256sum=2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
     dest=/home/repmgr/repmgr.tar.gz
+    validate_certs={{ not config.has_https_proxy }}
 
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   sudo: true

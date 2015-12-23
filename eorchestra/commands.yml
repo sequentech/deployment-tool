@@ -21,7 +21,7 @@
 
 - name: EOrchestra, encrypt.js deps
   sudo: true
-  get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/
+  get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/ validate_certs={{ not config.has_https_proxy }}
   with_items:
     - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn.js
     - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn2.js
