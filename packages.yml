@@ -41,12 +41,13 @@
     - pkg: python-pip_1.5.6-5ubuntu2_all.deb
       sha256sum: f879f8ba8b72dd76783c0c314c9e1052007526742ad755768f53966e86177350
 
-- name: Packages, Install downloaded python-pip 1.5.6 & python3-pip 1.5.6
+- name: Packages, Install downloaded python-pip 1.5.6
   sudo: true
-  apt: deb=/tmp/{{item}}
-  with_items:
-    - python-pip_1.5.6-5ubuntu2_all.deb
-    - python3-pip_1.5.6-5ubuntu2_all.deb
+  apt: deb=/tmp/python-pip_1.5.6-5ubuntu2_all.deb
+
+- name: Packages, Install downloaded python3-pip 1.5.6
+  sudo: true
+  apt: deb=/tmp/python3-pip_1.5.6-5ubuntu2_all.deb
 
 - name: Packages, Generate UTF-8 locales
   sudo: true
