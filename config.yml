@@ -87,8 +87,7 @@ config:
   auths: "['auth2']"
 
   # set to true if the environment where you are going to deploy the machine,
-  # it uses an https_proxy, which is not supported in ansible. If that is the
-  # case, then you need to manually add any repository
+  # it uses an https_proxy, which is not transparently supported in ansible.
   has_https_proxy: false
 
   # populates the /etc/hosts file. Sometimes this is needed, for example when

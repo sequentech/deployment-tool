@@ -59,7 +59,7 @@ and slave machines:
 Once permissions have been granted, we'll continue to execute everything through
 the **agora** user. Now We need to install some requirements needed to continue:
 
-    agora@agora:~ $ sudo apt-get install software-properties-common pwgen
+    agora@agora:~ $ sudo apt-get install software-properties-common pwgen -y
     agora@agora:~ $ sudo apt-add-repository ppa:ansible/ansible -y
     agora@agora:~ $ sudo apt-get update
     agora@agora:~ $ sudo apt-get install -y ansible git
@@ -113,6 +113,9 @@ and accordingly. Both machines for deploy purposes should have the
 **config.load_balancing.master.slave_agoraelections_ssh_keys** set to **[]**
 (which means empty list) at this stage of deployment.
 
+If your machine is behind a proxy, you need to specify that in the
+**config.has_https_proxy** variable.
+
 After setting the configuration, you should set the playbook that we will use
 for deploying as master the machines, and also copy the ansible inventory used to
 specify that the deployment is done locally, then execute ansible with both of
@@ -154,6 +157,10 @@ Then, execute again ansible in ***agora1*** to apply the changes:
 After that, then you can change the **config.yml** for **agora2** to set
 the variable **config.load_balancing.is_master** to **false** and
 **config.load_balancing.slave.master_hostname** to the hostname of **agora1**.
+
+If your machine is behind a proxy, you need to specify that in the
+**config.has_https_proxy** variable.
+
 Then you can run again ansible in **agora2** to apply the changes, using the
 slave specific playbook, which can only work after having executed
 **playbook.agora.yml**:

@@ -82,6 +82,10 @@ config:
   director: 'auth1'
   auths: "['auth2']"
 
+  # set to true if the environment where you are going to deploy the machine,
+  # it uses an https_proxy, which is not transparently supported in ansible.
+  has_https_proxy: false
+
   #
   # Load Balancing & High Availability configuration details
   #
