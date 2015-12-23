@@ -66,6 +66,10 @@ config:
   # the log sender
   authapi_server_email: log@example.com
 
+  # administration interface
+  authapi_admin_email: 'admin@agoravoting.com'
+  authapi_admin_password: '<PASSWORD>'
+
   # Authorities
 
   authorities:
