@@ -66,7 +66,7 @@
 
 - name: Packages, Install downloaded python packages
   sudo: true
-  apt: deb=/tmp/{{item}}
+  shell: dpkg --skip-same-version -i /tmp/{{item}}
   with_items:
     - python3-pip_1.5.6-5ubuntu2_all.deb
     - python3-virtualenv_1.11.6+ds-1_all.deb
