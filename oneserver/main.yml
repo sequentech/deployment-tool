@@ -23,13 +23,28 @@
 # dnie & fnmt certs
 - name: OneServer, DNIE and FNMT ca in nginx
   sudo: true
-  template: src=oneserver/templates/dnie.conf dest=/etc/nginx/conf.d/dnie.conf owner="root" mode=0644
-  when: config.dnie_host is defined
+  template:
+    src=oneserver/templates/dnie.conf
+    dest=/etc/nginx/conf.d/dnie.conf
+    owner="root" mode=0644
+  when: config.dnie_auth.allow
+
+# remove the dnie conf when allow_dni is false, otherwise when changing
+# from one configuration to the other we would be leaving files around
+- name: OneServer, DNIE and FNMT ca in nginx (remove)
+  sudo: true
+  file: path=/etc/nginx/conf.d/dnie.conf state=absent
+  when: not config.dnie_auth.allow
 
 - name: OneServer, DNIE and FNMT ca
   sudo: true
   template: src=oneserver/templates/ca.crt dest=/srv/certs/dnie.ca.crt
-  when: config.dnie_host is defined
+  when: not config.dnie_auth.allow
+
+- name: OneServer, DNIE and FNMT ca (remove)
+  sudo: true
+  file: path=/srv/certs/dnie.ca.crt state=absent
+  when: not config.dnie_auth.allow
 
 - name: OneServer, Restarting nginx
   sudo: true

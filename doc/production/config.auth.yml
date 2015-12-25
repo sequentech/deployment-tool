@@ -42,8 +42,19 @@ config:
   agora_gui_elections_port: 10092
   agora_gui_lang: es
 
-  # dnie config
-  dnie_host: cert.agora-auth5
+  # DNI-e and FNMT authentication support related configuration
+  dnie_auth:
+    # boolean (true|false) that enables or disables the DNIe and FNMT
+    # authentication.
+    #
+    # Note: load_balancing is not currently supported when dni_auth is enabled
+    # because nginx for some reason always will request the client TLS
+    # certificate if the requester hostname doesn't match the nginx hostname.
+    allow: false
+
+    # Nginx requires a different FQDN to apply client side authentication,
+    # which is something needed for DNIe and FNMT auth.
+    host: cert.agora-auth5
 
   cert:
     C: EN
