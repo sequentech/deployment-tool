@@ -20,6 +20,18 @@
   sudo: true
   template: src=oneserver/templates/oneserver.conf dest=/etc/nginx/conf.d/oneserver.conf owner="root" mode=0644
 
+- name: OneServer, cloudflare.conf
+  sudo: true
+  template: src=oneserver/templates/cloudflare.conf dest=/etc/nginx/cloudflare.conf owner="root" mode=0644
+
+- name: OneServer, remove nginx default
+  sudo: true
+  file: path=/etc/nginx/sites-enabled/default, state=absent
+
+- name: OneServer, secure.conf
+  sudo: true
+  template: src=oneserver/templates/secure.conf dest=/etc/nginx/secure.conf owner="root" mode=0644
+
 # dnie & fnmt certs
 - name: OneServer, DNIE and FNMT ca in nginx
   sudo: true
