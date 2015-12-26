@@ -113,11 +113,30 @@ config:
   # Load Balancing & High Availability configuration details
   #
   load_balancing:
+    # set to true if you want to enable load_balancing. Basically this affects
+    # to oneserver.conf configuration
+    enabled: true
+
+    # set is_master to "true" if the machine will be the master server,
+    # set to "false" if it's going to act as a slave (with a hot standby
+    # postgresql database configuration)
     is_master: true
 
     # Id of the node. Both master and slaves require to have a unique id.
     # This is used by repmgr.
     repmgr_node_id: 1
+
+    # The CIDR address of the load balancer. This is used in the nginx
+    # configuration of oneserver.conf
+    loadbalancers_cidr: '192.168.50.2/0'
+
+    # The header used by the load balancer to communicate the real ip of the
+    # user.
+    load_balancer_real_ip_header: 'X-Real-IP'
+
+    # set to 'true' if the load balancer will access to this machines using
+    # TLS (which is more secure but slower).
+    use_https: false
 
     # Configuration needed when the machine is configured to be a slave i.e.
     # 'is_master' is set to 'false'
