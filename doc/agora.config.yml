@@ -27,6 +27,14 @@ config:
   eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
+  # some java related configuration options
+  java:
+    # maximum size of heap memory in Megabytes (int). Default: 4000. Your total
+    # RAM + SWAP needs to be bigger than this. If you are going to do very
+    # big tallies (hundred of thousands of votes or millions), you will need to
+    # change this to something bigger.
+    max_heap_memory_usage: 4000
+
   # agora-elections
   agora_elections_db_password: '<PASSWORD>'
   agora_elections_shared_secret: '<PASSWORD>'
