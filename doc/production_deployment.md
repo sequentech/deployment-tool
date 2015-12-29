@@ -152,7 +152,7 @@ and **config.load_balancing.master.slave_postgres_ssh_keys**.
 
 Then, execute again ansible in ***agora1*** to apply the changes:
 
-    agora@agora1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+    agora@agora1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml -v
 
 After that, then you can change the **config.yml** for **agora2** to set
 the variable **config.load_balancing.is_master** to **false** and
