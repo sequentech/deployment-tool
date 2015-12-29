@@ -45,7 +45,7 @@
     dest="{{item}}"
     backrefs=yes
     line='-Xmx{{config.java.max_heap_memory_usage}}m\1'
-    rx="^-Xmx(.*)$"
+    regexp="^-Xmx(.*)$"
     state=present
   with_items:
     - /usr/local/bin/vmn
