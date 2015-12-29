@@ -43,8 +43,9 @@
   sudo: true
   lineinfile:
     dest="{{item}}"
-    line="-Xmx{{config.java.max_heap_memory_usage}}m \"
-    rx="^-Xmx.*"
+    backrefs=yes
+    line='-Xmx{{config.java.max_heap_memory_usage}}m\1'
+    rx="^-Xmx(.*)$"
     state=present
   with_items:
     - /usr/local/bin/vmn
