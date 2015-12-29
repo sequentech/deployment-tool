@@ -5,7 +5,7 @@
 
 - name: Packages, Installing packages
   sudo: true
-  action: apt pkg={{item}} state=installed
+  action: apt pkg={{item}} state=installed force=yes
   with_items:
     - git
     - htop
@@ -21,6 +21,9 @@
     - libjpeg8-dev
     - libpq-dev
     - python-psycopg2
+    - python3-pip
+    - python3
+    - python-setuptools
     - build-essential
     - python-dev
     - vim

@@ -87,6 +87,7 @@
 - name: High Availability & Load Balancing [master], check if repmgr postgres user exists
   sudo: true
   sudo_user: postgres
+  when: config.load_balancing.is_master
   register: repmgr_user_exists
   shell: psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='repmgr'"
 
@@ -140,7 +141,7 @@
     - "conninfo='host={{config.host}} user=repmgr dbname=repmgr'"
     - "pg_bindir=/usr/lib/postgresql/9.3/bin"
 
-- name: High Availability & Load Balancing [master], checking repmgr cluster state
+- name: High Availability & Load Balancing, checking repmgr cluster state
   sudo: true
   sudo_user: postgres
   ignore_errors: true
@@ -176,6 +177,17 @@
   sudo: true
   when: not config.load_balancing.is_master
   service: name=postgresql state=started
+
+- name: High Availability & Load Balancing [slave], check node id
+  sudo: true
+  sudo_user: postgres
+  register: repl_nodes
+  when: not config.load_balancing.is_master
+  shell: "psql repmgr -tAc 'select id,name from repmgr_agoraelections.repl_nodes;'"
+
+- name: High Availability & Load Balancing [slave], fail if our node-id is repeated
+  fail: msg="config.load_balancing.repmgr_node_id = {{config.load_balancing.repmgr_node_id}} is already being used by another node"
+  when: not config.load_balancing.is_master and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|') != -1 and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|{{config.host}}') == -1
 
 - name: High Availability & Load Balancing [slave], register the standby
   sudo: true
