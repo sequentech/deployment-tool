@@ -42,10 +42,10 @@
 - name: EOrchestra, vfork max heap size configuration
   sudo: true
   lineinfile:
-    dest="{{item}}"
+    dest='{{item}}'
     backrefs=yes
-    line='\1-Xmx{{config.java.max_heap_memory_usage}}m\3'
-    regexp="^(.*)-Xmx(.*)m([^m]*)$"
+    line='-Xmx{{config.java.max_heap_memory_usage}}m\2'
+    regexp='^-Xmx([0-9]+)m(.*)$'
     state=present
   with_items:
     - /usr/local/bin/vmn
