@@ -15,7 +15,7 @@ config:
   global_secret_key: '<PASSWORD>'
   cloudflare: false
 
-  host: auth1
+  host: auth2
 
   # election-orchestra
   port: 5000

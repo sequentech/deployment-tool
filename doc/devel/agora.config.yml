@@ -87,7 +87,7 @@ config:
 
   # administration interface
   authapi_admin_email: 'admin@agoravoting.com'
-  authapi_admin_password: '<PASSWORD>'
+  authapi_admin_password: 'QWERTY33'
 
   # Authorities
 

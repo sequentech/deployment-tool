@@ -70,18 +70,15 @@ installation, we can edit Vagrantfile and change v.memory (memory in MB)
 and v.cpus (number of cpus):
 
     $ cd auth1
-    auth1 $ cp doc/devel/Vagrantfile.auth1 Vagrantfile
-    auth1 $ vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
+    auth1 $ cp doc/devel/Vagrantfile.auth1 Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     auth1 $ cd ..
 
     $ cd auth2
-    auth2 $ cp doc/devel/Vagrantfile.auth2 Vagrantfile
-    auth2 $ vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
+    auth2 $ cp doc/devel/Vagrantfile.auth2 Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     auth2 $ cd ..
 
     $ cd agora
-    agora $ cp doc/devel/Vagrantfile.agora Vagrantfile
-    agora $ vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
+    agora $ cp doc/devel/Vagrantfile.agora Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     agora $ cd ..
 
 Now we've three basic Ubuntu 14.04.3 LTS (Trusty Tahr) machines connected with these ips:
@@ -126,7 +123,6 @@ We need to deploy the two authorities and connect them. The deployment
 process is the same for both authorities.
 
     $ cd auth1
-    auth1 $ cp doc/devel/auth1.config.yml config.yml
     auth1 $ cp doc/devel/auth.playbook.yml playbook.yml
     auth1 $ vagrant provision
     auth1 $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/auth1.pkg >/dev/null"
@@ -134,7 +130,6 @@ process is the same for both authorities.
     auth1 $ cd ..
 
     $ cd auth2
-    auth2 $ cp doc/devel/auth2.config.yml config.yml
     auth2 $ cp doc/devel/auth.playbook.yml playbook.yml
     auth2 $ vagrant provision
     auth2 $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/auth2.pkg >/dev/null"
@@ -201,7 +196,6 @@ Let's provision the agora server in a similar fashion as we did with the
 authorities:
 
     $ cd agora
-    agora $ cp doc/devel/agora.config.yml config.yml
     agora $ cp doc/devel/agora.playbook.yml playbook.yml
     agora $ vagrant provision
     agora $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null"
