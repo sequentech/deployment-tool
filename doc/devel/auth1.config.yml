@@ -47,7 +47,18 @@ config:
   agora_gui_admin_port: 10090
   agora_gui_booth_port: 10091
   agora_gui_elections_port: 10092
-  agora_gui_lang: es
+
+  # These are variables that go to the /home/agoragui/avConfig.js configuration
+  # file. See the file for more details.
+  gui_config:
+    language: en
+    defaultRoute: /admin/login
+    debug: 'false'
+
+    contact:
+      email: contact@example.com
+      twitter: ''
+      tlf: ''
 
   # DNI-e and FNMT authentication support related configuration
   dnie_auth:

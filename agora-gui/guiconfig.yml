@@ -1,0 +1,52 @@
+---
+- name: AgoraGui, config setup
+  sudo: true
+  sudo_user: agoragui
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="{{item.regexp}}"
+           replace="{{item.replace}}"'
+  with_items:
+    - regexp: "baseUrl:.*"
+      replace: 'baseUrl: \""https://{{config.agora_elections_domain}}/elections/api/\"",'
+
+    - regexp: "authAPI:.*"
+      replace: 'authAPI: \""https://{{config.agora_elections_domain}}/authapi/api/\"",'
+
+    - regexp: "electionsAPI:.*"
+      replace: 'electionsAPI: \""https://{{config.agora_elections_domain}}/elections/api/\"",'
+
+    - regexp: "publicURL:.*"
+      replace: 'publicURL: \""https://{{config.agora_elections_domain}}/elections/public/\"",'
+
+    - regexp: "director:.*"
+      replace: 'director: \""{{ config.director }}\"",'
+
+    - regexp: "authorities:.*"
+      replace: 'authorities: {{ config.auths }},'
+
+    - regexp: "([/][/] )?language:.*"
+      replace: 'language: \""{{ config.gui_config.language }}\"",'
+
+    - regexp: "([/][/] )?lng:.*"
+      replace: 'lng: \""{{ config.gui_config.language }}\"",'
+
+    - regexp: "[/][/] detectLngQS:"
+      replace: 'detectLngQS:'
+
+    - regexp: "debug:.*"
+      replace: 'debug: {{ config.gui_config.debug }},'
+
+    - regexp: "defaultRoute:.*"
+      replace: 'defaultRoute: \""{{ config.gui_config.defaultRoute }}\"",'
+
+    - regexp: "debug:.*"
+      replace: 'debug: {{ config.gui_config.debug }},'
+
+    - regexp: "email:.*"
+      replace: 'email: \""{{ config.gui_config.contact.email }}\"",'
+
+    - regexp: "twitter:.*"
+      replace: 'twitter: \""{{ config.gui_config.contact.twitter }}\"",'
+
+    - regexp: "tlf:.*"
+      replace: 'tlf: \""{{ config.gui_config.contact.tlf }}\"",'
