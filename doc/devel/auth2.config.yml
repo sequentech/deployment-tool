@@ -66,6 +66,10 @@ config:
     # use the number of cores of the machine or less.
     worker_processes: 2
 
+    # enable/disable nginx reverse proxy cache for everything related to agora
+    # web server
+    reverse_proxy_cache: true
+
   # DNI-e and FNMT authentication support related configuration
   dnie_auth:
     # boolean (true|false) that enables or disables the DNIe and FNMT
