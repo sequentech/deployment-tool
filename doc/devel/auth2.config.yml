@@ -60,6 +60,12 @@ config:
       twitter: ''
       tlf: ''
 
+  # configuration related to the nginx web server
+  webserver:
+    # configures the "worker_processes" setting in nginx. Typically you would
+    # use the number of cores of the machine or less.
+    worker_processes: 2
+
   # DNI-e and FNMT authentication support related configuration
   dnie_auth:
     # boolean (true|false) that enables or disables the DNIe and FNMT
