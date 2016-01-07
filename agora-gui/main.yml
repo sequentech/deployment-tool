@@ -1,8 +1,8 @@
 ---
-- include: packages.yml
-- include: user.yml
-- include: nodejs.yml
-- include: repo.yml
+#- include: packages.yml
+#- include: user.yml
+#- include: nodejs.yml
+#- include: repo.yml
 - include: guiconfig.yml
 - include: app.yml
 - include: nginx.yml

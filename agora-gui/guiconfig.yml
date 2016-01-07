@@ -50,3 +50,27 @@
 
     - regexp: "tlf:.*"
       replace: 'tlf: \""{{ config.gui_config.contact.tlf }}\"",'
+
+- name: AgoraGui, config beautify options
+  sudo: true
+  sudo_user: agoragui # aa
+  replace:
+    "dest=/home/agoragui/{{item}}/Gruntfile.js
+    regexp='beautify:.*'
+    replace='beautify: {% if config.gui_config.debug == 'true' %}true{% else %}false{% endif %}'"
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, config compress options
+  sudo: true
+  sudo_user: agoragui
+  replace:
+    "dest=/home/agoragui/{{item}}/Gruntfile.js
+    regexp='compress:.*'
+    replace='compress: {% if config.gui_config.debug == 'false' %}true{% else %}{}{% endif %},'"
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
