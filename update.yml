@@ -9,4 +9,4 @@
     - include: eorchestra/update.yml
     - include: agora-elections/update.yml
     - include: authapi/update.yml
-    - include: agora-core-view/update.yml
+    - include: agora-gui/update.yml

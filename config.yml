@@ -1,61 +1,174 @@
 ---
+# global non-agora related configuration variables
+params:
+  # Sometimes services like supervisor take quite a while to restart and some
+  # others don't. Configure here exactly how many seconds it should wait for
+  # processes that restart slowly or and those that are fast.
+  sleep:
+    fast: 2
+    slow: 15
+
+# global configuration
 config:
   backup_password: '<PASSWORD>'
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
-  cloudflare: True
+  cloudflare: true
+
+  host: agora-auth5
 
   # election-orchestra
   port: 5000
-  host: agora-auth5
   public_ipaddress: 192.168.0.11
   private_ipaddress: 192.168.0.11
   vfork_server_ports: [4081, 4083]
   vfork_hint_server_ports: [8081, 8083]
+  eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
   # agora-elections
   agora_elections_db_password: '<PASSWORD>'
   agora_elections_shared_secret: '<PASSWORD>'
   agora_elections_expiry: 60000
-  agora_elections_domain: dev.agoravoting.com
+  agora_elections_domain: agora
   agora_elections_port: 14443
-  keystore_pass: supersecret
+  keystore_pass: '<PASSWORD>'
 
-  # agora-core-view
-  agora_core_view_domain: dev.agoravoting.com
-  agora_core_view_port: 14444
-  agora_core_lang: es
+  # agora-gui
+  agora_gui_domain: agora
+  agora_gui_admin_port: 10090
+  agora_gui_booth_port: 10091
+  agora_gui_elections_port: 10092
+  agora_gui_lang: es
 
-  # dnie config
-  dnie_host: cert.agora-auth5
+  # DNI-e and FNMT authentication support related configuration
+  dnie_auth:
+    # boolean (true|false) that enables or disables the DNIe and FNMT
+    # authentication.
+    #
+    # Note: load_balancing is not currently supported when dni_auth is enabled
+    # because nginx for some reason always will request the client TLS
+    # certificate if the requester hostname doesn't match the nginx hostname.
+    allow: false
+
+    # Nginx requires a different FQDN to apply client side authentication,
+    # which is something needed for DNIe and FNMT auth.
+    host: cert.agora-auth5
 
   cert:
-    C: ES
-    ST: Madrid
-    L: Madrid
-    O: Agoravoting
-    OU: Agora_Voting_SL
-    EMAIL: agora@agoravoting.com
+    C: EN
+    ST: Ney_York
+    L: Ney_York
+    O: Example
+    OU: Example
+    EMAIL: info@example.com
 
   # sentry
   sentry_port: 9090
+  sentry_admin_user: 'admin@example.com'
   sentry_db_password: '<PASSWORD>'
   sentry_admin_password: '<PASSWORD>'
+
+  # Sending the code sms and email log to an email
+  sentry_msg_log: False
+  # the log receiver
+  sentry_msg_log_email: log@example.com
+  # the log sender
+  authapi_server_email: log@example.com
+
+  # administration interface
+  authapi_admin_email: 'admin@agoravoting.com'
+  authapi_admin_password: '<PASSWORD>'
 
   # Authorities
 
   authorities:
     - id: "auth1"
-      name: "Agora Voting"
+      name: "Agora Voting 1"
       description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
       url: "https://agoravoting.com"
       image: "/docs/logo_agora.png"
     - id: "auth2"
-      name: "Agora Voting 1"
+      name: "Agora Voting 2"
       description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
       url: "https://agoravoting.com"
       image: "/docs/logo_agora.png"
   director: 'auth1'
   auths: "['auth2']"
+
+  # set to true if the environment where you are going to deploy the machine,
+  # it uses an https_proxy, which is not transparently supported in ansible.
+  has_https_proxy: false
+
+  # populates the /etc/hosts file. Sometimes this is needed, for example when
+  # deploying with vagrant, the name of other machines might not be
+  # automatically known by others, for example the name of the master might not
+  # be known by the slave machine.
+  hosts: []
+  #  - hostname: agora-auth5
+  #    ip: 192.168.50.4
+
+  #
+  # Load Balancing & High Availability configuration details
+  #
+  load_balancing:
+    # set to true if you want to enable load_balancing. Basically this affects
+    # to oneserver.conf configuration
+    enabled: true
+
+    # set is_master to "true" if the machine will be the master server,
+    # set to "false" if it's going to act as a slave (with a hot standby
+    # postgresql database configuration)
+    is_master: true
+
+    # Id of the node. Both master and slaves require to have a unique id.
+    # This is used by repmgr.
+    repmgr_node_id: 1
+
+    # The CIDR address of the load balancer. This is used in the nginx
+    # configuration of oneserver.conf
+    loadbalancers_cidr: '192.168.50.2/0'
+
+    # The header used by the load balancer to communicate the real ip of the
+    # user.
+    load_balancer_real_ip_header: 'X-Real-IP'
+
+    # set to 'true' if the load balancer will access to this machines using
+    # TLS (which is more secure but slower).
+    use_https: false
+
+    # Configuration needed when the machine is configured to be a slave i.e.
+    # 'is_master' is set to 'false'
+    slave:
+      # hostname of the master. Used to:
+      # - connect via rsync
+      # - connect via postgresql
+      master_hostname: 'localhost'
+
+      # specifies the update frequency of the rsync of dirs from master.
+      # rsync is done of /etc/eopeers/ and /home/agoraelections/datastore
+      rsync_update_secs: 600
+
+    # Configuration needed when the machine is configured to be a master i.e.
+    # 'is_master' is set to 'true'
+    master:
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /home/agoraelections/.ssh/id_rsa.pub in the slave machines.
+      slave_agoraelections_ssh_keys:
+        - 'ssh-rsa whatever ansible-generated'
+
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /var/lib/postgresql/.ssh/id_rsa.pub in the slave machines.
+      slave_postgres_ssh_keys:
+        - 'ssh-rsa whatever ansible-generated'
+
+      # CIDR block address slaves' used to specify:
+      #  - which machines can access to postgresql
+      slave_cidr_address: '192.168.0.0/24'

@@ -1,10 +1,16 @@
 ---
-- name: Election orchestra, Create Database User
+- name: EOrchestra, Create Database User
   sudo: true
   sudo_user: postgres
   postgresql_user: user=eorchestra password=eorchestra port=5432
 
-- name: Election orchestra, Create Database
+- name: EOrchestra, Create Database
   sudo: true
   sudo_user: postgres
-  postgresql_db: name=eorchestra owner=eorchestra encoding="utf-8"
+  postgresql_db: 
+    name=eorchestra 
+    owner=eorchestra
+    encoding="utf-8" 
+    lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8'
+    template='template0'
+    state=present

@@ -1,16 +1,24 @@
 ---
-- name: Java
+- name: Java, Accept license
   sudo: true
-  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-- name: Java PPA
+  debconf: name='oracle-java7-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+- name: Java, Install PPA repository
   sudo: true
-  shell: add-apt-repository -y ppa:webupd8team/java
-- name: Java update
+  shell: apt-add-repository ppa:webupd8team/java -y
+  # NOTE: we don't use apt_repository here because it fails when
+  # config.has_https_proxy=true, see
+  # https://github.com/ansible/ansible/issues/7322
+  #
+  # apt_repository: repo='ppa:webupd8team/java'
+
+- name: Java, apt-get update
   sudo: true
-  shell: apt-get update
-- name: Java install
+  apt: update_cache=yes
+
+- name: Java, install java packages
   sudo: true
-  shell: apt-get install -y oracle-java8-installer
-- name: Java install (2)
-  sudo: true
-  shell: apt-get install -y oracle-java8-set-default
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default

@@ -9,18 +9,27 @@
   sudo: true
   sudo_user: sentry
   shell: /home/sentry/venv/bin/python /home/sentry/sentryconf.py chdir=/home/sentry/
+  register: dsn_contents
 
 - name: Sentry-AuthApi install raven
   sudo: true
   sudo_user: authapi
   shell: /home/authapi/env/bin/pip install raven
 
+- name: Sentry, creating deploy_sentry.py
+  sudo: true
+  sudo_user: authapi
+  template: src=sentry/templates/deploy_sentry.py dest=/home/authapi/authapi/authapi/authapi/deploy_sentry.py owner="authapi" mode=0644
+
 - name: Sentry, Configuring authapi
   sudo: true
-  sudo_user: root
-  shell: cat /tmp/authapi.sentry >> /home/authapi/authapi/authapi/authapi/deploy.py
+  sudo_user: authapi
+  lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py line="import authapi.deploy_sentry; authapi.deploy_sentry.update(globals())" state=present
 
-# restarting authapi
-- name: Sentry-AuthApi restarting authapi
+- name: Sentry, restarting authapi
   sudo: true
   supervisorctl: name=authapi state=restarted
+
+- name: Sentry, restarting authapi_celery
+  sudo: true
+  supervisorctl: name=authapi_celery state=restarted

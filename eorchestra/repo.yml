@@ -1,18 +1,19 @@
 ---
-- name: Downloading fresq, election-orchestra and vfork
+- name: EOrchestra, Downloading frestq, election-orchestra and vfork
   sudo: true
   sudo_user: eorchestra
-  git: repo={{ item.repo.repo }} version={{ item.repo.version }}
-       dest=/home/eorchestra/{{ item.dest }}
+  git: repo={{ item.repo }} version={{ item.version }}
+       dest=/home/eorchestra/{{ item.dest }} force={{ item.force }}
   with_items:
-    - { repo: { repo: "{{ repos.fresq.repo }}", version: "{{ repos.fresq.version }}" }, dest: fresq }
-    - { repo: { repo: "{{ repos.eorchestra.repo }}", version: "{{ repos.eorchestra.version }}" }, dest: election-orchestra }
-    - { repo: { repo: "{{ repos.vfork.repo }}", version: "{{ repos.vfork.version }}" }, dest: vfork }
-
-# Needed for encrypt.js eotest for eotest
-# TODO remove this dependency
-- name: Agora ciudadana repo clone
-  sudo: true
-  sudo_user: eorchestra
-  git: repo={{ repos.aciudadana.repo }} version={{ repos.aciudadana.version }}
-       dest=/srv/eotests/agora-ciudadana
+    - repo: "{{ repos.frestq.repo }}"
+      version: "{{ repos.frestq.version }}"
+      force: "{{ repos.frestq.force }}"
+      dest: frestq
+    - repo: "{{ repos.eorchestra.repo }}"
+      version: "{{ repos.eorchestra.version }}"
+      force: "{{ repos.eorchestra.force }}"
+      dest: election-orchestra
+    - repo: "{{ repos.vfork.repo }}"
+      version: "{{ repos.vfork.version }}"
+      force: "{{ repos.vfork.force }}"
+      dest: vfork

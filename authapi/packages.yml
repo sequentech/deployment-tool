@@ -1,7 +1,8 @@
 ---
-- name: AuthApi,  Updating packages
+- name: AuthApi, Updating packages
   sudo: true
   action: apt update_cache=yes
+
 - name: AuthApi,  Installing packages
   sudo: true
   action: apt pkg={{item}} state=installed

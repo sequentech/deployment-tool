@@ -1,35 +1,54 @@
 ---
 repos:
-    agoracore:
-        repo: https://github.com/agoravoting/agora-core-view.git
-        version: master
     aelections:
         repo: https://github.com/agoravoting/agora_elections.git
-        version: master
+        version: next
+        force: yes
     results:
         repo: https://github.com/agoravoting/agora-results.git
-        version: master
-    openstv:
-        repo: https://github.com/agoravoting/openstv.git
-        version: master
+        version: next
+        force: yes
     tally:
         repo: https://github.com/agoravoting/agora-tally.git
-        version: master
+        version: next
+        force: yes
     authapi:
         repo: https://github.com/agoravoting/authapi.git
-        version: master
+        version: next
+        force: yes
     atools:
         repo: https://github.com/agoravoting/agora-tools.git
-        version: master
-    fresq:
+        version: next
+        force: yes
+    frestq:
         repo: https://github.com/agoravoting/frestq
-        version: master
+        version: next
+        force: yes
     eorchestra:
         repo: https://github.com/agoravoting/election-orchestra
-        version: master
-    aciudadana:
-        repo: https://github.com/agoravoting/agora-ciudadana.git
-        version: security
+        version: next
+        force: yes
     vfork:
         repo: https://github.com/agoravoting/vfork
-        version: master
+        version: next
+        force: yes
+    averifier:
+        repo: https://github.com/agoravoting/agora-verifier.git
+        version: next
+        force: yes
+    guicommon:
+        repo: https://github.com/agoravoting/agora-gui-common.git
+        version: next
+        force: yes
+    guiadmin:
+        repo: https://github.com/agoravoting/agora-gui-admin.git
+        version: next
+        force: yes
+    guibooth:
+        repo: https://github.com/agoravoting/agora-gui-booth.git
+        version: next
+        force: yes
+    guielections:
+        repo: https://github.com/agoravoting/agora-gui-elections.git
+        version: next
+        force: yes

@@ -1,9 +1,9 @@
 ---
-- name: Vfork check Makefile
+- name: EOrchestra, Vfork check Makefile
   stat: path=/home/eorchestra/vfork/Makefile
   register: Makefile
 
-- name: vfork clean
+- name: EOrchestra, vfork clean
   sudo: true
   sudo_user: eorchestra
   shell: make clean
@@ -11,7 +11,7 @@
   when: Makefile.stat.exists == True
 
 # TODO: we need a real fix for this, in the future when we have more time...
-- name: vfork fix
+- name: EOrchestra, vfork fix
   sudo: true
   sudo_user: eorchestra
   file: path=/home/eorchestra/vfork/{{ item }} state=absent
@@ -19,13 +19,13 @@
     - vfork/classes/vfork/protocol/Protocol.class
     - vfork/classes/vfork/protocol/mixnet/MixNetElGamalInterfaceJSON.class
 
-- name: vfork configure
+- name: EOrchestra, vfork configure
   sudo: true
   sudo_user: eorchestra
   shell: ./configure --enable-jgmpmee --enable-jecn
          chdir=/home/eorchestra/vfork
 
-- name: vfork make
+- name: EOrchestra, vfork make
   sudo: true
   sudo_user: eorchestra
   shell: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make
@@ -34,22 +34,36 @@
 # fix wikstrom special o screwing things up
 # http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding/623036#623036
 # alternatively modify the makefile.am and makefile.in files
-- name: vfork make install
+- name: EOrchestra, vfork make install
   sudo: true
   shell: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make install
          chdir=/home/eorchestra/vfork
 
-- name: vfork copy .vfork_env
+- name: EOrchestra, vfork max heap size configuration
+  sudo: true
+  lineinfile:
+    dest='{{item}}'
+    backrefs=yes
+    line='-Xmx{{config.java.max_heap_memory_usage}}m\2'
+    regexp='^-Xmx([0-9]+)m(.*)$'
+    state=present
+  with_items:
+    - /usr/local/bin/vmn
+    - /usr/local/bin/vmnc
+    - /usr/local/bin/vmnd
+    - /usr/local/bin/vmnv
+
+- name: EOrchestra, vfork copy .vfork_env
   sudo: true
   sudo_user: eorchestra
   shell: cp .vfork_env /home/eorchestra
          chdir=/home/eorchestra/vfork
 
-- name: vfork bashrc line
+- name: EOrchestra, vfork bashrc line
   sudo: true
   lineinfile: dest=/home/eorchestra/.bashrc line="source /home/eorchestra/.vfork_env" state=present
 
-- name: vfork init random device
+- name: EOrchestra, vfork init random device
   sudo: true
   sudo_user: eorchestra
   shell: bash -l -c "source /home/eorchestra/.vfork_env && vog -rndinit RandomDevice /dev/urandom"

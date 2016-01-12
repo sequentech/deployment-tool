@@ -2,7 +2,7 @@
 - include: repo.yml
 - include: copy.yml
 
-- name: commands
+- name: AgoraTools, commands
   sudo: true
   template: src=agora-tools/templates/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
   with_items:

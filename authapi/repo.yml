@@ -3,4 +3,4 @@
   sudo: true
   sudo_user: authapi
   git: repo={{ repos.authapi.repo }} version={{ repos.authapi.version }}
-       dest=/home/authapi/authapi
+       dest=/home/authapi/authapi force={{ repos.authapi.force }}

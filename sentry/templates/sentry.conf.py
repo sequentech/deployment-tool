@@ -22,7 +22,7 @@ SENTRY_USE_BIG_INTS = True
 # the beacon documentation for more information. This **must** be a string.
 
 # SENTRY_ADMIN_EMAIL = 'your.name@example.com'
-SENTRY_ADMIN_EMAIL = 'agora@agoravoting.com'
+SENTRY_ADMIN_EMAIL = '{{ config.sentry_admin_user }}'
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
@@ -38,7 +38,7 @@ DATABASES = {
         'NAME': 'sentry',
         'USER': 'sentry',
         'PASSWORD': '{{ config.sentry_db_password }}',
-        'HOST': '',
+        'HOST': '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}',
         'PORT': '5432',
     }
 }
@@ -173,7 +173,7 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 
 # The email address to send on behalf of
-SERVER_EMAIL = 'root@localhost'
+SERVER_EMAIL = '{{ config.sentry_admin_user }}'
 
 # If you're using mailgun for inbound mail, set your API key and configure a
 # route to forward to /api/hooks/mailgun/inbound/

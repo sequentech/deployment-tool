@@ -1,5 +1,4 @@
 ---
-# Package
 - name: AgoraElections, activator clean & stage
   sudo: true
   sudo_user: agoraelections

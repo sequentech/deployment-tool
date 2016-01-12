@@ -1,35 +1,39 @@
 ---
-- name: hostname
+- name: System, setting hostname
   sudo: true
   hostname: name={{ config.host }}
 
-- name: private ip in /etc/hosts
+- name: System, private ip in /etc/hosts
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
 
-- name: domain in /etc/hosts
+- name: System, domain in /etc/hosts
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections_domain }}" state=present
 
-- name: Creating nginx group
+- name: System, Creating nginx group
   sudo: true
   group: name=nginx state=present
 
-- name: Creating nginx user
+- name: System, Creating nginx user
   sudo: true
   user: name=nginx shell=/bin/false home=/nonexistent group=nginx
 
-- name: cert directories creation
+- name: System, cert directories creation
   sudo: true
   file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users
 
-- name: self-signed certificate creation
+- name: System, self-signed certificate creation
   sudo: true
   template: src=templates/cert.sh
             dest=/root/cert.sh
             owner=root mode=0755
 
-- name: self-signed certificate creation
+- name: System, self-signed certificate creation
   sudo: true
   shell: "/root/cert.sh"
 
+- name: System, populating /etc/hosts
+  sudo: true
+  lineinfile: dest=/etc/hosts line="{{ item.ip }} {{ item.hostname }}" state=present
+  with_items: config.hosts
