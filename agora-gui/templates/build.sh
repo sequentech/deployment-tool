@@ -5,7 +5,6 @@ guib=/home/agoragui
 # compile all the modules, one by one. stop if they don't build, because
 # otherwise we would put in production a non-working version of the software
 cd $guib/agora-gui-admin/
-bower install
 grunt build
 if [ $? -ne 0 ]
 then
@@ -14,7 +13,6 @@ then
 fi
 
 cd $guib/agora-gui-booth/
-bower install
 grunt build
 if [ $? -ne 0 ]
 then
@@ -23,7 +21,6 @@ then
 fi
 
 cd $guib/agora-gui-elections/
-bower install
 grunt build
 if [ $? -ne 0 ]
 then
