@@ -5,3 +5,4 @@
 - include: repo.yml
 - include: build.yml
 - include: revert_java8.yml
+- include: aguiconfig.yml

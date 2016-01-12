@@ -5,7 +5,12 @@
 
 - name: Java, Install PPA repository
   sudo: true
-  apt_repository: repo='ppa:webupd8team/java'
+  shell: apt-add-repository ppa:webupd8team/java -y
+  # NOTE: we don't use apt_repository here because it fails when
+  # config.has_https_proxy=true, see
+  # https://github.com/ansible/ansible/issues/7322
+  #
+  # apt_repository: repo='ppa:webupd8team/java'
 
 - name: Java, apt-get update
   sudo: true

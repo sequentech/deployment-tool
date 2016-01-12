@@ -1,4 +1,12 @@
 ---
+- name: AuthApi, Creating sentry_celery.sh
+  sudo: true
+  template: src=sentry/templates/sentry_celery.sh dest=/home/sentry/sentry_celery.sh owner="sentry" mode=0744
+
+- name: AuthApi, Creating sentry.sh
+  sudo: true
+  template: src=sentry/templates/sentry.sh dest=/home/sentry/sentry.sh owner="sentry" mode=0744
+
 - name: Sentry, Creating supervisord conf
   sudo: true
   template: src=sentry/templates/supervisor.conf dest=/etc/supervisor/conf.d/sentry.conf owner="root" mode=0644
@@ -9,4 +17,4 @@
 
 - name: Sentry, Restarting supervisord
   sudo: true
-  service: name=supervisor state=stopped sleep={{ params.sleep.slow }}
+  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}

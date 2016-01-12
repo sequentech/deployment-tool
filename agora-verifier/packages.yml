@@ -8,12 +8,14 @@
 - name: AgoraVerifier, Download sbt-0.13.7.deb
   get_url:
     url="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb"
+    sha256sum=7b503a255e75f8678a43258beccef571a1cf751179ee9257fd5fd55b3aa498c5
     dest="/tmp/sbt-0.13.7.deb"
+    validate_certs={{ not config.has_https_proxy }}
   when: sbt_check_deb.rc == 1
 
 - name: AgoraVerifier, Install sbt-0.13.7.deb
   sudo: true
-  apt: deb="/tmp/sbt-0.13.7.deb"
+  apt: deb="/tmp/sbt-0.13.7.deb" state=present
   when: sbt_check_deb.rc == 1
 
 - name: AgoraVerifier, Updating packages

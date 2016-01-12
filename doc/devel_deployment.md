@@ -2,7 +2,7 @@
 
 This document describes the complete deployment of an Agora Voting system
 with two Authorities for development purpuoses in your own physical machine
-through the usage of virtual machines.
+through the usage of virtual machines. We call it a development environment.
 
 ## Requirements
 
@@ -70,18 +70,15 @@ installation, we can edit Vagrantfile and change v.memory (memory in MB)
 and v.cpus (number of cpus):
 
     $ cd auth1
-    auth1 $ cp doc/Vagrantfile.auth1 Vagrantfile
-    auth1 $ vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config
+    auth1 $ cp doc/devel/Vagrantfile.auth1 Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     auth1 $ cd ..
 
     $ cd auth2
-    auth2 $ cp doc/Vagrantfile.auth2 Vagrantfile
-    auth2 $ vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config
+    auth2 $ cp doc/devel/Vagrantfile.auth2 Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     auth2 $ cd ..
 
     $ cd agora
-    agora $ cp doc/Vagrantfile.agora Vagrantfile
-    agora $ vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config
+    agora $ cp doc/devel/Vagrantfile.agora Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     agora $ cd ..
 
 Now we've three basic Ubuntu 14.04.3 LTS (Trusty Tahr) machines connected with these ips:
@@ -90,7 +87,7 @@ Now we've three basic Ubuntu 14.04.3 LTS (Trusty Tahr) machines connected with t
  * auth2: 192.168.50.3
  * agora: 192.168.50.4
 
-So you should add this to your /etc/hosts to be able to access them by name:
+So you should add this to your local machine /etc/hosts to be able to access them by name:
 
     echo -e "192.168.50.2 local-auth1\n192.168.50.3 local-auth2\n192.168.50.4 agora"  | sudo tee -a /etc/hosts
 
@@ -101,20 +98,20 @@ create a basic VM snapshot with java and other package dependencies installed
 so that provisioning can be done in a quicker manner.
 
     $ cd auth1
-    auth1 $ cp doc/auth1.config.yml config.yml
-    auth1 $ cp doc/base.playbook.yml playbook.yml
+    auth1 $ cp doc/devel/auth1.config.yml config.yml
+    auth1 $ cp doc/devel/base.playbook.yml playbook.yml
     auth1 $ vagrant provision
     auth1 $ vagrant snapshot take base
 
     $ cd auth2
-    auth2 $ cp doc/auth2.config.yml config.yml
-    auth2 $ cp doc/base.playbook.yml playbook.yml
+    auth2 $ cp doc/devel/auth2.config.yml config.yml
+    auth2 $ cp doc/devel/base.playbook.yml playbook.yml
     auth2 $ vagrant provision
     auth2 $ vagrant snapshot take base
 
     $ cd agora
-    agora $ cp doc/agora.config.yml config.yml
-    agora $ cp doc/base.playbook.yml playbook.yml
+    agora $ cp doc/devel/agora.config.yml config.yml
+    agora $ cp doc/devel/base.playbook.yml playbook.yml
     agora $ vagrant provision
     agora $ vagrant snapshot take base
 
@@ -126,16 +123,14 @@ We need to deploy the two authorities and connect them. The deployment
 process is the same for both authorities.
 
     $ cd auth1
-    auth1 $ cp doc/auth1.config.yml config.yml
-    auth1 $ cp doc/auth.playbook.yml playbook.yml
+    auth1 $ cp doc/devel/auth.playbook.yml playbook.yml
     auth1 $ vagrant provision
     auth1 $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/auth1.pkg >/dev/null"
     auth1 $ scp -F vagrant.ssh.config default:/home/vagrant/auth1.pkg auth1.pkg
     auth1 $ cd ..
 
     $ cd auth2
-    auth2 $ cp doc/auth2.config.yml config.yml
-    auth2 $ cp doc/auth.playbook.yml playbook.yml
+    auth2 $ cp doc/devel/auth.playbook.yml playbook.yml
     auth2 $ vagrant provision
     auth2 $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/auth2.pkg >/dev/null"
     auth2 $ scp -F vagrant.ssh.config default:/home/vagrant/auth2.pkg auth2.pkg
@@ -143,40 +138,6 @@ process is the same for both authorities.
 
 Now we have these two servers running with all authority software installed
 and running.
-
-### Reconfiguring locales
-
-This step is only needed if you found an error on the previous step when
-executing 'vagrant provision'. If when you executed 'vagrant provision' you
-got this kind of error:
-
-    TASK: [Election orchestra, Create Database User] ******************************
-    failed: [default] => {"failed": true}
-    msg: unable to connect to database: could not connect to server: No such file or directory
-            Is the server running locally and accepting
-            connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?
-
-Then you should reconfigure the locales configuration:
-
-    vagrant ssh
-    sudo su
-    locale
-
-That command will show you all the locales you need to install, then you
-will need to do something similar to:
-
-    locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
-    dpkg-reconfigure locales
-    psql --version
-    pg_createcluster 9.3 main
-    /etc/init.d/postgresql start
-    exit
-    exit
-
-Now you should be able to execute 'vagrant provision' without errors. A
-cleaner option is to do the locale-gen and dpkg-reconfigure just after the
-'vagrant up --no-provision' command, avoiding getting an error before the
-first vagrant provision.
 
 ### Connecting auth1 with auth2
 
@@ -235,8 +196,7 @@ Let's provision the agora server in a similar fashion as we did with the
 authorities:
 
     $ cd agora
-    agora $ cp doc/agora.config.yml config.yml
-    agora $ cp doc/agora.playbook.yml playbook.yml
+    agora $ cp doc/devel/agora.playbook.yml playbook.yml
     agora $ vagrant provision
     agora $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null"
     agora $ scp -F vagrant.ssh.config default:/home/vagrant/agora.pkg agora.pkg
@@ -260,7 +220,7 @@ authorities to our eopeers.
 
     $ cd agora
     agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg ../auth2/auth2.pkg default:/home/vagrant/
-    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart"
+    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart; supervisorctl restart agora-elections"
     agora $ cd ..
 
 Having completed these steps, we now have a complete agora-voting installation.

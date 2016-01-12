@@ -9,9 +9,21 @@
   sudo: true
   template: src=authapi/templates/uwsgi.ini dest=/home/authapi/uwsgi.ini owner=authapi mode=0644
 
-- name: AuthApi, launchshell.sh
+- name: AuthApi, creating some shell commands
   sudo: true
-  template: src=authapi/templates/launchshell.sh dest=/home/authapi/launchshell.sh owner=authapi mode=0744
+  template:
+    src="authapi/templates/{{item.name}}"
+    dest="/home/authapi/{{item.name}}"
+    owner=authapi mode="{{item.perm}}"
+  with_items:
+    - name: launchshell.sh
+      perm: "0744"
+    - name: changepassword.sh
+      perm: "0744"
+    - name: launchcommand.sh
+      perm: "0744"
+    - name: fixture.json
+      perm: "0644"
 
 - name: AuthApi, Creates webstatic directory
   sudo: true
@@ -26,15 +38,28 @@
 - name: AuthApi, Installing python uwsgi, psycopg2
   sudo: true
   sudo_user: authapi
-  shell: /home/authapi/env/bin/pip install uwsgi psycopg2
+  pip:
+    name={{item}}
+    virtualenv=/home/authapi/env
+    state=present
+  with_items:
+    - uwsgi
+    - psycopg2
 
 - include: djangoapp.yml
 
-- name: AuthApi, Admin user (2)
+- name: AuthApi, Load fixture (admin user)
   sudo: true
   sudo_user: authapi
-  django_manage: command=loaddata fixtures=/home/authapi/authapi/authapi/api/fixtures/initial.json
+  django_manage:
+    command=loaddata
+    fixtures=/home/authapi/fixture.json
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env
     settings: "authapi.deploy"
+
+- name: AuthApi, set password
+  sudo: true
+  sudo_user: authapi
+  shell: /home/authapi/changepassword.sh admin "{{config.authapi_admin_password}}"

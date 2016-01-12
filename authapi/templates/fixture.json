@@ -1,0 +1,60 @@
+[
+{
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$12000$zrkTHP06f34l$xKU3InSmsG7p4dbYSHtQ2tQpvAwUUJ+B/QuNtV74Tco=",
+        "username": "admin",
+        "is_staff": true,
+        "is_superuser": true,
+        "email": "{{config.authapi_admin_email}}",
+        "is_active": true
+    },
+    "model": "auth.user"
+},
+{
+    "fields": {
+      "census": "close",
+      "extra_fields": [],
+      "auth_method": "user-and-password",
+      "auth_method_config": "{\"config\":{\"authentication-action\":{ \"mode\":\"\" },\"msg\":\"Click %(url)s and put this code %(code)s\",\"subject\":\"Confirm your email\"},\"pipeline\":{\"register-pipeline\":[[\"check_whitelisted\",{\"field\":\"ip\"}],[\"check_blacklisted\",{\"field\":\"ip\"}],[\"check_total_max\",{\"max\":8,\"field\":\"ip\"}]],\"authenticate-pipeline\":[],\"give_perms\":[{\"object_type\":\"UserData\",\"perms\":[\"edit\"],\"object_id\":\"UserDataId\"},{\"object_type\":\"AuthEvent\",\"perms\":[\"create\"]}]}}",
+      "status": "started",
+      "created": "2015-02-16T17:41:28+00:00"
+    },
+    "pk": 1,
+    "model": "api.authevent",
+    "created": "2015-02-16T17:41:28+00:00"
+},
+{
+    "fields": {
+        "status": "act",
+        "metadata": "\"{}\"",
+        "tlf": null,
+        "event": 1,
+        "user": 1
+    },
+    "model": "api.userdata",
+    "pk": 1
+},
+{
+    "fields": {
+        "user": 1,
+        "object_type": "AuthEvent",
+        "object_id": 0,
+        "perm": "create",
+        "created": "2015-02-16T17:41:28+00:00"
+    },
+    "model": "api.acl",
+    "pk": 0
+},
+{
+    "fields": {
+        "user": 1,
+        "object_type": "AuthEvent",
+        "object_id": 1,
+        "perm": "edit",
+        "created": "2015-02-16T17:41:28+00:00"
+    },
+    "model": "api.acl",
+    "pk": 1
+}
+]

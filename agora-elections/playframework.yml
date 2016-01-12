@@ -3,8 +3,11 @@
 - name: AgoraElections, Installing play framework
   sudo: true
   sudo_user: agoraelections
-  get_url: url=http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
-           dest=/home/agoraelections/activator.zip
+  get_url:
+    url=http://downloads.typesafe.com/typesafe-activator/1.2.12/typesafe-activator-1.2.12-minimal.zip
+    dest=/home/agoraelections/activator.zip
+    sha256sum=f34809502d2225db8b9fdb03a9594deb31bccab9ca4ac84b537d80bd78e5b2c9
+    validate_certs={{ not config.has_https_proxy }}
 
 - name: AgoraElections, Installing play framework (unzip)
   sudo: true

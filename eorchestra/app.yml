@@ -1,4 +1,14 @@
 ---
+- name: EOrchestra, Ensure using https in git clone
+  sudo: true
+  sudo_user: eorchestra
+  shell: 'git config --global url."https://".insteadOf git://'
+  # this is neede because otherwise when installing packages with pip
+  # requirements from a git repository, it won't use the http_proxy if
+  # configured, see:
+  # http://stackoverflow.com/questions/128035/how-do-i-pull-from-a-git-repository-through-an-http-proxy/32744849#32744849
+  # http://jgoodall.me/posts/2013/05/29/git-use-https/
+
 - name: EOrchestra, frestq python packages
   sudo: true
   sudo_user: eorchestra

@@ -12,7 +12,7 @@
     #- include: eorchestra/main.yml
     - include: agora-elections/main.yml
     - include: authapi/main.yml
-    - include: agora-gui/main.yml
     - include: sentry/main.yml
+    - include: agora-gui/main.yml
     - include: oneserver/main.yml
     - include: agora-verifier/main.yml

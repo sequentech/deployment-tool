@@ -39,6 +39,20 @@
   shell: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make install
          chdir=/home/eorchestra/vfork
 
+- name: EOrchestra, vfork max heap size configuration
+  sudo: true
+  lineinfile:
+    dest='{{item}}'
+    backrefs=yes
+    line='-Xmx{{config.java.max_heap_memory_usage}}m\2'
+    regexp='^-Xmx([0-9]+)m(.*)$'
+    state=present
+  with_items:
+    - /usr/local/bin/vmn
+    - /usr/local/bin/vmnc
+    - /usr/local/bin/vmnd
+    - /usr/local/bin/vmnv
+
 - name: EOrchestra, vfork copy .vfork_env
   sudo: true
   sudo_user: eorchestra

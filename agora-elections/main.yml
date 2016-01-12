@@ -51,7 +51,7 @@
 - name: AgoraElections, Key store setup (2)
   sudo: true
   sudo_user: agoraelections
-  shell: yes | keytool -importkeystore -deststorepass {{ config.keystore_pass }} -destkeypass {{ config.keystore_pass }} -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass {{ config.keystore_pass }} -alias client
+  shell: yes | keytool -importkeystore -deststorepass "{{ config.keystore_pass }}" -destkeypass "{{ config.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.keystore_pass }}" -alias client
          chdir=/home/agoraelections/
 
 # Admin tool setup
@@ -65,11 +65,30 @@
   sudo_user: agoraelections
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
               regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections_shared_secret}}'"
+
 - name: AgoraElections, Admin setup (2)
   sudo: true
   sudo_user: agoraelections
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
               regexp="db_password = .*$" replace="db_password = '{{config.agora_elections_db_password}}'"
+
+- name: AgoraElections, Admin setup (3)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
+              regexp="app_host = .*$" replace="app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
+
+- name: AgoraElections, Admin setup (4)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
+              regexp="IVY=.*$" replace="IVY=$HOME/.ivy2/cache"
+
+- name: AgoraElections, Admin setup (5)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
+              regexp="AGORA_HOME=.*$" replace="AGORA_HOME=$HOME/agora-elections"
 
 - include: app.yml
 

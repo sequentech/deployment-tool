@@ -30,10 +30,24 @@
   shell: make install
          chdir=/home/agoragui/node-v0.10.31
 
+- name: AgoraGui, configure npm proxy settings
+  sudo: true
+  when: config.has_https_proxy
+  shell: npm --global set proxy $http_proxy && npm --global set https-proxy $https_proxy
+
+- name: AgoraGui, Install Nodejs 5/5 (with proxy)
+  sudo: true
+  shell: npm --https-proxy=$http_proxy --registry=http://registry.npmjs.org/ --global install {{item}}
+  when: config.has_https_proxy
+  with_items:
+    - grunt-cli
+    - grunt
+    - bower
+
 - name: AgoraGui, Install Nodejs 5/5
   sudo: true
-  when: node_version.rc != 0 or 'v0.10.31' not in node_version.stdout
   npm: name={{item}} global=yes state=present
+  when: not config.has_https_proxy
   with_items:
     - grunt-cli
     - grunt
