@@ -1,4 +1,8 @@
 ---
+- name: OneServer, authapi custom_urls.py
+  sudo: true
+  template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
+
 - name: OneServer, authapi url config
   sudo: true
   lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py
@@ -11,10 +15,6 @@
   with_items:
     - authapi
     - authapi_celery
-
-- name: OneServer, authapi custom_urls.py
-  sudo: true
-  template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
 
 - name: OneServer, All in one nginx
   sudo: true

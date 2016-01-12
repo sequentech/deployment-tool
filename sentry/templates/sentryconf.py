@@ -1,20 +1,28 @@
+import os
+os.environ['SENTRY_CONF'] = "/home/sentry/sentry.conf.py"
+
 # Bootstrap the Sentry environment
-from sentry.utils.runner import configure
-configure("/home/sentry/sentry.conf.py")
+from sentry.runner import configure
+configure()
 
 # Create the org, team and project if needed
-from sentry.models import Team, Project, ProjectKey, User, Organization
+from sentry.models import Team, Project, ProjectKey, User, Organization, OrganizationMember
 
 user = User.objects.get(pk=1)
 
 name = 'AgoraVoting'
 name2 = 'AuthApi'
 
-if Organization.objects.filter(name=name, owner=user).count() == 0:
+if Organization.objects.filter(name=name).count() == 0:
     organization = Organization()
     organization.name = name
-    organization.owner = user
     organization.save()
+
+    om = OrganizationMember()
+    om.organization = organization
+    om.role = 'owner'
+    om.user = user
+    om.save()
 
     team = Team()
     team.name = name
@@ -27,7 +35,7 @@ if Organization.objects.filter(name=name, owner=user).count() == 0:
     project.organization = organization
     project.save()
 else:
-    organization = Organization.objects.filter(name=name, owner=user).all()[0]
+    organization = Organization.objects.filter(name=name).all()[0]
     team = Team.objects.filter(name=name, organization=organization).all()[0]
     project =Project.objects.filter(team=team, name=name2, organization=organization).all()[0]
 
