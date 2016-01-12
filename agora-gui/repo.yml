@@ -36,3 +36,26 @@
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
+
+- name: AgoraGui, ensuring latest version of agora-gui-common gets reinstalled removing it
+  sudo: true
+  sudo_user: agoragui
+  file:
+    path=/home/agoragui/{{item}}/bower_components/avCommon
+    state=absent
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, configuring agora-gui-common version in agora-gui-*
+  sudo: true
+  sudo_user: agoragui
+  replace:
+    dest=/home/agoragui/{{item}}/bower.json
+    regexp='"avCommon"(.) "[^"]+(".*)$'
+    replace='"avCommon"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
