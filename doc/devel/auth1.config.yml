@@ -105,6 +105,13 @@ config:
   # the log sender
   authapi_server_email: log@example.com
 
+  # Election ids are autoinc integer numbers set when created from the
+  # administrative web interface. This settings allows to specify the start
+  # number of the election ids. This might be useful to set if you want to
+  # them to start at a specific rate for any reason, for example if the
+  # authorities are shared with other authapi servers.
+  authapi_election_start_id: 1
+
   # administration interface
   authapi_admin_email: 'admin@agoravoting.com'
   authapi_admin_password: '<PASSWORD>'
