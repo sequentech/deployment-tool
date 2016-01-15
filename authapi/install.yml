@@ -63,3 +63,8 @@
   sudo: true
   sudo_user: authapi
   shell: /home/authapi/changepassword.sh admin "{{config.authapi_admin_password}}"
+
+- name: Authapi, set authapi election start id
+  sudo: true
+  sudo_user: postgres
+  shell: psql authapi -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.authapi_election_start_id}}));"

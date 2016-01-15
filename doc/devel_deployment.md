@@ -220,7 +220,7 @@ authorities to our eopeers.
 
     $ cd agora
     agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg ../auth2/auth2.pkg default:/home/vagrant/
-    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart; supervisorctl restart agora-elections"
+    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart; sudo supervisorctl restart agora-elections"
     agora $ cd ..
 
 Having completed these steps, we now have a complete agora-voting installation.
