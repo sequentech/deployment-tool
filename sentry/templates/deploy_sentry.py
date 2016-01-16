@@ -9,9 +9,9 @@ def update(globs):
             'raven.contrib.django.raven_compat',
         )
 
-{% if config.sentry_msg_log %}
-    globs['ADMINS'] = ( ('msg log', '{{ config.sentry_msg_log_email }}'), )
-    globs['SERVER_EMAIL'] = '{{ config.authapi_server_email }}'
+{% if config.sentry.msg_log %}
+    globs['ADMINS'] = ( ('msg log', '{{ config.sentry.msg_log_email }}'), )
+    globs['SERVER_EMAIL'] = '{{ config.authapi.server_email }}'
 {% endif %}
 
     globs['LOGGING'] = {
@@ -27,7 +27,7 @@ def update(globs):
         },
     },
     'handlers': {
-{% if config.sentry_msg_log %}
+{% if config.sentry.msg_log %}
         'mail_admins': {
             'level': 'INFO',
             'class': 'django.utils.log.AdminEmailHandler'
@@ -54,7 +54,7 @@ def update(globs):
             'handlers': ['sentry'],
             'propagate': False,
         },
-{% if config.sentry_msg_log %}
+{% if config.sentry.msg_log %}
         'authapi.notify': {
             'level': 'INFO',
             'handlers': ['sentry', 'mail_admins'],

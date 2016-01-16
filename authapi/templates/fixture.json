@@ -6,7 +6,7 @@
         "username": "admin",
         "is_staff": true,
         "is_superuser": true,
-        "email": "{{config.authapi_admin_email}}",
+        "email": "{{config.authapi.admin_email}}",
         "is_active": true
     },
     "model": "auth.user"

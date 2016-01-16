@@ -12,7 +12,7 @@
   sudo: true
   sudo_user: postgres
   when: config.load_balancing.is_master
-  postgresql_user: user=sentry password='{{config.sentry_db_password}}' port=5432
+  postgresql_user: user=sentry password='{{config.sentry.db_password}}' port=5432
 
 - name: Sentry, Create Database
   sudo: true
@@ -37,7 +37,7 @@
   sudo: true
   sudo_user: sentry
   when: config.load_balancing.is_master
-  shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email='{{ config.sentry_admin_user }}' --superuser --password='{{ config.sentry_admin_password }}'
+  shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email='{{ config.sentry.admin_user }}' --superuser --password='{{ config.sentry.admin_password }}'
   register: command_result
   failed_when:
     - "'already exists' not in command_result.stderr"
