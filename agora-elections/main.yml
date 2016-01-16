@@ -45,13 +45,13 @@
 - name: AgoraElections, Key store setup (1)
   sudo: true
   sudo_user: agoraelections
-  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.keystore_pass }}"
+  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
          chdir=/home/agoraelections/
 
 - name: AgoraElections, Key store setup (2)
   sudo: true
   sudo_user: agoraelections
-  shell: yes | keytool -importkeystore -deststorepass "{{ config.keystore_pass }}" -destkeypass "{{ config.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.keystore_pass }}" -alias client
+  shell: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
          chdir=/home/agoraelections/
 
 # Admin tool setup
@@ -64,13 +64,13 @@
   sudo: true
   sudo_user: agoraelections
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections_shared_secret}}'"
+              regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections.shared_secret}}'"
 
 - name: AgoraElections, Admin setup (2)
   sudo: true
   sudo_user: agoraelections
   replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="db_password = .*$" replace="db_password = '{{config.agora_elections_db_password}}'"
+              regexp="db_password = .*$" replace="db_password = '{{config.agora_elections.db_password}}'"
 
 - name: AgoraElections, Admin setup (3)
   sudo: true

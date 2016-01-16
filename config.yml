@@ -36,22 +36,26 @@ config:
     max_heap_memory_usage: 4000
 
   # agora-elections
-  agora_elections_db_password: '<PASSWORD>'
-  agora_elections_shared_secret: '<PASSWORD>'
-  agora_elections_expiry: 60000
-  agora_elections_domain: agoravoting.com
-  agora_elections_port: 14443
-  keystore_pass: '<PASSWORD>'
+  agora_elections:
+    db_password: '<PASSWORD>'
+    shared_secret: '<PASSWORD>'
+    expiry: 60000
+    domain: agoravoting.com
+    port: 14443
+
+    # Password used to encrypt the authorities' public keys for usage in
+    # agora-elections.
+    keystore_pass: '<PASSWORD>'
 
   # agora-gui
-  agora_gui_domain: agoravoting.com
-  agora_gui_admin_port: 10090
-  agora_gui_booth_port: 10091
-  agora_gui_elections_port: 10092
+  agora_gui:
+    domain: agoravoting.com
+    admin_port: 10090
+    booth_port: 10091
+    elections_port: 10092
 
-  # These are variables that go to the /home/agoragui/avConfig.js configuration
-  # file. See the file for more details.
-  gui_config:
+    # These are variables that go to the /home/agoragui/avConfig.js configuration
+    # file. See the file for more details.
     language: en
     defaultRoute: /admin/login
     debug: 'false'
@@ -87,28 +91,40 @@ config:
 
   cert:
     C: EN
-    ST: Ney_York
-    L: Ney_York
+    ST: Ney York
+    L: Ney York
     O: Example
     OU: Example
     EMAIL: info@example.com
 
   # sentry
-  sentry_port: 9090
-  sentry_admin_user: 'admin@example.com'
-  sentry_db_password: '<PASSWORD>'
-  sentry_admin_password: '<PASSWORD>'
+  sentry:
+    port: 9090
+    admin_user: 'admin@example.com'
+    db_password: '<PASSWORD>'
+    admin_password: '<PASSWORD>'
 
-  # Sending the code sms and email log to an email
-  sentry_msg_log: False
-  # the log receiver
-  sentry_msg_log_email: log@example.com
-  # the log sender
-  authapi_server_email: log@example.com
+    # Sending the code sms and email log to an email
+    msg_log: False
 
-  # administration interface
-  authapi_admin_email: 'admin@agoravoting.com'
-  authapi_admin_password: '<PASSWORD>'
+    # the log receiver
+    msg_log_email: log@example.com
+
+
+  # administration interface settings
+  authapi:
+    # configuration of the log sender
+    server_email: log@example.com
+
+    # Election ids are autoinc integer numbers set when created from the
+    # administrative web interface. This settings allows to specify the start
+    # number of the election ids. This might be useful to set if you want to
+    # them to start at a specific rate for any reason, for example if the
+    # authorities are shared with other authapi servers.
+    election_start_id: 1
+
+    admin_email: 'admin@agoravoting.com'
+    admin_password: 'QWERTY33'
 
   # Authorities
 
