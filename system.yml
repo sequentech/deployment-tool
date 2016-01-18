@@ -9,7 +9,7 @@
 
 - name: System, domain in /etc/hosts
   sudo: true
-  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections_domain }}" state=present
+  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections.domain }}" state=present
 
 - name: System, Creating nginx group
   sudo: true
