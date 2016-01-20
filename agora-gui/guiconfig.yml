@@ -7,28 +7,28 @@
            replace="{{item.replace}}"'
   with_items:
     - regexp: "baseUrl:.*"
-      replace: 'baseUrl: \""https://{{config.agora_elections.domain}}/elections/api/\"",'
+      replace: 'baseUrl: "https://{{config.agora_elections.domain}}/elections/api/",'
 
     - regexp: "authAPI:.*"
-      replace: 'authAPI: \""https://{{config.agora_elections.domain}}/authapi/api/\"",'
+      replace: 'authAPI: "https://{{config.agora_elections.domain}}/authapi/api/",'
 
     - regexp: "electionsAPI:.*"
-      replace: 'electionsAPI: \""https://{{config.agora_elections.domain}}/elections/api/\"",'
+      replace: 'electionsAPI: "https://{{config.agora_elections.domain}}/elections/api/",'
 
     - regexp: "publicURL:.*"
-      replace: 'publicURL: \""https://{{config.agora_elections.domain}}/elections/public/\"",'
+      replace: 'publicURL: "https://{{config.agora_elections.domain}}/elections/public/",'
 
     - regexp: "director:.*"
-      replace: 'director: \""{{ config.director }}\"",'
+      replace: 'director: "{{ config.director }}",'
 
     - regexp: "authorities:.*"
       replace: 'authorities: {{ config.auths }},'
 
     - regexp: "([/][/] )?language:.*"
-      replace: 'language: \""{{ config.agora_gui.language }}\"",'
+      replace: 'language: "{{ config.agora_gui.language }}",'
 
     - regexp: "([/][/] )?lng:.*"
-      replace: 'lng: \""{{ config.agora_gui.language }}\"",'
+      replace: 'lng: "{{ config.agora_gui.language }}",'
 
     - regexp: "[/][/] detectLngQS:"
       replace: 'detectLngQS:'
@@ -37,19 +37,19 @@
       replace: 'debug: {{ config.agora_gui.debug }},'
 
     - regexp: "defaultRoute:.*"
-      replace: 'defaultRoute: \""{{ config.agora_gui.defaultRoute }}\"",'
+      replace: 'defaultRoute: "{{ config.agora_gui.defaultRoute }}",'
 
     - regexp: "debug:.*"
       replace: 'debug: {{ config.agora_gui.debug }},'
 
     - regexp: "email:.*"
-      replace: 'email: \""{{ config.agora_gui.contact.email }}\"",'
+      replace: 'email: "{{ config.agora_gui.contact.email }}",'
 
     - regexp: "twitter:.*"
-      replace: 'twitter: \""{{ config.agora_gui.contact.twitter }}\"",'
+      replace: 'twitter: "{{ config.agora_gui.contact.twitter }}",'
 
     - regexp: "tlf:.*"
-      replace: 'tlf: \""{{ config.agora_gui.contact.tlf }}\"",'
+      replace: 'tlf: "{{ config.agora_gui.contact.tlf }}",'
 
 - name: AgoraGui, config beautify options
   sudo: true

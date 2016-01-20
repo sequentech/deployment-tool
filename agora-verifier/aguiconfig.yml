@@ -16,10 +16,10 @@
            replace="{{item.replace}}"'
   with_items:
     - regexp: "link:.*"
-      replace: 'link: \""https://{{config.agora_elections.domain}}/verifier/agora-verifier\"",'
+      replace: 'link: "https://{{config.agora_elections.domain}}/verifier/agora-verifier",'
 
     - regexp: "hash:.*"
-      replace: 'hash: \""{{sha256sum.stdout}}\"",'
+      replace: 'hash: "{{sha256sum.stdout}}",'
 
 - name: AgoraVerifier, building AgoraGui
   sudo: true
