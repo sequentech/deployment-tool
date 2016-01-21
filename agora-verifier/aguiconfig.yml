@@ -11,9 +11,10 @@
   sudo: true
   sudo_user: agoragui
   when: avConfig.stat.exists == True
-  replace: 'dest=/home/agoragui/avConfig.js
-           regexp="{{item.regexp}}"
-           replace="{{item.replace}}"'
+  replace:
+    dest: /home/agoragui/avConfig.js
+    regexp: "{{item.regexp}}"
+    replace: "{{item.replace}}"
   with_items:
     - regexp: "link:.*"
       replace: 'link: "https://{{config.agora_elections.domain}}/verifier/agora-verifier",'

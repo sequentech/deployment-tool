@@ -2,9 +2,10 @@
 - name: AgoraGui, config setup
   sudo: true
   sudo_user: agoragui
-  replace: 'dest=/home/agoragui/avConfig.js
-           regexp="{{item.regexp}}"
-           replace="{{item.replace}}"'
+  replace:
+    dest: /home/agoragui/avConfig.js
+    regexp: "{{item.regexp}}"
+    replace: "{{item.replace}}"
   with_items:
     - regexp: "baseUrl:.*"
       replace: 'baseUrl: "https://{{config.agora_elections.domain}}/elections/api/",'
