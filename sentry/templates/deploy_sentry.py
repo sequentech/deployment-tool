@@ -2,7 +2,7 @@
 
 # call to this function to update the globs globals variable: update(globals())
 def update(globs):
-    globs['RAVEN_CONFIG'] = dict(dsn='{{ dsn_contents.stderr }}')
+    globs['RAVEN_CONFIG'] = dict(dsn='{{ dsn_contents.stdout }}')
 
     if 'raven.contrib.django.raven_compat' not in globs['INSTALLED_APPS']:
         globs['INSTALLED_APPS'] = globs['INSTALLED_APPS'] + (
