@@ -121,9 +121,69 @@ config:
     # authorities are shared with other authapi servers.
     election_start_id: 1
 
+    # stablishes if admins can register or not
+    # default value: 'close'
+    # allowed values: 'close', 'open'
+    admin_census_mode: close
+
     # administration interface
     admin_email: 'admin@agoravoting.com'
     admin_password: '<PASSWORD>'
+
+    # sms configuration
+    sms:
+      # enable sms configuration. if set to false, the sms configuration doesn't
+      # get inserted in the deploy.py config file.
+      # allowed values: true|false
+      enabled: false
+
+      # sms provider
+      # allowed values: esendex
+      provider: esendex
+
+      # Each user might have different domain ids. This settings depends on
+      # the provider.
+      domain_id: '<DOMAIND>'
+
+      # Provider's user name.
+      login: '<LOGIN>'
+
+      # Provider's password.
+      password: '<PASSWORD>'
+
+      # Base URL of the API of the provider. Depends on the provider, the
+      # default works for esendex.
+      url: 'https://api.esendex.com/v1.0/messagedispatcher'
+
+      # Depends on the provider. Allows you to change the sender id.
+      sender_id: 'agoravoting'
+
+      # Voice lang code. Only for esendex. Default: None.
+      voice_lang_code: 'None'
+
+      # Base template for email messages. The %s will be replaced by the
+      # message, so you can add prefix and suffixes.
+      base_template: "%s -- Agora Voting"
+
+    # email configuration
+    email:
+      # enable email configuration. if set to false, the emailconfiguration
+      # doesn't get inserted in the deploy.py config file.
+      # allowed values: true|false
+      enabled: false
+
+      # The sender email address
+      default_from_email: 'agora@example.com'
+
+      # Email server host
+      email_host: 'example.com'
+
+      # Email server port
+      email_port: 24
+
+      # Base template for plain text email messages. The %s will be replaced by
+      # the message, so you can add prefix and suffixes.
+      base_template: "%s\n\n -- Agora Voting https://agoravoting.com"
 
   # Authorities
 
