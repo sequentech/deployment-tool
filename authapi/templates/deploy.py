@@ -1,6 +1,6 @@
 from authapi.settings import *
 
-DEBUG = False
+DEBUG = {{config.authapi.debug}}
 
 STATIC_ROOT = '/home/authapi/webstatic'
 MEDIA_ROOT = '/home/authapi/webstatic/media'

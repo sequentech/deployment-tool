@@ -111,6 +111,10 @@ config:
 
   # the log sender
   authapi:
+    # Whether authapi is run in debug mode or not.
+    # Allowed values: True|False
+    debug: False
+
     server_email: log@example.com
 
     # Election ids are autoinc integer numbers set when created from the
