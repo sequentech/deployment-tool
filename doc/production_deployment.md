@@ -38,21 +38,22 @@ it fails, then agora2 will be used for that as a redundancy strategy.
 First, create the deployment user if it hasn't been created yet. We'll use
 **agora** for that:
 
-    root@agora # adduser agora agora
+    root@agora # adduser agora agora --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
 
 Afterwards, you should add the permissions that the agora user requires for
 administration and deployment.
 
 This is how you do it in the two servers that will be used as authorities:
 
-    root@agora # wget https://github.com/agoravoting/agora-dev-box/blob/feature_load_balancing_high_availability/doc/production/auth.sudoers
+    root@agora # wget https://raw.githubusercontent.com/agoravoting/agora-dev-box/next/doc/production/auth.sudoers
     root@agora # cat auth.sudoers >> /etc/sudoers
 
 And this is how you do it for the two other servers that will be used as master
 and slave machines:
 
-    root@agora # wget https://github.com/agoravoting/agora-dev-box/blob/feature_load_balancing_high_availability/doc/production/auth.sudoers
-    root@agora # cat auth.sudoers >> /etc/sudoers
+    root@agora # wget https://raw.githubusercontent.com/agoravoting/agora-dev-box/next/doc/production/agora.sudoers
+    root@agora # cat agora.sudoers >> /etc/sudoers
+
 
 - Install initial dependencies
 
@@ -84,7 +85,7 @@ deployment script:
 
     agora@agora:~ $ git clone https://github.com/agoravoting/agora-dev-box.git
     agora@agora:~ $ cd agora-dev-box
-    agora@agora:~/agora-dev-box/ $ git checkout feature_load_balancing_high_availability
+    agora@agora:~/agora-dev-box/ $ git checkout next
 
 We'll use a master config file as a base:
 
@@ -175,7 +176,7 @@ the deployment script:
 
     agora@auth:~ $ git clone https://github.com/agoravoting/agora-dev-box.git
     agora@auth:~ $ cd agora-dev-box
-    agora@auth:~/agora-dev-box/ $ git checkout feature_load_balancing_high_availability
+    agora@auth:~/agora-dev-box/ $ git checkout next
 
 We'll use an authority config file as a base:
 
