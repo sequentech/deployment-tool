@@ -38,7 +38,7 @@ it fails, then agora2 will be used for that as a redundancy strategy.
 First, create the deployment user if it hasn't been created yet. We'll use
 **agora** for that:
 
-    root@agora # adduser agora agora --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
+    root@agora # adduser agora agora --gecos "FullName,RoomNumber,WorkPhone,HomePhone" --disabled-password
 
 Afterwards, you should add the permissions that the agora user requires for
 administration and deployment.
