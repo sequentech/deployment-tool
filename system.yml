@@ -37,3 +37,11 @@
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ item.ip }} {{ item.hostname }}" state=present
   with_items: config.hosts
+
+
+- name: System, updating /etc/screenrc
+  sudo: true
+  template:
+    src=templates/screenrc
+    dest=/etc/screenrc
+    owner=root mode=0644
