@@ -160,9 +160,9 @@ config:
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: 'None'
 
-      # Base template for email messages. The %s will be replaced by the
-      # message, so you can add prefix and suffixes.
-      base_template: "%s -- Agora Voting"
+      # Base template for sms messages. The __MESSAGE__ will be replaced by
+      # the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__ -- Agora Voting"
 
     # email configuration
     email:
@@ -180,9 +180,9 @@ config:
       # Email server port
       email_port: 24
 
-      # Base template for plain text email messages. The %s will be replaced by
-      # the message, so you can add prefix and suffixes.
-      base_template: "%s\n\n -- Agora Voting https://agoravoting.com"
+      # Base template for plain text email messages. The __MESSAGE__ will be
+      # replaced by the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
 
   # Authorities
 

@@ -160,7 +160,12 @@ config:
       sender_id: 'agoravoting'
 
       # Voice lang code. Only for esendex. Default: None.
-      voice_lang_code: 'None'
+      voice_lang_code: None
+
+      # Base template for sms messages. The %s will be replaced by the
+      # message, so you can add prefix and suffixes. Watch the size of the
+      # template: sms messages are limited to 140 characters.
+      base_template: "__MESSAGE__ -- Agora Voting"
 
     # email configuration
     email:
@@ -177,6 +182,10 @@ config:
 
       # Email server port
       email_port: 24
+
+      # Base template for plain text email messages. The __MESSAGE__ will be
+      # replaced by the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
 
   # Authorities
   authorities:
