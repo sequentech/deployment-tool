@@ -113,6 +113,10 @@ config:
 
   # administration interface settings
   authapi:
+    # Whether authapi is run in debug mode or not.
+    # Allowed values: True|False
+    debug: True
+
     # configuration of the log sender
     server_email: log@example.com
 
