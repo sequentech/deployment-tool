@@ -96,6 +96,9 @@ config:
     OU: Example
     EMAIL: info@example.com
 
+    # within how many days will the certificate will expire?
+    lifetime: 3650
+
   # sentry
   sentry:
     port: 9090
