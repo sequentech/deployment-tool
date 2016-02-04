@@ -39,7 +39,7 @@ SMS_VOICE_LANG_CODE = {{config.authapi.sms.voice_lang_code}}
 
 SMS_BASE_TEMPLATE = "{{config.authapi.sms.base_template}}"
 
-SMS_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/%(authid)s/public/login"
+SMS_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login"
 
 {% endif %}
 
@@ -52,5 +52,5 @@ EMAIL_PORT = {{config.authapi.email.email_port}}
 
 EMAIL_BASE_TEMPLATE = "{{config.authapi.email.base_template}}"
 
-EMAIL_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/%(authid)s/public/login/%(email)s"
+EMAIL_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login/__EMAIL__"
 {% endif %}
