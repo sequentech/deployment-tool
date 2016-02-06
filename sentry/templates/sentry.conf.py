@@ -148,7 +148,9 @@ SENTRY_URL_PREFIX = 'http://{{ config.agora_elections.domain }}:{{ config.sentry
 
 # If you're using a reverse proxy, you should enable the X-Forwarded-Proto
 # header and uncomment the following settings
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+{% if not config.load_balancing.enabled or config.load_balancing.use_https %}
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+{% endif %}
 
 SENTRY_WEB_HOST = '0.0.0.0'
 SENTRY_WEB_PORT = {{ config.sentry.port }}
