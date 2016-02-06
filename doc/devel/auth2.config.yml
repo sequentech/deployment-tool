@@ -101,9 +101,25 @@ config:
 
   # sentry
   sentry:
+    # port in which the sentry backend is run.
+    # Note: this is NOT the port in  which the nginx sentry web service is run.
     port: 9090
-    admin_user: 'admin@example.com'
+
+    # password of the postgresql database of the sentry backend.
     db_password: '<PASSWORD>'
+
+    # HTTP Port in which sentry is accessed. Only used for now in
+    # oneserver.conf. Note that this port might be configure to use
+    # https only if not config.load_balancing.enabled or
+    # config.load_balancing.use_https, see oneserver.conf for details.
+    web_port: 8443
+
+    # Sentry Administrative web user email. Used to login into the sentry web
+    # interface.
+    admin_user: 'admin@example.com'
+
+    # Sentry Administrative web user password. Used to login into the sentry web
+    # interface.
     admin_password: '<PASSWORD>'
 
     # Sending the code sms and email log to an email
