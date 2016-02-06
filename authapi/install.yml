@@ -67,4 +67,5 @@
 - name: Authapi, set authapi election start id
   sudo: true
   sudo_user: postgres
+  when: config.load_balancing.is_master
   shell: psql authapi -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.authapi.election_start_id}}));"
