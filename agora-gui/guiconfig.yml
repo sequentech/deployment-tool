@@ -49,7 +49,7 @@
       replace: 'twitter: \""{{ config.agora_gui.contact.twitter }}\"",'
 
     - regexp: "tlf:.*"
-      replace: 'tlf: \""{{ config.agora_gui.contact.tlf }}\"",'
+      replace: 'tlf: \"{{ config.agora_gui.contact.tlf }}\",'
 
 - name: AgoraGui, config beautify options
   sudo: true
