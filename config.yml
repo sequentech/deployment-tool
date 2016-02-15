@@ -163,7 +163,7 @@ config:
 
       # sms provider
       # allowed values: esendex
-      sms_provider: esendex
+      provider: esendex
 
       # Each user might have different domain ids. This settings depends on
       # the provider.
