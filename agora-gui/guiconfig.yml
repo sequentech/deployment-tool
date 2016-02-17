@@ -45,6 +45,9 @@
     - regexp: "email:.*"
       replace: 'email: \""{{ config.agora_gui.contact.email }}\"",'
 
+    - regexp: "sales:.*"
+      replace: 'sales: \""{{ config.agora_gui.contact.sales }}\"",'
+
     - regexp: "twitter:.*"
       replace: 'twitter: \""{{ config.agora_gui.contact.twitter }}\"",'
 

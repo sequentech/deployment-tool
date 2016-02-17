@@ -60,7 +60,10 @@ config:
     debug: 'false'
 
     contact:
+      # Support contact email displayed in the footer links
       email: contact@example.com
+      # Sales contact email displayed in the footer links
+      sales: sales@example.com
       twitter: ''
       tlf: ''
 
