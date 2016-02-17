@@ -48,8 +48,50 @@
     - regexp: "sales:.*"
       replace: 'sales: \""{{ config.agora_gui.contact.sales }}\"",'
 
+    - regexp: "facebook:.*"
+      replace: 'facebook: \""{{ config.agora_gui.social.facebook }}\"",'
+
     - regexp: "twitter:.*"
-      replace: 'twitter: \""{{ config.agora_gui.contact.twitter }}\"",'
+      replace: 'twitter: \""{{ config.agora_gui.social.twitter }}\"",'
+
+    - regexp: "googleplus:.*"
+      replace: 'googleplus: \""{{ config.agora_gui.social.googleplus }}\"",'
+
+    - regexp: "youtube:.*"
+      replace: 'youtube: \""{{ config.agora_gui.social.youtube }}\"",'
+
+    - regexp: "github:.*"
+      replace: 'github: \""{{ config.agora_gui.social.github }}\"",'
+
+    - regexp: "aboutus:.*"
+      replace: 'aboutus: \""{{ config.agora_gui.technology.aboutus }}\"",'
+
+    - regexp: "pricing:.*"
+      replace: 'pricing: \""{{ config.agora_gui.technology.pricing }}\"",'
+
+    - regexp: "overview:.*"
+      replace: 'overview: \""{{ config.agora_gui.technology.overview }}\"",'
+
+    - regexp: "solutions:.*"
+      replace: 'solutions: \""{{ config.agora_gui.technology.solutions }}\"",'
+
+    - regexp: "admin_manual:.*"
+      replace: 'admin_manual: \""{{ config.agora_gui.technology.admin_manual }}\"",'
+
+    - regexp: "terms_of_service:.*"
+      replace: 'terms_of_service: \""{{ config.agora_gui.legal.terms_of_service }}\"",'
+
+    - regexp: "cookies:.*"
+      replace: 'cookies: \""{{ config.agora_gui.legal.cookies }}\"",'
+
+    - regexp: "privacy:.*"
+      replace: 'privacy: \""{{ config.agora_gui.legal.privacy }}\"",'
+
+    - regexp: "security_contact:.*"
+      replace: 'security_contact: \""{{ config.agora_gui.legal.security_contact }}\"",'
+
+    - regexp: "community_website:.*"
+      replace: 'community_website: \""{{ config.agora_gui.legal.community_website }}\"",'
 
     - regexp: "tlf:.*"
       replace: 'tlf: \"{{ config.agora_gui.contact.tlf }}\",'
