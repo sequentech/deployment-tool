@@ -78,6 +78,9 @@
     - regexp: "admin_manual:.*"
       replace: 'admin_manual: \""{{ config.agora_gui.technology.admin_manual }}\"",'
 
+    - regexp: "helpUrl:.*"
+      replace: 'helpUrl: \""{{ config.agora_gui.technology.admin_manual }}\"",'
+
     - regexp: "terms_of_service:.*"
       replace: 'terms_of_service: \""{{ config.agora_gui.legal.terms_of_service }}\"",'
 
