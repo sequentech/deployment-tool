@@ -15,7 +15,7 @@
 
 - name: AgoraVerifier, Install sbt-0.13.7.deb
   sudo: true
-  apt: deb="/tmp/sbt-0.13.7.deb" state=present
+  apt: deb="/tmp/sbt-0.13.7.deb"
   when: sbt_check_deb.rc == 1
 
 - name: AgoraVerifier, Updating packages
