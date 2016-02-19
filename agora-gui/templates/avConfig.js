@@ -21,7 +21,7 @@ var avConfigData = {
   electionsAPI: "https://{{config.agora_elections.domain}}/elections/api/",
 
   // Agora Admin help url
-  helpUrl: "https://agoravoting.com/help",
+  helpUrl: "{{ config.agora_gui.technology.admin_manual }}",
 
   authorities: {{ config.auths }},
   director: "{{ config.director }}",
