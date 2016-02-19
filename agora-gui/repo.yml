@@ -23,10 +23,14 @@
   git: repo={{ repos.guibooth.repo }} version={{ repos.guibooth.version }}
        dest=/home/agoragui/agora-gui-booth force={{ repos.guibooth.force }}
 
-- name: AgoraGui, Creating avConfig.js file
+- name: AgoraGui, config setup
   sudo: true
-  sudo_user: agoragui
-  shell: cp /home/agoragui/agora-gui-common/avConfig.js /home/agoragui/avConfig.js
+  template:
+    src=agora-gui/templates/avConfig.js
+    dest=/home/agoragui/avConfig.js
+    owner=agoragui
+    group=agoragui
+    mode=0644
 
 - name: AgoraGui, linking avConfig.js in all agora-gui-*
   sudo: true

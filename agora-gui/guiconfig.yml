@@ -1,107 +1,16 @@
 ---
-- name: AgoraGui, config setup
-  sudo: true
-  sudo_user: agoragui
-  replace: 'dest=/home/agoragui/avConfig.js
-           regexp="{{item.regexp}}"
-           replace="{{item.replace}}"'
-  with_items:
-    - regexp: "baseUrl:.*"
-      replace: 'baseUrl: \""https://{{config.agora_elections.domain}}/elections/api/\"",'
-
-    - regexp: "authAPI:.*"
-      replace: 'authAPI: \""https://{{config.agora_elections.domain}}/authapi/api/\"",'
-
-    - regexp: "electionsAPI:.*"
-      replace: 'electionsAPI: \""https://{{config.agora_elections.domain}}/elections/api/\"",'
-
-    - regexp: "publicURL:.*"
-      replace: 'publicURL: \""https://{{config.agora_elections.domain}}/elections/public/\"",'
-
-    - regexp: "director:.*"
-      replace: 'director: \""{{ config.director }}\"",'
-
-    - regexp: "authorities:.*"
-      replace: 'authorities: {{ config.auths }},'
-
-    - regexp: "([/][/] )?language:.*"
-      replace: 'language: \""{{ config.agora_gui.language }}\"",'
-
-    - regexp: "([/][/] )?lng:.*"
-      replace: 'lng: \""{{ config.agora_gui.language }}\"",'
-
-    - regexp: "[/][/] detectLngQS:"
-      replace: 'detectLngQS:'
-
-    - regexp: "debug:.*"
-      replace: 'debug: {{ config.agora_gui.debug }},'
-
-    - regexp: "defaultRoute:.*"
-      replace: 'defaultRoute: \""{{ config.agora_gui.defaultRoute }}\"",'
-
-    - regexp: "debug:.*"
-      replace: 'debug: {{ config.agora_gui.debug }},'
-
-    - regexp: "email:.*"
-      replace: 'email: \""{{ config.agora_gui.contact.email }}\"",'
-
-    - regexp: "sales:.*"
-      replace: 'sales: \""{{ config.agora_gui.contact.sales }}\"",'
-
-    - regexp: "facebook:.*"
-      replace: 'facebook: \""{{ config.agora_gui.social.facebook }}\"",'
-
-    - regexp: "twitter:.*"
-      replace: 'twitter: \""{{ config.agora_gui.social.twitter }}\"",'
-
-    - regexp: "googleplus:.*"
-      replace: 'googleplus: \""{{ config.agora_gui.social.googleplus }}\"",'
-
-    - regexp: "youtube:.*"
-      replace: 'youtube: \""{{ config.agora_gui.social.youtube }}\"",'
-
-    - regexp: "github:.*"
-      replace: 'github: \""{{ config.agora_gui.social.github }}\"",'
-
-    - regexp: "aboutus:.*"
-      replace: 'aboutus: \""{{ config.agora_gui.technology.aboutus }}\"",'
-
-    - regexp: "pricing:.*"
-      replace: 'pricing: \""{{ config.agora_gui.technology.pricing }}\"",'
-
-    - regexp: "overview:.*"
-      replace: 'overview: \""{{ config.agora_gui.technology.overview }}\"",'
-
-    - regexp: "solutions:.*"
-      replace: 'solutions: \""{{ config.agora_gui.technology.solutions }}\"",'
-
-    - regexp: "admin_manual:.*"
-      replace: 'admin_manual: \""{{ config.agora_gui.technology.admin_manual }}\"",'
-
-    - regexp: "helpUrl:.*"
-      replace: 'helpUrl: \""{{ config.agora_gui.technology.admin_manual }}\"",'
-
-    - regexp: "terms_of_service:.*"
-      replace: 'terms_of_service: \""{{ config.agora_gui.legal.terms_of_service }}\"",'
-
-    - regexp: "cookies:.*"
-      replace: 'cookies: \""{{ config.agora_gui.legal.cookies }}\"",'
-
-    - regexp: "privacy:.*"
-      replace: 'privacy: \""{{ config.agora_gui.legal.privacy }}\"",'
-
-    - regexp: "security_contact:.*"
-      replace: 'security_contact: \""{{ config.agora_gui.legal.security_contact }}\"",'
-
-    - regexp: "community_website:.*"
-      replace: 'community_website: \""{{ config.agora_gui.legal.community_website }}\"",'
-
-    - regexp: "tlf:.*"
-      replace: 'tlf: \"{{ config.agora_gui.contact.tlf }}\",'
+- name: AgoraGui, copy logo image
+  when: config.agora_gui.organization.logo_path != ''
+  copy:
+    "src={{config.agora_gui.organization.logo_url}}
+    dest=/home/agoragui/agora-gui-admin/img/agora_voting_logo_white_100.png
+    owner=agoragui
+    group=agoragui
+    mode=u=rw,g=r,o=r"
 
 - name: AgoraGui, config beautify options
   sudo: true
-  sudo_user: agoragui # aa
+  sudo_user: agoragui
   replace:
     "dest=/home/agoragui/{{item}}/Gruntfile.js
     regexp='beautify:.*'
