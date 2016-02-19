@@ -2,7 +2,7 @@
 - name: AgoraGui, copy logo image
   when: config.agora_gui.organization.logo_path != ''
   copy:
-    "src={{config.agora_gui.organization.logo_url}}
+    "src={{config.agora_gui.organization.logo_path}}
     dest=/home/agoragui/agora-gui-admin/img/agora_voting_logo_white_100.png
     owner=agoragui
     group=agoragui
