@@ -327,3 +327,6 @@ agora1 in the director election authority. This can be done by:
 
     agora@auth1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
 
+### Troubleshooting
+
+For Troubleshooting please read the deployment_troubleshooting.md file.
