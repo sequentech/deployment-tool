@@ -200,18 +200,18 @@ config:
 
     # Defines the extra fields used in authentication and registration. Empty by
     # default
-    extra_fields: []
+    extra_fields: >
+      []
 
-    # Admin credentials. Note that some of them might get unused, for example
-    # admin_password won't be of use if auth_method is 'sms'.
+    # Admin user data and credentials. Note that some of them might get unused,
+    # for example admin_password won't be of use if auth_method is 'sms'.
     admin_user:
-      first_name: 'Admin'
-      admin_email: 'admin@agoravoting.com'
-      admin_password: '<PASSWORD>'
+      email: 'admin@agoravoting.com'
+      password: '<PASSWORD>'
 
       # Note that admin telephone number should contain no spaces. International
       # prefixes are entered like "+34" for Spain, for example
-      admin_tlf: '+34666666666'
+      tlf: '+34666666666'
 
     # sms configuration
     sms:
