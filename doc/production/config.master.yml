@@ -191,9 +191,25 @@ config:
     # allowed values: 'close', 'open'
     admin_census_mode: close
 
-    # administration interface
-    admin_email: 'admin@agoravoting.com'
-    admin_password: '<PASSWORD>'
+    # Stablishes the authentication method used for election administrators
+    #
+    # Allowed values: (user-and-password|email|sms)
+    auth_method: 'user-and-password'
+
+    # Defines the extra fields used in authentication and registration. Empty by
+    # default
+    extra_fields: >
+      []
+
+    # Admin user data and credentials. Note that some of them might get unused,
+    # for example admin_password won't be of use if auth_method is 'sms'.
+    admin_user:
+      email: 'admin@agoravoting.com'
+      password: 'QWERTY33'
+
+      # Note that admin telephone number should contain no spaces. International
+      # prefixes are entered like "+34" for Spain, for example
+      tlf: ''
 
     # sms configuration
     sms:
