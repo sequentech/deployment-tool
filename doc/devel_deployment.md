@@ -198,7 +198,7 @@ authorities:
     $ cd agora
     agora $ cp doc/devel/agora.playbook.yml playbook.yml
     agora $ vagrant provision
-    agora $ vagrant ssh -c "sudo eopeers --show-mine | tee /home/vagrant/agora.pkg >/dev/null"
+    agora $ vagrant ssh -c "sudo eopeers --show-mine --private-ip | tee /home/vagrant/agora.pkg >/dev/null"
     agora $ scp -F vagrant.ssh.config default:/home/vagrant/agora.pkg agora.pkg
     agora $ cd ..
 
@@ -209,13 +209,11 @@ use local-auth1 as the director authority, but we need to add all
 authorities to our eopeers.
 
     $ cd auth1
-    auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
-    auth1 $ vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
+    auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg && vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
     auth1 $ cd ..
 
     $ cd auth2
-    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg
-    auth2 $ vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
+    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg && vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
     auth2 $ cd ..
 
     $ cd agora
@@ -263,35 +261,4 @@ three machines, as a base working condition:
 
 ### Troubleshooting
 
-#### Supervisor trouble
-
-If the we loads but the form doesn't show up, and when you analyze traffic some
-queries (for example  https://agora/authapi/api/auth-event/1/) return
-"502 Bad Gateway", this might be because supervisor might be dead. This is a bug
-that we don't know how to fix yet but has a simple solution: restart supervisor:
-
-You can check that supervisor is down when this happens:
-
-
-    $ cd agora
-    agora $ vagrant ssh -c "sudo supervisorctl status"
-
-        unix:///var/run/supervisor.sock no such file
-        Connection to 127.0.0.1 closed.
-
-If that's the case, restart it:
-
-    $ cd agora
-    agora $ vagrant ssh -c "sudo /etc/init.d/supervisor* restart"
-
-Afterwards, supervisor status should return something like this, which is ok:
-
-    $ cd agora
-    agora $ vagrant ssh -c "sudo supervisorctl status"
-
-        agora-elections                  RUNNING    pid 7665, uptime 0:00:04
-        authapi                          RUNNING    pid 7663, uptime 0:00:04
-        authapi_celery                   RUNNING    pid 7667, uptime 0:00:04
-        sentry                           RUNNING    pid 7664, uptime 0:00:04
-        sentry_celery                    RUNNING    pid 7666, uptime 0:00:04
-        Connection to 127.0.0.1 closed.
+For Troubleshooting please read the deployment_troubleshooting.md file.
