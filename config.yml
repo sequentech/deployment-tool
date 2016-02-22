@@ -196,7 +196,7 @@ config:
     # Stablishes the authentication method used for election administrators
     #
     # Allowed values: (user-and-password|email|sms)
-    auth_method: 'sms'
+    auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by
     # default
