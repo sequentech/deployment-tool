@@ -1,4 +1,5 @@
 ---
+- include: cache.yml
 - include: packages.yml
 - include: rsync.yml
 - include: repmgr.yml
