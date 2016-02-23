@@ -1,0 +1,24 @@
+---
+- name: High Availability & Load Balancing [master], Using agora-elections local memcached address
+  sudo: true
+  when: config.load_balancing.is_master
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/conf/application.local.conf
+    regexp='memcached.host=.*'
+    replace='memcached.host="127.0.0.1:11211"'
+
+- name: High Availability & Load Balancing [slave], Using agora-elections master memcached address
+  sudo: true
+  when: not config.load_balancing.is_master
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/conf/application.local.conf
+    regexp='memcached.host=.*'
+    replace='memcached.host="{{config.load_balancing.slave.master_hostname}}:11211"'
+
+- name: High Availability & Load Balancing, restarting supervisor agora-elections
+  sudo: true
+  supervisorctl: name={{ item }} state=restarted
+  with_items:
+    - agora-elections
