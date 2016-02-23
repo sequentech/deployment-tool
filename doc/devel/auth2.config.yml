@@ -245,6 +245,9 @@ config:
       # the message, so you can add prefix and suffixes.
       base_template: "__MESSAGE__ -- Agora Voting"
 
+      # Possible backends: email|console
+      backend: 'console'
+
     # email configuration
     email:
       # enable email configuration. if set to false, the emailconfiguration

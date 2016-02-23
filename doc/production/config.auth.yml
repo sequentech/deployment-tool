@@ -242,9 +242,12 @@ config:
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: 'None'
 
-      # Base template for sms messages. The %s will be replaced by the
+      # Base template for sms messages. The __MESSAGE__ will be replaced by the
       # message, so you can add prefix and suffixes.
-      base_template: "%s -- Agora Voting"
+      base_template: "__MESSAGE__ -- Agora Voting"
+
+      # Possible backends: email|console
+      backend: 'console'
 
     # email configuration
     email:

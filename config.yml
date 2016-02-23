@@ -268,6 +268,9 @@ config:
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
       base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+      
+      # Possible backends: email|console
+      backend: 'console'
 
   # Authorities
   authorities:
