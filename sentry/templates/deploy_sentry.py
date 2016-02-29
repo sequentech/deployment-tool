@@ -19,7 +19,7 @@ def update(globs):
     'disable_existing_loggers': True,
     'root': {
         'level': 'WARNING',
-        'handlers': ['sentry'],
+        'handlers': ['sentry', 'console'],
     },
     'formatters': {
         'verbose': {
@@ -46,18 +46,18 @@ def update(globs):
     'loggers': {
         'django': {
             'level': 'ERROR',
-            'handlers': ['sentry'],
+            'handlers': ['sentry', 'console'],
             'propagate': False,
         },
         'authapi': {
             'level': 'INFO',
-            'handlers': ['sentry'],
+            'handlers': ['sentry', 'console'],
             'propagate': False,
         },
 {% if config.sentry.msg_log %}
         'authapi.notify': {
             'level': 'INFO',
-            'handlers': ['sentry', 'mail_admins'],
+            'handlers': ['sentry', 'mail_admins', 'console'],
             'propagate': False,
         },
 {% endif %}
