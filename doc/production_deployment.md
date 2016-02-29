@@ -258,7 +258,7 @@ Go to https://agora1/admin/login and create a test election. Then execute
 the following to create some votes. Change '2' in the following commands with
 your election number:
 
-    agora@agora1:~ $ sudo -u agoraelections
+    agora@agora1:~ $ su - agoraelections
     agoraelections@agora1:~ $ source ~/env/bin/activate
     agoraelections@agora1:~ $ cd ~/agora-elections/admin
     agoraelections@agora1:~ $ export ELECTION_ID=2

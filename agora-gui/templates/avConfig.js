@@ -10,7 +10,7 @@ var avConfigData = {
   // getting info about an election. This url is usually in the form of
   // 'https://foo/api/v3/' and always ends in '/'.
   base: '',
-  theme: "default",
+  theme: "{{ config.agora_gui.theme }}",
   baseUrl: "https://{{config.agora_elections.domain}}/elections/api/",
   freeAuthId: 1,
 

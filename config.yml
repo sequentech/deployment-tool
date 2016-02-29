@@ -57,7 +57,17 @@ config:
     # These are variables that go to the /home/agoragui/avConfig.js configuration
     # file. See the file for more details.
     language: en
+
     defaultRoute: /admin/login
+
+    # interface theme
+    # allowed values (string): default|podemos|ccoo|bcnencomu
+    theme: 'default'
+
+    # when debug mode is false, javascript and in general source code is
+    # uglified and minified, otherwise it is not to allow better debugging.
+    #
+    # allowed values (string): true|false
     debug: 'false'
 
     # Details pertaining to the organization that runs the software
