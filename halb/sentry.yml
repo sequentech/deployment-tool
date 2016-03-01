@@ -4,18 +4,10 @@
   sudo: true
   sudo_user: postgres
   when: config.load_balancing.is_master
-  lineinfile:
-    dest=/home/sentry/sentry.conf.py
-    line="        'HOST': 'localhost',"
-    regexp="        .HOST",
-    state=present
+  lineinfile: "dest=/home/sentry/sentry.conf.py line=\"        'HOST': 'localhost',\" regexp='        .HOST'     state=present"
 
 - name: High Availability & Load Balancing [slave], configure sentry
   sudo: true
   sudo_user: postgres
   when: not config.load_balancing.is_master
-  lineinfile:
-    dest=/home/sentry/sentry.conf.py
-    line="        'HOST': '{{config.load_balancing.slave.master_hostname}}',"
-    regexp="        .HOST",
-    state=present
+  lineinfile: "dest=/home/sentry/sentry.conf.py line=\"        'HOST': '{{config.load_balancing.slave.master_hostname}}',\" regexp='        .HOST' state=present"
