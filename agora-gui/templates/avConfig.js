@@ -13,6 +13,9 @@ var avConfigData = {
   theme: "{{ config.agora_gui.theme }}",
   baseUrl: "https://{{config.agora_elections.domain}}/elections/api/",
   freeAuthId: 1,
+  
+  // Webpage title
+  webTitle: "{{ config.agora_gui.webTitle }}",
 
   // AuthApi base url
   authAPI: "https://{{config.agora_elections.domain}}/authapi/api/",
