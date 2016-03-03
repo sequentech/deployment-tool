@@ -53,6 +53,9 @@ config:
     booth_port: 10091
     elections_port: 10092
 
+    # webpage title
+    webTitle: 'Agora Voting'
+
     # These are variables that go to the /home/agoragui/avConfig.js configuration
     # file. See the file for more details.
     language: en
