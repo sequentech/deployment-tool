@@ -55,6 +55,9 @@ config:
 
     # webpage title
     webTitle: 'Agora Voting'
+    
+    # Show 'Success Action' tab in admin agora_gui
+    showSuccessAction: false
 
     # These are variables that go to the /home/agoragui/avConfig.js configuration
     # file. See the file for more details.

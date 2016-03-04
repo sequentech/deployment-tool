@@ -16,6 +16,9 @@ var avConfigData = {
   
   // Webpage title
   webTitle: "{{ config.agora_gui.webTitle }}",
+  
+  // Show 'Success Action' tab in admin agora_gui
+  showSuccessAction: {% if config.agora_gui.showSuccessAction %}true{% else %}false{% endif %},
 
   // AuthApi base url
   authAPI: "https://{{config.agora_elections.domain}}/authapi/api/",
