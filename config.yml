@@ -55,10 +55,10 @@ config:
     elections_port: 10092
     
     # webpage title
-    webTitle: 'Agora Voting'
+    web_title: 'Agora Voting'
     
     # Show 'Success Action' tab in admin agora_gui
-    showSuccessAction: false
+    show_success_action: false
 
     # These are variables that go to the /home/agoragui/avConfig.js configuration
     # file. See the file for more details.
