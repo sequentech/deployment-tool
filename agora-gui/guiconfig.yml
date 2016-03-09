@@ -32,3 +32,14 @@
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
+
+- name: AgoraGui, copy static_extra_path
+  when: config.agora_gui.static_extra_path != ''
+  sudo: true
+  copy:
+    "src={{config.agora_gui.static_extra_path}}
+    dest=/home/agoragui/static_extra/
+    directory_mode=0750
+    owner=agoragui
+    group=agoragui
+    mode=u=rw,g=r,o=r"

@@ -160,16 +160,16 @@ var avConfigData = {
   },
 
   help: {
-    info:""
+    info:"{{ config.agora_gui.texts.help_info }}"
   },
 
   success: {
-    text: ""
+    text: "{{ config.agora_gui.texts.booth_success_extra }}"
   },
 
   tos: {
-    text:"",
-    title: ""
+    text:"{{ config.agora_gui.texts.tos_text }}",
+    title: "{{ config.agora_gui.texts.tos_title }}"
   }
 };
 

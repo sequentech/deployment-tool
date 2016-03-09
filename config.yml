@@ -94,7 +94,30 @@ config:
       # Sales contact email displayed in the footer links
       sales: sales@example.com
       tlf: ''
+
+    texts:
+      # informative html documentation shown in the booth help and in the public
+      # election view, documentation tab
+      help_info: ''
+
+      # html extra info to show in the voting booth success screen
+      booth_success_extra: ''
+
+      # terms of service text, shown in the documentation and in the booth
+      # start page
+      tos_text: ''
+
+      # terms of service title, shown in the documentation and in the booth
+      # start page
+      tos_title: ''
    
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be available publicly. Usually these files are
+    # referenced in  agora_gui.texts.help_info for example. The URL for a file
+    # "foo.png" inside static_extra_path would be:
+    # https://<DOMAIN>/election/static/static_extra/foo.png"
+    static_extra_path: ''
+
     # social networks footer links
     social:
       facebook: 'https://www.facebook.com/AgoraVoting'
