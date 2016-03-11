@@ -39,7 +39,5 @@
   copy:
     "src={{config.agora_gui.static_extra_path}}
     dest=/home/agoragui/static_extra/
-    directory_mode=0775
     owner=agoragui
-    group=agoragui
-    mode=u=rw,g=r,o=r"
+    group=agoragui"
