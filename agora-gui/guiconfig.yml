@@ -32,3 +32,25 @@
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
+
+- name: AgoraGui, copy static_extra_path
+  when: config.agora_gui.static_extra_path != ''
+  sudo: true
+  copy:
+    "src={{config.agora_gui.static_extra_path}}
+    dest=/home/agoragui/static_extra/
+    owner=agoragui
+    group=agoragui"
+
+- name: AgoraGui, config election limits
+  sudo: true
+  sudo_user: agoragui
+  replace:
+    "dest=/home/agoragui/agora-gui-admin/avAdmin/election-limits-service.js
+    regexp='{{ item.key }}:.*'
+    replace='{{ item.key }}: {{ item.value }},'"
+  with_items:
+    - { key: maxNumQuestions, value: "{{ config.election_limits.max_num_questions }}" }
+    - { key: maxNumAnswers, value: "{{ config.election_limits.max_num_answers }}" }
+    - { key: maxShortStringLength, value: "{{ config.election_limits.max_short_string_length }}" }
+    - { key: maxLongStringLength, value: "{{ config.election_limits.max_long_string_length }}" }
