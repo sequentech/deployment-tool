@@ -4,7 +4,9 @@
   register: avConfig
 
 - name: AgoraVerifier, get hash of verifier
-  shell: sha256sum /home/agoraverifier/agora-verifier | cut -d' ' -f 1
+  shell: sha256sum /home/agoraverifier/agora-verifier/agora-verifier | cut -d' ' -f 1
+  sudo: true
+  sudo_user: agoraverifier
   register: sha256sum
 
 - name: AgoraVerifier, config setup for agora-verifier
