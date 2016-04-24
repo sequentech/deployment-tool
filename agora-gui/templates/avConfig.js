@@ -102,7 +102,11 @@ var avConfigData = {
 
   timeoutSeconds: 3600,
 
+  {% if config.agora_gui.custom_public_download_url %}
+  publicURL: "{{ config.agora_gui.custom_public_download_url }}",
+  {% else %}
   publicURL: "https://{{config.agora_elections.domain}}/elections/public/",
+  {% endif %}
 
   // if we are in debug mode or not
   debug: {{ config.agora_gui.debug }},
