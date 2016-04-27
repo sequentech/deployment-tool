@@ -39,7 +39,7 @@ SMS_VOICE_LANG_CODE = {{config.authapi.sms.voice_lang_code}}
 
 SMS_BASE_TEMPLATE = """{{config.authapi.sms.base_template}}"""
 
-SMS_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login"
+SMS_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
 
 {% endif %}
 
