@@ -40,3 +40,5 @@ cp -r $guib/agora-gui-booth/dist $base/dist-booth
 
 [ -d $base/dist-elections ] && rm -rf $base/dist-elections
 cp -r $guib/agora-gui-elections/dist $base/dist-elections
+
+[ -d $base/static_extra ] && cp -r $guib/static_extra $base/dist-elections/static_extra || true

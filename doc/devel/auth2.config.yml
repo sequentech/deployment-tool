@@ -74,6 +74,16 @@ config:
     # allowed values (string): true|false
     debug: 'false'
 
+    # If you want tallies to be linked and downloaded from a different URL,
+    # change this variable from false to a string. This could be an example:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/'
+    #
+    # and with this example, the download for the tally 1331 would be:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
+    custom_public_download_url: false
+
     contact:
       # Support contact email displayed in the footer links
       email: contact@example.com

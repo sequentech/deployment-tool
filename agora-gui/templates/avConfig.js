@@ -105,7 +105,11 @@ var avConfigData = {
 
   timeoutSeconds: 3600,
 
+  {% if config.agora_gui.custom_public_download_url %}
+  publicURL: "{{ config.agora_gui.custom_public_download_url }}",
+  {% else %}
   publicURL: "https://{{config.agora_elections.domain}}/elections/public/",
+  {% endif %}
 
   // if we are in debug mode or not
   debug: {{ config.agora_gui.debug }},
@@ -163,16 +167,16 @@ var avConfigData = {
   },
 
   help: {
-    info:""
+    info:"{{ config.agora_gui.texts.help_info }}"
   },
 
   success: {
-    text: ""
+    text: "{{ config.agora_gui.texts.booth_success_extra }}"
   },
 
   tos: {
-    text:"",
-    title: ""
+    text:"{{ config.agora_gui.texts.tos_text }}",
+    title: "{{ config.agora_gui.texts.tos_title }}"
   }
 };
 

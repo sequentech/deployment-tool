@@ -76,6 +76,16 @@ config:
     # allowed values (string): true|false
     debug: 'false'
 
+    # If you want tallies to be linked and downloaded from a different URL,
+    # change this variable from false to a string. This could be an example:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/'
+    #
+    # and with this example, the download for the tally 1331 would be:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
+    custom_public_download_url: false
+
     # Details pertaining to the organization that runs the software
     organization:
       # changes the organization logo. The path should be a path accessible to
@@ -97,7 +107,30 @@ config:
       # Sales contact email displayed in the footer links
       sales: sales@example.com
       tlf: ''
+
+    texts:
+      # informative html documentation shown in the booth help and in the public
+      # election view, documentation tab
+      help_info: ''
+
+      # html extra info to show in the voting booth success screen
+      booth_success_extra: ''
+
+      # terms of service text, shown in the documentation and in the booth
+      # start page
+      tos_text: ''
+
+      # terms of service title, shown in the documentation and in the booth
+      # start page
+      tos_title: ''
    
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be available publicly. Usually these files are
+    # referenced in  agora_gui.texts.help_info for example. The URL for a file
+    # "foo.png" inside static_extra_path would be:
+    # https://<DOMAIN>/election/static/static_extra/foo.png"
+    static_extra_path: ''
+
     # social networks footer links
     social:
       facebook: 'https://www.facebook.com/AgoraVoting'
