@@ -98,6 +98,15 @@
     state=directory
     mode=0755
 
+- name: AgoraElections, creating agora-tools/config/config.json
+  sudo: true
+  sudo_user: agoraelections
+  template:
+    src=agora-elections/templates/config.json
+    dest=/home/agoraelections/agora-tools/config/config.json
+    owner=agoraelections
+    mode=0644
+
 - include: app.yml
 
 # Run script
