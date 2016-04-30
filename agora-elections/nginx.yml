@@ -1,3 +1,4 @@
+---
 - name: AgoraElections, Creating nginx conf
   sudo: true
   template: src=agora-elections/templates/nginx.conf dest=/etc/nginx/conf.d/agora-elections.conf owner="root" mode=0644

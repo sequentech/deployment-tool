@@ -1,0 +1,123 @@
+---
+# Config files
+- name: AgoraElections, Default conf
+  sudo: true
+  sudo_user: agoraelections
+  template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
+
+- name: AgoraElections, Test conf
+  sudo: true
+  sudo_user: agoraelections
+  template: src=agora-elections/templates/test.local.conf dest=/home/agoraelections/agora-elections/conf/test.local.conf owner="agoraelections" mode=0644
+
+- name: AgoraElections, datastore dir
+  sudo: true
+  sudo_user: agoraelections
+  file: path=/home/agoraelections/datastore state=directory owner=agoraelections group=agoraelections
+
+- name: AgoraElections, public datastore dir
+  sudo: true
+  sudo_user: agoraelections
+  file: path=/home/agoraelections/datastore/public state=directory owner=agoraelections group=agoraelections recurse=true
+
+- name: AgoraElections, private datastore dir
+  sudo: true
+  sudo_user: agoraelections
+  file: path=/home/agoraelections/datastore/private state=directory owner=agoraelections group=agoraelections
+
+# Key store set up
+- name: AgoraElections, Key store setup (1)
+  sudo: true
+  sudo_user: agoraelections
+  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
+         chdir=/home/agoraelections/
+
+- name: AgoraElections, Key store setup (2)
+  sudo: true
+  sudo_user: agoraelections
+  shell: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
+         chdir=/home/agoraelections/
+
+# Admin tool setup
+- name: AgoraElections, Admin chmod
+  sudo: true
+  sudo_user: agoraelections
+  shell: chmod u+x /home/agoraelections/agora-elections/admin/admin.py
+
+- name: AgoraElections, Admin setup (1)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
+              regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections.shared_secret}}'"
+
+- name: AgoraElections, Admin setup (2)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
+              regexp="db_password = .*$" replace="db_password = '{{config.agora_elections.db_password}}'"
+
+- name: AgoraElections, Admin setup (3)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
+              regexp="app_host = .*$" replace="app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
+
+- name: AgoraElections, Admin setup (4)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
+              regexp="IVY=.*$" replace="IVY=$HOME/.ivy2/cache"
+
+- name: AgoraElections, Admin setup (5)
+  sudo: true
+  sudo_user: agoraelections
+  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
+              regexp="AGORA_HOME=.*$" replace="AGORA_HOME=$HOME/agora-elections"
+
+# this is needed for dedicated instances only where cycle.py enters in action:
+- name: AgoraElections, Admin setup (6)
+  sudo: true
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/admin/cycle.py
+    regexp="{{item.regexp}}"
+    replace="{{item.replace}}"
+  with_items:
+    - regexp: "public_ds =.*"
+      replace: "public_ds = '/home/agoraelections/datastore/public'"
+
+    - regexp: "private_ds =.*"
+      replace: "private_ds = '/home/agoraelections/datastore/private'"
+
+# again, this is only used for dedicated instances workflows:
+- name: AgoraElections, Creating /home/agoraelection/data
+  sudo: true
+  sudo_user: agoraelections
+  file:
+    path=/home/agoraelection/data
+    state=directory
+    mode=0755
+
+- include: app.yml
+
+# Run script
+- name: AgoraElections, ensure memcached service started
+  sudo: true
+  service: name=memcached state=started
+
+- name: AgoraElections, Run script
+  sudo: true
+  sudo_user: agoraelections
+  template: src=agora-elections/templates/run.sh dest=/home/agoraelections/run.sh owner="agoraelections" mode=0744
+
+- include: nginx.yml
+
+- name: AgoraElections, supervisor file
+  sudo: true
+  template: src=agora-elections/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  with_items:
+    - { f: agora-elections.conf, dest: /etc/supervisor/conf.d/agora-elections.conf, owner: "root", mode: "0644" }
+
+- name: AgoraElections, restarting supervisor
+  sudo: true
+  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}

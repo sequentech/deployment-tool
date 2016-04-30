@@ -1,6 +1,12 @@
 ---
-- name: AgoraElections, Git clone
+- name: AgoraElections, agora-elections git clone
   sudo: true
   sudo_user: agoraelections
   git: repo={{ repos.aelections.repo }} version={{ repos.aelections.version }}
        dest=/home/agoraelections/agora-elections force={{ repos.aelections.force }}
+
+- name: AgoraElections, agora-tools git clone
+  sudo: true
+  sudo_user: agoraelections
+  git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
+       dest=/home/agoraelections/agora-tools force={{ repos.atools.force }}
