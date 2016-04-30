@@ -34,6 +34,22 @@ config:
     # change this to something bigger.
     max_heap_memory_usage: 4000
 
+  # generic election related constraints that apply to multiple parts of the
+  # deployment, for example the same limit might apply to authapi, agora-gui
+  # and agora-elections
+  election_limits:
+    # maximum number of questions allowed in an election
+    max_num_questions: 20
+
+    # maximum number of allowed possible answers in a question
+    max_num_answers: 10000
+
+    # maximum size in characters of long strings like url titles
+    max_short_string_length: 300
+
+    # maximum size in characters of long strings like question description
+    max_long_string_length: 3000
+
   # agora-elections
   agora_elections:
     db_password: '<PASSWORD>'
