@@ -8,5 +8,8 @@
 - name: AgoraElections, agora-tools git clone
   sudo: true
   sudo_user: agoraelections
-  git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
-       dest=/home/agoraelections/agora-tools force={{ repos.atools.force }}
+  git:
+    repo={{ repos.atools.repo }}
+    version={{ repos.atools.version }}
+    dest=/home/agoraelections/agora-tools
+    force={{ repos.atools.force }}

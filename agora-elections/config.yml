@@ -90,11 +90,11 @@
       replace: "private_ds = '/home/agoraelections/datastore/private'"
 
 # again, this is only used for dedicated instances workflows:
-- name: AgoraElections, Creating /home/agoraelection/data
+- name: AgoraElections, Creating /home/agoraelections/data
   sudo: true
   sudo_user: agoraelections
   file:
-    path=/home/agoraelection/data
+    path=/home/agoraelections/data
     state=directory
     mode=0755
 
