@@ -26,14 +26,10 @@
     dest=/home/agoraverifier/agora-results
     force={{ repos.results.force }}
 
-- name: AgoraVerifier, symbolic links
+- name: AgoraVerifier, copy dirs
   sudo: true
   sudo_user: agoraverifier
-  file:
-    src={{ item.src }}
-    dest={{ item.dest }}
-    state=link
-    owner=agoraverifier
+  command: cp -rf '{{ item.src }}' '{{ item.dest }}'
   with_items:
     - src: '/home/agoraverifier/agora-tally/agora_tally'
       dest: '/home/agoraverifier/agora-verifier/agora_tally'
