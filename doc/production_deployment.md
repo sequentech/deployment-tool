@@ -75,8 +75,8 @@ created to allow the following kind of connections:
 -  [agora1, agora2] <<tcp:443>> Internet # web service
 -  [agora1, agora2] <<tcp:9090>> Internet # sentry
 -  auth1 <<tcp:5000>> auth2 # eotest
--  auth1 <<tcp:4081>> auth2 # verificatum
--  auth1 <<udp:8081>> auth2 # verificatum
+-  auth1 <<tcp:4081>> auth2 # vfork
+-  auth1 <<udp:8081>> auth2 # vfork
 
 # Agora web servers master deployment [agora1, agora2]
 
