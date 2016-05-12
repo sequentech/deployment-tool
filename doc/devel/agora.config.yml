@@ -108,6 +108,33 @@ config:
       sales: sales@example.com
       tlf: ''
 
+    texts:
+      # informative html documentation shown in the booth help and in the public
+      # election view, documentation tab
+      help_info: ''
+
+      # html extra info to show in the voting booth success screen
+      booth_success_extra: ''
+
+      # terms of service text, shown in the documentation and in the booth
+      # start page
+      tos_text: ''
+
+     # terms of service title, shown in the documentation and in the booth
+      # start page
+      tos_title: ''
+
+      # you can include any html text in agora-gui-admin html to customize it
+      admin_html_body_include: ''
+
+    
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be available publicly. Usually these files are
+    # referenced in  agora_gui.texts.help_info for example. The URL for a file
+    # "foo.png" inside static_extra_path would be:
+    # https://<DOMAIN>/election/static/static_extra/foo.png"
+    static_extra_path: ''
+
     # Details pertaining to the organization that runs the software
     organization:
       # changes the organization logo. The path should be a path accessible to
@@ -118,10 +145,10 @@ config:
 
       # Name of the organization, appears in the logo mouse hover, in the login
       # page ("Login into __NAME__ admin account"), in the poweredBy, etc
-      orgName: 'Agora Voting'
+      name: 'Agora Voting'
 
       # URL that the logo links to
-      orgUrl: 'https://agoravoting.com'
+      url: 'https://agoravoting.com'
    
     # social networks footer links
     social:
