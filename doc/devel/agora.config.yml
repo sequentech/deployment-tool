@@ -145,7 +145,7 @@ config:
 
       # Name of the organization, appears in the logo mouse hover, in the login
       # page ("Login into __NAME__ admin account"), in the poweredBy, etc
-      ame: 'Agora Voting'
+      name: 'Agora Voting'
 
       # URL that the logo links to
       url: 'https://agoravoting.com'
