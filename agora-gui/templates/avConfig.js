@@ -57,7 +57,9 @@ var avConfigData = {
     //
     // Default: not set
     //
+    {% if config.agora_gui.force_language %}
     lng: "{{ config.agora_gui.language }}",
+    {% endif %}
 
 
     // specifies the set language query string.
@@ -71,7 +73,11 @@ var avConfigData = {
     //
     // Default: ['en', 'es', 'gl', 'ca']
     //
-    // lngWhitelist: ['en', 'es', 'gl', 'ca'],
+    lngWhitelist: [
+      {% for lang in config.agora_gui.language_whitelist %}
+        "{{lang}}"{% if not loop.last %}{% endif %},
+      {% endfor %}
+    ],
   },
 
   // specifies the language cookie options,

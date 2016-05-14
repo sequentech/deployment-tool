@@ -80,6 +80,17 @@ config:
     # file. See the file for more details.
     language: en
 
+    # Forces a specific language.
+    force_language: false
+
+    # Specifies what translations will be available.
+    # Defaults to all available translations.
+    language_whitelist:
+      - en
+      - es
+      - gl
+      - ca
+
     defaultRoute: /admin/login
 
     # interface theme
