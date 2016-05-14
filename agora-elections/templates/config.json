@@ -1,6 +1,6 @@
 {
   "director": "{{ config.director }}",
-  "authorities": ["{{ config.auths | regex_replace('\\'', '"')}}"],
+  "authorities": {{ config.auths | regex_replace('\\'', '"')}},
   "agora_results_config": [
     [
       "agora_results.pipes.results.do_tallies",
