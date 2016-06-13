@@ -71,7 +71,10 @@ config:
     elections_port: 10092
 
     # webpage title
-    webTitle: 'Agora Voting'
+    web_title: 'Agora Voting'
+    
+    # Show 'Success Action' tab in admin agora_gui
+    show_success_action: false
 
     # These are variables that go to the /home/agoragui/avConfig.js configuration
     # file. See the file for more details.
@@ -231,10 +234,10 @@ config:
     admin_password: '<PASSWORD>'
 
     # Sending the code sms and email log to an email
-    sentry_msg_log: False
+    msg_log: False
 
     # the log receiver
-    sentry_msg_log_email: log@example.com
+    msg_log_email: log@example.com
 
   # the log sender
   authapi:
@@ -307,12 +310,9 @@ config:
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: 'None'
 
-      # Base template for sms messages. The __MESSAGE__ will be replaced by the
-      # message, so you can add prefix and suffixes.
+      # Base template for sms messages. The __MESSAGE__ will be replaced by
+      # the message, so you can add prefix and suffixes.
       base_template: "__MESSAGE__ -- Agora Voting"
-
-      # Possible backends: email|console
-      backend: 'console'
 
     # email configuration
     email:
@@ -333,6 +333,9 @@ config:
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
       base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+
+      # Possible backends: email|console
+      backend: 'console'
 
   # Authorities
 
