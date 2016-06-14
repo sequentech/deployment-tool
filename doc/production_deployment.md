@@ -156,8 +156,8 @@ Then, execute again ansible in ***agora1*** to apply the changes:
     agora@agora1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml -v
 
 After that, then you can change the **config.yml** for **agora2** to set
-the variable **config.load_balancing.is_master** to **false** and
-**config.load_balancing.slave.master_hostname** to the hostname of **agora1**.
+the variable **config.load_balancing.is_master** to **false**,
+**config.load_balancing.slave.master_hostname** to the hostname of **agora1** and **config.load_balancing.repmgr_node_id** to **2**.
 
 If your machine is behind a proxy, you need to specify that in the
 **config.has_https_proxy** variable.
