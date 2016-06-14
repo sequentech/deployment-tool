@@ -182,8 +182,13 @@ We'll use an authority config file as a base:
 
     agora@auth:~/agora-dev-box/ $ cp doc/production/config.auth.yml config.yml
 
-Edit the config.yml file following the instructions inside, then copy the
-appropiate inventory and playbook, then launch the ansible deployment script:
+Edit the config.yml file following the instructions inside. Specifically, don't forget to edit:
+
+* config.host
+* config.public_ipaddress
+* config.private_ipaddress
+
+Then copy the appropiate inventory and playbook, then launch the ansible deployment script:
 
     agora@auth:~/agora-dev-box/ $ cp doc/production/playbook.auth.yml playbook.yml
     agora@auth:~/agora-dev-box/ $ cp doc/production/local.inventory inventory
