@@ -1,4 +1,16 @@
 ---
+- name: High Availability & Load Balancing [master], Configure memcached to listen to accept connections from all interfaces
+  sudo: true
+  when: config.load_balancing.is_master
+  replace:
+    dest=/etc/memcached.conf
+    regexp='-l.*'
+    replace='-l 0.0.0.0'
+
+- name: High Availability & Load Balancing [master], ensure memcached service is restarted
+  when: config.load_balancing.is_master
+  service: name=memcached state=restarted
+
 - name: High Availability & Load Balancing [master], Using agora-elections local memcached address
   sudo: true
   when: config.load_balancing.is_master
