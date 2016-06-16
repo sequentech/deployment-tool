@@ -58,6 +58,7 @@ config:
     expiry: 60000
     domain: agoravoting.com
     port: 14443
+    ssl_port: 14453
 
     # Password used to encrypt the authorities' public keys for usage in
     # agora-elections.
