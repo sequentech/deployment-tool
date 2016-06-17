@@ -58,6 +58,11 @@ config:
     expiry: 60000
     domain: agoravoting.com
     port: 14443
+    # Port used by agora_elections for path /private. This path is used
+    # by election-orchestra to for example retrieve the ciphertexts.
+    # Only the election authorities can access this path, usin SSL/HTTPS and
+    # using their certificates as client certificates.
+    ssl_port: 14453
 
     # Password used to encrypt the authorities' public keys for usage in
     # agora-elections.

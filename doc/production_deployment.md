@@ -77,6 +77,8 @@ created to allow the following kind of connections:
 -  auth1 <<tcp:5000>> auth2 # eotest
 -  auth1 <<tcp:4081>> auth2 # vfork
 -  auth1 <<udp:8081>> auth2 # vfork
+-  [agora1, agora2] <<tcp:14443>> [auth1, auh2]
+-  [agora1, agora2] <<tcp:14453>> [auth1, auh2] # download ciphertexts
 
 # Agora web servers master deployment [agora1, agora2]
 
