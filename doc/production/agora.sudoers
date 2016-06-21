@@ -1,3 +1,18 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 User_Alias     AGORA_USER = agora
 Runas_Alias    AGORA_OP = root
 Runas_Alias    AGORA_USERS = agoraelections, agoragui, agoraverifier, authapi, repmgr, sentry, postgres
@@ -10,5 +25,5 @@ AGORA_USER ALL=(AGORA_OP) NOPASSWD: AGORA_COMMANDS
 AGORA_USER ALL=(root) NOPASSWD: /usr/bin/less /var/log/[a-z]*/[A-Za-z_-]*.log
 AGORA_USER ALL=(root) NOPASSWD: /usr/bin/tail -n [0-9]* -F /var/log/[a-z]*/[A-Za-z_-]*.log
 
-# gestionar agora
+# manage agora
 AGORA_USER ALL=(AGORA_USERS) NOPASSWD: ALL
