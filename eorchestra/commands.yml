@@ -1,5 +1,20 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
-- name: commands
+- name: EOrchestra, creating commands
   sudo: true
   template: src=eorchestra/templates/commands/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
   with_items:
@@ -11,10 +26,29 @@
     - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0755" }
     - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0755" }
 
-- name: creating /srv/eotests
+- name: EOrchestra, creating /srv/eotests
   sudo: true
   file: path="/srv/eotests" owner="eorchestra" group="users" state=directory
 
-- name: encrypt.js
+- name: EOrchestra, creating /srv/eotests/encrypt-deps
+  sudo: true
+  file: path="/srv/eotests/encrypt-deps" owner="eorchestra" group="users" state=directory
+
+- name: EOrchestra, encrypt.js deps
+  sudo: true
+  get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/ validate_certs={{ not config.has_https_proxy }}
+  with_items:
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn2.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/bigint.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/class.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/elgamal.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/random.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sha1.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sha2.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sjcl.js
+    - http://momentjs.com/downloads/moment.js
+
+- name: EOrchestra, encrypt.js
   sudo: true
   template: src=eorchestra/templates/commands/encrypt.js dest=/srv/eotests/encrypt.js owner=root mode=0755

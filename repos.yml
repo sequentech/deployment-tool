@@ -1,35 +1,69 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
 repos:
-    agoracore:
-        repo: https://github.com/agoravoting/agora-core-view.git
-        version: master
     aelections:
         repo: https://github.com/agoravoting/agora_elections.git
-        version: master
+        version: 3.2.0
+        force: yes
     results:
         repo: https://github.com/agoravoting/agora-results.git
-        version: master
-    openstv:
-        repo: https://github.com/agoravoting/openstv.git
-        version: master
+        version: 3.2.0
+        force: yes
     tally:
         repo: https://github.com/agoravoting/agora-tally.git
-        version: master
+        version: 3.2.0
+        force: yes
     authapi:
         repo: https://github.com/agoravoting/authapi.git
-        version: master
+        version: 3.2.0
+        force: yes
     atools:
         repo: https://github.com/agoravoting/agora-tools.git
-        version: master
-    fresq:
+        version: 3.2.0
+        force: yes
+    frestq:
         repo: https://github.com/agoravoting/frestq
-        version: master
+        version: 3.2.0
+        force: yes
     eorchestra:
         repo: https://github.com/agoravoting/election-orchestra
-        version: master
-    aciudadana:
-        repo: https://github.com/agoravoting/agora-ciudadana.git
-        version: security
+        version: 3.2.0
+        force: yes
     vfork:
         repo: https://github.com/agoravoting/vfork
-        version: master
+        version: 3.2.0
+        force: yes
+    averifier:
+        repo: https://github.com/agoravoting/agora-verifier.git
+        version: 3.2.0
+        force: yes
+    guicommon:
+        repo: https://github.com/agoravoting/agora-gui-common.git
+        version: 3.2.0
+        force: yes
+    guiadmin:
+        repo: https://github.com/agoravoting/agora-gui-admin.git
+        version: 3.2.0
+        force: yes
+    guibooth:
+        repo: https://github.com/agoravoting/agora-gui-booth.git
+        version: 3.2.0
+        force: yes
+    guielections:
+        repo: https://github.com/agoravoting/agora-gui-elections.git
+        version: 3.2.0
+        force: yes

@@ -1,5 +1,20 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
-- name: Sentry Installation
+- name: Sentry, Sentry installation
   sudo: true
   sudo_user: sentry
   pip: name=sentry[postgres] virtualenv=/home/sentry/venv
@@ -11,19 +26,34 @@
 - name: Sentry, Create Database User
   sudo: true
   sudo_user: postgres
-  postgresql_user: user=sentry password="{{config.sentry_db_password}}" port=5432
+  when: config.load_balancing.is_master
+  postgresql_user: user=sentry password='{{config.sentry.db_password}}' port=5432
 
 - name: Sentry, Create Database
   sudo: true
   sudo_user: postgres
-  postgresql_db: name=sentry owner=sentry
+  when: config.load_balancing.is_master
+  postgresql_db:
+    name=sentry
+    owner=sentry
+    encoding="utf-8"
+    lc_collate='en_US.UTF-8'
+    lc_ctype='en_US.UTF-8'
+    template='template0'
+    state=present
 
 - name: Sentry upgrade
   sudo: true
   sudo_user: sentry
+  when: config.load_balancing.is_master
   shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py upgrade --noinput
 
 - name: Sentry, creating the first user
   sudo: true
   sudo_user: sentry
-  shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email=admin@agoravoting.com --superuser --password="{{ config.sentry_admin_password }}"
+  when: config.load_balancing.is_master
+  shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email='{{ config.sentry.admin_user }}' --superuser --password='{{ config.sentry.admin_password }}'
+  register: command_result
+  failed_when:
+    - "'already exists' not in command_result.stderr"
+    - "command_result.rc != 0"

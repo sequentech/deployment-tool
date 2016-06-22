@@ -1,35 +1,62 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
-- name: hostname
+- name: System, setting hostname
   sudo: true
   hostname: name={{ config.host }}
 
-- name: private ip in /etc/hosts
+- name: System, private ip in /etc/hosts
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
 
-- name: domain in /etc/hosts
+- name: System, domain in /etc/hosts
   sudo: true
-  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections_domain }}" state=present
+  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections.domain }}" state=present
 
-- name: Creating nginx group
+- name: System, Creating nginx group
   sudo: true
   group: name=nginx state=present
 
-- name: Creating nginx user
+- name: System, Creating nginx user
   sudo: true
   user: name=nginx shell=/bin/false home=/nonexistent group=nginx
 
-- name: cert directories creation
+- name: System, cert directories creation
   sudo: true
   file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users
 
-- name: self-signed certificate creation
+- name: System, self-signed certificate creation
   sudo: true
   template: src=templates/cert.sh
             dest=/root/cert.sh
             owner=root mode=0755
 
-- name: self-signed certificate creation
+- name: System, self-signed certificate creation
   sudo: true
   shell: "/root/cert.sh"
 
+- name: System, populating /etc/hosts
+  sudo: true
+  lineinfile: dest=/etc/hosts line="{{ item.ip }} {{ item.hostname }}" state=present
+  with_items: config.hosts
+
+
+- name: System, updating /etc/screenrc
+  sudo: true
+  template:
+    src=templates/screenrc
+    dest=/etc/screenrc
+    owner=root mode=0644

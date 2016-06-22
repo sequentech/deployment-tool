@@ -1,0 +1,46 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AgoraVerifier, Check if sbt is installed
+  command: dpkg-query -W sbt
+  register: sbt_check_deb
+  failed_when: sbt_check_deb.rc > 1
+  changed_when: sbt_check_deb.rc == 1
+
+- name: AgoraVerifier, Download sbt-0.13.7.deb
+  get_url:
+    url="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb"
+    sha256sum=7b503a255e75f8678a43258beccef571a1cf751179ee9257fd5fd55b3aa498c5
+    dest="/tmp/sbt-0.13.7.deb"
+    validate_certs={{ not config.has_https_proxy }}
+  when: sbt_check_deb.rc == 1
+
+- name: AgoraVerifier, Install sbt-0.13.7.deb
+  sudo: true
+  apt: deb="/tmp/sbt-0.13.7.deb" state=present
+  when: sbt_check_deb.rc == 1
+
+- name: AgoraVerifier, Updating packages
+  sudo: true
+  action: apt update_cache=yes
+
+- name: AgoraVerifier, Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - sharutils
+    - oracle-java7-installer
+    - oracle-java7-set-default

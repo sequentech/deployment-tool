@@ -1,3 +1,20 @@
+/**
+ * This file is part of agora-dev-box.
+ * Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+ * agora-dev-box is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+
+ * agora-dev-box is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+
+ * You should have received a copy of the GNU Affero General Public License
+ * along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+**/
+
 var fs = require('fs');
 
 // otherwise one of the scripts complains
@@ -5,34 +22,31 @@ var navigator = {
   "appName": "foo"
 };
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/jsbn.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/jsbn.js','utf8');
 eval(filedata);
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/jsbn2.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/jsbn2.js','utf8');
 eval(filedata);
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/bigint.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/bigint.js','utf8');
 eval(filedata);
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/class.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/class.js','utf8');
 eval(filedata);
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/elgamal.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/elgamal.js','utf8');
 eval(filedata);
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/random.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/random.js','utf8');
 eval(filedata);
 
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/sha1.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/sha1.js','utf8');
 eval(filedata);
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/agora/libs/crypto/sha2.js','utf8');
-eval(filedata);
-
-filedata = fs.readFileSync('agora-ciudadana/agora_site/static/js/libs/json2.js','utf8');
+filedata = fs.readFileSync('encrypt-deps/sha2.js','utf8');
 eval(filedata);
 
-var sjcl = require('./agora-ciudadana/agora_site/static/js/agora/libs/crypto/sjcl.js');
-var moment = require('./agora-ciudadana/agora_site/static/js/libs/moment.js');
+var sjcl = require('encrypt-deps/sjcl.js');
+var moment = require('encrypt-deps/moment.js');
 
 // FIXME copied from voting_booth.js as it is a hassle to import the whole agora view structure
 var encryptAnswer = function(pk_json, plain_answer) {
@@ -113,8 +127,8 @@ else {
                 }
             }
         }
-        var serialized = JSON.stringifyCompat(ballots)
-        console.warn('> Node: tally = ' + JSON.stringifyCompat(tally));
+        var serialized = JSON.stringify(ballots)
+        console.warn('> Node: tally = ' + JSON.stringify(tally));
         console.warn('> Node: outputting votes..');
         console.log(serialized);
     }

@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+base=/home/agoragui
+guib=/home/agoragui
+
+# compile all the modules, one by one. stop if they don't build, because
+# otherwise we would put in production a non-working version of the software
+cd $guib/agora-gui-admin/
+bower update --config.interactive=false
+grunt build
+if [ $? -ne 0 ]
+then
+  echo "build error in agora-gui-admin"
+  exit 1
+fi
+
+cd $guib/agora-gui-booth/
+bower update --config.interactive=false
+grunt build
+if [ $? -ne 0 ]
+then
+  echo "build error in agora-gui-booth"
+  exit 1
+fi
+
+cd $guib/agora-gui-elections/
+bower update --config.interactive=false
+grunt build
+if [ $? -ne 0 ]
+then
+  echo "build error in agora-gui-elections"
+  exit 1
+fi
+
+# only switch to the new build if everything was built correctly
+[ -d $base/dist-admin ] && rm -rf $base/dist-admin
+cp -r $guib/agora-gui-admin/dist $base/dist-admin
+
+[ -d $base/dist-booth ] && rm -rf $base/dist-booth
+cp -r $guib/agora-gui-booth/dist $base/dist-booth
+
+[ -d $base/dist-elections ] && rm -rf $base/dist-elections
+cp -r $guib/agora-gui-elections/dist $base/dist-elections
+
+[ -d $base/static_extra ] && cp -r $guib/static_extra $base/dist-elections/static_extra || true

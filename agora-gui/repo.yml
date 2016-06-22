@@ -1,0 +1,80 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AgoraGui, Git clone agora-gui-common
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guicommon.repo }} version={{ repos.guicommon.version }}
+       dest=/home/agoragui/agora-gui-common force={{ repos.guicommon.force }}
+
+- name: AgoraGui, Git clone agora-gui-admin
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guiadmin.repo }} version={{ repos.guiadmin.version }}
+       dest=/home/agoragui/agora-gui-admin force={{ repos.guiadmin.force }}
+
+- name: AgoraGui, Git clone agora-gui-elections
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guielections.repo }} version={{ repos.guielections.version }}
+       dest=/home/agoragui/agora-gui-elections force={{ repos.guielections.force }}
+
+- name: AgoraGui, Git clone agora-gui-booth
+  sudo: true
+  sudo_user: agoragui
+  git: repo={{ repos.guibooth.repo }} version={{ repos.guibooth.version }}
+       dest=/home/agoragui/agora-gui-booth force={{ repos.guibooth.force }}
+
+- name: AgoraGui, config setup
+  sudo: true
+  template:
+    src=agora-gui/templates/avConfig.js
+    dest=/home/agoragui/avConfig.js
+    owner=agoragui
+    group=agoragui
+    mode=0644
+
+- name: AgoraGui, linking avConfig.js in all agora-gui-*
+  sudo: true
+  sudo_user: agoragui
+  file: src=/home/agoragui/avConfig.js dest=/home/agoragui/{{ item }}/avConfig.js state=link
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, ensuring latest version of agora-gui-common gets reinstalled removing it
+  sudo: true
+  sudo_user: agoragui
+  file:
+    path=/home/agoragui/{{item}}/bower_components/avCommon
+    state=absent
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, configuring agora-gui-common version in agora-gui-*
+  sudo: true
+  sudo_user: agoragui
+  replace:
+    dest=/home/agoragui/{{item}}/bower.json
+    regexp='"avCommon"(.) "[^"]+(".*)$'
+    replace='"avCommon"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth

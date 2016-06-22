@@ -1,0 +1,51 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: High Availability & Load Balancing [master], Configure memcached to listen to accept connections from all interfaces
+  sudo: true
+  when: config.load_balancing.is_master
+  replace:
+    dest=/etc/memcached.conf
+    regexp='-l.*'
+    replace='-l 0.0.0.0'
+
+- name: High Availability & Load Balancing [master], ensure memcached service is restarted
+  when: config.load_balancing.is_master
+  service: name=memcached state=restarted
+
+- name: High Availability & Load Balancing [master], Using agora-elections local memcached address
+  sudo: true
+  when: config.load_balancing.is_master
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/conf/application.local.conf
+    regexp='memcached.host=.*'
+    replace='memcached.host="127.0.0.1:11211"'
+
+- name: High Availability & Load Balancing [slave], Using agora-elections master memcached address
+  sudo: true
+  when: not config.load_balancing.is_master
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/conf/application.local.conf
+    regexp='memcached.host=.*'
+    replace='memcached.host="{{config.load_balancing.slave.master_hostname}}:11211"'
+
+- name: High Availability & Load Balancing, restarting supervisor agora-elections
+  sudo: true
+  supervisorctl: name={{ item }} state=restarted
+  with_items:
+    - agora-elections

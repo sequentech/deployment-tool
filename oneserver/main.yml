@@ -1,36 +1,82 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
-- name: authapi url config
+- name: OneServer, authapi custom_urls.py
+  sudo: true
+  template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
+
+- name: OneServer, authapi url config
   sudo: true
   lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py
               line="ROOT_URLCONF = 'custom_urls'"
               state=present
 
-- name: Restarting authapi service
+- name: OneServer, Restarting authapi service
   sudo: true
   supervisorctl: name={{ item }} state=restarted
   with_items:
     - authapi
     - authapi_celery
 
-- name: authapi custom_urls.py
-  sudo: true
-  template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
-
-- name: All in one nginx
+- name: OneServer, All in one nginx
   sudo: true
   template: src=oneserver/templates/oneserver.conf dest=/etc/nginx/conf.d/oneserver.conf owner="root" mode=0644
 
-# dnie & fnmt certs
-- name: DNIE and FNMT ca in nginx
+- name: OneServer, configure nginx
   sudo: true
-  template: src=oneserver/templates/dnie.conf dest=/etc/nginx/conf.d/dnie.conf owner="root" mode=0644
-  when: config.dnie_host is defined
+  template: src=oneserver/templates/nginx.conf dest=/etc/nginx/nginx.conf owner="root" mode=0644
 
-- name: DNIE and FNMT ca
+- name: OneServer, cloudflare.conf
+  sudo: true
+  template: src=oneserver/templates/cloudflare.conf dest=/etc/nginx/cloudflare.conf owner="root" mode=0644
+
+- name: OneServer, remove nginx default
+  sudo: true
+  file: path=/etc/nginx/sites-enabled/default, state=absent
+
+- name: OneServer, secure.conf
+  sudo: true
+  template: src=oneserver/templates/secure.conf dest=/etc/nginx/secure.conf owner="root" mode=0644
+
+# dnie & fnmt certs
+- name: OneServer, DNIE and FNMT ca in nginx
+  sudo: true
+  template:
+    src=oneserver/templates/dnie.conf
+    dest=/etc/nginx/conf.d/dnie.conf
+    owner="root" mode=0644
+  when: config.dnie_auth.allow
+
+# remove the dnie conf when allow_dni is false, otherwise when changing
+# from one configuration to the other we would be leaving files around
+- name: OneServer, DNIE and FNMT ca in nginx (remove)
+  sudo: true
+  file: path=/etc/nginx/conf.d/dnie.conf state=absent
+  when: not config.dnie_auth.allow
+
+- name: OneServer, DNIE and FNMT ca
   sudo: true
   template: src=oneserver/templates/ca.crt dest=/srv/certs/dnie.ca.crt
-  when: config.dnie_host is defined
+  when: not config.dnie_auth.allow
 
-- name: Restarting nginx
+- name: OneServer, DNIE and FNMT ca (remove)
+  sudo: true
+  file: path=/srv/certs/dnie.ca.crt state=absent
+  when: not config.dnie_auth.allow
+
+- name: OneServer, Restarting nginx
   sudo: true
   service: name=nginx state=restarted

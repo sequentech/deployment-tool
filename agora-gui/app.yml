@@ -1,0 +1,64 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AgoraGui, npm install
+  sudo: true
+  sudo_user: agoragui
+  when: config.has_https_proxy
+  shell: npm --https-proxy=$http_proxy --registry=http://registry.npmjs.org/ --phantomjs_cdnurl=https://cnpmjs.org/downloads install chdir=/home/agoragui/{{ item }}
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, npm install
+  sudo: true
+  sudo_user: agoragui
+  when: not config.has_https_proxy
+  npm: path=/home/agoragui/{{ item }}
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, bower install (proxy)
+  sudo: true
+  sudo_user: agoragui
+  when: config.has_https_proxy
+  shell: http_proxy=$http_proxy https_proxy=$http_proxy bower install --config.interactive=false chdir=/home/agoragui/{{ item }}
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, bower install
+  sudo: true
+  sudo_user: agoragui
+  when: not config.has_https_proxy
+  shell: bower install --config.interactive=false chdir=/home/agoragui/{{ item }}
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, Creating build.sh
+  sudo: true
+  template: src=agora-gui/templates/build.sh dest=/home/agoragui/build.sh owner="agoragui" group="agoragui" mode=0744
+
+- name: AgoraGui, building
+  sudo: true
+  sudo_user: agoragui
+  shell: ./build.sh chdir=/home/agoragui/

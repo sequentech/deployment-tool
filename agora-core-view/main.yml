@@ -1,7 +1,0 @@
----
-- include: packages.yml
-- include: user.yml
-- include: nodejs.yml
-- include: repo.yml
-- include: app.yml
-- include: nginx.yml

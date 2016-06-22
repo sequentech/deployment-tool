@@ -1,3 +1,18 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 # This file is just Python, with a touch of Django which means
 # you can inherit and tweak settings to your hearts content.
 from sentry.conf.server import *
@@ -22,7 +37,7 @@ SENTRY_USE_BIG_INTS = True
 # the beacon documentation for more information. This **must** be a string.
 
 # SENTRY_ADMIN_EMAIL = 'your.name@example.com'
-SENTRY_ADMIN_EMAIL = 'agora@agoravoting.com'
+SENTRY_ADMIN_EMAIL = '{{ config.sentry.admin_user }}'
 
 # Instruct Sentry that this install intends to be run by a single organization
 # and thus various UI optimizations should be enabled.
@@ -37,8 +52,8 @@ DATABASES = {
 
         'NAME': 'sentry',
         'USER': 'sentry',
-        'PASSWORD': '{{ config.sentry_db_password }}',
-        'HOST': '',
+        'PASSWORD': '{{ config.sentry.db_password }}',
+        'HOST': '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}',
         'PORT': '5432',
     }
 }
@@ -144,14 +159,16 @@ SENTRY_FILESTORE_OPTIONS = {
 ALLOWED_HOSTS = ['*']
 
 # You MUST configure the absolute URI root for Sentry:
-SENTRY_URL_PREFIX = 'http://{{ config.agora_elections_domain }}:{{ config.sentry_port }}'  # No trailing slash!
+SENTRY_URL_PREFIX = 'http://{{ config.agora_elections.domain }}:{{ config.sentry.port }}'  # No trailing slash!
 
 # If you're using a reverse proxy, you should enable the X-Forwarded-Proto
 # header and uncomment the following settings
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+{% if not config.load_balancing.enabled or config.load_balancing.use_https %}
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+{% endif %}
 
 SENTRY_WEB_HOST = '0.0.0.0'
-SENTRY_WEB_PORT = {{ config.sentry_port }}
+SENTRY_WEB_PORT = {{ config.sentry.port }}
 SENTRY_WEB_OPTIONS = {
     # 'workers': 3,  # the number of gunicorn workers
     # 'secure_scheme_headers': {'X-FORWARDED-PROTO': 'https'},
@@ -173,7 +190,7 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 
 # The email address to send on behalf of
-SERVER_EMAIL = 'root@localhost'
+SERVER_EMAIL = '{{ config.sentry.admin_user }}'
 
 # If you're using mailgun for inbound mail, set your API key and configure a
 # route to forward to /api/hooks/mailgun/inbound/

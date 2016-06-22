@@ -1,4 +1,27 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
+- name: AuthApi, Creating sentry_celery.sh
+  sudo: true
+  template: src=sentry/templates/sentry_celery.sh dest=/home/sentry/sentry_celery.sh owner="sentry" mode=0744
+
+- name: AuthApi, Creating sentry.sh
+  sudo: true
+  template: src=sentry/templates/sentry.sh dest=/home/sentry/sentry.sh owner="sentry" mode=0744
+
 - name: Sentry, Creating supervisord conf
   sudo: true
   template: src=sentry/templates/supervisor.conf dest=/etc/supervisor/conf.d/sentry.conf owner="root" mode=0644
@@ -7,10 +30,6 @@
   sudo: true
   template: src=sentry/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/sentry_celery.conf owner="root" mode=0644
 
-- name: Restarting supervisord
+- name: Sentry, Restarting supervisord
   sudo: true
-  service: name=supervisor state=stopped
-
-- name: Restarting supervisord
-  sudo: true
-  service: name=supervisor state=started
+  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}

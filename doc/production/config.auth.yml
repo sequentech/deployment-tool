@@ -1,0 +1,450 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+# global non-agora related configuration variables
+params:
+  # Sometimes services like supervisor take quite a while to restart and some
+  # others don't. Configure here exactly how many seconds it should wait for
+  # processes that restart slowly or and those that are fast.
+  sleep:
+    fast: 2
+    slow: 15
+
+# global configuration
+config:
+  backup_password: '<PASSWORD>'
+
+  # global config. Note: currently some other keys are used as global conf
+  global_secret_key: '<PASSWORD>'
+  cloudflare: false
+
+  host: agora-auth5
+
+  # election-orchestra
+  port: 5000
+  public_ipaddress: 192.168.50.4
+  private_ipaddress: 192.168.50.4
+  vfork_server_ports: [4081, 4083]
+  vfork_hint_server_ports: [8081, 8083]
+  eorchestra_password: '<PASSWORD>'
+  auto_mode: true
+
+  # some java related configuration options
+  java:
+    # maximum size of heap memory in Megabytes (int). Default: 4000. Your total
+    # RAM + SWAP needs to be bigger than this. If you are going to do very
+    # big tallies (hundred of thousands of votes or millions), you will need to
+    # change this to something bigger.
+    max_heap_memory_usage: 4000
+
+  # generic election related constraints that apply to multiple parts of the
+  # deployment, for example the same limit might apply to authapi, agora-gui
+  # and agora-elections
+  election_limits:
+    # maximum number of questions allowed in an election
+    max_num_questions: 20
+
+    # maximum number of allowed possible answers in a question
+    max_num_answers: 10000
+
+    # maximum size in characters of long strings like url titles
+    max_short_string_length: 300
+
+    # maximum size in characters of long strings like question description
+    max_long_string_length: 3000
+
+  # agora-elections
+  agora_elections:
+    db_password: '<PASSWORD>'
+    shared_secret: '<PASSWORD>'
+    expiry: 60000
+    domain: agora
+    port: 14443
+    # Port used by agora_elections for path /private. This path is used
+    # by election-orchestra to for example retrieve the ciphertexts.
+    # Only the election authorities can access this path, usin SSL/HTTPS and
+    # using their certificates as client certificates.
+    ssl_port: 14453
+
+    # Password used to encrypt the authorities' public keys for usage in
+    # agora-elections.
+    keystore_pass: '<PASSWORD>'
+
+  # agora-gui
+  agora_gui:
+    domain: agora
+    admin_port: 10090
+    booth_port: 10091
+    elections_port: 10092
+
+    # webpage title
+    web_title: 'Agora Voting'
+    
+    # Show 'Success Action' tab in admin agora_gui
+    show_success_action: false
+
+    # These are variables that go to the /home/agoragui/avConfig.js configuration
+    # file. See the file for more details.
+    language: en
+    defaultRoute: /admin/login
+
+    # interface theme
+    # allowed values (string): default|podemos|ccoo|bcnencomu
+    theme: 'default'
+
+    # when debug mode is false, javascript and in general source code is
+    # uglified and minified, otherwise it is not to allow better debugging.
+    #
+    # allowed values (string): true|false
+    debug: 'false'
+
+    # If you want tallies to be linked and downloaded from a different URL,
+    # change this variable from false to a string. This could be an example:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/'
+    #
+    # and with this example, the download for the tally 1331 would be:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
+    custom_public_download_url: false
+
+    contact:
+      # Support contact email displayed in the footer links
+      email: contact@example.com
+      # Sales contact email displayed in the footer links
+      sales: sales@example.com
+      tlf: ''
+
+    texts:
+      # informative html documentation shown in the booth help and in the public
+      # election view, documentation tab
+      help_info: ''
+
+      # html extra info to show in the voting booth success screen
+      booth_success_extra: ''
+
+      # terms of service text, shown in the documentation and in the booth
+      # start page
+      tos_text: ''
+
+     # terms of service title, shown in the documentation and in the booth
+      # start page
+      tos_title: ''
+
+      # you can include any html text in agora-gui-admin html to customize it
+      admin_html_body_include: ''
+
+    
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be available publicly. Usually these files are
+    # referenced in  agora_gui.texts.help_info for example. The URL for a file
+    # "foo.png" inside static_extra_path would be:
+    # https://<DOMAIN>/election/static/static_extra/foo.png"
+    static_extra_path: ''
+
+    # Details pertaining to the organization that runs the software
+    organization:
+      # changes the organization logo. The path should be a path accessible to
+      # ansible. Use an empty string ('') if you don't want to change the logo.
+      # Note: we recommend to use a png image with 18px height and less than
+      # 200px width.
+      logo_path: ''
+
+      # Name of the organization, appears in the logo mouse hover, in the login
+      # page ("Login into __NAME__ admin account"), in the poweredBy, etc
+      name: 'Agora Voting'
+
+      # URL that the logo links to
+      url: 'https://agoravoting.com'
+   
+    # social networks footer links
+    social:
+      facebook: 'https://www.facebook.com/AgoraVoting'
+      twitter: 'https://twitter.com/agoravoting'
+      twitterHandle: 'agoravoting'
+      googleplus: 'https://plus.google.com/101939665794445172389/posts'
+      youtube: 'https://www.youtube.com/results?search_query=Agora+Voting'
+      github: 'https://github.com/agoravoting/'
+    
+    # technology footer links
+    technology:
+      aboutus: 'https://agoravoting.com/#aboutus'
+      pricing: 'https://agoravoting.com/#pricing'
+      overview: 'https://agoravoting.com/overview/'
+      solutions: 'https://agoravoting.com/solutions/'
+      admin_manual: 'https://bit.ly/avguiadeuso'
+    
+    # legality footer links
+    legal:
+      terms_of_service: 'https://agoravoting.com/tos/'
+      cookies: 'https://agoravoting.com/cookies/'
+      privacy: 'https://agoravoting.com/privacy/'
+      security_contact: 'https://agoravoting.com/security_contact/'
+      community_website: 'https://agoravoting.org'
+
+  # configuration related to the nginx web server
+  webserver:
+    # configures the "worker_processes" setting in nginx. Typically you would
+    # use the number of cores of the machine or less.
+    worker_processes: 2
+
+    # enable/disable nginx reverse proxy cache for everything related to agora
+    # web server
+    reverse_proxy_cache: true
+
+  # DNI-e and FNMT authentication support related configuration
+  dnie_auth:
+    # boolean (true|false) that enables or disables the DNIe and FNMT
+    # authentication.
+    #
+    # Note: load_balancing is not currently supported when dni_auth is enabled
+    # because nginx for some reason always will request the client TLS
+    # certificate if the requester hostname doesn't match the nginx hostname.
+    allow: false
+
+    # Nginx requires a different FQDN to apply client side authentication,
+    # which is something needed for DNIe and FNMT auth.
+    host: cert.agora-auth5
+
+  cert:
+    C: EN
+    ST: Ney York
+    L: Ney York
+    O: Example
+    OU: Example
+    EMAIL: info@example.com
+
+    # within how many days will the certificate will expire?
+    lifetime: 3650
+
+  # sentry
+  sentry:
+    # port in which the sentry backend is run.
+    # Note: this is NOT the port in  which the nginx sentry web service is run.
+    port: 9090
+
+    # password of the postgresql database of the sentry backend.
+    db_password: '<PASSWORD>'
+
+    # HTTP Port in which sentry is accessed. Only used for now in
+    # oneserver.conf. Note that this port might be configure to use
+    # https only if not config.load_balancing.enabled or
+    # config.load_balancing.use_https, see oneserver.conf for details.
+    web_port: 8443
+
+    # Sentry Administrative web user email. Used to login into the sentry web
+    # interface.
+    admin_user: 'admin@example.com'
+
+    # Sentry Administrative web user password. Used to login into the sentry web
+    # interface.
+    admin_password: '<PASSWORD>'
+
+    # Sending the code sms and email log to an email
+    msg_log: False
+
+    # the log receiver
+    msg_log_email: log@example.com
+
+  # the log sender
+  authapi:
+    # Whether authapi is run in debug mode or not.
+    # Allowed values: True|False
+    debug: False
+
+    server_email: log@example.com
+
+    # Election ids are autoinc integer numbers set when created from the
+    # administrative web interface. This settings allows to specify the start
+    # number of the election ids. This might be useful to set if you want to
+    # them to start at a specific rate for any reason, for example if the
+    # authorities are shared with other authapi servers.
+    election_start_id: 1
+
+    # stablishes if admins can register or not
+    # default value: 'close'
+    # allowed values: 'close', 'open'
+    admin_census_mode: close
+
+    # Stablishes the authentication method used for election administrators
+    #
+    # Allowed values: (user-and-password|email|sms)
+    auth_method: 'user-and-password'
+
+    # Defines the extra fields used in authentication and registration. Empty by
+    # default
+    extra_fields: >
+      []
+
+    # Admin user data and credentials. Note that some of them might get unused,
+    # for example admin_password won't be of use if auth_method is 'sms'.
+    admin_user:
+      email: 'admin@agoravoting.com'
+      password: 'QWERTY33'
+
+      # Note that admin telephone number should contain no spaces. International
+      # prefixes are entered like "+34" for Spain, for example
+      tlf: ''
+
+    # sms configuration
+    sms:
+      # enable sms configuration. if set to false, the sms configuration doesn't
+      # get inserted in the deploy.py config file.
+      # allowed values: true|false
+      enabled: false
+
+      # sms provider
+      # allowed values: esendex
+      provider: esendex
+
+      # Each user might have different domain ids. This settings depends on
+      # the provider.
+      domain_id: '<DOMAIND>'
+
+      # Provider's user name.
+      login: '<LOGIN>'
+
+      # Provider's password.
+      password: '<PASSWORD>'
+
+      # Base URL of the API of the provider. Depends on the provider, the
+      # default works for esendex.
+      url: 'https://api.esendex.com/v1.0/messagedispatcher'
+
+      # Depends on the provider. Allows you to change the sender id.
+      sender_id: 'agoravoting'
+
+      # Voice lang code. Only for esendex. Default: None.
+      voice_lang_code: 'None'
+
+      # Base template for sms messages. The __MESSAGE__ will be replaced by
+      # the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__ -- Agora Voting"
+
+    # email configuration
+    email:
+      # enable email configuration. if set to false, the emailconfiguration
+      # doesn't get inserted in the deploy.py config file.
+      # allowed values: true|false
+      enabled: false
+
+      # The sender email address
+      default_from_email: 'agora@example.com'
+
+      # Email server host
+      email_host: 'example.com'
+
+      # Email server port
+      email_port: 24
+
+      # Base template for plain text email messages. The __MESSAGE__ will be
+      # replaced by the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+
+      # Possible backends: email|console
+      backend: 'console'
+
+  # Authorities
+
+  authorities:
+    - id: "auth1"
+      name: "Agora Voting 1"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+    - id: "auth2"
+      name: "Agora Voting 2"
+      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://agoravoting.com"
+      image: "/docs/logo_agora.png"
+  director: 'auth1'
+  auths: "['auth2']"
+
+  # set to true if the environment where you are going to deploy the machine,
+  # it uses an https_proxy, which is not transparently supported in ansible.
+  has_https_proxy: false
+
+  # populates the /etc/hosts file. Sometimes this is needed, for example when
+  # deploying with vagrant, the name of other machines might not be
+  # automatically known by others, for example the name of the master might not
+  # be known by the slave machine.
+  hosts: []
+  #  - hostname: agora-auth5
+  #    ip: 192.168.50.4
+
+  #
+  # Load Balancing & High Availability configuration details
+  #
+  load_balancing:
+    # set to true if you want to enable load_balancing. Basically this affects
+    # to oneserver.conf configuration
+    enabled: false
+
+    # set is_master to "true" if the machine will be the master server,
+    # set to "false" if it's going to act as a slave (with a hot standby
+    # postgresql database configuration)
+    is_master: true
+
+    # Id of the node. Both master and slaves require to have a unique id.
+    # This is used by repmgr.
+    repmgr_node_id: 1
+
+    # The CIDR address of the load balancer. This is used in the nginx
+    # configuration of oneserver.conf
+    loadbalancers_cidr: '192.168.50.2/0'
+
+    # The header used by the load balancer to communicate the real ip of the
+    # user.
+    load_balancer_real_ip_header: 'X-Real-IP'
+
+    # set to 'true' if the load balancer will access to this machines using
+    # TLS (which is more secure but slower).
+    use_https: true
+
+    # Configuration needed when the machine is configured to be a slave i.e.
+    # 'is_master' is set to 'false'
+    slave:
+      # hostname of the master. Used to:
+      # - connect via rsync
+      # - connect via postgresql
+      master_hostname: 'localhost'
+
+      # specifies the update frequency of the rsync of dirs from master.
+      # rsync is done of /etc/eopeers/ and /home/agoraelections/datastore
+      rsync_update_secs: 600
+
+    # Configuration needed when the machine is configured to be a master i.e.
+    # 'is_master' is set to 'true'
+    master:
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /home/agoraelections/.ssh/id_rsa.pub in the slave machines.
+      slave_agoraelections_ssh_keys: []
+      #  - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChqdkxOwcZasOpW8b6FPULMLYozOG4GKioFVmH+zT8l7fO/+SSeqEePJT5DDdvhuFuatStRvkrlRns4PoB3AeOsjnk+PIe+nIRXx1o7Wyjtn8AzWq55X8XWNHuh6QsVbVWFD6AzbFb2kiAx8sRe2+suLbW2DuSoCBWoildWe0ipMW1//qv477jfOZKdYlVAvRu/vbhoBwvmnlI/7N06oDkhyBJ+WUlY8T72FCTWhA3U6Q3CHRryNOG8sRIvVcq9m30dY3x8BvmRDbEQRjOnLTvW+Ua1KLnq9azVBjYvvbkTWVkiLMLhKEqgjXrNvL1sPVjmyqJ9PPNxaztW3JAVmJkTQk40K32z4G+pq1Hfy5vuOhnCubyRf5b4KWFxGUbZX9vM1+U8o5w7HOspGM+60e4NASVXIUYJmdwXL3w2ERwn3qvMhhEvqgtan9+3Lu5lpKMcaax0/GhxYREzdN4njRpXAkUIf2TjRTohx6s+6QCTrXpaQm/sLUITH8fRJqG6JVkp7f6Dldo9PesxnwWdmYcamTyhPpnuk+vA6sXPQmSpxhUTObXir0o/VZmacUbU193884MS72/hmk7m7J1u0EU95fW80WjdordrjI3Zj9TvWRo1tSbKbzc6Gan8mVXeMa22yRlvL4ZcxkKgAcDuz1zdCrlV8pZcsRdBobQwdf2mw== agoraelections@agora-slave/ansible-generated'
+
+      # The list of keys in here will be accepted  to login as agoraelections.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /var/lib/postgresql/.ssh/id_rsa.pub in the slave machines.
+      slave_postgres_ssh_keys: []
+      #  - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3dzOI4ZV6h0lv5KtUSRgGNBcCLv0+CSwsO7JDcUeTIcmzpAecsBR9d2SikKpoB4tKxDUFOCvmBak1mjaROdqRCIHJZTlEVy22hCeVD0Twdq2H+teGnXdoJ5yI1VgZllLMgOIXuDqKJMsIxn7gtPrqdJQS0/iMTR4nsrB95Ybh/hdJBzo8dgg/KAu1uDsy9R2TWY1mPIF10VlHjcVrbtLcTAR9Vg/Yg21mh3MqG0m/ymnRE4DXfpbauW2d8B6YPoMxrnnquUDVh5NMn7GYDaPjXk42zpMOmTAxvzQ94qRGWxr5SgaeBHdENmOTX0Yg0jkkiODPl3a9hHgjU/ueo7TjKB38vmm178I8pEDqLMo+DTtY2VYBhhvmAbfDyFbPgjDq4urMNJFY3T2RSF6os+Q6B/W2kygaEAFjJQeaXh+TAb56vJOwdRJgGiAvlyWwjF5WIojDCFYVV5M2KJuKzNGTJwfWmNnkK1EP0TxwUG1af7TGmJoNEMSgv6usk2m34MFsGE5MYhR4bvT/6jYwcrSeYu993wYpCl+k+L4PgQ39NU0SixdNoXLzMkiZFrVmqVsve6mgnvTQ4B6jE2YgzBwLqEt9zh1LlxV7/f/0y1pnq8x4M5mJgBudWMnMO5nvIK+L8ziD3LN/1r9Yyv8jJy3PNzNUjlQzlys9Wjyjf7Z/LQ== postgres@agora-slave/ansible-generated'
+
+      # CIDR block address slaves' used to specify:
+      #  - which machines can access to postgresql
+      slave_cidr_address: '192.168.50.4/24'

@@ -1,0 +1,93 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: High Availability & Load Balancing, Updating packages
+  sudo: true
+  action: apt update_cache=yes
+
+- name: High Availability & Load Balancing, Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - memcached
+    - rsync
+    - libedit-dev
+    - libpam-dev
+
+- name: High Availability & Load Balancing, non-local memcached.conf
+  lineinfile:
+    dest=dest=/etc/sudoers
+    state=absent
+    line="-l 127.0.0.1"
+
+- name: High Availability & Load Balancing, Restart memcached
+  service: name=memcached state=restarted
+
+- name: High Availability & Load Balancing, Create ssh key for agoraelections, postgres
+  sudo: true
+  user:
+    name={{item}}
+    generate_ssh_key=yes
+    state=present
+    ssh_key_type=rsa
+    ssh_key_comment="{{ item }}@{{ ansible_nodename }}/ansible-generated"
+    ssh_key_bits=4096
+    ssh_key_file=.ssh/id_rsa
+  with_items:
+   - agoraelections
+   - postgres
+
+- name: High Availability & Load Balancing [master], Authorizing agoraelections slave keys
+  sudo: true
+  when: config.load_balancing.is_master
+  authorized_key:
+    user=agoraelections
+    key="{{ item }}"
+  with_items: config.load_balancing.master.slave_agoraelections_ssh_keys
+
+- name: High Availability & Load Balancing [master], Authorizing postgres slave keys
+  sudo: true
+  when: config.load_balancing.is_master
+  authorized_key:
+    user=postgres
+    key="{{ item }}"
+  with_items: config.load_balancing.master.slave_postgres_ssh_keys
+
+- name: High Availability & Load Balancing [slave], Authorizing postgres slave keys
+  sudo: true
+  sudo_user: postgres
+  when: not config.load_balancing.is_master
+  shell: |
+    expect -c '
+    spawn ssh postgres@{{config.load_balancing.slave.master_hostname}} echo hola
+    expect {
+    yes/no { send yes\r ; exp_continue}
+    }'
+  register: command_result
+  failed_when: "'hola' not in command_result.stdout or 'password:' in command_result.stdout"
+
+- name: High Availability & Load Balancing [slave], Authorizing agoraelections slave keys
+  sudo: true
+  sudo_user: agoraelections
+  when: not config.load_balancing.is_master
+  shell: |
+    expect -c '
+    spawn ssh agoraelections@{{config.load_balancing.slave.master_hostname}} echo hola
+    expect {
+    yes/no { send yes\r ; exp_continue}
+    }'
+  register: command_result
+  failed_when: "'hola' not in command_result.stdout or 'password:' in command_result.stdout"

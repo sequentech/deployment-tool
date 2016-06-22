@@ -1,0 +1,45 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AgoraVerifier, check if avConfig.js exists
+  stat: path=/home/agoragui/avConfig.js
+  register: avConfig
+
+- name: AgoraVerifier, get hash of verifier
+  shell: sha256sum /home/agoraverifier/agora-verifier/agora-verifier | cut -d' ' -f 1
+  sudo: true
+  sudo_user: agoraverifier
+  register: sha256sum
+
+- name: AgoraVerifier, config setup for agora-verifier
+  sudo: true
+  sudo_user: agoragui
+  when: avConfig.stat.exists == True
+  replace: 'dest=/home/agoragui/avConfig.js
+           regexp="{{item.regexp}}"
+           replace="{{item.replace}}"'
+  with_items:
+    - regexp: "link:.*"
+      replace: 'link: "https://{{config.agora_elections.domain}}/verifier/agora-verifier",'
+
+    - regexp: "hash:.*"
+      replace: 'hash: "{{sha256sum.stdout}}",'
+
+- name: AgoraVerifier, building AgoraGui
+  sudo: true
+  sudo_user: agoragui
+  when: avConfig.stat.exists == True
+  shell: ./build.sh chdir=/home/agoragui/

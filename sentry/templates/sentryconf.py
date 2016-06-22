@@ -1,88 +1,59 @@
-# Bootstrap the Sentry environment
-from sentry.utils.runner import configure
-configure("/home/sentry/sentry.conf.py")
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
 
-# Do something crazy
-from sentry.models import Team, Project, ProjectKey, User, Organization
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+import os
+os.environ['SENTRY_CONF'] = "/home/sentry/sentry.conf.py"
+
+# Bootstrap the Sentry environment
+from sentry.runner import configure
+configure()
+
+# Create the org, team and project if needed
+from sentry.models import Team, Project, ProjectKey, User, Organization, OrganizationMember
 
 user = User.objects.get(pk=1)
 
-organization = Organization()
-organization.name = 'AgoraVoting'
-organization.owner = user
-organization.save()
+name = 'AgoraVoting'
+name2 = 'AuthApi'
 
-team = Team()
-team.name = 'AgoraVoting'
-team.organization = organization
-team.save()
+if Organization.objects.filter(name=name).count() == 0:
+    organization = Organization()
+    organization.name = name
+    organization.save()
 
-project = Project()
-project.team = team
-project.name = 'AuthApi'
-project.organization = organization
-project.save()
+    om = OrganizationMember()
+    om.organization = organization
+    om.role = 'owner'
+    om.user = user
+    om.save()
+
+    team = Team()
+    team.name = name
+    team.organization = organization
+    team.save()
+
+    project = Project()
+    project.team = team
+    project.name = name2
+    project.organization = organization
+    project.save()
+else:
+    organization = Organization.objects.filter(name=name).all()[0]
+    team = Team.objects.filter(name=name, organization=organization).all()[0]
+    project =Project.objects.filter(team=team, name=name2, organization=organization).all()[0]
 
 key = ProjectKey.objects.filter(project=project)[0]
 dsn = key.get_dsn()
-
-# writting the sentry configuration to deploy.conf
-authapi_conf = '''
-# sentry
-RAVEN_CONFIG = {
-    'dsn': '%s',
-}
-INSTALLED_APPS = INSTALLED_APPS + (
-    'raven.contrib.django.raven_compat',
-)
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'root': {
-        'level': 'WARNING',
-        'handlers': ['sentry'],
-    },
-    'formatters': {
-        'verbose': {
-            'format': '%%(levelname)s %%(asctime)s %%(module)s %%(process)d %%(thread)d %%(message)s'
-        },
-    },
-    'handlers': {
-        'sentry': {
-            'level': 'INFO',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
-    },
-    'loggers': {
-        'django': {
-            'level': 'ERROR',
-            'handlers': ['sentry'],
-            'propagate': False,
-        },
-        'authapi': {
-            'level': 'INFO',
-            'handlers': ['sentry'],
-            'propagate': False,
-        },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-    },
-}
-'''
-
-with open('/tmp/authapi.sentry', 'w') as f:
-    f.write(authapi_conf % dsn)
+print(dsn)
