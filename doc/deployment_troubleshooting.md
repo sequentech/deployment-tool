@@ -197,3 +197,17 @@ Afterwards, supervisor status should return something like this, which is ok:
         sentry                           RUNNING    pid 7664, uptime 0:00:04
         sentry_celery                    RUNNING    pid 7666, uptime 0:00:04
         Connection to 127.0.0.1 closed.
+
+## 4. Problems provisioning
+
+Sometimes the provisioning fails. This can be related to some syntax changes on
+ansible's playbooks format. Check that you have Ansible 2.x or superior. If you
+are using vagrant to provision a virtual machine, you need to install ansible 2.x 
+on the host machine, not on the guest.
+
+On Ubuntu, you can install the latest version of Ansible by executing:
+
+    $ sudo apt-get install software-properties-common pwgen -y
+    $ sudo apt-add-repository ppa:ansible/ansible -y
+    $ sudo apt-get update
+    $ sudo apt-get install ansible -y
