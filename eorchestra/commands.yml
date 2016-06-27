@@ -1,3 +1,18 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
 ---
 - name: EOrchestra, creating commands
   sudo: true
@@ -23,15 +38,15 @@
   sudo: true
   get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/ validate_certs={{ not config.has_https_proxy }}
   with_items:
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/jsbn2.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/bigint.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/class.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/elgamal.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/random.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sha1.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sha2.js
-    - https://github.com/agoravoting/agora-gui-booth/raw/master/vendor/crypto/sjcl.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/jsbn.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/jsbn2.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/bigint.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/class.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/elgamal.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/random.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/sha1.js
+    - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/sha2.js
+    - https://github.com/agoravoting/agora-gui-common/raw/{{ repos.guicommon.version }}/vendor/crypto/sjcl.js
     - http://momentjs.com/downloads/moment.js
 
 - name: EOrchestra, encrypt.js
