@@ -30,6 +30,9 @@
   with_items:
     - libpcre3
     - libpcre3-dev
+    - python-dev 
+    - libffi-dev 
+    - libssl-dev
 
 - name: EOrchestra, installing extra pip packages
   sudo: true
@@ -38,6 +41,7 @@
   with_items:
     - setuptools
     - uwsgi
+    - requests[security]
 
 - name: EOrchestra, configure settings
   sudo: true
