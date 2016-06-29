@@ -20,13 +20,24 @@
 - include: repo.yml
 - include: vfork.yml
 
+- name: EOrchestra, Updating packages
+  sudo: true
+  action: apt update_cache=yes
+
+- name: EOrchestra, Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed force=yes
+  with_items:
+    - libpcre3
+    - libpcre3-dev
+
 - name: EOrchestra, installing extra pip packages
   sudo: true
   sudo_user: eorchestra
   pip: name={{item}} virtualenv=/home/eorchestra/venv state=present
   with_items:
-    - uwsgi
     - setuptools
+    - uwsgi
 
 - name: EOrchestra, configure settings
   sudo: true
