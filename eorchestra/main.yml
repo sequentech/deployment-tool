@@ -33,13 +33,16 @@
     - python-dev 
     - libffi-dev 
     - libssl-dev
-
+    
 - name: EOrchestra, installing extra pip packages
   sudo: true
   sudo_user: eorchestra
   pip: name={{item}} virtualenv=/home/eorchestra/venv state=present
   with_items:
     - setuptools
+    # Hack: Frestq needs to install this, but its installation will fail once
+    # requests[security] (and in particular PyOpenSSL) is installed
+    - psycopg2==2.5.2
     - uwsgi
     - requests[security]
 
