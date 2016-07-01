@@ -77,3 +77,19 @@
     "dest=/home/agoragui/agora-gui-admin/Gruntfile.js
     regexp='admin_html_body_include:.*'
     replace='admin_html_body_include:\"{{ config.agora_gui.texts.admin_html_body_include }}\",'"
+
+- name: AgoraGui, config custom html body include for agora-gui-booth
+  sudo: true
+  sudo_user: agoragui
+  replace:
+    "dest=/home/agoragui/agora-gui-booth/Gruntfile.js
+    regexp='booth_html_body_include:.*'
+    replace='booth_html_body_include:\"{{ config.agora_gui.texts.booth_html_body_include }}\",'"
+
+- name: AgoraGui, config custom html body include for agora-gui-elections
+  sudo: true
+  sudo_user: agoragui
+  replace:
+    "dest=/home/agoragui/agora-gui-elections/Gruntfile.js
+    regexp='elections_html_body_include:.*'
+    replace='elections_html_body_include:\"{{ config.agora_gui.texts.elections_html_body_include }}\",'"
