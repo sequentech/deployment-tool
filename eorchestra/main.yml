@@ -20,13 +20,33 @@
 - include: repo.yml
 - include: vfork.yml
 
+- name: EOrchestra, Updating packages
+  sudo: true
+  action: apt update_cache=yes
+
+- name: EOrchestra, Installing packages
+  sudo: true
+  action: apt pkg={{item}} state=installed force=yes
+  with_items:
+    - libpcre3
+    - libpcre3-dev
+    - python-dev 
+    - libffi-dev 
+    - libssl-dev
+    
 - name: EOrchestra, installing extra pip packages
   sudo: true
   sudo_user: eorchestra
   pip: name={{item}} virtualenv=/home/eorchestra/venv state=present
   with_items:
-    - uwsgi
     - setuptools
+    # HACK: Frestq needs to install this, but its installation will fail once
+    # requests[security] (and in particular PyOpenSSL) is installed
+    # TODO: Upgrade pip, as that fixes this issue, but it also requires a small 
+    # modification of frestq
+    - psycopg2==2.5.2
+    - uwsgi
+    - requests[security]
 
 - name: EOrchestra, configure settings
   sudo: true
