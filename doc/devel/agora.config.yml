@@ -146,6 +146,12 @@ config:
 
       # you can include any html text in agora-gui-admin html to customize it
       admin_html_body_include: ''
+ 
+      # you can include any html text in agora-gui-elections html to customize it
+      elections_html_body_include: ''
+
+      # you can include any html text in agora-gui-booth html to customize it
+      booth_html_body_include: ''
 
     
     # path to a directory to be copied recursively because it containing static
