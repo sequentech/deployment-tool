@@ -26,9 +26,7 @@ then
     fi
     if [ -f ${SERVER_PATH}/$1/tally.tar.gz ]
     then
-        MYDIR=$(pwd)
         cd /home/eorchestra/election-orchestra && sudo eid=$1 -u eorchestra bash -c  'export FRESTQ_SETTINGS=base_settings.py; /home/eorchestra/venv/bin/python app.py --reset-tally $eid'
-        cd $MYDIR
         rm ${SERVER_PATH}/$1/tally.tar.gz ${SERVER_PATH}/$1/tally.tar.gz.sha256
         echo "Removed tally: ${SERVER_PATH}/$1/tally.tar.gz"
         exit 0
