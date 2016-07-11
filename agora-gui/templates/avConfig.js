@@ -167,6 +167,17 @@ var avConfigData = {
     security_contact: "{{ config.agora_gui.legal.security_contact }}",
     community_website: "{{ config.agora_gui.legal.community_website }}"
   },
+  
+  documentation: {
+    documentation: "{{ config.agora_gui.documentation.documentation }}",
+    overview: "{{ config.agora_gui.documentation.overview }}",
+    technical: "{{ config.agora_gui.documentation.technical }}",
+    security_contact: "{{ config.agora_gui.legal.security_contact }}"
+  },
+  
+  documentation_html_include: "{{ config.agora_gui.texts.documentation_html_include }}",
+  
+  legal_html_include: "{{ config.agora_gui.texts.legal_html_include }}",
 
   // Details pertaining to the organization that runs the software
   organization: {
