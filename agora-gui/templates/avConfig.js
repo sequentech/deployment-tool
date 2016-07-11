@@ -169,7 +169,7 @@ var avConfigData = {
   },
   
   documentation: {
-    documentation: "{{ config.agora_gui.documentation.documentation }}",
+    faq: "{{ config.agora_gui.documentation.faq }}",
     overview: "{{ config.agora_gui.documentation.overview }}",
     technical: "{{ config.agora_gui.documentation.technical }}",
     security_contact: "{{ config.agora_gui.legal.security_contact }}"
