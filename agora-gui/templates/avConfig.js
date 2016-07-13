@@ -194,10 +194,6 @@ var avConfigData = {
     hash: ""
   },
 
-  help: {
-    info:"{{ config.agora_gui.texts.help_info }}"
-  },
-
   success: {
     text: "{{ config.agora_gui.texts.booth_success_extra }}"
   },
