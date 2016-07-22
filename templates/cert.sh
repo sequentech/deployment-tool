@@ -25,7 +25,7 @@ CN=${1:-`hostname`}
 EMAIL={{ config.cert.EMAIL }}
 DNS1={{ config.agora_elections.domain }}
 
-CERT_DIR="/srv/certs/selfsigned/"
+CERT_DIR="/srv/certs/selfsigned"
 CERT_PREFIX="cert"
 CERT_PATH="$CERT_DIR/${CERT_PREFIX}.pem"
 CERT_KEY_PATH="$CERT_DIR/key-nopass.pem"
