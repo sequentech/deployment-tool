@@ -23,7 +23,7 @@ OU={{ config.cert.OU }}
 HOST=${1:-`hostname`}
 CN=${1:-`hostname`}
 EMAIL={{ config.cert.EMAIL }}
-DNS1="pre-azure.nvotes.com"
+DNS1={{ config.agora_elections.domain }}
 
 CERT_DIR="/srv/certs/selfsigned/"
 CERT_PREFIX="cert"
@@ -32,6 +32,7 @@ CERT_KEY_PATH="$CERT_DIR/key-nopass.pem"
 CERT_CALIST_PATH="$CERT_DIR/calist"
 
 CREATE_CERT=false
+CALIST_COPY=""
 
 if [ ! -f $CERT_PATH ]; then
   CREATE_CERT=true
@@ -50,13 +51,14 @@ else
       CREATE_CERT=false
     fi
   fi
+  # If there are CAs installed for the authorities, preserve them
   if [ "$CREATE_CERT" == true ]; then
     FIRST_CERT_LINE=$(awk '/-----BEGIN CERTIFICATE-----/ {getline; print $0}' "$CERT_PATH")
     NLINES_CERT=$(expr 1 + $(awk '/-----END CERTIFICATE-----/ {print NR; exit}' "$CERT_PATH") - $(awk '/-----BEGIN CERTIFICATE-----/ {print NR; exit}' "$CERT_PATH"))
     FIRST_CALIST_LINE=$(expr 1 + $(awk -v v="$FIRST_CERT_LINE" 'match($0,v) {print NR; exit}' "$CERT_CALIST_PATH"))
     LAST_CALIST_LINE=$(expr "$FIRST_CALIST_LINE" + "$NLINES_CERT")
-    rm -f $CERT_DIR/calist.copy
-    sed "$FIRST_CALIST_LINE,$LAST_CALIST_LINE d" "$CERT_CALIST_PATH"  | sed '/^\s*$/d' > "$CERT_DIR"/calist.copy
+    # Remove own CA, preserve authorities CAs
+    CALIST_COPY=$(sed "$FIRST_CALIST_LINE,$LAST_CALIST_LINE d" "$CERT_CALIST_PATH"  | sed '/^\s*$/d')
   fi
 fi
 
@@ -90,8 +92,5 @@ issuerAltName          = issuer:copy
 EOF
 )
   cp "$CERT_PATH" "$CERT_CALIST_PATH"
-  if [ -f "$CERT_DIR"/calist.copy ]; then
-    cat "$CERT_DIR"/calist.copy >> "$CERT_CALIST_PATH"
-    rm -f "$CERT_DIR"/calist.copy
-  fi
+  echo "$CALIST_COPY" >> "$CERT_CALIST_PATH"
 fi
