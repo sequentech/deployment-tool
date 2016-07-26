@@ -145,9 +145,6 @@ config:
       tlf: ''
 
     texts:
-      # informative html documentation shown in the booth help and in the public
-      # election view, documentation tab
-      help_info: ''
 
       # html extra info to show in the voting booth success screen
       booth_success_extra: ''
@@ -162,6 +159,20 @@ config:
 
       # you can include any html text in agora-gui-admin html to customize it
       admin_html_body_include: ''
+
+      # you can include any html text in agora-gui-elections html to customize it
+      elections_html_body_include: ''
+
+      # you can include any html text in agora-gui-booth html to customize it
+      booth_html_body_include: ''
+
+      # you can include any html text, which will be shown on the documentation
+      # page on agora-gui-elections and on help in voting booth (agora-gui-booth)
+      documentation_html_include: ''
+
+      # you can include any html text, which will be shown on the legal page
+      # on agora-gui-elections
+      legal_html_include: ''
 
     # path to a directory to be copied recursively because it containing static
     # files that need to be available publicly. Usually these files are
@@ -194,6 +205,11 @@ config:
       privacy: 'https://agoravoting.com/privacy/'
       security_contact: 'https://agoravoting.com/security_contact/'
       community_website: 'https://agoravoting.org'
+    
+    documentation:
+      faq: 'https://nvotes.com/doc/en/'
+      overview: 'https://agoravoting.com/overview/'
+      technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
 
   # configuration related to the nginx web server
   webserver:
