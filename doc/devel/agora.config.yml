@@ -66,6 +66,35 @@ config:
     # maximum size in characters of long strings like question description
     max_long_string_length: 3000
 
+  # configuration related to election results calculations
+  agora_results:
+    # this is the list of allowed pipes that can be used when calculating an
+    # election result. The idea of limiting them is for safety. This is used
+    # by agora-elections and also agora-verifier
+    pipes_whitelist:
+      #- agora_results.pipes.duplicate_questions.duplicate_questions
+      - agora_results.pipes.modifications.apply_modifications
+      #- agora_results.pipes.multipart.make_multipart
+      #- agora_results.pipes.multipart.election_max_size_corrections
+      #- agora_results.pipes.multipart.question_totals_with_corrections
+      #- agora_results.pipes.multipart.reduce_answers_with_corrections
+      #- agora_results.pipes.multipart.multipart_tally_plaintexts_append_joiner
+      #- agora_results.pipes.multipart.data_list_reverse
+      #- agora_results.pipes.multipart.multipart_tally_plaintexts_joiner
+      #- agora_results.pipes.multipart.append_ballots
+      - agora_results.pipes.parity.proportion_rounded
+      - agora_results.pipes.parity.parity_zip_non_iterative
+      #- agora_results.pipes.parity.reorder_winners
+      #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
+      #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.pretty_print.pretty_print_stv_winners
+      - agora_results.pipes.pretty_print.pretty_print_not_iterative
+      - agora_results.pipes.results.do_tallies
+      #- agora_results.pipes.results.to_files
+      #- agora_results.pipes.results.apply_removals
+      - agora_results.pipes.sort.sort_non_iterative
+      #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
+
   # agora-elections
   agora_elections:
     db_password: '<PASSWORD>'

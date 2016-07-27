@@ -86,7 +86,7 @@ config:
       - agora_results.pipes.parity.parity_zip_non_iterative
       #- agora_results.pipes.parity.reorder_winners
       #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
-      - agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
       #- agora_results.pipes.pretty_print.pretty_print_stv_winners
       - agora_results.pipes.pretty_print.pretty_print_not_iterative
       - agora_results.pipes.results.do_tallies
@@ -94,7 +94,6 @@ config:
       #- agora_results.pipes.results.apply_removals
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
-
 
   # agora-elections
   agora_elections:
