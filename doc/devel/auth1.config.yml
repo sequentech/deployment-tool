@@ -119,6 +119,11 @@ config:
     # should set this to false; else, set it to true (default).
     private_path_verify_ssl_client_certificate: true
 
+    # In an election, a voter can change his vote as a way to mitigate coercion.
+    # Here you can set the maximum number of vote changes. Set to 0 to disable
+    # vote changing.
+    max_revotes: 5
+
   # agora-gui
   agora_gui:
     domain: agora
