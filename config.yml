@@ -83,6 +83,14 @@ config:
     # agora-elections.
     keystore_pass: '<PASSWORD>'
 
+    # The callbacks from election authorities go to the private directory, for
+    # example to download encrypted ballots and to push tally results. In
+    # release 3.3.0+, this is done with SSL client certificate verification but
+    # in previous versions this didn't happen. To let an agora server
+    # installation work with election authorities version 3.2.0 or less, you
+    # should set this to false; else, set it to true (default).
+    private_path_verify_ssl_client_certificate: true
+
   # agora-gui
   agora_gui:
     domain: agoravoting.com
