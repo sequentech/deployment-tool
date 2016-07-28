@@ -20,8 +20,8 @@ ST="{{ config.cert.ST }}"
 L="{{ config.cert.L }}"
 O="{{ config.cert.O }}"
 OU="{{ config.cert.OU }}"
-HOST=${1:-`hostname`}
-CN=${1:-`hostname`}
+HOST=$(hostname)
+CN=$(hostname)
 EMAIL={{ config.cert.EMAIL }}
 DNS1={{ config.agora_elections.domain }}
 
