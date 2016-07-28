@@ -237,8 +237,8 @@ config:
 
   cert:
     C: EN
-    ST: Ney York
-    L: Ney York
+    ST: New York
+    L: New York
     O: Example
     OU: Example
     EMAIL: info@example.com

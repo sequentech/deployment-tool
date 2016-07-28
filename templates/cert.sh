@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
-C={{ config.cert.C }}
-ST={{ config.cert.ST }}
-L={{ config.cert.L }}
-O={{ config.cert.O }}
-OU={{ config.cert.OU }}
+C="{{ config.cert.C }}"
+ST="{{ config.cert.ST }}"
+L="{{ config.cert.L }}"
+O="{{ config.cert.O }}"
+OU="{{ config.cert.OU }}"
 HOST=${1:-`hostname`}
 CN=${1:-`hostname`}
 EMAIL={{ config.cert.EMAIL }}
@@ -51,19 +51,21 @@ else
       CREATE_CERT=false
     fi
   fi
-  # If there are CAs installed for the authorities, preserve them
-  if [ "$CREATE_CERT" == true ]; then
-    FIRST_CERT_LINE=$(awk '/-----BEGIN CERTIFICATE-----/ {getline; print $0}' "$CERT_PATH")
-    NLINES_CERT=$(expr 1 + $(awk '/-----END CERTIFICATE-----/ {print NR; exit}' "$CERT_PATH") - $(awk '/-----BEGIN CERTIFICATE-----/ {print NR; exit}' "$CERT_PATH"))
-    FIRST_CALIST_LINE=$(expr 1 + $(awk -v v="$FIRST_CERT_LINE" 'match($0,v) {print NR; exit}' "$CERT_CALIST_PATH"))
-    LAST_CALIST_LINE=$(expr "$FIRST_CALIST_LINE" + "$NLINES_CERT")
-    # Remove own CA, preserve authorities CAs
-    CALIST_COPY=$(sed "$FIRST_CALIST_LINE,$LAST_CALIST_LINE d" "$CERT_CALIST_PATH"  | sed '/^\s*$/d')
+fi
+
+if [ "--gencert" == "$1" ]; then
+  CREATE_CERT=true
+  if [ "false" == "$2" ]; then
+    CREATE_CERT=false
   fi
 fi
 
-if [ "$CREATE_CERT" == true ]
-then
+if [ "$CREATE_CERT" == true ]; then
+  # If there are CAs installed for the authorities, preserve them
+  if [ "$CREATE_CERT" == true ]; then
+    # Remove own CA, preserve authorities CAs
+    CALIST_COPY=$(python "/root/cert.py" "$CERT_PATH" "$CERT_CALIST_PATH")
+  fi
   openssl req -nodes -x509 -newkey rsa:4096 -extensions v3_ca -keyout "$CERT_KEY_PATH" -out "$CERT_PATH" -days 3650  -subj "/C=${C}/ST=${ST}/L=${L}/O=${O}/OU=${OU}/CN=${CN}/emailAddress=${EMAIL}" -config <(cat <<-EOF
 [req]
 default_bits           = 4096
