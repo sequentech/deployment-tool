@@ -46,7 +46,13 @@
 
 - name: System, self-signed certificate creation
   sudo: true
-  shell: "/root/cert.sh"
+  template: src=templates/cert.py
+            dest=/root/cert.py
+            owner=root mode=0755
+
+- name: System, self-signed certificate creation
+  sudo: true
+  shell: /root/cert.sh --gencert false
 
 - name: System, populating /etc/hosts
   sudo: true
