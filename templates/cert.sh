@@ -31,38 +31,16 @@ CERT_PATH="$CERT_DIR/${CERT_PREFIX}.pem"
 CERT_KEY_PATH="$CERT_DIR/key-nopass.pem"
 CERT_CALIST_PATH="$CERT_DIR/calist"
 
-CREATE_CERT=false
+CREATE_CERT={{ config.cert.force_create }}
 CALIST_COPY=""
 
 if [ ! -f $CERT_PATH ]; then
   CREATE_CERT=true
-else
-  # Check if the existing certificate has a valid name and alternative DNS
-  NOW_CN=$(openssl x509 -in "$CERT_PATH" -text | grep "Subject: " | sed s/.*,\ CN\=// | sed s/\\/emailAddress.*//)
-  NOW_DNS_LIST=$(openssl x509 -in "$CERT_PATH" -text  | awk '/X509v3\ Subject\ Alternative\ Name:/ { getline; print $0}')
-  NOW_DNS1=$(echo "$NOW_DNS_LIST" | awk '{print $1}' | sed s/DNS:// | sed s/,//)
-  NOW_DNS2=$(echo "$NOW_DNS_LIST" | awk '{print $2}' | sed s/DNS:// | sed s/,//)
-  CREATE_CERT=true
-  if [ "$NOW_CN" == "$CN" ] || [ "$NOW_CN" == "$DNS1" ]; then
-    if [ "$NOW_DNS1" == "$CN" ] && [ "$NOW_DNS2" == "$DNS1" ]; then
-      CREATE_CERT=false
-    fi
-    if [ "$NOW_DNS1" == "$DNS1" ] && [ "$NOW_DNS2" == "$CN" ]; then
-      CREATE_CERT=false
-    fi
-  fi
 fi
 
-if [ "--gencert" == "$1" ]; then
-  CREATE_CERT=true
-  if [ "false" == "$2" ]; then
-    CREATE_CERT=false
-  fi
-fi
-
-if [ "$CREATE_CERT" == true ]; then
+if [ true == "$CREATE_CERT" ]; then
   # If there are CAs installed for the authorities, preserve them
-  if [ "$CREATE_CERT" == true ]; then
+  if [ -f "$CERT_PATH" ] && [ -f "$CERT_CALIST_PATH" ]; then
     # Remove own CA, preserve authorities CAs
     CALIST_COPY=$(python "/root/cert.py" "$CERT_PATH" "$CERT_CALIST_PATH")
   fi

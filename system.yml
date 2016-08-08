@@ -52,7 +52,7 @@
 
 - name: System, self-signed certificate creation
   sudo: true
-  shell: /root/cert.sh --gencert false
+  shell: /root/cert.sh
 
 - name: System, populating /etc/hosts
   sudo: true
