@@ -246,6 +246,10 @@ config:
     # within how many days will the certificate will expire?
     lifetime: 3650
 
+    # force creation of a new certificate
+    # allowed values: true|false
+    force_create: false
+
   # sentry
   sentry:
     # port in which the sentry backend is run.

@@ -46,9 +46,7 @@ cert_file.close()
 
 # store calist file in a single string
 calist_file = open(calist_path, "r")
-calist = ""
-for line in calist_file:
-    calist = calist + line
+calist = calist_file.read()
 calist_file.close()
 
 # remove cert from calist
