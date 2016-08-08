@@ -42,6 +42,16 @@ config:
   eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
+  http:
+    # In big elections memory or disk buffer might need to be increased,
+    # specifically to upload the list of valid voterids if any filtering is going
+    # to be made, or when uploading the list of electors. This setting is
+    # applied at once to:
+    # play.http.parser.maxDiskBuffer (in agora-elections config)
+    # play.http.parser.maxMemoryBuffer (in agora-elections config)
+    # client_max_body_size (in nginx)
+    max_body_size: 2m
+
   # some java related configuration options
   java:
     # maximum size of heap memory in Megabytes (int). Default: 4000. Your total
