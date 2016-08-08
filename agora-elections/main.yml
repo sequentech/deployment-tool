@@ -36,6 +36,16 @@
   sudo_user: agoraelections
   template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
 
+
+- name: AgoraElections, Pipes whitelist
+  sudo: true
+  sudo_user: agoraelections
+  template:
+    src=agora-elections/templates/pipes_whitelist
+    dest=/home/agoraelections/agora-elections/conf/pipes_whitelist
+    owner="agoraelections"
+    mode=0644
+
 - name: AgoraElections, Test conf
   sudo: true
   sudo_user: agoraelections
