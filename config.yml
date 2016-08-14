@@ -135,6 +135,18 @@ config:
     # vote changing.
     max_revotes: 5
 
+    # When this setting is true, an election can be virtual and have
+    # subelections. A virtual election can have no votes itself and can move
+    # directly from created to calculated results state and the results
+    # calculation include the tallies of the subelections, so it can be used
+    # to consolide election results.
+    #
+    # Virtual elections have currently one limitation: ownership of the
+    # subelections is not checked, and that is why support for virtual elections
+    # is disabled by default and should only be enabled in dedicated
+    # installations.
+    virtualElectionsAllowed: false
+
   # agora-gui
   agora_gui:
     domain: agoravoting.com
