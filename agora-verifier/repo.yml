@@ -49,12 +49,21 @@
     regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
     replace='\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
-- name: AgoraVerifier, copy dirs
+- name: AgoraVerifier, fresh start
   sudo: true
   sudo_user: agoraverifier
-  synchronize:
-    src={{ item.src }}
-    dest={{ item.dest }}
+  file:
+    path='{{ item }}'
+    state=absent
+  with_items:
+    - /home/agoraverifier/agora-verifier/agora_tally
+    - /home/agoraverifier/agora-verifier/agora_results
+    - /home/agoraverifier/agora-verifier/agora-results
+
+- name: AgoraVerifier, copy dirs/files
+  sudo: true
+  sudo_user: agoraverifier
+  command: cp -rf '{{ item.src }}' '{{ item.dest }}'
   with_items:
     - src: '/home/agoraverifier/agora-tally/agora_tally'
       dest: '/home/agoraverifier/agora-verifier/agora_tally'
