@@ -52,7 +52,9 @@
 - name: AgoraVerifier, copy dirs
   sudo: true
   sudo_user: agoraverifier
-  command: cp -rf '{{ item.src }}' '{{ item.dest }}'
+  synchronize:
+    src={{ item.src }}
+    dest={{ item.dest }}
   with_items:
     - src: '/home/agoraverifier/agora-tally/agora_tally'
       dest: '/home/agoraverifier/agora-verifier/agora_tally'
