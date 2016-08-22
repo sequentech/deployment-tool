@@ -41,6 +41,14 @@
     dest=/home/agoraverifier/agora-results
     force={{ repos.results.force }}
 
+- name: AgoraVerifier, update pipes whitelist
+  sudo: true
+  sudo_user: agoraverifier
+  replace:
+    dest=/home/agoraverifier/agora-results/agora-results
+    regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
+    replace='\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+
 - name: AgoraVerifier, copy dirs
   sudo: true
   sudo_user: agoraverifier
@@ -67,11 +75,3 @@
       - /home/agoraverifier/agora-verifier/package.sh
       - /home/agoraverifier/agora-verifier/pverify.sh
       - /home/agoraverifier/agora-verifier/vmnc.sh
-
-- name: AgoraVerifier, update pipes whitelist
-  sudo: true
-  sudo_user: agoraverifier
-  replace:
-    dest=/home/agoraverifier/agora-results/agora-results
-    regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
-    replace='\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
