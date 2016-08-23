@@ -167,16 +167,21 @@ var avConfigData = {
     security_contact: "{{ config.agora_gui.legal.security_contact }}",
     community_website: "{{ config.agora_gui.legal.community_website }}"
   },
-  
+
   documentation: {
     faq: "{{ config.agora_gui.documentation.faq }}",
     overview: "{{ config.agora_gui.documentation.overview }}",
     technical: "{{ config.agora_gui.documentation.technical }}",
     security_contact: "{{ config.agora_gui.legal.security_contact }}"
   },
-  
+
+  share_social: {
+    allow_edit: "{{ config.agora_gui.share_social.allow_edit }}",
+    default: "{{ config.agora_gui.share_social.default }}"
+  },
+
   documentation_html_include: "{{ config.agora_gui.texts.documentation_html_include }}",
-  
+
   legal_html_include: "{{ config.agora_gui.texts.legal_html_include }}",
 
   // Details pertaining to the organization that runs the software

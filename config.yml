@@ -243,7 +243,7 @@ config:
       googleplus: 'https://plus.google.com/101939665794445172389/posts'
       youtube: 'https://www.youtube.com/results?search_query=Agora+Voting'
       github: 'https://github.com/agoravoting/'
-    
+
     # technology footer links
     technology:
       aboutus: 'https://agoravoting.com/#aboutus'
@@ -251,7 +251,7 @@ config:
       overview: 'https://agoravoting.com/overview/'
       solutions: 'https://agoravoting.com/solutions/'
       admin_manual: 'https://bit.ly/avguiadeuso'
-    
+
     # legality footer links
     legal:
       terms_of_service: 'https://agoravoting.com/tos/'
@@ -259,11 +259,19 @@ config:
       privacy: 'https://agoravoting.com/privacy/'
       security_contact: 'https://agoravoting.com/security_contact/'
       community_website: 'https://agoravoting.org'
-    
+
     documentation:
       faq: 'https://nvotes.com/doc/en/'
       overview: 'https://agoravoting.com/overview/'
       technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
+
+    # social networks buttons configuration
+    share_social:
+      allow_edit: true
+      default:
+        - network: 'Twitter'
+          button_text: ''
+          social_message: 'I have just voted in election https://go.nvotes.com, you can too! #nvotes'
 
   # configuration related to the nginx web server
   webserver:
