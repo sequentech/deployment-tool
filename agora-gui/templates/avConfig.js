@@ -177,7 +177,15 @@ var avConfigData = {
 
   share_social: {
     allow_edit: "{{ config.agora_gui.share_social.allow_edit }}",
-    default: "{{ config.agora_gui.share_social.default }}"
+    default: [
+      {% for button in config.agora_gui.share_social.default %}
+      {
+        network: "{{ button.network }}",
+        button_text: "{{ button.button_text }}",
+        social_message: "{{ button.social_message }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
   },
 
   documentation_html_include: "{{ config.agora_gui.texts.documentation_html_include }}",
