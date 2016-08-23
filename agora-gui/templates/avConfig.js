@@ -176,7 +176,7 @@ var avConfigData = {
   },
 
   share_social: {
-    allow_edit: "{{ config.agora_gui.share_social.allow_edit }}",
+    allow_edit: {% if config.agora_gui.share_social.allow_edit %}true{% else %}false{% endif %},
     default: [
       {% for button in config.agora_gui.share_social.default %}
       {
