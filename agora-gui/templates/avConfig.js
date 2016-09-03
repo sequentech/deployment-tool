@@ -50,7 +50,7 @@ var avConfigData = {
   director: "{{ config.director }}",
 
   //Minimum loading time (milliseconds)
-  minLoadingTime: {{ agora_gui.min_loading_time }},
+  minLoadingTime: {{ config.agora_gui.min_loading_time }},
 
   resourceUrlWhitelist: [
     // Allow same origin resource loads.
