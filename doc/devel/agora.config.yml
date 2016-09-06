@@ -156,7 +156,7 @@ config:
     defaultRoute: /admin/login
 
     # Minimum loading time (milliseconds)
-    min_loading_time: 3000
+    min_loading_time: 12000
 
     # interface theme
     # allowed values (string): default|podemos|ccoo|bcnencomu
