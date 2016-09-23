@@ -118,9 +118,9 @@
 - include: app.yml
 
 # Run script
-- name: AgoraElections, ensure memcached service started
+- name: AgoraElections, ensure memcached service is restarted
   sudo: true
-  service: name=memcached state=started
+  service: name=memcached state=restarted
 
 - name: AgoraElections, Run script
   sudo: true
