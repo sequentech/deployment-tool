@@ -115,6 +115,39 @@
   replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
               regexp="AGORA_HOME=.*$" replace="AGORA_HOME=$HOME/agora-elections"
 
+- name: AgoraElections, Admin setup (6)
+  sudo: true
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/admin/cycle.py
+    regexp="public_ds = .*$"
+    replace="public_ds = '/home/agoraelections/datastore/public'"
+
+- name: AgoraElections, Admin setup (7)
+  sudo: true
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/admin/cycle.py
+    regexp="private_ds = .*$"
+    replace="private_ds = '/home/agoraelections/datastore/private'"
+
+- name: AgoraElections, Admin setup (8)
+  sudo: true
+  sudo_user: agoraelections
+  replace:
+    dest=/home/agoraelections/agora-elections/admin/admin.py
+    regexp="authapi_port = .*$"
+    replace="authapi_port = 10081"
+
+- name: AgoraElections, Admin setup (9)
+  sudo: true
+  sudo_user: agoraelections
+  when: config.authapi.auth_method == 'user-and-password'
+  replace:
+    dest=/home/agoraelections/agora-elections/admin/admin.py
+    regexp="authapi_credentials = .*$"
+    replace="authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
+
 - include: app.yml
 
 # Run script
