@@ -379,6 +379,10 @@ config:
     # allowed values: 'close', 'open'
     admin_census_mode: open
 
+    # Every time authapi is deployed, Authapi's upsert_users command is run with
+    # this variable as argument, if the file exists.
+    upsert_file: /home/authapi/usersdata.json
+
     # Stablishes the authentication method used for election administrators
     #
     # Allowed values: (user-and-password|email|sms)
