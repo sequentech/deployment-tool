@@ -54,23 +54,24 @@
     - m4
 
 - name: Packages, check whether old 9.3 postgres is installed
-  shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then echo false; else echo true; fi"
+  shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
   register: old_postgres_is_installed
+  ignore_errors: true
 
 - name: Packages, stop postgresql service
   become: true
-  when: old_postgres_is_installed
+  when: old_postgres_is_installed|succeeded
   service: name=postgresql state=stopped
 
 - name: Packages, upgrade postgresql db to 9.4
   become: true
   become_user: postgres
-  when: old_postgres_is_installed
+  when: old_postgres_is_installed|succeeded
   shell: cd && /usr/lib/postgresql/9.4/bin/pg_upgrade -b /usr/lib/postgresql/9.3/bin -B /usr/lib/postgresql/9.4/bin -d /etc/postgresql/9.3/main -D /etc/postgresql/9.4/main
 
 - name: Packages, remove postgresql 9.3 if exists
   become: true
-  when: old_postgres_is_installed
+  when: old_postgres_is_installed|succeeded
   action: apt pkg={{item}} purge=yes state=absent
   with_items:
     - postgresql-9.3
