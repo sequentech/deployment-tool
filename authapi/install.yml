@@ -86,7 +86,7 @@
   shell: psql authapi -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.authapi.election_start_id}}));"
 
 - name: Authapi, check usersdata file
-  stat: path={{upsert_file}}
+  stat: path={{config.authapi.upsert_file}}
   register: usersdata_file
 
 - name: AuthApi, upsert users
@@ -94,7 +94,7 @@
   sudo_user: authapi
   when: usersdata_file.stat.isreg is defined and usersdata_file.stat.isreg
   django_manage:
-    command="upsert_users {{upsert_file}}"
+    command="upsert_users {{config.authapi.upsert_file}}"
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env
