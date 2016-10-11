@@ -19,6 +19,10 @@
 - name: AuthApi, Creating deploy settings
   sudo: true
   template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644
+  
+- name: AuthApi, Creating test settings
+  become: true
+  template: src=authapi/templates/test_settings.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644 force=yes
 
 - name: AuthApi, Creating uwsgi settings
   sudo: true
@@ -99,3 +103,8 @@
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env
     settings: "authapi.deploy"
+
+- name: Authapi, allow authapi user to create databases (for example the test db)
+  become: true
+  become_user: postgres
+  shell: psql authapi -tAc "ALTER USER authapi CREATEDB;"
