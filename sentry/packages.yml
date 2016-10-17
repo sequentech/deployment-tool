@@ -36,3 +36,25 @@
     - libssl-dev
     - redis-server
     - redis-tools
+    - clang
+    - llvm
+    - cmake
+
+- name: Sentry, download CMake
+  become: true
+  get_url: 
+    url: https://cmake.org/files/v3.6/cmake-3.6.2.tar.gz
+    dest: /tmp/cmake.tar.gz
+    validate_certs: false
+
+- name: Sentry, extract CMake
+  become: true
+  shell: tar xvf /tmp/cmake.tar.gz
+  args:
+    chdir: /tmp
+
+- name: Sentry, compile and install CMake
+  become: true
+  shell: cmake . && make && make install
+  args:
+    chdir: /tmp/cmake-3.6.2
