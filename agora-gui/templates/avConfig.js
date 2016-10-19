@@ -49,6 +49,11 @@ var avConfigData = {
   authorities: {{ config.auths }},
   director: "{{ config.director }}",
 
+  // For admins:
+  // Allow editing the json description of the election before creating it
+  // Allowed values: true|false
+  allowEditElectionJson: {% if config.allow_edit_election_json %}true{% else %}false{% endif %},
+
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.agora_gui.min_loading_time }},
 
