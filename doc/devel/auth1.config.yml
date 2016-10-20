@@ -192,6 +192,10 @@ config:
     # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
     custom_public_download_url: false
 
+    # show the documentation links after successfully casting a vote
+    # allowed values: true| false
+    show_doc_on_vote_cast: false
+
     contact:
       # Support contact email displayed in the footer links
       email: contact@example.com
