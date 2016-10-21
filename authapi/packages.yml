@@ -26,7 +26,7 @@
     - git
     - libfreetype6-dev
     - virtualenvwrapper
-    - postgresql
+    - postgresql-9.4
     - supervisor
     - python-dev
     - build-essential

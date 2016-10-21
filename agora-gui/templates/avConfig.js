@@ -49,6 +49,15 @@ var avConfigData = {
   authorities: {{ config.auths }},
   director: "{{ config.director }}",
 
+  // For admins:
+  // Allow editing the json description of the election before creating it
+  // Allowed values: true|false
+  allowEditElectionJson: {% if config.agora_gui.allow_edit_election_json %}true{% else %}false{% endif %},
+
+  // show the documentation links after successfully casting a vote
+  // allowed values: true| false
+  showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
+
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.agora_gui.min_loading_time }},
 

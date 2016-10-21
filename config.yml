@@ -169,6 +169,11 @@ config:
     # Minimum loading time (milliseconds)
     min_loading_time: 12000
 
+    # For admins:
+    # Allow editing the json description of the election before creating it
+    # Allowed values: true|false
+    allow_edit_election_json: true
+
     # interface theme
     # allowed values (string): default|podemos|ccoo|bcnencomu
     theme: 'default'
@@ -188,6 +193,10 @@ config:
     #
     # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
     custom_public_download_url: false
+
+    # show the documentation links after successfully casting a vote
+    # allowed values: true| false
+    show_doc_on_vote_cast: false
 
     # Details pertaining to the organization that runs the software
     organization:
@@ -378,6 +387,10 @@ config:
     # default value: 'open'
     # allowed values: 'close', 'open'
     admin_census_mode: open
+
+    # Every time authapi is deployed, Authapi's upsert_users command is run with
+    # this variable as argument, if the file exists.
+    upsert_file: /home/authapi/usersdata.json
 
     # Stablishes the authentication method used for election administrators
     #
