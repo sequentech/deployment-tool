@@ -35,6 +35,12 @@
   pip: virtualenv=/home/eorchestra/tenv
        virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
        requirements=/home/eorchestra/agora-tools/requirements.txt
+       
+- name: EOrchestra, agora-tools config_example.json
+  become: true
+  template: src=eorchestra/templates/config_example.json
+            dest=/home/eorchestra/agora-tools/config/config_example.json
+            owner="eorchestra" mode=0655
 
 - name: EOrchestra, agora-results req.txt
   become: true
