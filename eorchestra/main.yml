@@ -33,7 +33,7 @@
     - python-dev 
     - libffi-dev 
     - libssl-dev
-    
+
 - name: EOrchestra, installing extra pip packages
   sudo: true
   sudo_user: eorchestra
@@ -84,3 +84,5 @@
   with_items:
     - { name: supervisor, sleep: "{{ params.sleep.slow }}" }
     - { name: nginx, sleep: "{{ params.sleep.fast }}" }
+
+- include: auth.yml

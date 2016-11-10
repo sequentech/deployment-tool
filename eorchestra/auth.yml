@@ -1,0 +1,62 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: EOrchestra, Downloading agora-tools, agora-results
+  become: true
+  become_user: eorchestra
+  git: repo={{ item.repo }} version={{ item.version }}
+       dest=/home/eorchestra/{{ item.dest }} force={{ item.force }}
+  with_items:
+    - repo: "{{ repos.atools.repo }}"
+      version: "{{ repos.atools.version }}"
+      force: "{{ repos.atools.force }}"
+      dest: agora-tools
+    - repo: "{{ repos.results.repo }}"
+      version: "{{ repos.results.version }}"
+      force: "{{ repos.results.force }}"
+      dest: agora-results
+
+- name: EOrchestra, agora-tools virtualenv
+  become: true
+  become_user: eorchestra
+  pip: virtualenv=/home/eorchestra/tenv
+       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
+       requirements=/home/eorchestra/agora-tools/requirements.txt
+       
+- name: EOrchestra, agora-tools config_example.json
+  become: true
+  template: src=eorchestra/templates/config_example.json
+            dest=/home/eorchestra/agora-tools/config/config_example.json
+            owner="eorchestra" mode=0655
+
+- name: EOrchestra, agora-results req.txt
+  become: true
+  template: src=agora-elections/templates/results.req.txt
+            dest=/home/eorchestra/agora-results/results.req.txt
+            owner="eorchestra" mode=0655
+
+- name: EOrchestra, agora-results virtualenv
+  become: true
+  become_user: eorchestra
+  pip: virtualenv=/home/eorchestra/renv
+       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
+       requirements=/home/eorchestra/agora-results/results.req.txt
+
+- name: EOrchestra, agora-results results.sh
+  become: true
+  template: src=eorchestra/templates/results.sh
+            dest=/home/eorchestra/agora-tools/results.sh
+            owner="eorchestra" mode=0755
