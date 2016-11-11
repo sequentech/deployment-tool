@@ -1,6 +1,6 @@
-# Complete Agora Voting deployment system
+# Complete nVotes deployment system
 
-This document describes the complete deployment of an Agora Voting system
+This document describes the complete deployment of a nVotes system
 with two Authorities for development purpuoses in your own physical machine
 through the usage of virtual machines. We call it a development environment.
 
@@ -103,7 +103,7 @@ So you should add this to your local machine /etc/hosts to be able to access the
     echo -e "192.168.50.2 local-auth1\n192.168.50.3 local-auth2\n192.168.50.4 agora"  | sudo tee -a /etc/hosts
 
 ## Base provisioning
- 
+
 Although recommended, this step can be ignored. This step will allow us to
 create a basic VM snapshot with java and other package dependencies installed
 so that provisioning can be done in a quicker manner.
@@ -242,7 +242,7 @@ You can open your broswer and make the rest of the election using the admin:
 
 Use the default credentials:
 
-    Email : admin@agoravoting.com
+    Email : admin@nvotes.com
     Authentication Code : QWERTY33
 
 Then you should view the list of elections you have. You can go to the

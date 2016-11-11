@@ -31,7 +31,7 @@ config:
   global_secret_key: '<PASSWORD>'
   cloudflare: false
 
-  host: agoravoting.com
+  host: nvotes.com
 
   # election-orchestra
   port: 5000
@@ -110,7 +110,7 @@ config:
     db_password: '<PASSWORD>'
     shared_secret: '<PASSWORD>'
     expiry: 60000
-    domain: agoravoting.com
+    domain: nvotes.com
     port: 14443
     # Port used by agora_elections for path /private. This path is used
     # by election-orchestra to for example retrieve the ciphertexts.
@@ -149,13 +149,13 @@ config:
 
   # agora-gui
   agora_gui:
-    domain: agoravoting.com
+    domain: nvotes.com
     admin_port: 10090
     booth_port: 10091
     elections_port: 10092
     
     # webpage title
-    web_title: 'Agora Voting'
+    web_title: 'nVotes'
     
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
@@ -405,7 +405,7 @@ config:
     # Admin user data and credentials. Note that some of them might get unused,
     # for example admin_password won't be of use if auth_method is 'sms'.
     admin_user:
-      email: 'admin@agoravoting.com'
+      email: 'admin@nvotes.com'
       password: '<PASSWORD>'
 
       # Note that admin telephone number should contain no spaces. International
@@ -438,7 +438,7 @@ config:
       url: 'https://api.esendex.com/v1.0/messagedispatcher'
 
       # Depends on the provider. Allows you to change the sender id.
-      sender_id: 'agoravoting'
+      sender_id: 'nvotes'
 
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: None
@@ -446,7 +446,7 @@ config:
       # Base template for sms messages. The %s will be replaced by the
       # message, so you can add prefix and suffixes. Watch the size of the
       # template: sms messages are limited to 140 characters.
-      base_template: "__MESSAGE__ -- Agora Voting"
+      base_template: "__MESSAGE__ -- nVotes"
 
     # email configuration
     email:
@@ -466,7 +466,7 @@ config:
 
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
-      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+      base_template: "__MESSAGE__\n\n -- nVotes https://nvotes.com"
       
       # Possible backends: email|console
       backend: 'console'
@@ -474,14 +474,14 @@ config:
   # Authorities
   authorities:
     - id: "auth1"
-      name: "Agora Voting 1"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 1"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
     - id: "auth2"
-      name: "Agora Voting 2"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 2"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
   director: 'auth1'
   auths: "['auth2']"

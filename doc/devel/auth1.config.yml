@@ -154,7 +154,7 @@ config:
     elections_port: 10092
 
     # webpage title
-    web_title: 'Agora Voting'
+    web_title: 'nVotes'
 
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
@@ -400,7 +400,7 @@ config:
     # Admin user data and credentials. Note that some of them might get unused,
     # for example admin_password won't be of use if auth_method is 'sms'.
     admin_user:
-      email: 'admin@agoravoting.com'
+      email: 'admin@nvotes.com'
       password: 'QWERTY33'
 
       # Note that admin telephone number should contain no spaces. International
@@ -433,14 +433,14 @@ config:
       url: 'https://api.esendex.com/v1.0/messagedispatcher'
 
       # Depends on the provider. Allows you to change the sender id.
-      sender_id: 'agoravoting'
+      sender_id: 'nvotes'
 
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: 'None'
 
       # Base template for sms messages. The __MESSAGE__ will be replaced by
       # the message, so you can add prefix and suffixes.
-      base_template: "__MESSAGE__ -- Agora Voting"
+      base_template: "__MESSAGE__ -- nVotes"
 
       # Possible backends: email|console
       backend: 'console'
@@ -463,20 +463,20 @@ config:
 
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
-      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+      base_template: "__MESSAGE__\n\n -- nVotes https://nvotes.com"
 
   # Authorities
 
   authorities:
     - id: "auth1"
-      name: "Agora Voting 1"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 1"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
     - id: "auth2"
-      name: "Agora Voting 2"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 2"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
   director: 'auth1'
   auths: "['auth2']"
