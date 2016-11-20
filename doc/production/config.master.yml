@@ -459,6 +459,11 @@ config:
       # Possible backends: email|console
       backend: 'console'
 
+    # list of extra options, added at the end as configuration lines in the
+    # configuration file
+    extra_options: []
+      # - WHATEVER = 'VALUE'
+
   # Authorities
   
   authorities:
