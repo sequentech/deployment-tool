@@ -78,5 +78,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 {% endif %}
 
 {% for extra_option in config.authapi.extra_options %}
-{{extra_option}}}
+{{extra_option}}
 {% endfor %}
