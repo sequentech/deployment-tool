@@ -29,13 +29,25 @@
       force: "{{ repos.results.force }}"
       dest: agora-results
 
-- name: EOrchestra, agora-tools virtualenv
+# this block&rescue is only a workaround so that it works in ansible 2.2.0,
+# 2.2.1 should have a fix for the issue, see
+# https://github.com/ansible/ansible-modules-core/issues/5347
+- block:
+    - name: EOrchestra, agora-tools virtualenv
+      pip:
+        requirements: /home/eorchestra/agora-tools/requirements.txt
+        virtualenv: /home/eorchestra/tenv
+        virtualenv_python: python3
+
+  rescue:
+    - name: EOrchestra, agora-tools virtualenv
+      pip:
+        requirements: /home/eorchestra/agora-tools/requirements.txt
+        virtualenv_python: python3
+        executable: /home/eorchestra/tenv/bin/pip
   become: true
   become_user: eorchestra
-  pip: virtualenv=/home/eorchestra/tenv
-       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
-       requirements=/home/eorchestra/agora-tools/requirements.txt
-       
+
 - name: EOrchestra, agora-tools config_example.json
   become: true
   template: src=eorchestra/templates/config_example.json
@@ -48,12 +60,24 @@
             dest=/home/eorchestra/agora-results/results.req.txt
             owner="eorchestra" mode=0655
 
-- name: EOrchestra, agora-results virtualenv
+# this block&rescue is only a workaround so that it works in ansible 2.2.0,
+# 2.2.1 should have a fix for the issue, see
+# https://github.com/ansible/ansible-modules-core/issues/5347
+- block:
+    - name: EOrchestra, agora-results virtualenv
+      pip:
+        requirements: /home/eorchestra/agora-results/results.req.txt
+        virtualenv: /home/eorchestra/renv
+        virtualenv_python: python3
+
+  rescue:
+    - name: EOrchestra, agora-results virtualenv
+      pip:
+        requirements: /home/eorchestra/agora-results/results.req.txt
+        virtualenv_python: python3
+        executable: /home/eorchestra/renv/bin/pip
   become: true
   become_user: eorchestra
-  pip: virtualenv=/home/eorchestra/renv
-       virtualenv_command="/usr/bin/virtualenv -p /usr/bin/python3"
-       requirements=/home/eorchestra/agora-results/results.req.txt
 
 - name: EOrchestra, agora-results results.sh
   become: true
