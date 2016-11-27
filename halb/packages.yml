@@ -56,7 +56,7 @@
   authorized_key:
     user=agoraelections
     key="{{ item }}"
-  with_items: config.load_balancing.master.slave_agoraelections_ssh_keys
+  with_items: "{{ config.load_balancing.master.slave_agoraelections_ssh_keys }}"
 
 - name: High Availability & Load Balancing [master], Authorizing postgres slave keys
   sudo: true
@@ -64,7 +64,7 @@
   authorized_key:
     user=postgres
     key="{{ item }}"
-  with_items: config.load_balancing.master.slave_postgres_ssh_keys
+  with_items: "{{ config.load_balancing.master.slave_postgres_ssh_keys }}"
 
 - name: High Availability & Load Balancing [slave], Authorizing postgres slave keys
   sudo: true
