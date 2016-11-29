@@ -26,6 +26,7 @@
     - rsync
     - libedit-dev
     - libpam-dev
+    - libselinux-dev
 
 - name: High Availability & Load Balancing, non-local memcached.conf
   lineinfile:
