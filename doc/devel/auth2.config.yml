@@ -134,6 +134,25 @@ config:
     # vote changing.
     max_revotes: 5
 
+    # vote callback allows agora-elections to notify the authentication module
+    # (which can be external) that a vote has been cast.
+    vote_callback:
+      # mode can be one of three values:
+      #
+      # - default: vote callback is enabled but the url is the default one, for
+      #            the authapi deployed in this same server.
+      #
+      # - custom: vote callback is enabled to the url specified in the
+      #           custom_url field.
+      #
+      # - disabled: vote callback is disabled.
+      mode: 'default'
+
+      # Custom url is only used with 'custom' mode. Note that the url can be
+      # dynamic. To substitute the election id in the url, use ${eid}, and to
+      # substitute the userid, use ${uid}
+      custom_url: ''
+
     # When this setting is true, an election can be virtual and have
     # subelections. A virtual election can have no votes itself and can move
     # directly from created to calculated results state and the results
@@ -386,6 +405,10 @@ config:
     # default value: 'close'
     # allowed values: 'close', 'open'
     admin_census_mode: close
+
+    # Every time authapi is deployed, Authapi's upsert_users command is run with
+    # this variable as argument, if the file exists.
+    upsert_file: /home/authapi/usersdata.json
 
     # Stablishes the authentication method used for election administrators
     #
