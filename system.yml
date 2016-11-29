@@ -57,7 +57,7 @@
 - name: System, populating /etc/hosts
   sudo: true
   lineinfile: dest=/etc/hosts line="{{ item.ip }} {{ item.hostname }}" state=present
-  with_items: config.hosts
+  with_items: "{{ config.hosts }}"
 
 
 - name: System, updating /etc/screenrc

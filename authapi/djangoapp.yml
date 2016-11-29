@@ -28,7 +28,7 @@
   sudo: true
   sudo_user: authapi
   pip:
-    virtualenv=/home/authapi/env
+    executable=/home/authapi/env/bin/pip
     requirements=/home/authapi/authapi/requirements.txt
     state=present
 

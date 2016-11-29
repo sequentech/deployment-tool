@@ -59,7 +59,7 @@
   sudo_user: authapi
   pip:
     name={{item}}
-    virtualenv=/home/authapi/env
+    executable=/home/authapi/env/bin/pip
     state=present
   with_items:
     - uwsgi
