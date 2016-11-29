@@ -30,16 +30,17 @@ root):
 To provision the virtual machines we'll make use of VirtualBox. Again, we
 recommend you to use the [latest version of VirtualBox that can be downloaded from here](https://www.virtualbox.org/wiki/Linux_Downloads).
 
-- Ansible 2.x
+- Ansible 2.1
 
 Vagrant uses the host's ansible to do provisioning on the guest machines. 
-Because of some changes in the format of playbooks, we need to use Ansible 2.x.
-To install the latest ansible on an Ubuntu machine, execute:
+Because of some changes in the format of playbooks, we need to use
+Ansible 2.1. To install the latest ansible on an Ubuntu machine, execute:
 
     $ sudo apt-get install software-properties-common pwgen -y
-    $ sudo apt-add-repository ppa:ansible/ansible -y
+    $ sudo apt-add-repository ppa:ansible/ansible-2.1 -y -r
     $ sudo apt-get update
-    $ sudo apt-get install ansible -y
+    $ sudo apt-get install ansible=2.1* -y
+    $ sudo apt-mark hold ansible
 
 ## agora-dev-box
 
