@@ -37,7 +37,7 @@ Because of some changes in the format of playbooks, we need to use
 Ansible 2.1. To install the latest ansible on an Ubuntu machine, execute:
 
     $ sudo apt-get install software-properties-common pwgen -y
-    $ sudo apt-add-repository ppa:ansible/ansible-2.1 -y -r
+    $ sudo apt-add-repository ppa:ansible/ansible-2.1 -y
     $ sudo apt-get update
     $ sudo apt-get install ansible=2.1* -y
     $ sudo apt-mark hold ansible
