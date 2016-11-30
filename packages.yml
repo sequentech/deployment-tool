@@ -23,7 +23,7 @@
   apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
     state: present
-    validate_certs: {{ not config.has_https_proxy }}
+    validate_certs: "{{ not config.has_https_proxy }}"
 
 - name: Packages, Updating packages
   become: true
