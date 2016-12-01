@@ -27,6 +27,7 @@
     - libedit-dev
     - libpam-dev
     - libselinux-dev
+    - postgresql-server-dev-9.4
 
 - name: High Availability & Load Balancing, non-local memcached.conf
   lineinfile:
