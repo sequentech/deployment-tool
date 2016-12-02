@@ -9,6 +9,7 @@
 - Fix csv dump in agora-payments.
 - Fix agora-elections admin config to enhance support for big elections.
 - Fix problem that prevented admin login in certain cases.
+- Fix census search.
 - Make tally verifications easier.
 - Enable shuffling specific categories.
 - Show points for each voting option.
@@ -21,6 +22,9 @@
 - Add confirm tally dialog on admin and enable tallying only active users.
 - Add more granularity to authapi perms.
 - Allow showing documentation after casting a vote.
+- add support for filling the email/sms template with any variable from census data.
+- Allow sending messages to voters at any step of the election process.
+- Enable controlling the maximum number of allowed revotes.
 
 ## 3.3.0 (26-07-2016)
 
