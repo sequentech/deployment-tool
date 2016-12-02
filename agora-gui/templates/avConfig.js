@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '3.3.0';
+var AV_CONFIG_VERSION = '3.4.0';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -48,6 +48,18 @@ var avConfigData = {
 
   authorities: {{ config.auths }},
   director: "{{ config.director }}",
+
+  // For admins:
+  // Allow editing the json description of the election before creating it
+  // Allowed values: true|false
+  allowEditElectionJson: {% if config.agora_gui.allow_edit_election_json %}true{% else %}false{% endif %},
+
+  // show the documentation links after successfully casting a vote
+  // allowed values: true| false
+  showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
+
+  //Minimum loading time (milliseconds)
+  minLoadingTime: {{ config.agora_gui.min_loading_time }},
 
   resourceUrlWhitelist: [
     // Allow same origin resource loads.
@@ -167,16 +179,29 @@ var avConfigData = {
     security_contact: "{{ config.agora_gui.legal.security_contact }}",
     community_website: "{{ config.agora_gui.legal.community_website }}"
   },
-  
+
   documentation: {
     faq: "{{ config.agora_gui.documentation.faq }}",
     overview: "{{ config.agora_gui.documentation.overview }}",
     technical: "{{ config.agora_gui.documentation.technical }}",
     security_contact: "{{ config.agora_gui.legal.security_contact }}"
   },
-  
+
+  share_social: {
+    allow_edit: {% if config.agora_gui.share_social.allow_edit %}true{% else %}false{% endif %},
+    default: [
+      {% for button in config.agora_gui.share_social.default %}
+      {
+        network: "{{ button.network }}",
+        button_text: "{{ button.button_text }}",
+        social_message: "{{ button.social_message }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  },
+
   documentation_html_include: "{{ config.agora_gui.texts.documentation_html_include }}",
-  
+
   legal_html_include: "{{ config.agora_gui.texts.legal_html_include }}",
 
   // Details pertaining to the organization that runs the software

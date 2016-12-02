@@ -19,6 +19,10 @@
 - name: AuthApi, Creating deploy settings
   sudo: true
   template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644
+  
+- name: AuthApi, Creating test settings
+  become: true
+  template: src=authapi/templates/test_settings.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644 force=yes
 
 - name: AuthApi, Creating uwsgi settings
   sudo: true
@@ -55,7 +59,7 @@
   sudo_user: authapi
   pip:
     name={{item}}
-    virtualenv=/home/authapi/env
+    executable=/home/authapi/env/bin/pip
     state=present
   with_items:
     - uwsgi
@@ -84,3 +88,28 @@
   sudo_user: postgres
   when: config.load_balancing.is_master
   shell: psql authapi -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.authapi.election_start_id}}));"
+
+- name: Authapi, copy usersdata file
+  when: config.authapi.upsert_file != ''
+  sudo: true
+  copy:
+    "src={{config.authapi.upsert_file}}
+     dest=/home/authapi/upsert_users.json
+     owner=authapi
+     group=authapi"
+
+- name: AuthApi, upsert users
+  sudo: true
+  sudo_user: authapi
+  when: config.authapi.upsert_file != ''
+  django_manage:
+    command="upsert_users /home/authapi/upsert_users.json"
+  args:
+    app_path: /home/authapi/authapi/authapi
+    virtualenv: /home/authapi/env
+    settings: "authapi.deploy"
+
+- name: Authapi, allow authapi user to create databases (for example the test db)
+  become: true
+  become_user: postgres
+  shell: psql authapi -tAc "ALTER USER authapi CREATEDB;"

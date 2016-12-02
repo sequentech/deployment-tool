@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This file is part of agora-dev-box.
 # Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
 
@@ -13,22 +15,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
----
-- hosts: all
+# ./results.sh -t tally.tar.gz -c config.json -s
 
-  tasks:
-    - include_vars: config.yml
-    - include_vars: repos.yml
+# fixes errors on non-ascii characters
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
-    - include: java.yml
-    - include: packages.yml
-    - include: system.yml
-    - include: agora-tools/main.yml
-    #- include: eorchestra/main.yml
-    - include: agora-elections/main.yml
-    - include: authapi/main.yml
-    - include: sentry/main.yml
-    - include: agora-gui/main.yml
-    - include: oneserver/main.yml
-    - include: agora-verifier/main.yml
-    - include: halb/main.yml
+AGORA_RESULTS=/home/eorchestra/agora-results
+VENV=/home/eorchestra/renv
+source $VENV/bin/activate
+$AGORA_RESULTS/agora-results $*

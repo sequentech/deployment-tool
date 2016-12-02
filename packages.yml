@@ -14,19 +14,30 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
+- name: Packages, add postgresql 9.4 repo
+  become: true
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4' state=present
+
+- name: Packages, add postgresql repo keys
+  become: true
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+    validate_certs: "{{ not config.has_https_proxy }}"
+
 - name: Packages, Updating packages
-  sudo: true
+  become: true
   action: apt update_cache=yes
 
 - name: Packages, Installing packages
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=installed force=yes
   with_items:
     - git
     - htop
     - curl
-    - postgresql
-    - postgresql-server-dev-all
+    - postgresql-9.4
+    - postgresql-9.4-repmgr
     - mercurial
     - nginx
     - supervisor
@@ -34,7 +45,8 @@
     - libffi-dev
     - virtualenvwrapper
     - libjpeg8-dev
-    - libpq-dev
+    - libpq-dev=9.4*
+    - libpq5=9.4*
     - python-psycopg2
     - python3-pip
     - python3
@@ -45,6 +57,38 @@
     - libgmp-dev
     - make
     - m4
+
+- name: Packages, check whether old 9.3 postgres is installed
+  shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
+  register: old_postgres_is_installed
+  ignore_errors: true
+
+- name: Packages, stop postgresql service
+  become: true
+  when: old_postgres_is_installed|succeeded
+  service: name=postgresql state=stopped
+
+- name: Packages, upgrade postgresql db to 9.4
+  become: true
+  become_user: postgres
+  when: old_postgres_is_installed|succeeded
+  shell: cd && /usr/lib/postgresql/9.4/bin/pg_upgrade -b /usr/lib/postgresql/9.3/bin -B /usr/lib/postgresql/9.4/bin -d /etc/postgresql/9.3/main -D /etc/postgresql/9.4/main
+
+- name: Packages, remove postgresql 9.3 if exists
+  become: true
+  when: old_postgres_is_installed|succeeded
+  action: apt pkg={{item}} purge=yes state=absent
+  with_items:
+    - postgresql-9.3
+    - postgresql-client-9.3
+
+- name: Packages, set postgresql 9.4 service port
+  become: true
+  lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf regexp="\s*port\s*=\s*\d+.*" line="port = 5432"
+
+- name: Packages, start postgresql service
+  become: true
+  service: name=postgresql state=started
 
 - name: Packages, Download some python packages from ubuntu vivid release (needed for http_proxy)
   sudo: true
@@ -104,7 +148,7 @@
 
 - name: Packages, Create postgresql cluster
   sudo: true
-  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.3 main
+  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.4 main
   register: cmdoutput
   failed_when: "'Error: cluster configuration already exists' not in cmdoutput.stderr and cmdoutput.rc != 0"
 

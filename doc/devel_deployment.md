@@ -1,6 +1,6 @@
-# Complete Agora Voting deployment system
+# Complete nVotes deployment system
 
-This document describes the complete deployment of an Agora Voting system
+This document describes the complete deployment of a nVotes system
 with two Authorities for development purpuoses in your own physical machine
 through the usage of virtual machines. We call it a development environment.
 
@@ -30,16 +30,17 @@ root):
 To provision the virtual machines we'll make use of VirtualBox. Again, we
 recommend you to use the [latest version of VirtualBox that can be downloaded from here](https://www.virtualbox.org/wiki/Linux_Downloads).
 
-- Ansible 2.x
+- Ansible 2.1
 
 Vagrant uses the host's ansible to do provisioning on the guest machines. 
-Because of some changes in the format of playbooks, we need to use Ansible 2.x.
-To install the latest ansible on an Ubuntu machine, execute:
+Because of some changes in the format of playbooks, we need to use
+Ansible 2.1. To install the latest ansible on an Ubuntu machine, execute:
 
     $ sudo apt-get install software-properties-common pwgen -y
-    $ sudo apt-add-repository ppa:ansible/ansible -y
+    $ sudo apt-add-repository ppa:ansible/ansible-2.1 -y
     $ sudo apt-get update
-    $ sudo apt-get install ansible -y
+    $ sudo apt-get install ansible=2.1* -y
+    $ sudo apt-mark hold ansible
 
 ## agora-dev-box
 
@@ -103,7 +104,7 @@ So you should add this to your local machine /etc/hosts to be able to access the
     echo -e "192.168.50.2 local-auth1\n192.168.50.3 local-auth2\n192.168.50.4 agora"  | sudo tee -a /etc/hosts
 
 ## Base provisioning
- 
+
 Although recommended, this step can be ignored. This step will allow us to
 create a basic VM snapshot with java and other package dependencies installed
 so that provisioning can be done in a quicker manner.
@@ -242,7 +243,7 @@ You can open your broswer and make the rest of the election using the admin:
 
 Use the default credentials:
 
-    Email : admin@agoravoting.com
+    Email : admin@nvotes.com
     Authentication Code : QWERTY33
 
 Then you should view the list of elections you have. You can go to the

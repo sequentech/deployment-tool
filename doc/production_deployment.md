@@ -61,9 +61,10 @@ Once permissions have been granted, we'll continue to execute everything through
 the **agora** user. Now We need to install some requirements needed to continue:
 
     agora@agora:~ $ sudo apt-get install software-properties-common pwgen -y
-    agora@agora:~ $ sudo apt-add-repository ppa:ansible/ansible -y
+    agora@agora:~ $ sudo apt-add-repository ppa:ansible/ansible-2.1 -y
     agora@agora:~ $ sudo apt-get update
-    agora@agora:~ $ sudo apt-get install -y ansible git
+    agora@agora:~ $ sudo apt-get install -y ansible=2.1* git
+    agora@agora:~ $ sudo apt-mark hold ansible
 
 - Configure ports and permissions
 

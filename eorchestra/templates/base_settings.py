@@ -49,6 +49,9 @@ AUTOACCEPT_REQUESTS = {{ config.auto_mode }}
 
 KILL_ALL_VFORK_BEFORE_START_NEW = True
 
+# Maximum number of questions per election
+MAX_NUM_QUESTIONS_PER_ELECTION = {{ config.election_limits.max_num_questions }}
+
 QUEUES_OPTIONS = {
     'vfork_queue': {
         'max_threads': 1,

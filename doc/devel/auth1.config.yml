@@ -41,6 +41,16 @@ config:
   eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
+  http:
+    # In big elections memory or disk buffer might need to be increased,
+    # specifically to upload the list of valid voterids if any filtering is going
+    # to be made, or when uploading the list of electors. This setting is
+    # applied at once to:
+    # play.http.parser.maxDiskBuffer (in agora-elections config)
+    # play.http.parser.maxMemoryBuffer (in agora-elections config)
+    # client_max_body_size (in nginx)
+    max_body_size: 2m
+
   # some java related configuration options
   java:
     # maximum size of heap memory in Megabytes (int). Default: 4000. Your total
@@ -65,6 +75,35 @@ config:
     # maximum size in characters of long strings like question description
     max_long_string_length: 3000
 
+  # configuration related to election results calculations
+  agora_results:
+    # this is the list of allowed pipes that can be used when calculating an
+    # election result. The idea of limiting them is for safety. This is used
+    # by agora-elections and also agora-verifier
+    pipes_whitelist:
+      #- agora_results.pipes.duplicate_questions.duplicate_questions
+      - agora_results.pipes.modifications.apply_modifications
+      #- agora_results.pipes.multipart.make_multipart
+      #- agora_results.pipes.multipart.election_max_size_corrections
+      #- agora_results.pipes.multipart.question_totals_with_corrections
+      #- agora_results.pipes.multipart.reduce_answers_with_corrections
+      #- agora_results.pipes.multipart.multipart_tally_plaintexts_append_joiner
+      #- agora_results.pipes.multipart.data_list_reverse
+      #- agora_results.pipes.multipart.multipart_tally_plaintexts_joiner
+      #- agora_results.pipes.multipart.append_ballots
+      - agora_results.pipes.parity.proportion_rounded
+      - agora_results.pipes.parity.parity_zip_non_iterative
+      #- agora_results.pipes.parity.reorder_winners
+      #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
+      #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.pretty_print.pretty_print_stv_winners
+      - agora_results.pipes.pretty_print.pretty_print_not_iterative
+      - agora_results.pipes.results.do_tallies
+      #- agora_results.pipes.results.to_files
+      #- agora_results.pipes.results.apply_removals
+      - agora_results.pipes.sort.sort_non_iterative
+      #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
+
   # agora-elections
   agora_elections:
     db_password: '<PASSWORD>'
@@ -82,6 +121,50 @@ config:
     # agora-elections.
     keystore_pass: '<PASSWORD>'
 
+    # The callbacks from election authorities go to the private directory, for
+    # example to download encrypted ballots and to push tally results. In
+    # release 3.3.0+, this is done with SSL client certificate verification but
+    # in previous versions this didn't happen. To let an agora server
+    # installation work with election authorities version 3.2.0 or less, you
+    # should set this to false; else, set it to true (default).
+    private_path_verify_ssl_client_certificate: true
+
+    # In an election, a voter can change his vote as a way to mitigate coercion.
+    # Here you can set the maximum number of vote changes. Set to 1 to disable
+    # vote changing.
+    max_revotes: 5
+
+    # vote callback allows agora-elections to notify the authentication module
+    # (which can be external) that a vote has been cast.
+    vote_callback:
+      # mode can be one of three values:
+      #
+      # - default: vote callback is enabled but the url is the default one, for
+      #            the authapi deployed in this same server.
+      #
+      # - custom: vote callback is enabled to the url specified in the
+      #           custom_url field.
+      #
+      # - disabled: vote callback is disabled.
+      mode: 'default'
+
+      # Custom url is only used with 'custom' mode. Note that the url can be
+      # dynamic. To substitute the election id in the url, use ${eid}, and to
+      # substitute the userid, use ${uid}
+      custom_url: ''
+
+    # When this setting is true, an election can be virtual and have
+    # subelections. A virtual election can have no votes itself and can move
+    # directly from created to calculated results state and the results
+    # calculation include the tallies of the subelections, so it can be used
+    # to consolide election results.
+    #
+    # Virtual elections have currently one limitation: ownership of the
+    # subelections is not checked, and that is why support for virtual elections
+    # is disabled by default and should only be enabled in dedicated
+    # installations.
+    virtualElectionsAllowed: false
+
   # agora-gui
   agora_gui:
     domain: agora
@@ -90,8 +173,8 @@ config:
     elections_port: 10092
 
     # webpage title
-    web_title: 'Agora Voting'
-    
+    web_title: 'nVotes'
+
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
 
@@ -99,6 +182,14 @@ config:
     # file. See the file for more details.
     language: en
     defaultRoute: /admin/login
+
+    # Minimum loading time (milliseconds)
+    min_loading_time: 12000
+
+    # For admins:
+    # Allow editing the json description of the election before creating it
+    # Allowed values: true|false
+    allow_edit_election_json: true
 
     # interface theme
     # allowed values (string): default|podemos|ccoo|bcnencomu
@@ -119,6 +210,10 @@ config:
     #
     # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
     custom_public_download_url: false
+
+    # show the documentation links after successfully casting a vote
+    # allowed values: true| false
+    show_doc_on_vote_cast: false
 
     contact:
       # Support contact email displayed in the footer links
@@ -163,7 +258,6 @@ config:
       # on agora-gui-elections
       legal_html_include: ''
 
-    
     # path to a directory to be copied recursively because it containing static
     # files that need to be available publicly. Usually these files are
     # referenced in  agora_gui.texts.help_info for example. The URL for a file
@@ -181,40 +275,48 @@ config:
 
       # Name of the organization, appears in the logo mouse hover, in the login
       # page ("Login into __NAME__ admin account"), in the poweredBy, etc
-      name: 'Agora Voting'
+      name: 'nVotes'
 
       # URL that the logo links to
-      url: 'https://agoravoting.com'
-   
+      url: 'https://nvotes.com'
+
     # social networks footer links
     social:
-      facebook: 'https://www.facebook.com/AgoraVoting'
-      twitter: 'https://twitter.com/agoravoting'
-      twitterHandle: 'agoravoting'
+      facebook: 'https://www.facebook.com/nvotes'
+      twitter: 'https://twitter.com/nvotescom'
+      twitterHandle: 'nvotescom'
       googleplus: 'https://plus.google.com/101939665794445172389/posts'
-      youtube: 'https://www.youtube.com/results?search_query=Agora+Voting'
+      youtube: 'https://www.youtube.com/results?search_query=nvotes'
       github: 'https://github.com/agoravoting/'
-    
+
     # technology footer links
     technology:
-      aboutus: 'https://agoravoting.com/#aboutus'
-      pricing: 'https://agoravoting.com/#pricing'
-      overview: 'https://agoravoting.com/overview/'
-      solutions: 'https://agoravoting.com/solutions/'
-      admin_manual: 'https://bit.ly/avguiadeuso'
-    
+      aboutus: 'https://nvotes.com/'
+      pricing: 'https://nvotes.com/pricing'
+      overview: 'https://nvotes.com/'
+      solutions: 'https://nvotes.com/'
+      admin_manual: 'https://nvotes.com/doc/en/'
+
     # legality footer links
     legal:
-      terms_of_service: 'https://agoravoting.com/tos/'
+      terms_of_service: 'https://nvotes.com/tos/'
       cookies: 'https://agoravoting.com/cookies/'
       privacy: 'https://agoravoting.com/privacy/'
-      security_contact: 'https://agoravoting.com/security_contact/'
+      security_contact: 'https://nvotes.com/security-contact/'
       community_website: 'https://agoravoting.org'
-    
+
     documentation:
       faq: 'https://nvotes.com/doc/en/'
       overview: 'https://agoravoting.com/overview/'
       technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
+
+    # social networks buttons configuration
+    share_social:
+      allow_edit: true
+      default:
+        - network: 'Twitter'
+          button_text: ''
+          social_message: 'I have just voted in election https://go.nvotes.com, you can too! #nvotes'
 
   # configuration related to the nginx web server
   webserver:
@@ -250,6 +352,10 @@ config:
 
     # within how many days will the certificate will expire?
     lifetime: 3650
+
+    # force creation of a new certificate
+    # allowed values: 'true'|'false'
+    force_create: 'false'
 
   # sentry
   sentry:
@@ -300,6 +406,10 @@ config:
     # allowed values: 'close', 'open'
     admin_census_mode: close
 
+    # Every time authapi is deployed, Authapi's upsert_users command is run with
+    # this variable as argument, if the file exists.
+    upsert_file: /home/authapi/usersdata.json
+
     # Stablishes the authentication method used for election administrators
     #
     # Allowed values: (user-and-password|email|sms)
@@ -313,7 +423,7 @@ config:
     # Admin user data and credentials. Note that some of them might get unused,
     # for example admin_password won't be of use if auth_method is 'sms'.
     admin_user:
-      email: 'admin@agoravoting.com'
+      email: 'admin@nvotes.com'
       password: 'QWERTY33'
 
       # Note that admin telephone number should contain no spaces. International
@@ -346,14 +456,14 @@ config:
       url: 'https://api.esendex.com/v1.0/messagedispatcher'
 
       # Depends on the provider. Allows you to change the sender id.
-      sender_id: 'agoravoting'
+      sender_id: 'nvotes'
 
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: 'None'
 
       # Base template for sms messages. The __MESSAGE__ will be replaced by
       # the message, so you can add prefix and suffixes.
-      base_template: "__MESSAGE__ -- Agora Voting"
+      base_template: "__MESSAGE__ -- nVotes"
 
       # Possible backends: email|console
       backend: 'console'
@@ -376,20 +486,25 @@ config:
 
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
-      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+      base_template: "__MESSAGE__\n\n -- nVotes https://nvotes.com"
+
+    # list of extra options, added at the end as configuration lines in the
+    # configuration file
+    extra_options: []
+      # - WHATEVER = 'VALUE'
 
   # Authorities
 
   authorities:
     - id: "auth1"
-      name: "Agora Voting 1"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 1"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
     - id: "auth2"
-      name: "Agora Voting 2"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 2"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
   director: 'auth1'
   auths: "['auth2']"
