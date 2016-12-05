@@ -31,7 +31,7 @@ config:
   global_secret_key: '<PASSWORD>'
   cloudflare: false
 
-  host: agoravoting.com
+  host: nvotes.com
 
   # election-orchestra
   port: 5000
@@ -110,7 +110,7 @@ config:
     db_password: '<PASSWORD>'
     shared_secret: '<PASSWORD>'
     expiry: 60000
-    domain: agoravoting.com
+    domain: nvotes.com
     port: 14443
     # Port used by agora_elections for path /private. This path is used
     # by election-orchestra to for example retrieve the ciphertexts.
@@ -135,6 +135,25 @@ config:
     # vote changing.
     max_revotes: 5
 
+    # vote callback allows agora-elections to notify the authentication module
+    # (which can be external) that a vote has been cast.
+    vote_callback:
+      # mode can be one of three values:
+      #
+      # - default: vote callback is enabled but the url is the default one, for
+      #            the authapi deployed in this same server.
+      #
+      # - custom: vote callback is enabled to the url specified in the
+      #           custom_url field.
+      #
+      # - disabled: vote callback is disabled.
+      mode: 'default'
+
+      # Custom url is only used with 'custom' mode. Note that the url can be
+      # dynamic. To substitute the election id in the url, use ${eid}, and to
+      # substitute the userid, use ${uid}
+      custom_url: ''
+
     # When this setting is true, an election can be virtual and have
     # subelections. A virtual election can have no votes itself and can move
     # directly from created to calculated results state and the results
@@ -149,13 +168,13 @@ config:
 
   # agora-gui
   agora_gui:
-    domain: agoravoting.com
+    domain: nvotes.com
     admin_port: 10090
     booth_port: 10091
     elections_port: 10092
     
     # webpage title
-    web_title: 'Agora Voting'
+    web_title: 'nVotes'
     
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
@@ -208,10 +227,10 @@ config:
 
       # Name of the organization, appears in the logo mouse hover, in the login
       # page ("Login into __NAME__ admin account"), in the poweredBy, etc
-      name: 'Agora Voting'
+      name: 'nVotes'
 
       # URL that the logo links to
-      url: 'https://agoravoting.com'
+      url: 'https://nvotes.com'
 
     contact:
       # Support contact email displayed in the footer links
@@ -259,27 +278,27 @@ config:
 
     # social networks footer links
     social:
-      facebook: 'https://www.facebook.com/AgoraVoting'
-      twitter: 'https://twitter.com/agoravoting'
-      twitterHandle: 'agoravoting'
+      facebook: 'https://www.facebook.com/nvotes'
+      twitter: 'https://twitter.com/nvotescom'
+      twitterHandle: 'nvotescom'
       googleplus: 'https://plus.google.com/101939665794445172389/posts'
-      youtube: 'https://www.youtube.com/results?search_query=Agora+Voting'
+      youtube: 'https://www.youtube.com/results?search_query=nvotes'
       github: 'https://github.com/agoravoting/'
 
     # technology footer links
     technology:
-      aboutus: 'https://agoravoting.com/#aboutus'
-      pricing: 'https://agoravoting.com/#pricing'
-      overview: 'https://agoravoting.com/overview/'
-      solutions: 'https://agoravoting.com/solutions/'
-      admin_manual: 'https://bit.ly/avguiadeuso'
+      aboutus: 'https://nvotes.com/'
+      pricing: 'https://nvotes.com/pricing'
+      overview: 'https://nvotes.com/'
+      solutions: 'https://nvotes.com/'
+      admin_manual: 'https://nvotes.com/doc/en/'
 
     # legality footer links
     legal:
-      terms_of_service: 'https://agoravoting.com/tos/'
+      terms_of_service: 'https://nvotes.com/tos/'
       cookies: 'https://agoravoting.com/cookies/'
       privacy: 'https://agoravoting.com/privacy/'
-      security_contact: 'https://agoravoting.com/security_contact/'
+      security_contact: 'https://nvotes.com/security-contact/'
       community_website: 'https://agoravoting.org'
 
     documentation:
@@ -405,7 +424,7 @@ config:
     # Admin user data and credentials. Note that some of them might get unused,
     # for example admin_password won't be of use if auth_method is 'sms'.
     admin_user:
-      email: 'admin@agoravoting.com'
+      email: 'admin@nvotes.com'
       password: '<PASSWORD>'
 
       # Note that admin telephone number should contain no spaces. International
@@ -438,7 +457,7 @@ config:
       url: 'https://api.esendex.com/v1.0/messagedispatcher'
 
       # Depends on the provider. Allows you to change the sender id.
-      sender_id: 'agoravoting'
+      sender_id: 'nvotes'
 
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: None
@@ -446,7 +465,7 @@ config:
       # Base template for sms messages. The %s will be replaced by the
       # message, so you can add prefix and suffixes. Watch the size of the
       # template: sms messages are limited to 140 characters.
-      base_template: "__MESSAGE__ -- Agora Voting"
+      base_template: "__MESSAGE__ -- nVotes"
 
     # email configuration
     email:
@@ -466,22 +485,27 @@ config:
 
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
-      base_template: "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+      base_template: "__MESSAGE__\n\n -- nVotes https://nvotes.com"
       
       # Possible backends: email|console
       backend: 'console'
 
+    # list of extra options, added at the end as configuration lines in the
+    # configuration file
+    extra_options: []
+      # - WHATEVER = 'VALUE'
+
   # Authorities
   authorities:
     - id: "auth1"
-      name: "Agora Voting 1"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 1"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
     - id: "auth2"
-      name: "Agora Voting 2"
-      description: "Agora Voting es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
-      url: "https://agoravoting.com"
+      name: "nVotes 2"
+      description: "nVotes es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://nvotes.com"
       image: "/docs/logo_agora.png"
   director: 'auth1'
   auths: "['auth2']"

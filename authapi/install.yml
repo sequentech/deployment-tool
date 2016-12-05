@@ -59,7 +59,7 @@
   sudo_user: authapi
   pip:
     name={{item}}
-    virtualenv=/home/authapi/env
+    executable=/home/authapi/env/bin/pip
     state=present
   with_items:
     - uwsgi
@@ -89,16 +89,21 @@
   when: config.load_balancing.is_master
   shell: psql authapi -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.authapi.election_start_id}}));"
 
-- name: Authapi, check usersdata file
-  stat: path={{config.authapi.upsert_file}}
-  register: usersdata_file
+- name: Authapi, copy usersdata file
+  when: config.authapi.upsert_file != ''
+  sudo: true
+  copy:
+    "src={{config.authapi.upsert_file}}
+     dest=/home/authapi/upsert_users.json
+     owner=authapi
+     group=authapi"
 
 - name: AuthApi, upsert users
   sudo: true
   sudo_user: authapi
-  when: usersdata_file.stat.isreg is defined and usersdata_file.stat.isreg
+  when: config.authapi.upsert_file != ''
   django_manage:
-    command="upsert_users {{config.authapi.upsert_file}}"
+    command="upsert_users /home/authapi/upsert_users.json"
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env

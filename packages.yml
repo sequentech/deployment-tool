@@ -16,11 +16,14 @@
 ---
 - name: Packages, add postgresql 9.4 repo
   become: true
-  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4' state=present
 
 - name: Packages, add postgresql repo keys
   become: true
-  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+    validate_certs: "{{ not config.has_https_proxy }}"
 
 - name: Packages, Updating packages
   become: true
@@ -42,7 +45,8 @@
     - libffi-dev
     - virtualenvwrapper
     - libjpeg8-dev
-    - libpq-dev
+    - libpq-dev=9.4*
+    - libpq5=9.4*
     - python-psycopg2
     - python3-pip
     - python3
