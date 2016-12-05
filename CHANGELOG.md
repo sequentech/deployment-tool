@@ -1,4 +1,4 @@
-## 3.4.0 (11-11-2016)
+## 3.4.0 (01-12-2016)
 - Add support for multiple authentication methods per election.
 - Enable editing the election json before creating the election.
 - Add share buttons (Facebook, Twitter etc) to voting booth and public election site.
