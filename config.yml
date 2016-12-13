@@ -77,7 +77,7 @@ config:
 
     # list of users, separated by commas and spaces, that can sudo into
     # ansible-created users
-    agora_admins: agora
+    agora_users: agora
 
   http:
     # In big elections memory or disk buffer might need to be increased,
