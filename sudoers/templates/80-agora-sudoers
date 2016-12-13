@@ -1,6 +1,6 @@
-RunAs_Alias AGORAUSERS = agoraelections, agoragui, agoraverifier, eorchestra, authapi, repmgr, sentry
+User_Alias AGORAADMINS = {{ config.sudoers.agora_users }}
 
-User_Alias AGORAADMINS = {{ config.sudoers.agora_admins }}
+Runas_Alias AGORAUSERS = agoraelections, agoragui, agoraverifier, eorchestra, authapi, repmgr, sentry
 
 AGORAADMINS ALL = (AGORAUSERS) NOPASSWD: ALL
 

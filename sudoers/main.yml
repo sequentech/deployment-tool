@@ -22,4 +22,4 @@
     dest: /etc/sudoers.d/80-agora-sudoers
     owner: root
     group: root
-    mode: u=r,g=r
+    mode: 440
