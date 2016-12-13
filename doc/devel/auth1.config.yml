@@ -67,6 +67,17 @@ config:
   eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
+  # this section is all about giving to some existing users permissions to
+  # sudo into ansible-created users. If you already have these kind of
+  # permissions, its not needed. Disabled by default.
+  sudoers:
+    # enables or disables the adding of the sudo permissions
+    is_enabled: false
+
+    # list of users, separated by commas and spaces, that can sudo into
+    # ansible-created users
+    agora_users: agora
+
   http:
     # In big elections memory or disk buffer might need to be increased,
     # specifically to upload the list of valid voterids if any filtering is going

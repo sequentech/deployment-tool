@@ -22,6 +22,7 @@
 
     - include: java.yml
     - include: packages.yml
+    - include: sudoers.yml
     - include: system.yml
     - include: postgres_backups.yml
     - include: agora-tools/main.yml
