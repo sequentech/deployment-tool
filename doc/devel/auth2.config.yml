@@ -48,6 +48,7 @@ config:
     # applied at once to:
     # play.http.parser.maxDiskBuffer (in agora-elections config)
     # play.http.parser.maxMemoryBuffer (in agora-elections config)
+    # parsers.text.maxLength (in agora-elections config)
     # client_max_body_size (in nginx)
     max_body_size: 2m
 
