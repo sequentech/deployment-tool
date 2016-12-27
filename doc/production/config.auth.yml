@@ -105,6 +105,7 @@ config:
       #- agora_results.pipes.results.apply_removals
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
+      #- agora_results.pipes.pdf.configure_pdf
 
   # agora-elections
   agora_elections:
