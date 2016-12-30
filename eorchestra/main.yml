@@ -17,6 +17,8 @@
 - include: users.yml
 - include: commands.yml
 - include: postgres.yml
+- include: backups.yml 
+  when: config.postgres_backups
 - include: repo.yml
 - include: vfork.yml
 
