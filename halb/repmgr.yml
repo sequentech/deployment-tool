@@ -84,6 +84,14 @@
     dest=/home/repmgr/repmgr.tar.gz
     validate_certs={{ not config.has_https_proxy }}
 
+- name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
+  sudo: true
+  sudo_user: repmgr
+  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  file:
+    path: /home/repmgr/repmgr-3.0.2
+    state: absent
+
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   sudo: true
   sudo_user: repmgr
