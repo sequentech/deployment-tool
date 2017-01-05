@@ -30,14 +30,32 @@ backups:
     - { path: backups.folder/base }
     - { path: backups.folder/dump }
 
-- name: Eorchestra, create postgresql backup commands and config
+- name: Eorchestra, create postgresql backup commands and recovery config
   become: true
   template: src=templates/commands/{{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:
     - { src: create_backup_postgres.sh, dest: /usr/bin/create_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
     - { src: restore_backup_postgres.sh, dest: /usr/bin/restore_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
-    - { src: postgresql.conf, dest: /etc/postgresql/9.4/main/postgresql.conf, owner: "postgres", group: "postgres", mode: "0644" }
+    - { src: copy_wall_postgres.sh, dest: /usr/bin/copy_wall_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: recovery_end.sh, dest: /usr/bin/recovery_end.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf, owner: "postgres", group: "postgres", mode: "0644" }
+
+- name: Eorchestra, set postgresql 9.4 conf for archiving
+  become: true
+  become_user: postgres
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    regexp: {{ item.regexp }}
+    line: {{ item.line }}
+  with_items:
+    - { regexp: "\s*#?\s*wal_level\s*=\s*(minimal|archive|hot_standby|logical).*", line: "wal_level = logical" }
+    - { regexp: "\s*#?\s*fsync\s*=\s*(on|off).*", line: "fsync = on" }
+    - { regexp: "\s*#?\s*wal_sync_method\s*=\s*(open_datasync|fdatasync|fsync|fsync_writethrough|open_sync).*", line: "wal_sync_method = fsync" }
+    - { regexp: "\s*#?\s*full_page_writes\s*=\s*(on|off).*", line: "full_page_writes = on" }
+    - { regexp: "\s*#?\s*wal_writer_delay\s*=\s*\d+(ms)?.*", line: "wal_writer_delay = 200ms" }
+    - { regexp: "\s*#?\s*archive_mode\s*=\s*(on|off).*", line: "archive_mode = on" }
+    - { regexp: "\s*#?\s*archive_command\s*=\s*.*", line: "archive_command = 'copy_wall_postgres.sh %p %f | logger -t copy_wall_postgres; test ${PIPESTATUS[0]} -eq 0'" }
+    - { regexp: "\s*#?\s*archive_timeout\s*=\s*\d+.*", line: "archive_timeout = 600" }
 
 - name: EOrchestra, set daily postgresql backups
   become: true
@@ -46,7 +64,7 @@ backups:
     user: root
     minute: 0
     hour: 4
-    job: "/usr/bin/create_backup_postgres.sh 2>&1 | logger -t postgres_backup"
+    job: "/usr/bin/create_backup_postgres.sh 2>&1 | logger -t backup_cron_postgres"
 
 - name: EOrchestra, restarting postgresql to enable backups
   become: true
