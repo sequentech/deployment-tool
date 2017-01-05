@@ -30,6 +30,10 @@ config:
   global_secret_key: '<PASSWORD>'
   cloudflare: false
 
+  # create daily and live backups
+  # allowed values: true | false
+  postgres_backups: true
+
   host: auth2
 
   # election-orchestra
