@@ -20,8 +20,8 @@ import sys
 # The aim of this small script is to remove a certificate from a list of
 # certificates. The result is printed in the standard output.
 
-cert_path = "/srv/certs/selfsigned/cert.pem"
-calist_path = "/srv/certs/selfsigned/calist"
+cert_path = "{{ config.http.tls_cert_path }}"
+calist_path = "{{ config.http.tsl_calist_path }}"
 
 # read paths from the arguments
 if 3 == len(sys.argv):
