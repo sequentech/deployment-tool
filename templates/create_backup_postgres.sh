@@ -25,9 +25,13 @@ then
   exit 1
 fi
 
-BACKUP_DIR={{ backups.folder }}
+BACKUP_DIR={{ config.postgres_backups.folder }}
 DATE=`date '+%d_%m_%y_%H_%M_%S'`
 
-pg_basebackup -x --format=tar --gzip --compress=9 -D $BACKUP_DIR/base/$DATE
+pg_basebackup -U postgres -x --format=tar --gzip --compress=9 -D $BACKUP_DIR/base/$DATE
+echo "base backup created on $BACKUP_DIR/base/$DATE" | logger -t backup_cron_postgres
 
-pg_dumpall | gzip > $BACKUP_DIR/dump/dump_$DATE.gz
+sudo -u postgres pg_dumpall | tee $BACKUP_DIR/dump/dump_$DATE;
+gzip < $BACKUP_DIR/dump/dump_$DATE > $BACKUP_DIR/dump/dump_$DATE.gz
+rm $BACKUP_DIR/dump/dump_$DATE
+echo "dump backup created on $BACKUP_DIR/dump/dump_$DATE.gz" | logger -t backup_cron_postgres

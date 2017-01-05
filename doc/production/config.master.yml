@@ -32,8 +32,11 @@ config:
   cloudflare: false
 
   # create daily and live backups
-  # allowed values: true | false
-  postgres_backups: true
+  postgres_backups:
+    # allowed values: true | false
+    enabled: true
+    # folder where the postgres backups will be stored
+    folder: /home/eorchestra/postgres_backups
 
   host: agora-auth5
 

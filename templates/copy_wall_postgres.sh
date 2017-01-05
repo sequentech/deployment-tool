@@ -20,30 +20,32 @@ set -e
 
 # check number of arguments
 if [[ $# -ne 2 ]]; then
-  echo "copy_wall_postgress input ERROR: invalid number of arguments:" $#
-  exit 1
-fi
-
-# check first argument is an existing folder
-if [[ ! -d $1 ]]; then
-  echo "argument" $1 "is not an existing folder"
-  exit 1
-fi
-
-# check second argument is an existing file
-if [[ ! -f $1/$2 ]]; then
-  echo "argument" $2 "is not an existing file on folder" $1
+  echo "ERROR: invalid number of arguments: $#"
   exit 1
 fi
 
 FROM_PATH=$1
 FILE_NAME=$2
-TO_PATH={{ backups.folder }}/wal
+TO_PATH={{ config.postgres_backups.folder }}/wal
 
-# check whether wal folder exists
-if [[ ! -d $TO_PATH ]]; then
-  echo "wal folder $TO_PATH does not exist"
+# check first argument is an existing file
+if [[ ! -f $FROM_PATH ]]; then
+  echo "ERROR: argument $FROM_PATH is not an existing file"
   exit 1
 fi
 
-tar -czf $TO_PATH/$FILE_NAME.tar.gz $FROM_PATH/$FILE_NAME
+# check whether wal folder exists
+if [[ ! -d $TO_PATH ]]; then
+  echo "ERROR: wal folder $TO_PATH does not exist"
+  exit 1
+fi
+
+# check whether wal file already exists
+if [[ -f $TO_PATH/$FILE_NAME.gz ]]; then
+  echo "ERROR: wal archive file $TO_PATH/$FILE_NAME.gz already exists and shouldn't be overwritten"
+  exit 1
+fi
+
+gzip < $FROM_PATH > $TO_PATH/$FILE_NAME.gz
+echo "copied $FROM_PATH to $TO_PATH/$FILE_NAME.gz"
+exit 0
