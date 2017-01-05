@@ -21,7 +21,7 @@ import sys
 # certificates. The result is printed in the standard output.
 
 cert_path = "{{ config.http.tls_cert_path }}"
-calist_path = "{{ config.http.tsl_calist_path }}"
+calist_path = "{{ config.http.tls_calist_path }}"
 
 # read paths from the arguments
 if 3 == len(sys.argv):

@@ -44,7 +44,7 @@ PUBLIC_DATA_BASE_URL = 'https://{{ config.host }}:{{ config.port }}/public_data'
 # security configuration
 SSL_CERT_PATH = '{{ config.http.tls_cert_path }}'
 SSL_KEY_PATH = '{{ config.http.tls_cert_key_path }}'
-SSL_CALIST_PATH = '{{ config.http.tsl_calist_path }}'
+SSL_CALIST_PATH = '{{ config.http.tls_calist_path }}'
 ALLOW_ONLY_SSL_CONNECTIONS = True
 AUTOACCEPT_REQUESTS = {{ config.auto_mode }}
 
