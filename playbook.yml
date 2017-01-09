@@ -23,6 +23,7 @@
     - include: java.yml
     - include: packages.yml
     - include: system.yml
+    - include: postgres_backups.yml
     - include: agora-tools/main.yml
     - include: eorchestra/main.yml
     - include: agora-elections/main.yml

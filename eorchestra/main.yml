@@ -17,8 +17,6 @@
 - include: users.yml
 - include: commands.yml
 - include: postgres.yml
-- include: backups.yml 
-  when: config.postgres_backups.enabled
 - include: repo.yml
 - include: vfork.yml
 
@@ -32,8 +30,8 @@
   with_items:
     - libpcre3
     - libpcre3-dev
-    - python-dev 
-    - libffi-dev 
+    - python-dev
+    - libffi-dev
     - libssl-dev
 
 - name: EOrchestra, installing extra pip packages

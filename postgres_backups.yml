@@ -1,5 +1,5 @@
 # This file is part of agora-dev-box.
-# Copyright (C) 2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2016-2017  Agora Voting SL <agora@agoravoting.com>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -15,8 +15,9 @@
 
 ---
 
-- name: Eorchestra, create postgresql backup folder
+- name: PostgreSQL Backups, create postgresql backup folder
   become: true
+  when: config.postgres_backups.enabled
   file:
     path: "{{ item.path }}"
     state: directory
@@ -28,8 +29,9 @@
     - { path: "{{ config.postgres_backups.folder }}/base" }
     - { path: "{{ config.postgres_backups.folder }}/dump" }
 
-- name: Eorchestra, create postgresql backup commands and recovery config
+- name: PostgreSQL Backups, create postgresql backup commands and recovery config
   become: true
+  when: config.postgres_backups.enabled
   template: src=templates/{{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:
     - { src: create_backup_postgres.sh, dest: /usr/bin/create_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
@@ -39,9 +41,10 @@
     - { src: archive_command_postgres.sh, dest: /usr/bin/archive_command_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf, owner: "postgres", group: "postgres", mode: "0644" }
 
-- name: Eorchestra, set postgresql 9.4 conf for archiving
+- name: PostgreSQL Backups, set postgresql 9.4 conf for archiving
   become: true
   become_user: postgres
+  when: config.postgres_backups.enabled
   lineinfile:
     dest: /etc/postgresql/9.4/main/postgresql.conf
     regexp: "{{ item.regexp }}"
@@ -57,16 +60,18 @@
     - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: 'archive_timeout = 600' }
     - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 3' }
 
-- name: Eorchestra, set postgresql 9.4  pg_hba local replication config
+- name: PostgreSQL Backups, set postgresql 9.4  pg_hba local replication config
   become: true
   become_user: postgres
+  when: config.postgres_backups.enabled
   lineinfile:
     dest: /etc/postgresql/9.4/main/pg_hba.conf
     regexp: '\s*#?\s*local\s+replication\s+postgres\s+(trust|reject|md5|password|gss|sspi|ident|peer|ldap|radius|cert|pam).*'
     line: "local   replication     postgres                                trust"
 
-- name: EOrchestra, set daily postgresql backups
+- name: PostgreSQL Backups, set daily postgresql backups
   become: true
+  when: config.postgres_backups.enabled
   cron:
     name: "postgres_backups"
     user: root
@@ -74,13 +79,15 @@
     hour: 4
     job: "/usr/bin/create_backup_postgres.sh 2>&1"
 
-- name: EOrchestra, restarting postgresql to enable backups
+- name: PostgreSQL Backups, restarting postgresql to enable backups
   become: true
+  when: config.postgres_backups.enabled
   service: name=postgresql state=restarted sleep={{ params.sleep.fast }}
 
-- name: EOrchestra, create base backups
+- name: PostgreSQL Backups, create base backups
   become: true
   become_user: root
+  when: config.postgres_backups.enabled
   shell: /usr/bin/create_backup_postgres.sh 2>&1
   args:
     executable: /bin/bash
