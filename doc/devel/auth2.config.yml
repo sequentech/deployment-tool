@@ -35,7 +35,7 @@ config:
     # allowed values: true | false
     enabled: true
     # folder where the postgres backups will be stored
-    folder: /home/eorchestra/postgres_backups
+    folder: /var/postgres_backups
 
   host: auth2
 
