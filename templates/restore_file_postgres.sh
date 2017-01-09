@@ -15,5 +15,31 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
-bash copy_wall_postgres.sh $1 $2 2>&1 | logger -t copy_wall_postgres
-exit ${PIPESTATUS[0]}
+# Automatically exit bash on any error inside the exit
+set -e
+
+BACKUP_DIR={{ config.postgres_backups.folder }}
+POSTGRES_DATA_DIR=/var/lib/postgresql/9.4/main
+
+# check number of arguments
+if [[ $# -ne 2 ]]; then
+  echo "ERROR: invalid number of arguments: $#"
+  exit 1
+fi
+
+FROM_PATH=$1
+TO_PATH=$2
+
+WHO=`whoami`
+PRESENT_PATH=`pwd`
+
+# check file exists
+if [[ ! -f $BACKUP_DIR/wal/$FROM_PATH.gz ]]; then
+  echo "ERROR: file $BACKUP_DIR/wal/$FROM_PATH.gz doesn't exist or is not a file. User: $WHO Path: $PRESENT_PATH . TO: $TO_PATH"
+  exit 1
+fi
+
+gunzip < $BACKUP_DIR/wal/$FROM_PATH.gz > $TO_PATH
+echo "extracted  $BACKUP_DIR/wal/$FROM_PATH.gz to $TO_PATH"
+
+exit 0

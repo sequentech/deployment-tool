@@ -39,6 +39,8 @@
     - { src: copy_wall_postgres.sh, dest: /usr/bin/copy_wall_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: recovery_end.sh, dest: /usr/bin/recovery_end.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: archive_command_postgres.sh, dest: /usr/bin/archive_command_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: restore_file_postgres.sh, dest: /usr/bin/restore_file_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: restore_script_postgres.sh, dest: /usr/bin/restore_script_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf, owner: "postgres", group: "postgres", mode: "0644" }
 
 - name: PostgreSQL Backups, set postgresql 9.4 conf for archiving
@@ -58,7 +60,8 @@
     - { regexp: '\s*#?\s*archive_mode\s*=\s*(on|off).*', line: 'archive_mode = on' }
     - { regexp: '\s*#?\s*archive_command\s*=\s*.*', line: "archive_command = 'bash archive_command_postgres.sh %p %f'" }
     - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: 'archive_timeout = 600' }
-    - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 3' }
+    - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 5' }
+    - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 0' }
 
 - name: PostgreSQL Backups, set postgresql 9.4  pg_hba local replication config
   become: true

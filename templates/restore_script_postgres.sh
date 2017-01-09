@@ -13,7 +13,14 @@
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>. 
 
-bash copy_wall_postgres.sh $1 $2 2>&1 | logger -t copy_wall_postgres
+# check number of arguments
+if [[ $# -ne 2 ]]; then
+  echo "ERROR: invalid number of arguments: $#"
+  echo "ERROR: invalid number of arguments: $#" | logger -t recovery_postgres
+  exit 1
+fi
+
+bash restore_file_postgres.sh $1 $2 2>&1 | logger -t recovery_postgres
 exit ${PIPESTATUS[0]}

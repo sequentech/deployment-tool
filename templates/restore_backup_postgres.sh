@@ -15,16 +15,75 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>. 
 
-
 # NOTE:
 # in order to recover, use this information:
 # https://www.postgresql.org/docs/9.4/static/continuous-archiving.html#BACKUP-BASE-BACKUP point 24.3.4
 # 
 # basic steps:
+# 0: stop postgresql service
 # 1: make a copy of /var/lib/postgresql/9.4/main
 # 2: remove /var/lib/postgresql/9.4/main
 # 3: unzip base backup from /home/eorchestra/postgres_backups/base/whatever and copy it to /var/lib/postgresql/9.4/main
 # 4: unzip wal files from  /home/eorchestra/postgres_backups/wal to a folder F_WAL
 # 5: copy /etc/postgresql/9.4/main/recovery.conf to the data folder: /var/lib/postgresql/9.4/main/recovery.conf
 # 6: edit restore_command variable from recovery.conf to copy files from F_WAL, edit recovery_target_time if you want recover up to a specific date
-# 7: restart postgres
+# 7: start postgres
+
+# Automatically exit bash on any error inside the exit
+set -e
+
+BACKUP_DIR={{ config.postgres_backups.folder }}
+DATE=`date '+%d_%m_%y_%H_%M_%S'`
+POSTGRES_DATA_DIR=/var/lib/postgresql/9.4/main
+
+if [[ $# -lt 1 ]]; then
+  echo "ERROR: argument 1 (base backup folder name) missing"
+  exit 1
+fi
+
+BASE_BACKUP_NAME=$1
+
+# The user executing the script needs be root
+if [ ! "$(whoami)" == "root" ]; then
+  echo "ERROR: You need to execute this command as root"
+  exit 1
+fi
+
+# check whether base backup exists
+if [[ ! -d  $BACKUP_DIR/base/$BASE_BACKUP_NAME ]]; then
+  echo "ERROR: base backup folder missing (or it's not a folder): $BACKUP_DIR/base/$BASE_BACKUP_NAME"
+  exit 1
+elif [[ ! -f $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz ]]; then
+  echo "ERROR: base backup file missing (or it's not a file): $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz"
+  exit 1
+fi
+
+# stop postgresql
+echo "Stopping postgresql service..."
+service postgresql stop 9.4
+echo "Done"
+
+# check whether postgres data_directory exists and make backup
+if [[ -d $POSTGRES_DATA_DIR ]]; then
+  echo "Creating backup of existing PostgreSQL data directory"
+  if [[ ! -d $BACKUP_DIR/restore_backups ]]; then
+    sudo -u postgres mkdir $BACKUP_DIR/restore_backups
+  fi
+  sudo -u postgres tar -zcvf $BACKUP_DIR/restore_backups/$DATE.tar.gz $POSTGRES_DATA_DIR
+  sudo -u postgres rm -Rf $POSTGRES_DATA_DIR
+  echo "Done"
+else
+  echo "PostgreSQL data directory doesn't exist yet so we don't need to make a backup"
+fi
+
+# restore backup
+mkdir $POSTGRES_DATA_DIR
+tar -zxvf $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz -C $POSTGRES_DATA_DIR
+cp /etc/postgresql/9.4/main/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
+chown postgres.postgres -R $POSTGRES_DATA_DIR
+chmod 0700 -R $POSTGRES_DATA_DIR
+
+# start postgresql to restore the backup
+service postgresql start 9.4
+
+exit 0
