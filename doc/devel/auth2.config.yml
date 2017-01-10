@@ -118,6 +118,11 @@ config:
     # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
     tls_cert_path: /srv/certs/selfsigned/cert.pem
 
+    # Just like tls_cert_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_path: /srv/certs/selfsigned/cert.pem
+
     # Path of the TLS PEM certificate private key.
     #
     # Requirements:
@@ -133,6 +138,11 @@ config:
     # balancer configuration so you will have to replicate it if needed at your
     # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
     tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Just like tls_cert_key_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
 
     # Path of the chained list of the public certificates of the Certificate
     # Authorities that validate the config.http.tls_cert_path certificate
@@ -150,6 +160,11 @@ config:
     # balancer configuration so you will have to replicate it if needed at your
     # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
     tls_calist_path: /srv/certs/selfsigned/calist
+
+    # Just like tls_calist_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_calist_path: /srv/certs/selfsigned/calist
 
   # some java related configuration options
   java:

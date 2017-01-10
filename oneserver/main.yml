@@ -49,7 +49,15 @@
 
 - name: OneServer, secure.conf
   sudo: true
-  template: src=oneserver/templates/secure.conf dest=/etc/nginx/secure.conf owner="root" mode=0644
+  template:
+    src: oneserver/templates/{{ item }}
+    dest: /etc/nginx/{{ item }}
+    owner: root
+    mode: 0644
+  with_items:
+    - base_secure.conf
+    - secure.conf
+    - internal_secure.conf
 
 # dnie & fnmt certs
 - name: OneServer, DNIE and FNMT ca in nginx
