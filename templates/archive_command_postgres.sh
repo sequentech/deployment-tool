@@ -1,5 +1,7 @@
+#!/bin/bash
+
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2017  Agora Voting SL <agora@agoravoting.com>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -13,23 +15,5 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
----
-- hosts: all
-
-  tasks:
-    - include_vars: config.yml
-    - include_vars: repos.yml
-
-    - include: java.yml
-    - include: packages.yml
-    - include: system.yml
-    - include: postgres_backups.yml
-    - include: agora-tools/main.yml
-    - include: eorchestra/main.yml
-    #- include: agora-elections/main.yml
-    #- include: authapi/main.yml
-    #- include: sentry/main.yml
-    #- include: agora-gui/main.yml
-    #- include: oneserver/main.yml
-    - include: agora-verifier/main.yml
-    #- include: halb/main.yml
+bash copy_wall_postgres.sh $1 $2 2>&1 | logger -t copy_wall_postgres
+exit ${PIPESTATUS[0]}

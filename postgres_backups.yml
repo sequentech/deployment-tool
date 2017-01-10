@@ -1,0 +1,117 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2016-2017  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>. 
+
+---
+
+- name: PostgreSQL Backups, create postgresql backup folder
+  become: true
+  when: config.postgres_backups.enabled
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: postgres
+    group: postgres
+  with_items:
+    - { path: "{{ config.postgres_backups.folder }}" }
+    - { path: "{{ config.postgres_backups.folder }}/wal" }
+    - { path: "{{ config.postgres_backups.folder }}/base" }
+    - { path: "{{ config.postgres_backups.folder }}/dump" }
+
+- name: PostgreSQL Backups, create postgresql backup commands and recovery config
+  become: true
+  when: config.postgres_backups.enabled
+  template: src=templates/{{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: create_backup_postgres.sh, dest: /usr/bin/create_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
+    - { src: restore_backup_postgres.sh, dest: /usr/bin/restore_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
+    - { src: copy_wall_postgres.sh, dest: /usr/bin/copy_wall_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: recovery_end.sh, dest: /usr/bin/recovery_end.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: archive_command_postgres.sh, dest: /usr/bin/archive_command_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: restore_file_postgres.sh, dest: /usr/bin/restore_file_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: restore_script_postgres.sh, dest: /usr/bin/restore_script_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf, owner: "postgres", group: "postgres", mode: "0644" }
+
+- name: PostgreSQL Backups, set postgresql 9.4 conf for archiving
+  become: true
+  become_user: postgres
+  when: config.postgres_backups.enabled
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '\s*#?\s*wal_level\s*=\s*(minimal|archive|hot_standby|logical).*', line: 'wal_level = logical' }
+    - { regexp: '\s*#?\s*fsync\s*=\s*(on|off).*', line: 'fsync = on' }
+    - { regexp: '\s*#?\s*wal_sync_method\s*=\s*(open_datasync|fdatasync|fsync|fsync_writethrough|open_sync).*', line: 'wal_sync_method = fsync' }
+    - { regexp: '\s*#?\s*full_page_writes\s*=\s*(on|off).*', line: 'full_page_writes = on' }
+    - { regexp: '\s*#?\s*wal_writer_delay\s*=\s*\d+(ms)?.*', line: 'wal_writer_delay = 200ms' }
+    - { regexp: '\s*#?\s*archive_mode\s*=\s*(on|off).*', line: 'archive_mode = on' }
+    - { regexp: '\s*#?\s*archive_command\s*=\s*.*', line: "archive_command = 'bash archive_command_postgres.sh %p %f'" }
+    - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: "archive_timeout = {{ config.postgres_backups.archive_timeout }}" }
+    - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 5' }
+    - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 0' }
+
+- name: PostgreSQL Backups, disable archiving on postgresql 9.4 conf
+  become: true
+  become_user: postgres
+  when: not config.postgres_backups.enabled
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '\s*#?\s*archive_mode\s*=\s*(on|off).*', line: 'archive_mode = off' }
+
+- name: PostgreSQL Backups, set postgresql 9.4  pg_hba local replication config
+  become: true
+  become_user: postgres
+  when: config.postgres_backups.enabled
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/pg_hba.conf
+    regexp: '\s*#?\s*local\s+replication\s+postgres\s+(trust|reject|md5|password|gss|sspi|ident|peer|ldap|radius|cert|pam).*'
+    line: "local   replication     postgres                                trust"
+
+- name: PostgreSQL Backups, set daily postgresql backups
+  become: true
+  when: config.postgres_backups.enabled
+  cron:
+    name: "postgres_backups"
+    state: present
+    user: root
+    weekday: "{{ config.postgres_backups.base_backups.weekday }}"
+    day: "{{ config.postgres_backups.base_backups.day }}"
+    minute: "{{ config.postgres_backups.base_backups.minute }}"
+    hour: "{{ config.postgres_backups.base_backups.hour }}"
+    job: "/usr/bin/create_backup_postgres.sh 2>&1"
+
+- name: PostgreSQL Backups, disable daily postgresql backups
+  become: true
+  when: not config.postgres_backups.enabled
+  cron:
+    name: "postgres_backups"
+    state: absent
+
+- name: PostgreSQL Backups, restarting postgresql to enable backups
+  become: true
+  when: config.postgres_backups.enabled
+  service: name=postgresql state=restarted sleep={{ params.sleep.fast }}
+
+- name: PostgreSQL Backups, create base backups
+  become: true
+  become_user: root
+  when: config.postgres_backups.enabled and config.postgres_backups.backup_on_deploy
+  shell: /usr/bin/create_backup_postgres.sh > /dev/null 2>&1
+  args:
+    executable: /bin/bash
