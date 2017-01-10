@@ -39,4 +39,6 @@ rm $BACKUP_DIR/dump/dump_$DATE
 echo "dump backup created on $BACKUP_DIR/dump/dump_$DATE.gz"
 echo "dump backup created on $BACKUP_DIR/dump/dump_$DATE.gz" | logger -t backup_cron_postgres
 
+/usr/bin/clean_old_postgres_backups.sh 2>&1 | logger -t backup_cron_postgres
+
 exit 0

@@ -35,6 +35,7 @@
   template: src=templates/{{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:
     - { src: create_backup_postgres.sh, dest: /usr/bin/create_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
+    - { src: clean_old_postgres_backups.sh, dest: /usr/bin/clean_old_postgres_backups.sh, owner: "root", group: "root", mode: "0755" }
     - { src: restore_backup_postgres.sh, dest: /usr/bin/restore_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
     - { src: copy_wall_postgres.sh, dest: /usr/bin/copy_wall_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: recovery_end.sh, dest: /usr/bin/recovery_end.sh, owner: "postgres", group: "postgres", mode: "0755" }
@@ -94,7 +95,7 @@
     day: "{{ config.postgres_backups.base_backups.day }}"
     minute: "{{ config.postgres_backups.base_backups.minute }}"
     hour: "{{ config.postgres_backups.base_backups.hour }}"
-    job: "/usr/bin/create_backup_postgres.sh 2>&1"
+    job: "bash /usr/bin/create_backup_postgres.sh 2>&1"
 
 - name: PostgreSQL Backups, disable daily postgresql backups
   become: true
