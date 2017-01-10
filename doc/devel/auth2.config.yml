@@ -79,6 +79,19 @@ config:
     agora_users: agora
 
   http:
+    # Log level for error log in nginx.
+    #
+    # This log level stablishes the error_log directive level of error for
+    # nginx web server in /etc/nginx/nginx.conf at the http directive. The
+    # error log will appear in /var/log/nginx/error.log
+    #
+    # For more details, see
+    # http://nginx.org/en/docs/ngx_core_module.html#error_log
+    #
+    # Allowed values: debug, info, notice, warn, error, crit, alert, or emerg
+    # Default: error
+    nginx_error_log_level: error
+
     # In big elections memory or disk buffer might need to be increased,
     # specifically to upload the list of valid voterids if any filtering is going
     # to be made, or when uploading the list of electors. This setting is
