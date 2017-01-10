@@ -5,5 +5,8 @@
     "PRIVATE_IP_ADDRESS": "{{ config.private_ipaddress }}",
     "HOSTNAME": "{{ config.host }}",
     "PORT": {{ config.port }},
-    "KEYSTORE_PASS": "{{ config.agora_elections.keystore_pass }}"
+    "KEYSTORE_PASS": "{{ config.agora_elections.keystore_pass }}",
+    "TLS_CERT_PATH": "{{ config.http.tls_cert_path }}",
+    "TLS_CERT_KEY_PATH": "{{ config.http.tls_cert_key_path }}",
+    "TLS_CALIST_PATH": "{{ config.http.tls_calist_path }}"
 }
