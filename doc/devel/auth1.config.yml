@@ -32,10 +32,27 @@ config:
 
   # create daily and live backups
   postgres_backups:
+    # enables or disables backups
+    # set to false to stop making backups (it won't delete already archived backups)
     # allowed values: true | false
     enabled: true
     # folder where the postgres backups will be stored
     folder: /var/postgres_backups
+    # create a base backup every time postgres_backups.yml is deployed
+    # allowed values: true | false
+    backup_on_deploy: true
+    # enforces that a new WAL file is created after archive_timeout seconds max
+    archive_timeout: 600
+    # cron tab configuration for base backups
+    base_backups:
+      # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+      weekday: '*'
+      # Day of the month the job should run ( 1-31, *, */2, etc )
+      day: '*'
+      # minute when the job should run ( 0-59, *, */2, etc )
+      minute: 0
+      # hour when the job should run ( 0-23, *, */2, etc )
+      hour: 4
 
   host: auth1
 

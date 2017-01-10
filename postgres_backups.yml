@@ -59,9 +59,20 @@
     - { regexp: '\s*#?\s*wal_writer_delay\s*=\s*\d+(ms)?.*', line: 'wal_writer_delay = 200ms' }
     - { regexp: '\s*#?\s*archive_mode\s*=\s*(on|off).*', line: 'archive_mode = on' }
     - { regexp: '\s*#?\s*archive_command\s*=\s*.*', line: "archive_command = 'bash archive_command_postgres.sh %p %f'" }
-    - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: 'archive_timeout = 600' }
+    - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: "archive_timeout = {{ config.postgres_backups.archive_timeout }}" }
     - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 5' }
     - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 0' }
+
+- name: PostgreSQL Backups, disable archiving on postgresql 9.4 conf
+  become: true
+  become_user: postgres
+  when: not config.postgres_backups.enabled
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '\s*#?\s*archive_mode\s*=\s*(on|off).*', line: 'archive_mode = off' }
 
 - name: PostgreSQL Backups, set postgresql 9.4  pg_hba local replication config
   become: true
@@ -77,10 +88,20 @@
   when: config.postgres_backups.enabled
   cron:
     name: "postgres_backups"
+    state: present
     user: root
-    minute: 0
-    hour: 4
+    weekday: "{{ config.postgres_backups.base_backups.weekday }}"
+    day: "{{ config.postgres_backups.base_backups.day }}"
+    minute: "{{ config.postgres_backups.base_backups.minute }}"
+    hour: "{{ config.postgres_backups.base_backups.hour }}"
     job: "/usr/bin/create_backup_postgres.sh 2>&1"
+
+- name: PostgreSQL Backups, disable daily postgresql backups
+  become: true
+  when: not config.postgres_backups.enabled
+  cron:
+    name: "postgres_backups"
+    state: absent
 
 - name: PostgreSQL Backups, restarting postgresql to enable backups
   become: true
@@ -90,7 +111,7 @@
 - name: PostgreSQL Backups, create base backups
   become: true
   become_user: root
-  when: config.postgres_backups.enabled
-  shell: /usr/bin/create_backup_postgres.sh 2>&1
+  when: config.postgres_backups.enabled and config.postgres_backups.backup_on_deploy
+  shell: /usr/bin/create_backup_postgres.sh > /dev/null 2>&1
   args:
     executable: /bin/bash
