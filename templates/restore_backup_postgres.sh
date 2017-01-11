@@ -49,41 +49,94 @@ if [ ! "$(whoami)" == "root" ]; then
   exit 1
 fi
 
-# check whether base backup exists
-if [[ ! -d  $BACKUP_DIR/base/$BASE_BACKUP_NAME ]]; then
-  echo "ERROR: base backup folder missing (or it's not a folder): $BACKUP_DIR/base/$BASE_BACKUP_NAME"
-  exit 1
-elif [[ ! -f $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz ]]; then
-  echo "ERROR: base backup file missing (or it's not a file): $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz"
+if [ "$BASE_BACKUP_NAME" == "dump" ]; then
+  echo "ERROR: invalid argument: $BASE_BACKUP_NAME"
   exit 1
 fi
 
-# stop postgresql
-echo "Stopping postgresql service..."
-service postgresql stop 9.4
-echo "Done"
+# check if we want to restore a dump backup
+DUMP_TEST=`echo $BASE_BACKUP_NAME | sed 's/dump_.*/dump/'`
 
-# check whether postgres data_directory exists and make backup
-if [[ -d $POSTGRES_DATA_DIR ]]; then
-  echo "Creating backup of existing PostgreSQL data directory"
-  if [[ ! -d $BACKUP_DIR/restore_backups ]]; then
-    sudo -u postgres mkdir $BACKUP_DIR/restore_backups
+# dump backup
+if [ "$DUMP_TEST" == "dump" ]; then
+  # check whether base backup exists
+  if [[ ! -f $BACKUP_DIR/dump/$BASE_BACKUP_NAME.gz ]]; then
+    echo "ERROR: base backup file missing (or it's not a file): $BACKUP_DIR/dump/$BASE_BACKUP_NAME.gz"
+    exit 1
   fi
-  sudo -u postgres tar -zcvf $BACKUP_DIR/restore_backups/$DATE.tar.gz $POSTGRES_DATA_DIR
-  sudo -u postgres rm -Rf $POSTGRES_DATA_DIR
-  echo "Done"
+  # stop postgresql
+  echo "Stopping postgresql service..."
+  service postgresql stop 9.4
+  echo "Stopped"
+
+  # check whether postgres data_directory exists and make backup
+  if [[ -d $POSTGRES_DATA_DIR ]]; then
+    echo "Creating backup of existing PostgreSQL data directory"
+    if [[ ! -d $BACKUP_DIR/restore_backups ]]; then
+      sudo -u postgres mkdir $BACKUP_DIR/restore_backups
+    fi
+    sudo -u postgres tar -zcvf $BACKUP_DIR/restore_backups/$DATE.tar.gz $POSTGRES_DATA_DIR
+    echo "Created"
+  else
+    echo "PostgreSQL data directory doesn't exist yet so we don't need to make a backup"
+  fi
+
+  # unzip
+  echo "Unzipping backup.."
+  gunzip < $BACKUP_DIR/dump/$BASE_BACKUP_NAME.gz > $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql
+  chown postgres:postgres $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql
+  echo "Unzipped"
+  
+  echo "Recreating cluster"
+  pg_dropcluster 9.4 main
+  pg_createcluster 9.4 main
+  pg_ctlcluster 9.4 main start
+  sudo -u postgres psql -f $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql > /dev/null
+  echo "Cluster successfully recreated"
+
+  echo "Removing temporary data"
+  rm -R $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql
+  echo "Temporary data removed"
+
+# continuous archiving WAL backup
 else
-  echo "PostgreSQL data directory doesn't exist yet so we don't need to make a backup"
+  # check whether base backup exists
+  if [[ ! -d  $BACKUP_DIR/base/$BASE_BACKUP_NAME ]]; then
+    echo "ERROR: base backup folder missing (or it's not a folder): $BACKUP_DIR/base/$BASE_BACKUP_NAME"
+    exit 1
+  elif [[ ! -f $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz ]]; then
+    echo "ERROR: base backup file missing (or it's not a file): $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz"
+    exit 1
+  fi
+
+  # stop postgresql
+  echo "Stopping postgresql service..."
+  service postgresql stop 9.4
+  echo "Stopped"
+
+  # check whether postgres data_directory exists and make backup
+  if [[ -d $POSTGRES_DATA_DIR ]]; then
+    echo "Creating backup of existing PostgreSQL data directory"
+    if [[ ! -d $BACKUP_DIR/restore_backups ]]; then
+      sudo -u postgres mkdir $BACKUP_DIR/restore_backups
+    fi
+    sudo -u postgres tar -zcvf $BACKUP_DIR/restore_backups/$DATE.tar.gz $POSTGRES_DATA_DIR
+    sudo -u postgres rm -Rf $POSTGRES_DATA_DIR
+    echo "Created"
+  else
+    echo "PostgreSQL data directory doesn't exist yet so we don't need to make a backup"
+  fi
+
+  # restore backup
+  mkdir $POSTGRES_DATA_DIR
+  tar -zxvf $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz -C $POSTGRES_DATA_DIR
+  cp /etc/postgresql/9.4/main/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
+  chown postgres.postgres -R $POSTGRES_DATA_DIR
+  chmod 0700 -R $POSTGRES_DATA_DIR
+
+  # start postgresql to restore the backup
+  service postgresql start 9.4
 fi
 
-# restore backup
-mkdir $POSTGRES_DATA_DIR
-tar -zxvf $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz -C $POSTGRES_DATA_DIR
-cp /etc/postgresql/9.4/main/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
-chown postgres.postgres -R $POSTGRES_DATA_DIR
-chmod 0700 -R $POSTGRES_DATA_DIR
-
-# start postgresql to restore the backup
-service postgresql start 9.4
-
+echo "Backup restored"
 exit 0
