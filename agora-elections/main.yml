@@ -70,7 +70,7 @@
 - name: AgoraElections, Key store setup (1)
   sudo: true
   sudo_user: agoraelections
-  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
+  shell: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
          chdir=/home/agoraelections/
 
 - name: AgoraElections, Key store setup (2)

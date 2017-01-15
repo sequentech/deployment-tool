@@ -67,7 +67,31 @@ config:
   eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
+  # this section is all about giving to some existing users permissions to
+  # sudo into ansible-created users. If you already have these kind of
+  # permissions, its not needed. Disabled by default.
+  sudoers:
+    # enables or disables the adding of the sudo permissions
+    is_enabled: false
+
+    # list of users, separated by commas and spaces, that can sudo into
+    # ansible-created users
+    agora_users: agora
+
   http:
+    # Log level for error log in nginx.
+    #
+    # This log level stablishes the error_log directive level of error for
+    # nginx web server in /etc/nginx/nginx.conf at the http directive. The
+    # error log will appear in /var/log/nginx/error.log
+    #
+    # For more details, see
+    # http://nginx.org/en/docs/ngx_core_module.html#error_log
+    #
+    # Allowed values: debug, info, notice, warn, error, crit, alert, or emerg
+    # Default: error
+    nginx_error_log_level: error
+
     # In big elections memory or disk buffer might need to be increased,
     # specifically to upload the list of valid voterids if any filtering is going
     # to be made, or when uploading the list of electors. This setting is
@@ -77,6 +101,70 @@ config:
     # parsers.text.maxLength (in agora-elections config)
     # client_max_body_size (in nginx)
     max_body_size: 2m
+
+    # Path of the TLS PEM public certificate.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   agoraelections:users.
+    # - Must be a PEM certificate encrypted with the key in the path specified
+    #   in config.http.tls_cert_key_path.
+    #
+    # By default it is '/srv/certs/selfsigned/cert.pem', but you can change it
+    # to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_cert_path: /srv/certs/selfsigned/cert.pem
+
+    # Just like tls_cert_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_path: /srv/certs/selfsigned/cert.pem
+
+    # Path of the TLS PEM certificate private key.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   agoraelections:users.
+    # - Must be the private key of the public certificate of
+    #   config.http.tls_cert_path.
+    #
+    # By default it is '/srv/certs/selfsigned/key-nopass.pem', but you can
+    # change it to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Just like tls_cert_key_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Path of the chained list of the public certificates of the Certificate
+    # Authorities that validate the config.http.tls_cert_path certificate
+    # signature.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   agoraelections:users.
+    # - Must be a list of PEM certificate public keys.
+    #
+    # By default it is '/srv/certs/selfsigned/calist', but you can
+    # change it to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_calist_path: /srv/certs/selfsigned/calist
+
+    # Just like tls_calist_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_calist_path: /srv/certs/selfsigned/calist
 
   # some java related configuration options
   java:

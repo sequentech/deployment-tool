@@ -77,17 +77,25 @@
 - name: High Availability & Load Balancing, Download repmgr
   sudo: true
   sudo_user: repmgr
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   get_url:
     url=https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
     sha256sum=2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
     dest=/home/repmgr/repmgr.tar.gz
     validate_certs={{ not config.has_https_proxy }}
 
+- name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
+  sudo: true
+  sudo_user: repmgr
+  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  file:
+    path: /home/repmgr/repmgr-3.0.2
+    state: absent
+
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   sudo: true
   sudo_user: repmgr
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   unarchive:
     copy=no
     src=/home/repmgr/repmgr.tar.gz
@@ -96,7 +104,7 @@
 - name: High Availability & Load Balancing, make install
   sudo: true
   sudo_user: root
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   shell: make USE_PGXS=1 install chdir=/home/repmgr/repmgr-3.0.2/
 
 - name: High Availability & Load Balancing [master], check if repmgr postgres user exists

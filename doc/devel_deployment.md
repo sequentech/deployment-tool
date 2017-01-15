@@ -159,7 +159,7 @@ servers. In a real election system it's a good idea to not publish the ips
 and ports of the authorities to avoid malicious attacks.
 
 The deployment script creates a certificate for each authority in 
-/srv/cert/selfsigned/ and we manage the authority communication and 
+/srv/certs/selfsigned/ and we manage the authority communication and
 certificate sharing with the eopeers tool. 
 
     $ cd auth1
