@@ -360,12 +360,6 @@ config:
       # you can include any html text in agora-gui-booth html to customize it
       booth_html_body_include: ''
 
-      # you can include any html text in agora-gui-elections html to customize it
-      elections_html_body_include: ''
-
-      # you can include any html text in agora-gui-booth html to customize it
-      booth_html_body_include: ''
-
       # you can include any html text, which will be shown on the documentation
       # page on agora-gui-elections and on help in voting booth (agora-gui-booth)
       documentation_html_include: ''
