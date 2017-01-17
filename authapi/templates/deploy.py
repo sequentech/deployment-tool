@@ -44,7 +44,7 @@ SMS_DOMAIN_ID = "{{config.authapi.sms.domain_id}}"
 
 SMS_LOGIN = "{{config.authapi.sms.login}}"
 
-SMS_PASSWORD = "{{config.authapi.sms.password}}"
+SMS_PASSWORD = "{{config.authapi.sms.sms_password}}"
 
 SMS_URL = "{{config.authapi.sms.url}}"
 

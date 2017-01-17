@@ -560,7 +560,7 @@ config:
       login: '<LOGIN>'
 
       # Provider's password.
-      password: '<PASSWORD>'
+      sms_password: '<PASSWORD>'
 
       # Base URL of the API of the provider. Depends on the provider, the
       # default works for esendex.
