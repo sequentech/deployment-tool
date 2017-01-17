@@ -15,24 +15,19 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>. 
 
-# if ruamel.yaml is not installed, execute:
-# $ sudo pip install ruamel.yaml
-
-# first argument is the path to config.yml, otherwise it's assumed it's on path ./config.yml
-
-#import ruamel.yaml
 import string
 from os import urandom
-#from ruamel.yaml.scalarstring import SingleQuotedScalarString, DoubleQuotedScalarString
 import sys
 import argparse
 import re
 
+
+# generate password with length number of characters
 def gen_pass(length):
   alphabet = string.ascii_letters + string.digits
   return ''.join(alphabet[c % len(alphabet)] for c in urandom(length))
 
-
+# read arguments
 parser = argparse.ArgumentParser(description="Populate config.yml on agora-dev-box with random passwords. WARNING: This WILL delete your passwords, please make a copy of config.yml before executing it.")
 parser.add_argument('-c', '--config', help='Path to config.yml', default='config.yml')
 parser.add_argument('-l', '--length', help='Passwords length, as number of characters (default: 22)', default=22, type=int)
@@ -49,6 +44,7 @@ out_path = args.out
 if out_path is None and not blank:
   out_path = config_path
 
+# when setting the config.yml passwords to blank, the --out parameter is required
 if out_path is None and blank:
   print('missing --out argument')
   exit(1)
