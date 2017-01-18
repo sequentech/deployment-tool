@@ -37,7 +37,7 @@
     - { src: create_backup_postgres.sh, dest: /usr/bin/create_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
     - { src: clean_old_postgres_backups.sh, dest: /usr/bin/clean_old_postgres_backups.sh, owner: "root", group: "root", mode: "0755" }
     - { src: restore_backup_postgres.sh, dest: /usr/bin/restore_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
-    - { src: copy_wall_postgres.sh, dest: /usr/bin/copy_wall_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
+    - { src: copy_wal_postgres.sh, dest: /usr/bin/copy_wal_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: recovery_end.sh, dest: /usr/bin/recovery_end.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: archive_command_postgres.sh, dest: /usr/bin/archive_command_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: restore_file_postgres.sh, dest: /usr/bin/restore_file_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }

@@ -36,8 +36,19 @@ BACKUP_DIR={{ config.postgres_backups.folder }}
 DATE=`date '+%d_%m_%y_%H_%M_%S'`
 POSTGRES_DATA_DIR=/var/lib/postgresql/9.4/main
 
+function print_help {
+  echo -e """usage: restore_backups_postgres.sh [base-backup] [date]
+
+Restores the PostgreSQL database to a previous state. Execute the command as root.
+
+  [base-backup]\tName of the base backup (can be dump or continuous archiving). Required
+  [date]       \tRecover the database as it was at a given date. Optional, only for continuous archiving
+  """
+}
+
 if [[ $# -lt 1 ]]; then
-  echo "ERROR: argument 1 (base backup folder name) missing"
+  echo "ERROR: argument 1 (base backup name) missing"
+  print_help
   exit 1
 fi
 
@@ -131,6 +142,13 @@ else
   mkdir $POSTGRES_DATA_DIR
   tar -zxvf $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz -C $POSTGRES_DATA_DIR
   cp /etc/postgresql/9.4/main/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
+
+  # set backup date
+  if [[ $# -ge 2 ]]; then
+    BACKUP_DATE=$2 # e.g. '2004-07-14 22:39:00 EST'
+    RECOVERY_CONF=`cat $POSTGRES_DATA_DIR/recovery.conf | sed -r "s/\s*#?\s*recovery_target_time\s*=\s*'.*'(.*)/recovery_target_time = '$BACKUP_DATE'\1/"`
+    echo "$RECOVERY_CONF" > $POSTGRES_DATA_DIR/recovery.conf
+  fi
   chown postgres.postgres -R $POSTGRES_DATA_DIR
   chmod 0700 -R $POSTGRES_DATA_DIR
 

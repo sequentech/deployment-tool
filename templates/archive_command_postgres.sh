@@ -15,5 +15,5 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
-bash copy_wall_postgres.sh $1 $2 2>&1 | logger -t copy_wall_postgres
+bash copy_wal_postgres.sh $1 $2 2>&1 | logger -t copy_wal_postgres
 exit ${PIPESTATUS[0]}
