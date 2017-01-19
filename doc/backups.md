@@ -26,11 +26,11 @@ A new base and dump backup is created every time postgres_backups.yml is deploye
 
 Restoring a continuous archiving backup to its latest state, based on all the archived wals and a specific base backup, can be easily done calling:
 
-    # /usr/bin/restore_backup_postgres.sh day_month_year_hour_min_sec
+    # /usr/bin/restore_backup_postgres.sh day_month_year_hour_min_sec 'date'
 
 This command must be executed from root, and the first parameter is the name of the folder of the base backup to be used. If the data_folder of the cluster already exists, this script will create a full, gzipped, copy of it in the folder /var/postgres_backups/restore_backups before restoring the backup.
 
-In order to recover the database up to the state it was at a specific point in time, or even up to after a specific SQL transaction, you should uncomment and modify parameters recovery_target_time or recovery_target_xid on file /etc/postgresql/9.4/main/recovery.conf before calling script restore_backup_postgres.sh
+The second argument is the specific date you want to recover the database to. This is an optional argument, and it's only valid for restoring continuous archiving backups. An example date is '2004-07-14 22:39:00 EST'. If you want to recover the state of the database as it was after a given transaction, please set recovery_target_xid on file /etc/postgresql/9.4/main/recovery.conf before calling script restore_backup_postgres.sh instead.
 
 NOTE: Even when wal_keep_segments = 0 on postgresql.conf, for some reason PostgreSQL tends to maintain a number of old WAL files on folder pg_xlog (/var/lib/postgresql/9.4/main/pg_xlog) before copying them to /var/postgres_backups/wal . And when restoring a backup, WAL files are read from /var/postgres_backups/wal, which as just explained doesn't normally have the latest WAL files. Therefore, if you want to restore the database to the very latest state, it's advisable to stop postgresql and move (and compress) the remaining WAL files on pg_xlog to /var/postgres_backups/wal before calling restore_backup_postgres.sh
 
@@ -43,6 +43,8 @@ Restoring a SQL dump backup from /var/postgres_backups/dump can easily done call
 Notice that "dump_" has been added on the argument.
 
 This will recreate the database status as it was when the the backup was created. If the data_folder of the cluster exists, it will first make a copy of it in /var/postgres_backups/restore_backups
+
+NOTE: As of now, restoring a SQL dump backup implies dropping and recreating the cluster. This means that once the backup is restored, wal backups will use timeline 1 from index ..0001. As these new wal files clash with the old backup wal files, during the restoration all old wal files are moved to a /var/postgres_backups/wal/$DATE subfolder, with the aim of preserving them and allowing wal backups. This also means that if you want to restore a continuous archiving backup after restoring a sql dump backup, you will first have to manually move the wal files back from /var/postgres_backups/wal/$DATE to /var/postgres_backups/wal/
 
 # Logs
 
