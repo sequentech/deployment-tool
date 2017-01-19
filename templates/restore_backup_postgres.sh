@@ -35,6 +35,7 @@ set -e
 BACKUP_DIR={{ config.postgres_backups.folder }}
 DATE=`date '+%d_%m_%y_%H_%M_%S'`
 POSTGRES_DATA_DIR=/var/lib/postgresql/9.4/main
+POSTGRES_CONFIG_DIR=/etc/postgresql/9.4/main
 
 function print_help {
   echo -e """usage: restore_backups_postgres.sh [base-backup] [date]
@@ -92,21 +93,40 @@ if [ "$DUMP_TEST" == "dump" ]; then
     echo "PostgreSQL data directory doesn't exist yet so we don't need to make a backup"
   fi
 
+  # create copy of cluster configuration
+  tar -C $POSTGRES_CONFIG_DIR -zcvf $BACKUP_DIR/dump/$BASE_BACKUP_NAME.cfg.tar.gz .
+
+  # HACK: FIXME
+  # restoring a dump sql backup by the means we are using (dropping and 
+  # creating the cluster from scratch) means timeline will be  set to 1. This
+  # can generate problems for WAL backups, so we move all the wal backups to a
+  # subfolder
+  if ls $BACKUP_DIR/wal/*.gz &> /dev/null; then
+    mkdir $BACKUP_DIR/wal/$DATE
+    mv $BACKUP_DIR/wal/*.gz $BACKUP_DIR/wal/$DATE
+    chown postgres:postgres -R $BACKUP_DIR/wal/$DATE
+  fi
+
   # unzip
   echo "Unzipping backup.."
   gunzip < $BACKUP_DIR/dump/$BASE_BACKUP_NAME.gz > $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql
   chown postgres:postgres $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql
   echo "Unzipped"
-  
+
   echo "Recreating cluster"
+  # Remove whole cluster
   pg_dropcluster 9.4 main
   pg_createcluster 9.4 main
   pg_ctlcluster 9.4 main start
+  # Recover cluster config
+  service postgresql stop 9.4
+  tar -C $POSTGRES_CONFIG_DIR -zxvf $BACKUP_DIR/dump/$BASE_BACKUP_NAME.cfg.tar.gz .
+  service postgresql start 9.4
   sudo -u postgres psql -f $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql > /dev/null
   echo "Cluster successfully recreated"
 
   echo "Removing temporary data"
-  rm -R $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql
+  rm -R $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql $BACKUP_DIR/dump/$BASE_BACKUP_NAME.cfg.tar.gz
   echo "Temporary data removed"
 
 # continuous archiving WAL backup
@@ -141,7 +161,7 @@ else
   # restore backup
   mkdir $POSTGRES_DATA_DIR
   tar -zxvf $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz -C $POSTGRES_DATA_DIR
-  cp /etc/postgresql/9.4/main/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
+  cp $POSTGRES_CONFIG_DIR/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
 
   # set backup date
   if [[ $# -ge 2 ]]; then
