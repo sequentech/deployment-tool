@@ -14,7 +14,7 @@
     ]
   ],
   "agora_elections_base_url": "http://localhost:9000/api",
-  "agora_results_bin_path": "/home/eorchestra/agora-tools/config/results.sh",
+  "agora_results_bin_path": "/home/eorchestra/agora-tools/results.sh",
   "agora_elections_private_datastore_path": "/srv/election-orchestra/server1/public/",
   "global_prechanges": [
     [
