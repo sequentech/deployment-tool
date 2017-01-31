@@ -1,0 +1,15 @@
+{
+  "aelections": "agora_elections.git",
+  "results": "agora-results.git",
+  "tally": "agora-tally.git",
+  "authapi": "authapi.git",
+  "atools": "agora-tools.git",
+  "frestq": "frestq",
+  "eorchestra": "election-orchestra",
+  "vfork": "vfork",
+  "averifier": "agora-verifier.git",
+  "guicommon": "agora-gui-common.git",
+  "guiadmin": "agora-gui-admin.git",
+  "guibooth": "agora-gui-booth.git",
+  "guielections": "agora-gui-elections.git"
+}
