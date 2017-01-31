@@ -1,0 +1,22 @@
+{
+  "servers"  : [
+    "agora", "auth1", "auth2"
+  ],
+  "root"     : "./agora-dev-box/",
+  "config"   : {
+    "agora"  : "./agora-dev-box/doc/devel/agora.config.yml",
+    "auth1"  : "./agora-dev-box/doc/devel/auth1.config.yml",
+    "auth2"  : "./agora-dev-box/doc/devel/auth2.config.yml"
+  },
+  "playbook" : {
+    "base"   : "./agora-dev-box/doc/devel/base.playbook.yml",
+    "agora"  : "./agora-dev-box/doc/devel/agora.playbook.yml",
+    "auth1"  : "./agora-dev-box/doc/devel/auth.playbook.yml",
+    "auth2"  : "./agora-dev-box/doc/devel/auth.playbook.yml"
+  },
+  "vagrantfile" : {
+    "agora"  : "./agora-dev-box/doc/devel/Vagrantfile.agora",
+    "auth1"  : "./agora-dev-box/doc/devel/Vagrantfile.auth1",
+    "auth2"  : "./agora-dev-box/doc/devel/Vagrantfile.auth2"
+  }
+}
