@@ -2,21 +2,21 @@
   "servers"  : [
     "agora", "auth1", "auth2"
   ],
-  "root"     : "./agora-dev-box/",
+  "root"     : "../../",
   "config"   : {
-    "agora"  : "./agora-dev-box/doc/devel/agora.config.yml",
-    "auth1"  : "./agora-dev-box/doc/devel/auth1.config.yml",
-    "auth2"  : "./agora-dev-box/doc/devel/auth2.config.yml"
+    "agora"  : "../../doc/devel/agora.config.yml",
+    "auth1"  : "../../doc/devel/auth1.config.yml",
+    "auth2"  : "../../doc/devel/auth2.config.yml"
   },
   "playbook" : {
-    "base"   : "./agora-dev-box/doc/devel/base.playbook.yml",
-    "agora"  : "./agora-dev-box/doc/devel/agora.playbook.yml",
-    "auth1"  : "./agora-dev-box/doc/devel/auth.playbook.yml",
-    "auth2"  : "./agora-dev-box/doc/devel/auth.playbook.yml"
+    "base"   : "../../doc/devel/base.playbook.yml",
+    "agora"  : "../../doc/devel/agora.playbook.yml",
+    "auth1"  : "../../doc/devel/auth.playbook.yml",
+    "auth2"  : "../../doc/devel/auth.playbook.yml"
   },
   "vagrantfile" : {
-    "agora"  : "./agora-dev-box/doc/devel/Vagrantfile.agora",
-    "auth1"  : "./agora-dev-box/doc/devel/Vagrantfile.auth1",
-    "auth2"  : "./agora-dev-box/doc/devel/Vagrantfile.auth2"
+    "agora"  : "../../doc/devel/Vagrantfile.agora",
+    "auth1"  : "../../doc/devel/Vagrantfile.auth1",
+    "auth2"  : "../../doc/devel/Vagrantfile.auth2"
   }
 }
