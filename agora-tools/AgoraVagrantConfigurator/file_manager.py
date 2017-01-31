@@ -5,6 +5,8 @@ with open('config.json') as data_file:
     data = json.load(data_file)
 with open('repos_config.json') as repos_data_file:
     repos_data = json.load(repos_data_file)
+with open('provision_config.json') as provision_data_file:
+    provis_data = json.load(provision_data_file)
 
 tab = "    "
 
@@ -26,3 +28,23 @@ def modify_repos(repos_vars):
 
     repos.write(new_repos_content)
     print(new_repos_content)
+
+#La función que modifica los ficheros de vagrant provision
+def modify_provision(server, is_base):
+    #Cargamos el contenido nuevo
+    config_new = open(provis_data["config"][server], 'r').read()
+    vagrant_new = open(provis_data["vagrantfile"][server], 'r').read()
+    if(is_base == 1):
+        playbook_new = open(provis_data["playbook"]["base"], 'r').read()
+    else:
+        playbook_new = open(provis_data["playbook"][server], 'r').read()
+
+    #El destino del contenido nuevo
+    config_file = open(provis_data["root"] + "config.yml", 'w')
+    playbook_file = open(provis_data["root"] + "playbook.yml", 'w')
+    vagrant_file = open(provis_data["root"] + "Vagrantfile", 'w')
+
+    #Escritura del nuevo contenido en el destino
+    config_file.write(config_new)
+    playbook_file.write(playbook_new)
+    vagrant_file.write(vagrant_new)
