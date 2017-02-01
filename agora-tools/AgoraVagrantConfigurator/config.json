@@ -1,0 +1,8 @@
+{
+  "version" : "3.4.0",
+  "force" : "yes",
+  "github" : "https://github.com/agoravoting/",
+  "repos_route" : "../../repos.yml",
+  "build_route" : "../../agora-dev-box/agora-gui/templates/build.sh",
+  "repos_header": "# This file is part of agora-dev-box.\n# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>\n# agora-dev-box is free software: you can redistribute it and/or modify\n# it under the terms of the GNU Lesser General Public License as published by\n# the Free Software Foundation, either version 3 of the License.\n\n# agora-dev-box  is distributed in the hope that it will be useful,\n# but WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n# GNU Lesser General Public License for more details.\n\n# You should have received a copy of the GNU Lesser General Public License\n# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.\n\n---\nrepos:\n"
+}
