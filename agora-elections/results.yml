@@ -1,5 +1,5 @@
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2014-2017  Agora Voting SL <agora@agoravoting.com>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -14,13 +14,41 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraResults, Git clone
-  sudo: true
-  sudo_user: agoraelections
-  git: repo={{ repos.results.repo }} version={{ repos.results.version }}
-       dest=/home/agoraelections/agora-results force={{ repos.results.force }}
+- name: AgoraElections, Downloading agora-tools, agora-results
+  become: true
+  become_user: agoraelections
+  git: repo={{ item.repo }} version={{ item.version }}
+       dest=/home/agoraelections/{{ item.dest }} force={{ item.force }}
+  with_items:
+    - repo: "{{ repos.atools.repo }}"
+      version: "{{ repos.atools.version }}"
+      force: "{{ repos.atools.force }}"
+      dest: agora-tools
+    - repo: "{{ repos.results.repo }}"
+      version: "{{ repos.results.version }}"
+      force: "{{ repos.results.force }}"
+      dest: agora-results
 
-- name: AgoraResults, req.txt
+# this block&rescue is only a workaround so that it works in ansible 2.2.0,
+# 2.2.1 should have a fix for the issue, see
+# https://github.com/ansible/ansible-modules-core/issues/5347
+- block:
+    - name: AgoraElections, agora-tools virtualenv
+      pip:
+        requirements: /home/agoraelections/agora-tools/requirements.txt
+        virtualenv: /home/agoraelections/tenv
+        virtualenv_python: python3
+
+  rescue:
+    - name: AgoraElections, agora-tools virtualenv
+      pip:
+        requirements: /home/agoraelections/agora-tools/requirements.txt
+        virtualenv_python: python3
+        executable: /home/agoraelections/tenv/bin/pip
+  become: true
+  become_user: agoraelections
+
+- name: AgoraElections, req.txt
   sudo: true
   template: src=agora-elections/templates/results.req.txt
             dest=/home/agoraelections/agora-results/results.req.txt

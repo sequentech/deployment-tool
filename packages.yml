@@ -57,6 +57,7 @@
     - libgmp-dev
     - make
     - m4
+    - p7zip-full
 
 - name: Packages, check whether old 9.3 postgres is installed
   shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
