@@ -1,0 +1,49 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2017  Agora Voting SL <nvotes@nvotes.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+- name: AgoraElections, download jmeter for testing
+  become: true
+  become_user: agoraelections
+  get_url:
+    url: http://apache.uvigo.es/jmeter/binaries/apache-jmeter-3.1.tgz
+    dest: /home/agoraelections/apache-jmeter-3.1.tgz
+    checksum: sha1:70c4306b331f2b793ba947a94821266b18a32264
+
+- name: AgoraElections, create jmeter folder
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/jmeter
+    state: directory
+    owner: agoraelections
+    group: agoraelections
+    mode: 0755
+
+- name: AgoraElections, untar jmeter
+  become: true
+  become_user: agoraelections
+  unarchive:
+    copy: no
+    src: /home/agoraelections/apache-jmeter-3.1.tgz
+    dest: /home/agoraelections/jmeter
+
+- name: AgoraElections, copy jmeter configuration
+  become: true
+  become_user: agoraelections
+  template:
+    src: agora-elections/templates/test.jmx
+    dest: /home/agoraelections/agora-elections/admin/test.jmx
+    owner: agoraelections
+    mode: 0644
