@@ -38,12 +38,3 @@
     copy: no
     src: /home/agoraelections/apache-jmeter-3.1.tgz
     dest: /home/agoraelections/jmeter
-
-- name: AgoraElections, copy jmeter configuration
-  become: true
-  become_user: agoraelections
-  template:
-    src: agora-elections/templates/test.jmx
-    dest: /home/agoraelections/agora-elections/admin/test.jmx
-    owner: agoraelections
-    mode: 0644
