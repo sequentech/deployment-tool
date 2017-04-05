@@ -252,6 +252,19 @@ config:
     # vote changing.
     max_revotes: 5
 
+    # election-orchestra makes a callback to agora_elections using url path
+    # /api/election/:id/tallydone
+    # On this callback, agora_elections needs to download the tally from
+    # election-orchestra. As this download can fail, and in order to minimize
+    # the brittleness of the service, we can configure the timeout period and
+    # number of retries of this download
+
+    # Download tally timeout in milliseconds, default is one hour
+    download_tally_timeout: 3600000
+
+    # Download tally retries
+    download_tally_retries: 5
+
     # vote callback allows agora-elections to notify the authentication module
     # (which can be external) that a vote has been cast.
     vote_callback:
