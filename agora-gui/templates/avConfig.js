@@ -86,21 +86,27 @@ var avConfigData = {
     //
     // Default: not set
     //
+    {% if config.agora_gui.forceLanguage %}
     lng: "{{ config.agora_gui.language }}",
+    {% endif %}
 
 
     // specifies the set language query string.
     //
     // Default: "lang"
     //
-    detectLngQS: 'lang',
+    detectLngQS: '{{ config.agora_gui.detectLanguageQueryString }}',
 
 
     // Specifies what translations will be available.
     //
     // Default: ['en', 'es', 'gl', 'ca']
     //
-    // lngWhitelist: ['en', 'es', 'gl', 'ca'],
+    lngWhitelist: [
+      {% for lang in config.agora_gui.languagesWhitelist %}
+      '{{lang}}'{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ],
   },
 
   // specifies the language cookie options,
