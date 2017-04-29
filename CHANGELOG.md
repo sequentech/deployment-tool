@@ -1,3 +1,19 @@
+## 17.04 (29-04-2017)
+
+- Add desborda voting system.
+- Enable selection by category with one click.
+- Enable drag n drop on mobile platforms.
+- Improve language configuration on ansible deployments.
+- Make dumpvotes faster (hours down to seconds).
+- Add tool to generate votes for benchmarking.
+- Improve permissions granularity: create-real-elections.
+- Add callback from agora_elections to auth system to enable limiting revotes.
+- Automate creating zip for verifiable results.
+- Add voted/not voted filter category to gui-admin to enable sending messages to those who haven't voted yet.
+- Add script to populate config with random passwords.
+- Improve postgres backups.
+- Add PDF output to results formats.
+
 ## 3.4.0 (01-12-2016)
 - Add support for multiple authentication methods per election.
 - Enable editing the election json before creating the election.

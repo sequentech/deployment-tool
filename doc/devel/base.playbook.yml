@@ -23,3 +23,4 @@
     - include: java.yml
     - include: packages.yml
     - include: system.yml
+    - include: sudoers/main.yml

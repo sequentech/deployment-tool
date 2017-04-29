@@ -34,6 +34,13 @@
   sudo: true
   user: name=nginx shell=/bin/false home=/nonexistent group=nginx
 
+- name: System, nginx log directory permissions
+  sudo: true
+  file:
+    path: /var/log/nginx
+    owner: nginx
+    state: directory
+
 - name: System, cert directories creation
   sudo: true
   file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users

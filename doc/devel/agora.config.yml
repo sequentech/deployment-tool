@@ -31,6 +31,32 @@ config:
   global_secret_key: '<PASSWORD>'
   cloudflare: false
 
+  # create daily and live backups
+  postgres_backups:
+    # enables or disables backups
+    # set to false to stop making backups (it won't delete already archived backups)
+    # allowed values: true | false
+    enabled: true
+    # folder where the postgres backups will be stored
+    folder: /var/postgres_backups
+    # create a base backup every time postgres_backups.yml is deployed
+    # allowed values: true | false
+    backup_on_deploy: true
+    # enforces that a new WAL file is created after archive_timeout seconds max
+    archive_timeout: 600
+    # cron tab configuration for base backups
+    base_backups:
+      # number of days base backups are kept/stored (0 means forever)
+      keep_days: 30
+      # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+      weekday: '*'
+      # Day of the month the job should run ( 1-31, *, */2, etc )
+      day: '*'
+      # minute when the job should run ( 0-59, *, */2, etc )
+      minute: 0
+      # hour when the job should run ( 0-23, *, */2, etc )
+      hour: 4
+
   host: agora
 
   # election-orchestra
@@ -42,15 +68,104 @@ config:
   eorchestra_password: '<PASSWORD>'
   auto_mode: true
 
+  # this section is all about giving to some existing users permissions to
+  # sudo into ansible-created users. If you already have these kind of
+  # permissions, its not needed. Disabled by default.
+  sudoers:
+    # enables or disables the adding of the sudo permissions
+    is_enabled: false
+
+    # list of users, separated by commas and spaces, that can sudo into
+    # ansible-created users
+    agora_users: agora
+
   http:
+    # Log level for error log in nginx.
+    #
+    # This log level stablishes the error_log directive level of error for
+    # nginx web server in /etc/nginx/nginx.conf at the http directive. The
+    # error log will appear in /var/log/nginx/error.log
+    #
+    # For more details, see
+    # http://nginx.org/en/docs/ngx_core_module.html#error_log
+    #
+    # Allowed values: debug, info, notice, warn, error, crit, alert, or emerg
+    # Default: error
+    nginx_error_log_level: error
+
     # In big elections memory or disk buffer might need to be increased,
     # specifically to upload the list of valid voterids if any filtering is going
     # to be made, or when uploading the list of electors. This setting is
     # applied at once to:
     # play.http.parser.maxDiskBuffer (in agora-elections config)
     # play.http.parser.maxMemoryBuffer (in agora-elections config)
+    # parsers.text.maxLength (in agora-elections config)
     # client_max_body_size (in nginx)
     max_body_size: 2m
+
+    # Path of the TLS PEM public certificate.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   agoraelections:users.
+    # - Must be a PEM certificate encrypted with the key in the path specified
+    #   in config.http.tls_cert_key_path.
+    #
+    # By default it is '/srv/certs/selfsigned/cert.pem', but you can change it
+    # to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_cert_path: /srv/certs/selfsigned/cert.pem
+
+    # Just like tls_cert_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_path: /srv/certs/selfsigned/cert.pem
+
+    # Path of the TLS PEM certificate private key.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   agoraelections:users.
+    # - Must be the private key of the public certificate of
+    #   config.http.tls_cert_path.
+    #
+    # By default it is '/srv/certs/selfsigned/key-nopass.pem', but you can
+    # change it to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Just like tls_cert_key_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Path of the chained list of the public certificates of the Certificate
+    # Authorities that validate the config.http.tls_cert_path certificate
+    # signature.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   agoraelections:users.
+    # - Must be a list of PEM certificate public keys.
+    #
+    # By default it is '/srv/certs/selfsigned/calist', but you can
+    # change it to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_calist_path: /srv/certs/selfsigned/calist
+
+    # Just like tls_calist_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_calist_path: /srv/certs/selfsigned/calist
 
   # some java related configuration options
   java:
@@ -97,6 +212,7 @@ config:
       #- agora_results.pipes.parity.reorder_winners
       #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
       #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.desborda.podemos_desborda
       #- agora_results.pipes.pretty_print.pretty_print_stv_winners
       - agora_results.pipes.pretty_print.pretty_print_not_iterative
       - agora_results.pipes.results.do_tallies
@@ -104,6 +220,7 @@ config:
       #- agora_results.pipes.results.apply_removals
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
+      #- agora_results.pipes.pdf.configure_pdf
 
   # agora-elections
   agora_elections:
@@ -134,6 +251,19 @@ config:
     # Here you can set the maximum number of vote changes. Set to 1 to disable
     # vote changing.
     max_revotes: 5
+
+    # election-orchestra makes a callback to agora_elections using url path
+    # /api/election/:id/tallydone
+    # On this callback, agora_elections needs to download the tally from
+    # election-orchestra. As this download can fail, and in order to minimize
+    # the brittleness of the service, we can configure the timeout period and
+    # number of retries of this download
+
+    # Download tally timeout in milliseconds, default is one hour
+    download_tally_timeout: 3600000
+
+    # Download tally retries
+    download_tally_retries: 5
 
     # vote callback allows agora-elections to notify the authentication module
     # (which can be external) that a vote has been cast.
@@ -179,9 +309,22 @@ config:
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
 
-    # These are variables that go to the /home/agoragui/avConfig.js configuration
-    # file. See the file for more details.
+    # Default language of the application
     language: en
+
+    # Forces the default language
+    forceLanguage: false
+
+    # Specifies the set language query string, so that the
+    detectLanguageQueryString: lang
+
+    # Specifies what translations will be available
+    languagesWhitelist:
+      - en
+      - es
+      - gl
+      - ca
+
     defaultRoute: /admin/login
 
     # Minimum loading time (milliseconds)
@@ -239,12 +382,6 @@ config:
       # you can include any html text in agora-gui-admin html to customize it
       admin_html_body_include: ''
  
-      # you can include any html text in agora-gui-elections html to customize it
-      elections_html_body_include: ''
-
-      # you can include any html text in agora-gui-booth html to customize it
-      booth_html_body_include: ''
-
       # you can include any html text in agora-gui-elections html to customize it
       elections_html_body_include: ''
 
@@ -450,7 +587,7 @@ config:
       login: '<LOGIN>'
 
       # Provider's password.
-      password: '<PASSWORD>'
+      sms_password: '<PASSWORD>'
 
       # Base URL of the API of the provider. Depends on the provider, the
       # default works for esendex.

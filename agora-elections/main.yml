@@ -36,7 +36,6 @@
   sudo_user: agoraelections
   template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
 
-
 - name: AgoraElections, Pipes whitelist
   sudo: true
   sudo_user: agoraelections
@@ -45,6 +44,11 @@
     dest=/home/agoraelections/agora-elections/conf/pipes_whitelist
     owner="agoraelections"
     mode=0644
+
+- name: AgoraElections, postgres connection password setup
+  sudo: true
+  sudo_user: agoraelections
+  template: src=agora-elections/templates/.pg_service.conf dest=/home/agoraelections/.pg_service.conf owner="agoraelections" mode=0600
 
 - name: AgoraElections, Test conf
   sudo: true
@@ -70,7 +74,7 @@
 - name: AgoraElections, Key store setup (1)
   sudo: true
   sudo_user: agoraelections
-  shell: openssl pkcs12 -export -in /srv/certs/selfsigned/cert.pem -inkey /srv/certs/selfsigned/key-nopass.pem -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
+  shell: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
          chdir=/home/agoraelections/
 
 - name: AgoraElections, Key store setup (2)
@@ -171,3 +175,6 @@
 - name: AgoraElections, restarting supervisor
   sudo: true
   service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
+
+# jmeter for testing
+- include: jmeter.yml

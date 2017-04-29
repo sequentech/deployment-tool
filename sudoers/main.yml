@@ -1,5 +1,5 @@
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2016  Agora Voting SL <agora@agoravoting.com>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -14,16 +14,12 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- hosts: all
-
-  tasks:
-    - include_vars: config.yml
-    - include_vars: repos.yml
-
-    - include: java.yml
-    - include: packages.yml
-    - include: system.yml
-    - include: postgres_backups.yml
-    - include: sudoers/main.yml
-    - include: agora-tools/main.yml
-    - include: eorchestra/main.yml
+- name: Sudoers, add sudoers files
+  sudo: true
+  when: config.sudoers.is_enabled
+  template:
+    src: sudoers/templates/80-agora-sudoers
+    dest: /etc/sudoers.d/80-agora-sudoers
+    owner: root
+    group: root
+    mode: 440

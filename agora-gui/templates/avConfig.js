@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '3.4.0';
+var AV_CONFIG_VERSION = '17.04';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -86,21 +86,27 @@ var avConfigData = {
     //
     // Default: not set
     //
+    {% if config.agora_gui.forceLanguage %}
     lng: "{{ config.agora_gui.language }}",
+    {% endif %}
 
 
     // specifies the set language query string.
     //
     // Default: "lang"
     //
-    detectLngQS: 'lang',
+    detectLngQS: '{{ config.agora_gui.detectLanguageQueryString }}',
 
 
     // Specifies what translations will be available.
     //
     // Default: ['en', 'es', 'gl', 'ca']
     //
-    // lngWhitelist: ['en', 'es', 'gl', 'ca'],
+    lngWhitelist: [
+      {% for lang in config.agora_gui.languagesWhitelist %}
+      '{{lang}}'{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ],
   },
 
   // specifies the language cookie options,

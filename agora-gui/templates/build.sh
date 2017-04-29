@@ -18,11 +18,15 @@
 base=/home/agoragui
 guib=/home/agoragui
 
+{% if config.has_https_proxy %}
+# otherwise bower won't use the proxy appropiately
+export https_proxy=$http_proxy
+{% endif %}
+
 # compile all the modules, one by one. stop if they don't build, because
 # otherwise we would put in production a non-working version of the software
 cd $guib/agora-gui-admin/
-bower update --config.interactive=false
-grunt build
+bower update --config.interactive=false && grunt build
 if [ $? -ne 0 ]
 then
   echo "build error in agora-gui-admin"
@@ -30,8 +34,7 @@ then
 fi
 
 cd $guib/agora-gui-booth/
-bower update --config.interactive=false
-grunt build
+bower update --config.interactive=false && grunt build
 if [ $? -ne 0 ]
 then
   echo "build error in agora-gui-booth"
@@ -39,8 +42,7 @@ then
 fi
 
 cd $guib/agora-gui-elections/
-bower update --config.interactive=false
-grunt build
+bower update --config.interactive=false && grunt build
 if [ $? -ne 0 ]
 then
   echo "build error in agora-gui-elections"
