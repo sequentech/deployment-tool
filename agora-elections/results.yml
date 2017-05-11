@@ -31,7 +31,7 @@
 
 - name: AgoraElections, update agora-results pipes whitelist
   sudo: true
-  sudo_user: agoraverifier
+  sudo_user: agoraelections
   replace:
     dest=/home/agoraelections/agora-results/agora-results
     regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"

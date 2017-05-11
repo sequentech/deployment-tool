@@ -31,7 +31,7 @@
 
 - name: EOrchestra, update agora-results pipes whitelist
   sudo: true
-  sudo_user: agoraverifier
+  sudo_user: eorchestra
   replace:
     dest=/home/eorchestra/agora-results/agora-results
     regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
