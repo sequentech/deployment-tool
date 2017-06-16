@@ -345,6 +345,12 @@ config:
     # allowed values (string): true|false
     debug: 'false'
 
+    # gui-admin allows to import users from a csv, importing users in batches
+    # this parameter sets the batch size
+    # 0 means doing the import in only one batch always
+    # allowed values: integer number >= 0
+    census_import_batch: 500
+
     # If you want tallies to be linked and downloaded from a different URL,
     # change this variable from false to a string. This could be an example:
     #

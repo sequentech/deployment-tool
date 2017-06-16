@@ -61,6 +61,12 @@ var avConfigData = {
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.agora_gui.min_loading_time }},
 
+  // gui-admin allows to import users from a csv, importing users in batches
+  // this parameter sets the batch size
+  // 0 means doing the import in only one batch always
+  // allowed values: integer number >= 0
+  censusImportBatch: {{ config.agora_gui.census_import_batch|int }},
+
   resourceUrlWhitelist: [
     // Allow same origin resource loads.
     'self',
