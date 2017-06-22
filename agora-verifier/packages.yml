@@ -42,5 +42,16 @@
   action: apt pkg={{item}} state=installed
   with_items:
     - sharutils
-    - oracle-java7-installer
-    - oracle-java7-set-default
+    - openjdk-7-jdk
+
+- name: AgoraVerifier, settings OpenJDK 7 as default Java temporarily
+  sudo: true
+  alternatives:
+    name: java
+    path: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+
+- name: AgoraVerifier, settings OpenJDK 7 as default Javac temporarily
+  sudo: true
+  alternatives:
+    name: javac
+    path: /usr/lib/jvm/java-7-openjdk-amd64/bin/javac
