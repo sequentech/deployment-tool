@@ -67,6 +67,8 @@ EMAIL_PORT = "{{config.authapi.email.email_port}}"
 
 EMAIL_BASE_TEMPLATE = """{{config.authapi.email.base_template}}"""
 
+EMAIL_BASE_TITLE_TEMPLATE = """{{config.authapi.email.base_title_template}}"""
+
 EMAIL_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
 
 {% if 'email' == config.authapi.email.backend %}

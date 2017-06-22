@@ -630,6 +630,10 @@ config:
       # replaced by the message, so you can add prefix and suffixes.
       base_template: "__MESSAGE__\n\n -- nVotes https://nvotes.com"
 
+      # Base template for plain text email titles. The __TITLE__ will be
+      # replaced by the title, so you can add prefix and suffixes.
+      base_title_template_: "__TITLE__ - nVotes"
+
       # Possible backends: email|console
       backend: 'console'
 
