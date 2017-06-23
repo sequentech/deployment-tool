@@ -16,7 +16,7 @@
       "census": "{{config.authapi.admin_census_mode}}",
       "extra_fields": {{config.authapi.extra_fields}},
       "auth_method": "{{config.authapi.auth_method}}",
-      "auth_method_config": "{\"config\":{\"authentication-action\":{ \"mode\":\"\" },\"msg\":\"Authenticate at  __URL__ with __CODE__\"{% if config.authapi.auth_method == 'user-and-password' or config.authapi.auth_method == 'email' %}, \"subject\":\"Confirm your email\" {% endif %}},\"pipeline\":{\"register-pipeline\":[[\"check_whitelisted\",{\"field\":\"ip\"}],[\"check_blacklisted\",{\"field\":\"ip\"}],[\"check_total_max\",{\"max\":8,\"field\":\"ip\"}]],\"authenticate-pipeline\":[],\"give_perms\":[{\"object_type\":\"UserData\",\"perms\":[\"edit\"],\"object_id\":\"UserDataId\"},{\"object_type\":\"AuthEvent\",\"perms\":[\"create\"]}]}}",
+      "auth_method_config": "{\"config\":{\"authentication-action\":{ \"mode\":\"\" },\"msg\":\"{% if config.authapi.auth_method == 'sms-otp' %}Your code is __CODE__{% else%}Authenticate at  __URL__ with __CODE__{% endif %}\"{% if config.authapi.auth_method == 'user-and-password' or config.authapi.auth_method == 'email' %}, \"subject\":\"Confirm your email\" {% endif %}},\"pipeline\":{\"register-pipeline\":[[\"check_whitelisted\",{\"field\":\"ip\"}],[\"check_blacklisted\",{\"field\":\"ip\"}],[\"check_total_max\",{\"max\":8,\"field\":\"ip\"}]],\"authenticate-pipeline\":[],\"give_perms\":[{\"object_type\":\"UserData\",\"perms\":[\"edit\"],\"object_id\":\"UserDataId\"},{\"object_type\":\"AuthEvent\",\"perms\":[\"create\"]}]}}",
       "status": "started",
       "created": "2015-02-16T17:41:28+00:00"
     },
