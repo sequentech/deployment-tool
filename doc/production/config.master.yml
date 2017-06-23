@@ -567,6 +567,12 @@ config:
       # prefixes are entered like "+34" for Spain, for example
       tlf: ''
 
+    # sms otp authentication configuration
+    sms_otp:
+      # how many seconds does a one time toke has until it needs to be renewed.
+      # 1 minute by default (60 seconds)
+      expire_seconds: 60
+
     # sms configuration
     sms:
       # enable sms configuration. if set to false, the sms configuration doesn't

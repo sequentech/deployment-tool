@@ -79,6 +79,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 {% endif %}
 
+SMS_OTP_EXPIRE_SECONDS = {{config.authapi.sms_otp.expire_seconds}}
+
 {% for extra_option in config.authapi.extra_options %}
 {{extra_option}}
 {% endfor %}
