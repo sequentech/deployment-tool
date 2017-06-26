@@ -447,7 +447,18 @@ config:
       faq: 'https://nvotes.com/doc/en/'
       overview: 'https://agoravoting.com/overview/'
       technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
-
+    
+    # social networks buttons configuration
+    share_social:
+      allow_edit: true
+      default:
+        - network: 'Twitter'
+          button_text: ''
+          social_message: 'I have just voted in election __URL__, you can too! #nvotes'
+        - network: 'Facebook'
+          button_text: ''
+          social_message: '__URL__'
+          
   # configuration related to the nginx web server
   webserver:
     # configures the "worker_processes" setting in nginx. Typically you would
