@@ -1,0 +1,18 @@
+# Reason
+
+If a server using the free plugin is in the following state and wants to update to a newer state while maintaining the information on the admin_field called expected_census, the update.py script must be executed after deployment of the updated version.
+
+authapi branch free commit adc8772adc2b9d652e98484f5226251e315d7887 Date:   Tue Jun 20 15:56:36 2017 +0200
+agora-gui-admin free commit f3a612945196ecfe9d0b57c378528e2f24d76543 Date:   Tue Jun 20 17:25:04 2017 +0200
+agora-gui-common free commit 4c925343761bc5b4d7fe9af5698269796d8135fb Date:   Tue Jun 20 17:16:32 2017 +0200
+agora-dev-box free commit 914885ed384317a585b26bb6f250a15b773d7968 Date:   Fri Jun 16 17:24:34 2017 +0200
+nvotes-plugins free commit 78602c5a9683af94e11f5a8d82a4aff4b5642575 Date:   Tue Jun 20 15:09:27 2017 +0000
+nvotes-plugins-deploy free commit 4f6d194266c30f29bf7b34e8abfb7d326ba00d3c Date:   Tue Jun 20 10:45:27 2017 +0200
+
+# Commands to execute
+
+    sudo su agoraelections
+    cd ~
+    . tenv/bin/activate
+    pip install -r requirements.txt
+    python update.py
