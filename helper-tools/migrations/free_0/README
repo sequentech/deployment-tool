@@ -11,6 +11,8 @@ nvotes-plugins-deploy free commit 4f6d194266c30f29bf7b34e8abfb7d326ba00d3c Date:
 
 # Commands to execute
 
+First, edit update.py and replace AGORA_ELECTIONS_PASSWORD and AUTHAPI_PASSWORD with the required passwords. Then:
+
     sudo su agoraelections
     cd ~
     . tenv/bin/activate
