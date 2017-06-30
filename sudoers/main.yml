@@ -15,7 +15,7 @@
 
 ---
 - name: Sudoers, add sudoers files
-  sudo: true
+  become: true
   when: config.sudoers.is_enabled
   template:
     src: sudoers/templates/80-agora-sudoers

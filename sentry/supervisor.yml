@@ -15,21 +15,21 @@
 
 ---
 - name: AuthApi, Creating sentry_celery.sh
-  sudo: true
+  become: true
   template: src=sentry/templates/sentry_celery.sh dest=/home/sentry/sentry_celery.sh owner="sentry" mode=0744
 
 - name: AuthApi, Creating sentry.sh
-  sudo: true
+  become: true
   template: src=sentry/templates/sentry.sh dest=/home/sentry/sentry.sh owner="sentry" mode=0744
 
 - name: Sentry, Creating supervisord conf
-  sudo: true
+  become: true
   template: src=sentry/templates/supervisor.conf dest=/etc/supervisor/conf.d/sentry.conf owner="root" mode=0644
 
 - name: Sentry, Creating celery supervisord conf
-  sudo: true
+  become: true
   template: src=sentry/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/sentry_celery.conf owner="root" mode=0644
 
 - name: Sentry, Restarting supervisord
-  sudo: true
+  become: true
   service: name=supervisor state=restarted sleep={{ params.sleep.slow }}

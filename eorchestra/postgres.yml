@@ -15,13 +15,13 @@
 
 ---
 - name: EOrchestra, Create Database User
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   postgresql_user: user=eorchestra password=eorchestra port=5432
 
 - name: EOrchestra, Create Database
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   postgresql_db: 
     name=eorchestra 
     owner=eorchestra

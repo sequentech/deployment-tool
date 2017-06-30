@@ -15,5 +15,5 @@
 
 ---
 - name: AuthApi, Creating default user
-  sudo: true
+  become: true
   user: name=authapi shell=/bin/bash

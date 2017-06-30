@@ -15,11 +15,11 @@
 
 ---
 - name: High Availability & Load Balancing, Updating packages
-  sudo: true
+  become: true
   action: apt update_cache=yes
 
 - name: High Availability & Load Balancing, Installing packages
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=installed
   with_items:
     - memcached
@@ -40,7 +40,7 @@
   service: name=memcached state=restarted
 
 - name: High Availability & Load Balancing, Create ssh key for agoraelections, postgres
-  sudo: true
+  become: true
   user:
     name={{item}}
     generate_ssh_key=yes
@@ -54,7 +54,7 @@
    - postgres
 
 - name: High Availability & Load Balancing [master], Authorizing agoraelections slave keys
-  sudo: true
+  become: true
   when: config.load_balancing.is_master
   authorized_key:
     user=agoraelections
@@ -62,7 +62,7 @@
   with_items: "{{ config.load_balancing.master.slave_agoraelections_ssh_keys }}"
 
 - name: High Availability & Load Balancing [master], Authorizing postgres slave keys
-  sudo: true
+  become: true
   when: config.load_balancing.is_master
   authorized_key:
     user=postgres
@@ -70,8 +70,8 @@
   with_items: "{{ config.load_balancing.master.slave_postgres_ssh_keys }}"
 
 - name: High Availability & Load Balancing [slave], Authorizing postgres slave keys
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   when: not config.load_balancing.is_master
   shell: |
     expect -c '
@@ -83,8 +83,8 @@
   failed_when: "'hola' not in command_result.stdout or 'password:' in command_result.stdout"
 
 - name: High Availability & Load Balancing [slave], Authorizing agoraelections slave keys
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   when: not config.load_balancing.is_master
   shell: |
     expect -c '

@@ -15,9 +15,9 @@
 
 ---
 - name: AuthApi, Creating nginx conf
-  sudo: true
+  become: true
   template: src=authapi/templates/nginx.conf dest=/etc/nginx/conf.d/authapi.conf owner="root" mode=0644
 
 - name: AuthApi, Restarting nginx
-  sudo: true
+  become: true
   service: name=nginx state=restarted

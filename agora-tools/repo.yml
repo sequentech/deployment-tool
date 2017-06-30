@@ -15,6 +15,6 @@
 
 ---
 - name: AgoraTools, Downloading agora-tools
-  sudo: true
+  become: true
   git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
        dest=/srv/agora-tools force={{ repos.atools.force }}

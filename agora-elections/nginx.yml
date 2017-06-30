@@ -14,9 +14,9 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 - name: AgoraElections, Creating nginx conf
-  sudo: true
+  become: true
   template: src=agora-elections/templates/nginx.conf dest=/etc/nginx/conf.d/agora-elections.conf owner="root" mode=0644
 
 - name: AgoraElections, Restarting nginx
-  sudo: true
+  become: true
   service: name=nginx state=restarted

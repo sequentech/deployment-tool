@@ -15,23 +15,23 @@
 
 ---
 - name: Sentry, Sentry installation
-  sudo: true
-  sudo_user: sentry
+  become: true
+  become_user: sentry
   pip: name=sentry[postgres] virtualenv=/home/sentry/venv version=8.9.0
 
 - name: Sentry, Creating conf
-  sudo: true
+  become: true
   template: src=sentry/templates/sentry.conf.py dest=/home/sentry/sentry.conf.py owner="sentry" mode=0644
 
 - name: Sentry, Create Database User
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   when: config.load_balancing.is_master
   postgresql_user: user=sentry password='{{config.sentry.db_password}}' port=5432
 
 - name: Sentry, Create Database
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   when: config.load_balancing.is_master
   postgresql_db:
     name=sentry
@@ -43,14 +43,14 @@
     state=present
 
 - name: Sentry upgrade
-  sudo: true
-  sudo_user: sentry
+  become: true
+  become_user: sentry
   when: config.load_balancing.is_master
   shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py upgrade --noinput
 
 - name: Sentry, creating the first user
-  sudo: true
-  sudo_user: sentry
+  become: true
+  become_user: sentry
   when: config.load_balancing.is_master
   shell: /home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py createuser --no-input --email='{{ config.sentry.admin_user }}' --superuser --password='{{ config.sentry.admin_password }}'
   register: command_result

@@ -15,9 +15,9 @@
 
 ---
 - name: AgoraGui, Creating nginx conf
-  sudo: true
+  become: true
   template: src=agora-gui/templates/nginx.conf dest=/etc/nginx/conf.d/agoragui.conf owner="root" mode=0644
 
 - name: AgoraGui, Restarting nginx
-  sudo: true
+  become: true
   service: name=nginx state=restarted

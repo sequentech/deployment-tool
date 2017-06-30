@@ -15,8 +15,8 @@
 
 ---
 - name: EOrchestra, Downloading frestq, election-orchestra and vfork
-  sudo: true
-  sudo_user: eorchestra
+  become: true
+  become_user: eorchestra
   git: repo={{ item.repo }} version={{ item.version }}
        dest=/home/eorchestra/{{ item.dest }} force={{ item.force }}
   with_items:

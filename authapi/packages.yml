@@ -15,11 +15,11 @@
 
 ---
 - name: AuthApi, Updating packages
-  sudo: true
+  become: true
   action: apt update_cache=yes
 
 - name: AuthApi,  Installing packages
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=installed
   with_items:
     - nginx
