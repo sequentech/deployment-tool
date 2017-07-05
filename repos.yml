@@ -57,7 +57,7 @@ repos:
         force: yes
     guiadmin:
         repo: https://github.com/agoravoting/agora-gui-admin.git
-        version: 103111.1
+        version: afields-refactor
         force: yes
     guibooth:
         repo: https://github.com/agoravoting/agora-gui-booth.git
@@ -65,5 +65,5 @@ repos:
         force: yes
     guielections:
         repo: https://github.com/agoravoting/agora-gui-elections.git
-        version: 103111.1
+        version: afields-refactor
         force: yes
