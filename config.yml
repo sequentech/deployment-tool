@@ -370,8 +370,8 @@ config:
     admin_fields: []
     ## free plugin
       #- name: "expected_census"
-        #label: "free.adminFields.expectedCensus.label"
-        #description: "free.adminFields.expectedCensus.description"
+        #label: "Expected Census"
+        #description: "Expected Census"
         #type: "int"
         #min: 0
         #step: 1
@@ -380,8 +380,8 @@ config:
         #private: true
     ## legal plugin
       #- name: "legal_name"
-        #label: "legal.adminFields.legalName.label"
-        #placeholder: "legal.adminFields.legalName.placeholder"
+        #label: "Name"
+        #placeholder: "nVotes SL"
         #min: 1
         #type: "text"
         #value: ""
@@ -389,8 +389,8 @@ config:
         #private: false
 
       #- name: "legal_org"
-        #label: "legal.adminFields.legalOrg.label"
-        #placeholder: "legal.adminFields.legalOrg.placeholder"
+        #label: "Organization"
+        #placeholder: "nVotes SL"
         #type: "text"
         #min: 1
         #value: ""
@@ -398,8 +398,8 @@ config:
         #private: false
 
       #- name: "legal_id"
-        #label: "legal.adminFields.legalId.label"
-        #placeholder: "legal.adminFields.legalId.placeholder"
+        #label: "VAT"
+        #placeholder: "X1234567"
         #type: "text"
         #min: 1
         #value: ""
@@ -407,8 +407,8 @@ config:
         #private": false
 
       #- name: "legal_contact"
-        #label: "legal.adminFields.legalContact.label"
-        #placeholder: "legal.adminFields.legalContact.placeholder"
+        #label: "Contact"
+        #placeholder: "nvotes@nvotes.com"
         #type: "email"
         #value: ""
         #required: true
