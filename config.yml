@@ -366,6 +366,54 @@ config:
     # allowed values: true| false
     show_doc_on_vote_cast: false
 
+    # admin fields
+    admin_fields: []
+    ## free plugin
+      #- name: "expected_census"
+        #label: "free.adminFields.expectedCensus.label"
+        #description: "free.adminFields.expectedCensus.description"
+        #type: "int"
+        #min: 0
+        #step: 1
+        #value: 1000 # default expected census
+        #required: true
+        #private: true
+    ## legal plugin
+      #- name: "legal_name"
+        #label: "legal.adminFields.legalName.label"
+        #placeholder: "legal.adminFields.legalName.placeholder"
+        #min: 1
+        #type: "text"
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_org"
+        #label: "legal.adminFields.legalOrg.label"
+        #placeholder: "legal.adminFields.legalOrg.placeholder"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_id"
+        #label: "legal.adminFields.legalId.label"
+        #placeholder: "legal.adminFields.legalId.placeholder"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private": false
+
+      #- name: "legal_contact"
+        #label: "legal.adminFields.legalContact.label"
+        #placeholder: "legal.adminFields.legalContact.placeholder"
+        #type: "email"
+        #value: ""
+        #required: true
+        #private: false
+
     # Details pertaining to the organization that runs the software
     organization:
       # changes the organization logo. The path should be a path accessible to

@@ -58,6 +58,58 @@ var avConfigData = {
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
 
+  // admin fields
+  adminFields: [
+      {% for field in config.agora_gui.admin_fields %}
+
+      {
+          name: "{{ field.name }}",
+      {% if field.label is defined %}
+
+          label: "{{ field.label }}",
+      {% endif %}
+      {% if field.description is defined %}
+
+          description: "{{ field.description }}",
+      {% endif %}
+      {% if field.placeholder is defined %}
+
+          placeholder: "{{ field.placeholder }}",
+      {% endif %}
+      {% if field.min is defined %}
+
+          min: {{ field.min }},
+      {% endif %}
+      {% if field.max is defined %}
+
+          max: {{ field.max }},
+      {% endif %}
+      {% if field.step is defined %}
+
+          step: {{ field.step }},
+      {% endif %}
+      {% if field.value is string %}
+
+          value: "{{ field.value }}",
+      {% else %}
+
+          value: {{ field.value }},
+      {% endif %}
+      {% if field.required is defined %}
+
+          required: {% if field.required %}true{% else %}false{% endif %},
+      {% endif %}
+      {% if field.private is defined %}
+
+          private: true,
+      {% endif %}
+
+          type: "{{ field.type }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+
+  ],
+
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.agora_gui.min_loading_time }},
 
