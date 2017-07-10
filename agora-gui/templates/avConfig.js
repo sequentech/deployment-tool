@@ -58,6 +58,8 @@ var avConfigData = {
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
 
+  calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
+
   // admin fields
   adminFields: [
       {% for field in config.agora_gui.admin_fields %}
