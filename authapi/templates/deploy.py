@@ -36,6 +36,7 @@ DATABASES = {
 SHARED_SECRET = b'{{config.agora_elections.shared_secret}}'
 
 SECRET_KEY = '{{ config.global_secret_key }}'
+HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/home"
 
 {% if config.authapi.sms.enabled %}
 SMS_PROVIDER = "{{config.authapi.sms.provider}}"

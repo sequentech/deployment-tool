@@ -167,6 +167,7 @@ EMAIL_BASE_TEMPLATE = "__MESSAGE__\n\n -- nVotes https://nvotes.com"
 
 EMAIL_BASE_TITLE_TEMPLATE = "__TITLE__ - nVotes"
 
+HOME_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/home"
 SMS_AUTH_CODE_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 EMAIL_AUTH_CODE_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 
