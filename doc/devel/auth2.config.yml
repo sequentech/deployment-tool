@@ -724,7 +724,7 @@ config:
 
       # Base template for plain text email titles. The __TITLE__ will be
       # replaced by the title, so you can add prefix and suffixes.
-      base_title_template_: "__TITLE__ - nVotes"
+      base_title_template: "__TITLE__ - nVotes"
 
     # list of extra options, added at the end as configuration lines in the
     # configuration file
