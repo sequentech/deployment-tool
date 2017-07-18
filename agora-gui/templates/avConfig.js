@@ -57,6 +57,12 @@ var avConfigData = {
   // show the documentation links after successfully casting a vote
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
+  
+  // if true, the calculated results are always automatically published
+  // valid values: true, false
+  always_publish: {% if config.agora_elections.always_publish %}true{% else %}false{% endif %},
+
+  calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
 
   // admin fields
   adminFields: [

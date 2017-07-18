@@ -265,24 +265,45 @@ config:
     # Download tally retries
     download_tally_retries: 5
 
-    # vote callback allows agora-elections to notify the authentication module
-    # (which can be external) that a vote has been cast.
-    vote_callback:
-      # mode can be one of three values:
-      #
-      # - default: vote callback is enabled but the url is the default one, for
-      #            the authapi deployed in this same server.
-      #
-      # - custom: vote callback is enabled to the url specified in the
-      #           custom_url field.
-      #
-      # - disabled: vote callback is disabled.
-      mode: 'default'
+    # if true, the calculated results are always automatically published
+    # valid values: true, false
+    always_publish: false
 
+    # list of callbacks from agora-elections to authapi
+    # these callbacks are sometimes required for complex behaviour because
+    # agora-elections knows about election states that authapi doesn't know about
+    # and these callbacks allow the agora-elections to call the authapi to
+    # execute actions at certain states
+    # each callback is defined by a name, mode and url
+    # supported callback names: vote, started, published
+    # mode can be one of three values:
+    #
+    # - default: vote callback is enabled but the url is the default one, for
+    #            the authapi deployed in this same server.
+    #
+    # - custom: vote callback is enabled to the url specified in the
+    #           custom_url field.
+    #
+    # - disabled: vote callback is disabled.
+    callbacks:
+      # vote callback allows agora-elections to notify the authentication module
+      # (which can be external) that a vote has been cast.
       # Custom url is only used with 'custom' mode. Note that the url can be
       # dynamic. To substitute the election id in the url, use ${eid}, and to
       # substitute the userid, use ${uid}
-      custom_url: ''
+      - name: vote
+        mode: default
+        url: ''
+      # started callback is triggered by agora-elections when an election
+      # changes to stage 'started'
+      - name: started
+        mode: disabled
+        url: ''
+      # started callback is triggered by agora-elections when an election
+      # changes to stage 'published'
+      - name: published
+        mode: disabled
+        url: ''
 
     # When this setting is true, an election can be virtual and have
     # subelections. A virtual election can have no votes itself and can move
@@ -365,6 +386,84 @@ config:
     # allowed values: true| false
     show_doc_on_vote_cast: false
 
+    # default configuration for calculate results on agora-gui-admin
+    calculate_results_default: >-
+      [
+          [
+            "agora_results.pipes.results.do_tallies",
+            {"ignore_invalid_votes": true}
+          ],
+          [
+            "agora_results.pipes.sort.sort_non_iterative",
+            {
+              "question_indexes": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+            }
+          ]
+      ]
+
+    # admin fields
+    admin_fields: []
+    ## free plugin
+      #- name: "expected_census"
+        #label: "Expected Census"
+        #description: "Expected Census"
+        #type: "int"
+        #min: 0
+        #step: 1
+        #value: 1000 # default expected census
+        #required: true
+        #private: true
+    ## legal plugin
+      #- name: "legal_name"
+        #label: "Name"
+        #placeholder: "nVotes SL"
+        #min: 1
+        #type: "text"
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_org"
+        #label: "Organization"
+        #placeholder: "nVotes SL"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_id"
+        #label: "VAT"
+        #placeholder: "X1234567"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private": false
+
+      #- name: "legal_contact"
+        #label: "Contact"
+        #placeholder: "nvotes@nvotes.com"
+        #type: "email"
+        #value: ""
+        #required: true
+        #private: false
+
+    # Details pertaining to the organization that runs the software
+    organization:
+      # changes the organization logo. The path should be a path accessible to
+      # ansible. Use an empty string ('') if you don't want to change the logo.
+      # Note: we recommend to use a png image with 18px height and less than
+      # 200px width.
+      logo_path: ''
+
+      # Name of the organization, appears in the logo mouse hover, in the login
+      # page ("Login into __NAME__ admin account"), in the poweredBy, etc
+      name: 'nVotes'
+
+      # URL that the logo links to
+      url: 'https://nvotes.com'
+
     contact:
       # Support contact email displayed in the footer links
       email: contact@example.com
@@ -408,21 +507,6 @@ config:
     # "foo.png" inside static_extra_path would be:
     # https://<DOMAIN>/election/static/static_extra/foo.png"
     static_extra_path: ''
-
-    # Details pertaining to the organization that runs the software
-    organization:
-      # changes the organization logo. The path should be a path accessible to
-      # ansible. Use an empty string ('') if you don't want to change the logo.
-      # Note: we recommend to use a png image with 18px height and less than
-      # 200px width.
-      logo_path: ''
-
-      # Name of the organization, appears in the logo mouse hover, in the login
-      # page ("Login into __NAME__ admin account"), in the poweredBy, etc
-      name: 'nVotes'
-
-      # URL that the logo links to
-      url: 'https://nvotes.com'
 
     # social networks footer links
     social:
@@ -640,7 +724,7 @@ config:
 
       # Base template for plain text email titles. The __TITLE__ will be
       # replaced by the title, so you can add prefix and suffixes.
-      base_title_template_: "__TITLE__ - nVotes"
+      base_title_template: "__TITLE__ - nVotes"
 
     # list of extra options, added at the end as configuration lines in the
     # configuration file
