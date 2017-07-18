@@ -15,60 +15,60 @@
 
 ---
 - name: System, setting hostname
-  sudo: true
+  become: true
   hostname: name={{ config.host }}
 
 - name: System, private ip in /etc/hosts
-  sudo: true
+  become: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
 
 - name: System, domain in /etc/hosts
-  sudo: true
+  become: true
   lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections.domain }}" state=present
 
 - name: System, Creating nginx group
-  sudo: true
+  become: true
   group: name=nginx state=present
 
 - name: System, Creating nginx user
-  sudo: true
+  become: true
   user: name=nginx shell=/bin/false home=/nonexistent group=nginx
 
 - name: System, nginx log directory permissions
-  sudo: true
+  become: true
   file:
     path: /var/log/nginx
     owner: nginx
     state: directory
 
 - name: System, cert directories creation
-  sudo: true
+  become: true
   file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users
 
 - name: System, self-signed certificate creation
-  sudo: true
+  become: true
   template: src=templates/cert.sh
             dest=/root/cert.sh
             owner=root mode=0755
 
 - name: System, self-signed certificate creation
-  sudo: true
+  become: true
   template: src=templates/cert.py
             dest=/root/cert.py
             owner=root mode=0755
 
 - name: System, self-signed certificate creation
-  sudo: true
+  become: true
   shell: /root/cert.sh
 
 - name: System, populating /etc/hosts
-  sudo: true
+  become: true
   lineinfile: dest=/etc/hosts line="{{ item.ip }} {{ item.hostname }}" state=present
   with_items: "{{ config.hosts }}"
 
 
 - name: System, updating /etc/screenrc
-  sudo: true
+  become: true
   template:
     src=templates/screenrc
     dest=/etc/screenrc

@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '17.04';
+var AV_CONFIG_VERSION = '103111.1';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -57,9 +57,73 @@ var avConfigData = {
   // show the documentation links after successfully casting a vote
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
+  
+  // if true, the calculated results are always automatically published
+  // valid values: true, false
+  always_publish: {% if config.agora_elections.always_publish %}true{% else %}false{% endif %},
+
+  calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
+
+  // admin fields
+  adminFields: [
+      {% for field in config.agora_gui.admin_fields %}
+
+      {
+          name: "{{ field.name }}",
+      {% if field.label is defined %}
+
+          label: "{{ field.label }}",
+      {% endif %}
+      {% if field.description is defined %}
+
+          description: "{{ field.description }}",
+      {% endif %}
+      {% if field.placeholder is defined %}
+
+          placeholder: "{{ field.placeholder }}",
+      {% endif %}
+      {% if field.min is defined %}
+
+          min: {{ field.min }},
+      {% endif %}
+      {% if field.max is defined %}
+
+          max: {{ field.max }},
+      {% endif %}
+      {% if field.step is defined %}
+
+          step: {{ field.step }},
+      {% endif %}
+      {% if field.value is string %}
+
+          value: "{{ field.value }}",
+      {% else %}
+
+          value: {{ field.value }},
+      {% endif %}
+      {% if field.required is defined %}
+
+          required: {% if field.required %}true{% else %}false{% endif %},
+      {% endif %}
+      {% if field.private is defined %}
+
+          private: true,
+      {% endif %}
+
+          type: "{{ field.type }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+
+  ],
 
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.agora_gui.min_loading_time }},
+
+  // gui-admin allows to import users from a csv, importing users in batches
+  // this parameter sets the batch size
+  // 0 means doing the import in only one batch always
+  // allowed values: integer number >= 0
+  censusImportBatch: {{ config.agora_gui.census_import_batch|int }},
 
   resourceUrlWhitelist: [
     // Allow same origin resource loads.

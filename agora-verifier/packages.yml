@@ -29,29 +29,29 @@
   when: sbt_check_deb.rc == 1
 
 - name: AgoraVerifier, Install sbt-0.13.7.deb
-  sudo: true
+  become: true
   apt: deb="/tmp/sbt-0.13.7.deb" state=present
   when: sbt_check_deb.rc == 1
 
 - name: AgoraVerifier, Updating packages
-  sudo: true
+  become: true
   action: apt update_cache=yes
 
 - name: AgoraVerifier, Installing packages
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=installed
   with_items:
     - sharutils
     - openjdk-7-jdk
 
 - name: AgoraVerifier, settings OpenJDK 7 as default Java temporarily
-  sudo: true
+  become: true
   alternatives:
     name: java
     path: /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 
 - name: AgoraVerifier, settings OpenJDK 7 as default Javac temporarily
-  sudo: true
+  become: true
   alternatives:
     name: javac
     path: /usr/lib/jvm/java-7-openjdk-amd64/bin/javac

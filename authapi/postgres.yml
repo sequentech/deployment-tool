@@ -15,14 +15,14 @@
 
 ---
 - name: AuthApi, Create Database User
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   when: config.load_balancing.is_master
   postgresql_user: user=authapi password="{{config.eorchestra_password}}" port=5432
 
 - name: AuthApi, Create Database
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   when: config.load_balancing.is_master
   postgresql_db: 
     name=authapi

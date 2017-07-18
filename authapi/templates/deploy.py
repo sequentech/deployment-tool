@@ -36,6 +36,7 @@ DATABASES = {
 SHARED_SECRET = b'{{config.agora_elections.shared_secret}}'
 
 SECRET_KEY = '{{ config.global_secret_key }}'
+HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/home"
 
 {% if config.authapi.sms.enabled %}
 SMS_PROVIDER = "{{config.authapi.sms.provider}}"
@@ -67,6 +68,8 @@ EMAIL_PORT = "{{config.authapi.email.email_port}}"
 
 EMAIL_BASE_TEMPLATE = """{{config.authapi.email.base_template}}"""
 
+EMAIL_BASE_TITLE_TEMPLATE = """{{config.authapi.email.base_title_template}}"""
+
 EMAIL_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
 
 {% if 'email' == config.authapi.email.backend %}
@@ -76,6 +79,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 {% endif %}
 
 {% endif %}
+
+SMS_OTP_EXPIRE_SECONDS = {{config.authapi.sms_otp.expire_seconds}}
 
 {% for extra_option in config.authapi.extra_options %}
 {{extra_option}}

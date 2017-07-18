@@ -15,8 +15,8 @@
 
 ---
 - name: AgoraVerifier, Downloading agora-verifier repo
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   git:
     repo={{ repos.averifier.repo }}
     version={{ repos.averifier.version }}
@@ -24,8 +24,8 @@
     force={{ repos.averifier.force }}
 
 - name: AgoraVerifier, Downloading agora-tally repo
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   git:
     repo={{ repos.tally.repo }}
     version={{ repos.tally.version }}
@@ -33,8 +33,8 @@
     force={{ repos.tally.force }}
 
 - name: AgoraVerifier, Downloading agora-results repo
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   git:
     repo={{ repos.results.repo }}
     version={{ repos.results.version }}
@@ -42,16 +42,16 @@
     force={{ repos.results.force }}
 
 - name: AgoraVerifier, update pipes whitelist
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   replace:
     dest=/home/agoraverifier/agora-results/agora-results
     regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
     replace='\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
 - name: AgoraVerifier, fresh start
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   file:
     path='{{ item }}'
     state=absent
@@ -61,8 +61,8 @@
     - /home/agoraverifier/agora-verifier/agora-results
 
 - name: AgoraVerifier, copy dirs/files
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   command: cp -rf '{{ item.src }}' '{{ item.dest }}'
   with_items:
     - src: '/home/agoraverifier/agora-tally/agora_tally'
@@ -75,8 +75,8 @@
       dest: '/home/agoraverifier/agora-verifier/agora-results'
 
 - name: AgoraVerifier, executable bits
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   file:
     path={{ item }}
     state=file

@@ -15,5 +15,5 @@
 
 ---
 - name: AgoraGui, Creating default user
-  sudo: true
+  become: true
   user: name=agoragui shell=/bin/bash

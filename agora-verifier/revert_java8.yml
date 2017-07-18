@@ -15,7 +15,19 @@
 
 ---
 - name: AgoraVerifier, Removing OpenJDK 7 to make Oracle JDK 8 as default
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=absent
   with_items:
     - openjdk-7-jdk
+
+- name: AgoraVerifier, settings OpenJDK 7 as default Java temporarily
+  become: true
+  alternatives:
+    name: java
+    path: /usr/lib/jvm/java-8-oracle/jre/bin/java
+
+- name: AgoraVerifier, settings OpenJDK 7 as default Javac temporarily
+  become: true
+  alternatives:
+    name: javac
+    path: /usr/lib/jvm/java-8-oracle/bin/javac
