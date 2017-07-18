@@ -267,7 +267,7 @@ config:
 
     # if true, the calculated results are always automatically published
     # valid values: true, false
-    always_publish: true
+    always_publish: false
 
     # list of callbacks from agora-elections to authapi
     # these callbacks are sometimes required for complex behaviour because
