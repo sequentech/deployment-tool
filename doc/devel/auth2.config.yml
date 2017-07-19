@@ -299,7 +299,7 @@ config:
       - name: started
         mode: disabled
         url: ''
-      # started callback is triggered by agora-elections when an election
+      # published callback is triggered by agora-elections when an election
       # changes to stage 'published'
       - name: published
         mode: disabled
