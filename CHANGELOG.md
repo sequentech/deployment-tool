@@ -4,6 +4,7 @@
 - fixes to postgres backups.
 - add always_publish parameter to agora-dev-box.
 - enable multiple logins at once on the same browser.
+- add check for encoding overflow on gui-booth
 
 ## 103111.1 (30-06-2017)
 
