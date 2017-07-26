@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '103111.1';
+var AV_CONFIG_VERSION = '103111.2';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
