@@ -1,18 +1,22 @@
+## 103111.3 (??-??-2017)
+
+- Fix issue on gui-admin with int fields
+
 ## 103111.2 (27-07-2017)
 
-- define admin-fields to agora-dev-box.
-- fixes to postgres backups.
-- add always_publish parameter to agora-dev-box.
-- enable multiple logins at once on the same browser.
-- add check for encoding overflow on gui-booth
+- Define admin-fields to agora-dev-box.
+- Fixes to postgres backups.
+- Add always_publish parameter to agora-dev-box.
+- Enable multiple logins at once on the same browser.
+- Add check for encoding overflow on gui-booth
 
 ## 103111.1 (30-06-2017)
 
-- add desborda2 voting system.
-- warn about void values on import tsv on agora-tools.
-- fix java 7 use on agora-verifier.
-- add support for SMS OTP method for admins.
-- add SaaS features.
+- Add desborda2 voting system.
+- Warn about void values on import tsv on agora-tools.
+- Fix java 7 use on agora-verifier.
+- Add support for SMS OTP method for admins.
+- Add SaaS features.
 
 ## 17.04 (29-04-2017)
 
