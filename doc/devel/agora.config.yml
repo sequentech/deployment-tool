@@ -476,7 +476,8 @@ config:
     auth_msg:
       # authentication message (both for email and SMS authentication methods)
       # the default is the i18next string path, which works for multiple languages
-      # you can use these and othervariables: URL, URL2, CODE, HOME...
+      # you can use these and other variables:
+      # URL, URL2, CODE, HOME_URL, EVENT_ID... and slugs
       # example: 'Vote in __URL__ with code __CODE__'
       # default: 'avAdmin.auth.emaildef'
       msg: 'avAdmin.auth.emaildef'
