@@ -222,6 +222,20 @@ var avConfigData = {
     tlf: "{{ config.agora_gui.contact.tlf }}"
   },
 
+  // default authentication message to be sent to users of an election
+  auth_msg: {
+    // authentication message (both for email and SMS authentication methods)
+    // the default is the i18next string path, which works for multiple languages
+    // you can use these and othervariables: URL, URL2, CODE, HOME...
+    // example: 'Vote in __URL__ with code __CODE__'
+    // default: 'avAdmin.auth.emaildef'
+    msg: "{{ config.agora_gui.auth_msg.msg }}",
+    // authentication message subject (for emails)
+    // example: "Vote now with nVotes"
+    // default: 'avAdmin.auth.emailsubdef'
+    subject: "{{ config.agora_gui.auth_msg.subject }}"
+  },
+
   // social networks footer links
   social: {
       facebook: "{{ config.agora_gui.social.facebook }}",
