@@ -1,6 +1,7 @@
 ## 103111.3 (??-??-2017)
 
 - Fix issue on gui-admin with int fields
+- Improve logging on authmethods
 
 ## 103111.2 (27-07-2017)
 
