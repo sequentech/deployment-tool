@@ -65,7 +65,7 @@ def update(globs):
             'propagate': False,
         },
         'authapi': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['sentry', 'console'],
             'propagate': False,
         },
