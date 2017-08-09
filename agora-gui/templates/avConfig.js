@@ -34,6 +34,12 @@ var avConfigData = {
   // Webpage title
   webTitle: "{{ config.agora_gui.web_title }}",
   
+  // base url used for help on gui-admin
+  settingsHelpBaseUrl: "{{ config.agora_gui.settings_help_base_url }}",
+
+  // html/text to show when the help url for a setting fails to load
+  settingsHelpUrlError: "{{ config.agora_gui.texts.settings_help_url_error }}",
+  
   // Show 'Success Action' tab in admin agora_gui
   showSuccessAction: {% if config.agora_gui.show_success_action %}true{% else %}false{% endif %},
 
