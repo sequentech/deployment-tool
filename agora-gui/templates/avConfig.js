@@ -37,6 +37,9 @@ var avConfigData = {
   // base url used for help on gui-admin
   settingsHelpBaseUrl: "{{ config.agora_gui.settings_help_base_url }}",
 
+  // default url used for help on gui-admin
+  settingsHelpDefaultUrl: "{{ config.agora_gui.settings_help_default_url }}",
+
   // html/text to show when the help url for a setting fails to load
   settingsHelpUrlError: "{{ config.agora_gui.texts.settings_help_url_error }}",
   

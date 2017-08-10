@@ -385,6 +385,9 @@ config:
     # base url used for help on gui-admin
     settings_help_base_url: https://agora/admin/
 
+    # default url used for help on gui-admin
+    settings_help_default_url: https://agora/admin/help_error.html
+
     # show the documentation links after successfully casting a vote
     # allowed values: true| false
     show_doc_on_vote_cast: false
