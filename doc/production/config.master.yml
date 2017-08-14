@@ -647,7 +647,7 @@ config:
 
     # Stablishes the authentication method used for election administrators
     #
-    # Allowed values: (user-and-password|email|sms)
+    # Allowed values: (user-and-password|email|sms|sms-otp)
     auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by
@@ -664,6 +664,13 @@ config:
       # Note that admin telephone number should contain no spaces. International
       # prefixes are entered like "+34" for Spain, for example
       tlf: ''
+
+    # authentication message for election admins
+    admin_auth:
+      # auth message for admins when the auth method is sms-otp
+      sms_otp_msg: 'Your code with nVotes is __CODE__'
+      # auth message for admins when the auth method is not sms-otp
+      other_msg: 'Authenticate with nVotes at  __URL__ with __CODE__'
 
     # sms otp authentication configuration
     sms_otp:
