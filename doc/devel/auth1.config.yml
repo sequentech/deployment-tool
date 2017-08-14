@@ -382,6 +382,12 @@ config:
     # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
     custom_public_download_url: false
 
+    # base url used for help on gui-admin
+    settings_help_base_url: https://agora/admin/
+
+    # default url used for help on gui-admin
+    settings_help_default_url: https://agora/admin/help_error.html
+
     # show the documentation links after successfully casting a vote
     # allowed values: true| false
     show_doc_on_vote_cast: false
@@ -514,6 +520,10 @@ config:
       # you can include any html text, which will be shown on the legal page
       # on agora-gui-elections
       legal_html_include: ''
+
+      # html/text to show when the help url for a setting fails to load
+      settings_help_url_error: >-
+          <p style=\"color: red;\">An error has occurred, but don't worry, we're on it!</p>
 
     # path to a directory to be copied recursively because it containing static
     # files that need to be available publicly. Usually these files are
