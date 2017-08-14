@@ -1,6 +1,7 @@
 ## 103111.3 (??-??-2017)
 
 - Fix issue on gui-admin with int fields
+- Use new settings interface on 'Basic details' on gui-admin
 
 ## 103111.2 (27-07-2017)
 
