@@ -383,6 +383,12 @@ config:
     # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
     custom_public_download_url: false
 
+    # base url used for help on gui-admin
+    settings_help_base_url: https://agora/admin/
+
+    # default url used for help on gui-admin
+    settings_help_default_url: https://agora/admin/help_error.html
+
     # show the documentation links after successfully casting a vote
     # allowed values: true| false
     show_doc_on_vote_cast: false
@@ -515,6 +521,10 @@ config:
       # you can include any html text, which will be shown on the legal page
       # on agora-gui-elections
       legal_html_include: ''
+
+      # html/text to show when the help url for a setting fails to load
+      settings_help_url_error: >-
+          <p style=\"color: red;\">An error has occurred, but don't worry, we're on it!</p>
 
     # path to a directory to be copied recursively because it containing static
     # files that need to be available publicly. Usually these files are
@@ -655,7 +665,7 @@ config:
 
     # Stablishes the authentication method used for election administrators
     #
-    # Allowed values: (user-and-password|email|sms)
+    # Allowed values: (user-and-password|email|sms|sms-otp)
     auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by
@@ -672,6 +682,13 @@ config:
       # Note that admin telephone number should contain no spaces. International
       # prefixes are entered like "+34" for Spain, for example
       tlf: ''
+
+    # authentication message for election admins
+    admin_auth:
+      # auth message for admins when the auth method is sms-otp
+      sms_otp_msg: 'Your code with nVotes is __CODE__'
+      # auth message for admins when the auth method is not sms-otp
+      other_msg: 'Authenticate with nVotes at  __URL__ with __CODE__'
 
     # sms otp authentication configuration
     sms_otp:
