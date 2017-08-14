@@ -1,6 +1,9 @@
 ## 103111.3 (??-??-2017)
 
-- Fix issue on gui-admin with int fields
+- Fixed issue on gui-admin with int fields
+- Fixed issue with parameters of error strings on gui-admin
+- Improve logging on authmethods
+- Use new settings interface on 'Basic details' on gui-admin
 - Add auth messages for admins as config params on agora-dev-box
 
 ## 103111.2 (27-07-2017)
