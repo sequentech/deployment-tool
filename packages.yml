@@ -25,6 +25,17 @@
     state: present
     validate_certs: "{{ not config.has_https_proxy }}"
 
+- name: Packages, add nginx repository
+  become: true
+  apt_repository: repo='deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx' state=present
+
+- name: Packages, add nginx keys
+  become: true
+  apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+    state: present
+    validate_certs: "{{ not config.has_https_proxy }}"
+
 - name: Packages, Updating packages
   become: true
   action: apt update_cache=yes
@@ -39,7 +50,6 @@
     - postgresql-9.4
     - postgresql-9.4-repmgr
     - mercurial
-    - nginx
     - supervisor
     - node
     - libffi-dev
@@ -58,6 +68,7 @@
     - make
     - m4
     - p7zip-full
+    - nginx
 
 - name: Packages, check whether old 9.3 postgres is installed
   shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"

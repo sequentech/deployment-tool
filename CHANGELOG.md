@@ -1,4 +1,4 @@
-## 103111.3 (??-??-2017)
+## 103111.3 (14-08-2017)
 
 - Fixed issue on gui-admin with int fields
 - Fixed issue with parameters of error strings on gui-admin

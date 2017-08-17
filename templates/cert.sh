@@ -39,11 +39,6 @@ if [ ! -f $CERT_PATH ]; then
 fi
 
 if [ true == "$CREATE_CERT" ]; then
-  # If there are CAs installed for the authorities, preserve them
-  if [ -f "$CERT_PATH" ] && [ -f "$CERT_CALIST_PATH" ]; then
-    # Remove own CA, preserve authorities CAs
-    CALIST_COPY=$(python "/root/cert.py" "$CERT_PATH" "$CERT_CALIST_PATH")
-  fi
   openssl req -nodes -x509 -newkey rsa:4096 -extensions v3_ca -keyout "$CERT_KEY_PATH" -out "$CERT_PATH" -days 3650  -subj "/C=${C}/ST=${ST}/L=${L}/O=${O}/OU=${OU}/CN=${CN}/emailAddress=${EMAIL}" -config <(cat <<-EOF
 [req]
 default_bits           = 4096
