@@ -43,6 +43,11 @@
   become: true
   template: src=oneserver/templates/cloudflare.conf dest=/etc/nginx/cloudflare.conf owner="root" mode=0644
 
+- name: OneServer, configure cors
+  become: true
+  template: src=oneserver/templates/cors.conf dest=/etc/nginx/cors.conf owner="root" mode=0644
+
+- name: OneServer, cloudflare.conf
 - name: OneServer, remove nginx default
   become: true
   file: path=/etc/nginx/sites-enabled/default, state=absent
