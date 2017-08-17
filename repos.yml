@@ -53,7 +53,7 @@ repos:
         force: yes
     guicommon:
         repo: https://github.com/agoravoting/agora-gui-common.git
-        version: text-pwd
+        version: 103111.3
         force: yes
     guiadmin:
         repo: https://github.com/agoravoting/agora-gui-admin.git
