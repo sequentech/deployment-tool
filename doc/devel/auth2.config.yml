@@ -324,7 +324,7 @@ config:
   cors:
     # Nginx regular expression to match $http_origin variable. If it matches
     # the $http_origin is allowed with the Access-Control-Allow-Origin header
-    allow_origins_rx: ""
+    allow_origins_rx: "^$"
 
     # Sets the Access-Control-Allow-Origin header
     allow_credentials: "true"
