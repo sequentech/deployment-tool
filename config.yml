@@ -490,6 +490,10 @@ config:
       # URL that the logo links to
       url: 'https://nvotes.com'
 
+      # Configurable signup link. This link is shown only in /admin/login
+      # and can be set to any valid URL
+      admin_signup_link: '/admin/signup'
+
     contact:
       # Support contact email displayed in the footer links
       email: contact@example.com
