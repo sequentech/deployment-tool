@@ -322,104 +322,18 @@ config:
   # it is in another domain and that domain doesn't actively allows it with
   # some CORS-specific headers
   cors:
-    authapi:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
+    # Nginx regular expression to match $http_origin variable. If it matches
+    # the $http_origin is allowed with the Access-Control-Allow-Origin header
+    allow_origins_rx: ""
 
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
+    # Sets the Access-Control-Allow-Origin header
+    allow_credentials: "true"
 
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
+    # Sets the Access-Control-Allow-Methods header
+    allow_methods: GET, POST, OPTIONS
 
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
-    agora_elections:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
-
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
-
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
-
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
-    agora_gui_common:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
-
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
-
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
-
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
-    agora_gui_elections:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
-
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
-
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
-
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
-    agora_gui_admin:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
-
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
-
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
-
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
-    agora_gui_booth:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
-
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
-
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
-
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
-    static:
-      # Nginx regular expression to match $http_origin variable. If it matches
-      # the $http_origin is allowed with the Access-Control-Allow-Origin header
-      allow_origins_rx: "^$"
-
-      # Sets the Access-Control-Allow-Origin header
-      allow_credentials: "true"
-
-      # Sets the Access-Control-Allow-Methods header
-      allow_methods: GET, POST, OPTIONS
-
-      # Sets the Access-Control-Allow-Headers header
-      allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
+    # Sets the Access-Control-Allow-Headers header
+    allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
 
   # agora-gui
   agora_gui:
