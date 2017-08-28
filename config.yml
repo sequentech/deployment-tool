@@ -380,6 +380,31 @@ config:
     # allowed values (string): default|podemos|ccoo|bcnencomu
     theme: 'default'
 
+    # help links list
+    # html code for flexibility
+    help_list:
+      - >-
+        <a
+        {% raw %}href=\"{{ helpurl }}\"{% endraw %}
+        target=\"_blank\">
+        <i class=\"fa fa-book\" aria-hidden=\"true\"></i>
+        Documentation
+        </a>
+      - >-
+        <a
+        href=\"mailto:support@nvotes.com\"
+        target=\"_blank\">
+        <i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>
+        Contact Support
+        </a>
+      - >-
+        <a
+        href=\"mailto:support@nvotes.com\"
+        target=\"_blank\">
+        <i class=\"fa fa-comment\" aria-hidden=\"true\"></i>
+        Request free 1-on-1 session
+        </a>
+
     # when debug mode is false, javascript and in general source code is
     # uglified and minified, otherwise it is not to allow better debugging.
     #
