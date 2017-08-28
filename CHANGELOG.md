@@ -1,3 +1,7 @@
+## 103111.4 (??-??-2017)
+
+- Add configurable help menu list
+
 ## 103111.3 (14-08-2017)
 
 - Fixed issue on gui-admin with int fields
