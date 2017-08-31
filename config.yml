@@ -346,6 +346,14 @@ config:
     
     # webpage title
     web_title: 'nVotes'
+
+    # html to be inserted in the gui-admin profile view
+    profile_html: >-
+      <div
+      av-admin-field
+      ng-repeat=\"field in fields_def\"
+      editable=\"{% raw %}{{ field.user_editable }}{% endraw %}\">
+      </div>
     
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
