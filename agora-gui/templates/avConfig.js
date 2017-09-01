@@ -37,6 +37,9 @@ var avConfigData = {
   // Webpage title
   webTitle: "{{ config.agora_gui.web_title }}",
   
+  // html to be inserted in the gui-admin profile view
+  profileHtml: "{{ config.agora_gui.profile_html }}",
+  
   // base url used for help on gui-admin
   settingsHelpBaseUrl: "{{ config.agora_gui.settings_help_base_url }}",
 
