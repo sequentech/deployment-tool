@@ -79,6 +79,14 @@ var avConfigData = {
 
   calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
 
+  // help links list
+  // html code for flexibility
+  helpList: [
+    {% for help_item in config.agora_gui.help_list %}
+    "{{ help_item  }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+
   // admin fields
   adminFields: [
       {% for field in config.agora_gui.admin_fields %}
