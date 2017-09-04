@@ -91,18 +91,22 @@ var avConfigData = {
   // user interface. If the list is empty, question layouts will not be shown
   // as a configurable option
   shownAdminQuestionLayouts: [
-    {% for item in config.agora_gui.shown_admin_question_layouts %}
-    "{{ item  }}"{% if not loop.last and loop.length > 0 %},{% endif %}
-    {% endfor %}
+    {% if config.agora_gui.shown_admin_question_layouts.length > 0 %}
+      {% for item in config.agora_gui.shown_admin_question_layouts %}
+        "{{ item  }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
   ],
 
   // This is the list of admin question voting systems shown in the
   // administrative user interface. If the list is empty, question layouts
   // will not be shown as a configurable option
   shownAdminQuestionVotingSystems: [
-    {% for item in config.agora_gui.shown_admin_question_voting_systems %}
-    "{{ item  }}"{% if not loop.last and loop.length > 0 %},{% endif %}
-    {% endfor %}
+    {% if config.agora_gui.shown_admin_question_layouts.length > 0 %}
+      {% for item in config.agora_gui.shown_admin_question_voting_systems %}
+        "{{ item  }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
   ],
 
   // admin fields
