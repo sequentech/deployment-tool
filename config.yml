@@ -445,6 +445,25 @@ config:
     # allowed values: true| false
     show_doc_on_vote_cast: false
 
+    # This is the list of admin question layouts shown in the administrative
+    # user interface. If the list is empty, question layouts will not be shown
+    # as a configurable option
+    shown_admin_question_layouts:
+      - accordion
+      #- circles
+      #- simultaneous-questions
+      #- conditional-accordion
+      #- pcandidates-election
+
+    # This is the list of admin question voting systems shown in the
+    # administrative user interface. If the list is empty, question layouts
+    # will not be shown as a configurable option
+    shown_admin_question_voting_systems:
+     - plurality-at-large
+     - borda-nauru
+     - borda
+     #- pairwise-beta
+
     # default configuration for calculate results on agora-gui-admin
     calculate_results_default: >-
       [
