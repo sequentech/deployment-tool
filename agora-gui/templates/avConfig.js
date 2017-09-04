@@ -92,7 +92,7 @@ var avConfigData = {
   // as a configurable option
   shownAdminQuestionLayouts: [
     {% for item in config.agora_gui.shown_admin_question_layouts %}
-    "{{ item  }}"{% if not loop.last %},{% endif %}
+    "{{ item  }}"{% if not loop.last and loop.length > 0 %},{% endif %}
     {% endfor %}
   ],
 
@@ -101,7 +101,7 @@ var avConfigData = {
   // will not be shown as a configurable option
   shownAdminQuestionVotingSystems: [
     {% for item in config.agora_gui.shown_admin_question_voting_systems %}
-    "{{ item  }}"{% if not loop.last %},{% endif %}
+    "{{ item  }}"{% if not loop.last and loop.length > 0 %},{% endif %}
     {% endfor %}
   ],
 
