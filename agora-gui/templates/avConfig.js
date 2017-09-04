@@ -91,7 +91,7 @@ var avConfigData = {
   // user interface. If the list is empty, question layouts will not be shown
   // as a configurable option
   shownAdminQuestionLayouts: [
-    {% if config.agora_gui.shown_admin_question_layouts.length > 0 %}
+    {% if config.agora_gui.shown_admin_question_layouts %}
       {% for item in config.agora_gui.shown_admin_question_layouts %}
         "{{ item  }}"{% if not loop.last %},{% endif %}
       {% endfor %}
@@ -102,7 +102,7 @@ var avConfigData = {
   // administrative user interface. If the list is empty, question layouts
   // will not be shown as a configurable option
   shownAdminQuestionVotingSystems: [
-    {% if config.agora_gui.shown_admin_question_layouts.length > 0 %}
+    {% if config.agora_gui.shown_admin_question_voting_systems %}
       {% for item in config.agora_gui.shown_admin_question_voting_systems %}
         "{{ item  }}"{% if not loop.last %},{% endif %}
       {% endfor %}
