@@ -62,7 +62,7 @@
     - { regexp: '\s*#?\s*archive_command\s*=\s*.*', line: "archive_command = 'bash archive_command_postgres.sh %p %f'" }
     - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: "archive_timeout = {{ config.postgres_backups.archive_timeout }}" }
     - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 5' }
-    - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 0' }
+    - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 10' }
 
 - name: PostgreSQL Backups, disable archiving on postgresql 9.4 conf
   become: true
