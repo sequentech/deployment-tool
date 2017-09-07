@@ -1,3 +1,13 @@
+## 103111.4 (17-09-2017)
+
+* Make configurable at deployment which layouts and electoral systems are available as options in the administrative interface
+* Add configurable help menu list
+* fix configurable signup link on gui-admin
+* Add admin profile modal, and a header menu to access it
+* Fix slave deployment connection with master, related to postgres backup configuration
+* Solve a number of small issues with agora-dev-box deployment
+* Add script to  export configuration from staging environment to production env
+
 ## 103111.3 (14-08-2017)
 
 - Fixed issue on gui-admin with int fields

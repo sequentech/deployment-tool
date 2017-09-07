@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '103111.3';
+var AV_CONFIG_VERSION = '103111.4';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -36,6 +36,9 @@ var avConfigData = {
   
   // Webpage title
   webTitle: "{{ config.agora_gui.web_title }}",
+  
+  // html to be inserted in the gui-admin profile view
+  profileHtml: "{{ config.agora_gui.profile_html }}",
   
   // base url used for help on gui-admin
   settingsHelpBaseUrl: "{{ config.agora_gui.settings_help_base_url }}",
@@ -75,6 +78,36 @@ var avConfigData = {
   always_publish: {% if config.agora_elections.always_publish %}true{% else %}false{% endif %},
 
   calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
+
+  // help links list
+  // html code for flexibility
+  helpList: [
+    {% for help_item in config.agora_gui.help_list %}
+    "{{ help_item  }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+
+  // This is the list of admin question layouts shown in the administrative
+  // user interface. If the list is empty, question layouts will not be shown
+  // as a configurable option
+  shownAdminQuestionLayouts: [
+    {% if config.agora_gui.shown_admin_question_layouts %}
+      {% for item in config.agora_gui.shown_admin_question_layouts %}
+        "{{ item  }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+  ],
+
+  // This is the list of admin question voting systems shown in the
+  // administrative user interface. If the list is empty, question layouts
+  // will not be shown as a configurable option
+  shownAdminQuestionVotingSystems: [
+    {% if config.agora_gui.shown_admin_question_voting_systems %}
+      {% for item in config.agora_gui.shown_admin_question_voting_systems %}
+        "{{ item  }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+  ],
 
   // admin fields
   adminFields: [

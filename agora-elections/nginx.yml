@@ -17,6 +17,18 @@
   become: true
   template: src=agora-elections/templates/nginx.conf dest=/etc/nginx/conf.d/agora-elections.conf owner="root" mode=0644
 
+- name: OneServer, secure.conf
+  become: true
+  template:
+    src: oneserver/templates/{{ item }}
+    dest: /etc/nginx/{{ item }}
+    owner: root
+    mode: 0644
+  with_items:
+    - base_secure.conf
+    - secure.conf
+    - internal_secure.conf
+
 - name: AgoraElections, Restarting nginx
   become: true
   service: name=nginx state=restarted

@@ -42,6 +42,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMIN_AUTH_ID = 1
+
 
 # Application definition
 

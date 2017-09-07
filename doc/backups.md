@@ -32,8 +32,6 @@ This command must be executed from root, and the first parameter is the name of 
 
 The second argument is the specific date you want to recover the database to. This is an optional argument, and it's only valid for restoring continuous archiving backups. An example date is '2004-07-14 22:39:00 EST'. If you want to recover the state of the database as it was after a given transaction, please set recovery_target_xid on file /etc/postgresql/9.4/main/recovery.conf before calling script restore_backup_postgres.sh instead.
 
-NOTE: Even when wal_keep_segments = 0 on postgresql.conf, for some reason PostgreSQL tends to maintain a number of old WAL files on folder pg_xlog (/var/lib/postgresql/9.4/main/pg_xlog) before copying them to /var/postgres_backups/wal . And when restoring a backup, WAL files are read from /var/postgres_backups/wal, which as just explained doesn't normally have the latest WAL files. Therefore, if you want to restore the database to the very latest state, it's advisable to stop postgresql and move (and compress) the remaining WAL files on pg_xlog to /var/postgres_backups/wal before calling restore_backup_postgres.sh
-
 # Restoring a SQL dump backup
 
 Restoring a SQL dump backup from /var/postgres_backups/dump can easily done calling

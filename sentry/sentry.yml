@@ -41,6 +41,13 @@
     lc_ctype='en_US.UTF-8'
     template='template0'
     state=present
+ 
+# sentry upgrade bug workaround
+# https://github.com/getsentry/sentry/issues/5908
+- name: Sentry, sentry upgrade bug workaround
+  become: true
+  become_user: sentry
+  pip: name=redis virtualenv=/home/sentry/venv version=2.10.5
 
 - name: Sentry upgrade
   become: true
