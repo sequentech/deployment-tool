@@ -778,7 +778,7 @@ config:
       enabled: false
 
       # sms provider
-      # allowed values: esendex
+      # allowed values: esendex|twilio
       provider: esendex
 
       # Each user might have different domain ids. This settings depends on
@@ -797,6 +797,10 @@ config:
 
       # Depends on the provider. Allows you to change the sender id.
       sender_id: 'nvotes'
+      
+      # Depends on the provider. Sender telephone number, to be used by Twilio
+      # for countries that don't support alphanumeric sender ids.
+      sender_number: ''
 
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: 'None'

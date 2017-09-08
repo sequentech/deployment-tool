@@ -53,6 +53,8 @@ SMS_URL = "{{config.authapi.sms.url}}"
 
 SMS_SENDER_ID = "{{config.authapi.sms.sender_id}}"
 
+SMS_SENDER_NUMBER = "{{config.authapi.sms.sender_number}}"
+
 SMS_VOICE_LANG_CODE = {{config.authapi.sms.voice_lang_code}}
 
 SMS_BASE_TEMPLATE = """{{config.authapi.sms.base_template}}"""
