@@ -734,7 +734,7 @@ config:
 
     # Every time authapi is deployed, Authapi's upsert_users command is run with
     # this variable as argument, if the file exists.
-    upsert_file: /home/authapi/usersdata.json
+    upsert_file: ''
 
     # Stablishes the authentication method used for election administrators
     #
