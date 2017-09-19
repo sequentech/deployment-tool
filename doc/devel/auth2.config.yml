@@ -211,6 +211,7 @@ config:
       #- agora_results.pipes.parity.reorder_winners
       #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
       #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.desborda3.podemos_desborda3
       #- agora_results.pipes.desborda2.podemos_desborda2
       #- agora_results.pipes.desborda.podemos_desborda
       #- agora_results.pipes.pretty_print.pretty_print_stv_winners
@@ -221,6 +222,7 @@ config:
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
       #- agora_results.pipes.pdf.configure_pdf
+      - agora_results.pipes.withdraw_candidates.withdraw_candidates
 
   # agora-elections
   agora_elections:
