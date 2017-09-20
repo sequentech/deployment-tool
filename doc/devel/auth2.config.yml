@@ -704,7 +704,16 @@ config:
 
       # you can include any html text, which will be shown on the documentation
       # page on agora-gui-elections and on help in voting booth (agora-gui-booth)
-      documentation_html_include: ''
+      documentation_html_include: >-
+          <ul>
+          <li>
+          <a
+          href=\"/election/{% raw %}{{election_id}}{% endraw %}/public/extra-legal\"
+          target=\"_blank\"
+          ng-i18next=\"avDocumentation.legal.title\">
+          </a>
+          </li>
+          </ul>
 
       # you can include any html text, which will be shown on the legal page
       # on agora-gui-elections
