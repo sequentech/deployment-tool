@@ -212,6 +212,7 @@ config:
       #- agora_results.pipes.parity.reorder_winners
       #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
       #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.desborda3.podemos_desborda3
       #- agora_results.pipes.desborda2.podemos_desborda2
       #- agora_results.pipes.desborda.podemos_desborda
       #- agora_results.pipes.pretty_print.pretty_print_stv_winners
@@ -222,6 +223,7 @@ config:
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
       #- agora_results.pipes.pdf.configure_pdf
+      - agora_results.pipes.withdraw_candidates.withdraw_candidates
 
   # agora-elections
   agora_elections:
@@ -705,7 +707,16 @@ config:
 
       # you can include any html text, which will be shown on the documentation
       # page on agora-gui-elections and on help in voting booth (agora-gui-booth)
-      documentation_html_include: ''
+      documentation_html_include: >-
+          <ul>
+          <li>
+          <a
+          href=\"/election/{% raw %}{{election_id}}{% endraw %}/public/extra-legal\"
+          target=\"_blank\"
+          ng-i18next=\"avDocumentation.legal.title\">
+          </a>
+          </li>
+          </ul>
 
       # you can include any html text, which will be shown on the legal page
       # on agora-gui-elections
