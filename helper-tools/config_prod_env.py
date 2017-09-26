@@ -162,7 +162,7 @@ pipes=[
     lookup_key_group=3,
     replace_templ="\\1 {lookup_value}\n"
   ),
-  extract host from the production configuration file
+  # extract host from the production configuration file
   dict(
     name="store_keyvalue_match",
     pattern="^\s*(host):\s*(.*)\s*\n((.*\n)*\s*dnie_auth)",
