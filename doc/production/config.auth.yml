@@ -499,13 +499,13 @@ config:
       real: false,
       num_successful_logins_allowed: 0,
       census: {
-      allow_user_resend: false,
       voters: [],
       auth_method: 'email',
       census:'close',
       extra_fields: [ ],
       admin_fields: ConfigService.adminFields,
       config: {
+      allow_user_resend: false,
       msg: $i18next(ConfigService.auth_msg.msg),
       subject: $i18next(ConfigService.auth_msg.subject,
       {name: ConfigService.organization.orgName}),
