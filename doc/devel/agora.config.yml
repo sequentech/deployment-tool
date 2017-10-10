@@ -505,6 +505,7 @@ config:
       extra_fields: [ ],
       admin_fields: ConfigService.adminFields,
       config: {
+      allow_user_resend: false,
       msg: $i18next(ConfigService.auth_msg.msg),
       subject: $i18next(ConfigService.auth_msg.subject,
       {name: ConfigService.organization.orgName}),
