@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '103111.4';
+var AV_CONFIG_VERSION = '103111.6';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -72,12 +72,15 @@ var avConfigData = {
   // show the documentation links after successfully casting a vote
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
-  
+
   // if true, the calculated results are always automatically published
   // valid values: true, false
   always_publish: {% if config.agora_elections.always_publish %}true{% else %}false{% endif %},
 
   calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
+
+  // default template election for gui-admin
+  electionTemplate: "{{ config.agora_gui.election_template }}",
 
   // help links list
   // html code for flexibility

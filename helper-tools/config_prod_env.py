@@ -91,8 +91,8 @@ pipes=[
   dict(
     name="store_keyvalue_match",
     pattern="^\s*(" + "|".join(["backup_password", "global_secret_key",
-      "eorchestra_password", "db_password", "shared_secret", "keystore_pass",
-      "admin_password", "password", "host", "public_ipaddress",
+      "eorchestra_password", "shared_secret", "keystore_pass",
+      "admin_password", "password", "public_ipaddress",
       "private_ipaddress", "election_start_id", "settings_help_base_url",
       "settings_help_default_url", "admin_signup_link"]) + ")\s*:\s+(.*)\s*$",
     store_key_group=1,
@@ -111,8 +111,8 @@ pipes=[
   dict(
     name="replace_keyvalue_match",
     pattern="^(\s*(" + "|".join(["backup_password", "global_secret_key",
-      "eorchestra_password", "db_password", "shared_secret", "keystore_pass",
-      "admin_password", "password", "host", "public_ipaddress",
+      "eorchestra_password", "shared_secret", "keystore_pass",
+      "admin_password", "password", "public_ipaddress",
       "private_ipaddress", "election_start_id", "settings_help_base_url",
       "settings_help_default_url", "admin_signup_link"]) + ")\s*:\s+).*(\s*)$",
     lookup_key_group=2,
@@ -161,6 +161,48 @@ pipes=[
     pattern="^(\s*(agora_gui|expiry):.*\n\s*(domain):\s+)(.*)$",
     lookup_key_group=3,
     replace_templ="\\1 {lookup_value}\n"
+  ),
+  # extract host from the production configuration file
+  dict(
+    name="store_keyvalue_match",
+    pattern="^\s*(host):\s*(.*)\s*\n((.*\n)*\s*dnie_auth)",
+    store_key_group=1,
+    store_value_group=2
+  ),
+  # replace host from the production configuration file
+  dict(
+    name="replace_keyvalue_match",
+    pattern="^\s*(host):\s*(.*)\s*\n((.*\n)*\s*dnie_auth)",
+    lookup_key_group=1,
+    replace_templ="\n  \\1: {lookup_value}\n\n\\3"
+  ),
+  #extract agora_elections's db_password from the production configuration file
+  dict(
+    name="store_keyvalue_match",
+    pattern="^(\s*agora_elections:(.*\n)*)\s*(db_password):\s*(.*)\s*\n((.*\n)*\s*sentry:\s*\n)",
+    store_key_group=3,
+    store_value_group=4
+  ),
+  # replace agora_elections's db_password from the production configuration file
+  dict(
+    name="replace_keyvalue_match",
+    pattern="^(\s*agora_elections:(.*\n)*)\s*(db_password):\s*(.*)\s*\n((.*\n)*\s*sentry:\s*\n)",
+    lookup_key_group=3,
+    replace_templ="\\1\n    \\3: {lookup_value}\n\\5"
+  ),
+  # extract sentry's db_password from the production configuration file
+  dict(
+    name="store_keyvalue_match",
+    pattern="^(\s*sentry:(.*\n)*)\s*(db_password):\s*(.*)\s*\n",
+    store_key_group=3,
+    store_value_group=4
+  ),
+  # replace sentry's db_password from the production configuration file
+  dict(
+    name="replace_keyvalue_match",
+    pattern="^(\s*sentry:(.*\n)*)\s*(db_password):\s*(.*)\s*\n",
+    lookup_key_group=3,
+    replace_templ="\\1\n    \\3: {lookup_value}\n"
   ),
 ]
 
