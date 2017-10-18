@@ -44,7 +44,7 @@ ADMIN_AUTH_ID = 1
 # already registered, authapi will return an error with the 'user_exists'
 # codename. Otherwise, on error, authapi will always return the same generic
 # error with 'invalid_credentials' codename.
-SHOW_ALREADY_REGISTERED = {% if config.authapi.sms.enabled %}True{% else %}False{% endif %}
+SHOW_ALREADY_REGISTERED = {% if config.authapi.show_already_registered %}True{% else %}False{% endif %}
 
 {% if config.authapi.sms.enabled %}
 SMS_PROVIDER = "{{config.authapi.sms.provider}}"
