@@ -890,6 +890,12 @@ config:
       # auth message for admins when the auth method is not sms-otp
       other_msg: 'Authenticate with nVotes at  __URL__ with __CODE__'
 
+    # If this option is true, when an user tries to register and the user is
+    # already registered, authapi will return an error with the 'user_exists'
+    # codename. Otherwise, on error, authapi will always return the same generic
+    # error with 'invalid_credentials' codename.
+    show_already_registered: false
+
     # sms otp authentication configuration
     sms_otp:
       # how many seconds does a one time toke has until it needs to be renewed.
