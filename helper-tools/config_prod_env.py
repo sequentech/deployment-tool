@@ -24,7 +24,6 @@ import re
 INPUT_PROD_VERSION="103111.6"
 INPUT_PRE_VERSION="103111.7"
 OUTPUT_PROD_VERSION="103111.7"
-
 def store_keyvalue(prod_config, generated_config, keystore, pipe):
   '''
   Updates the keyvalue store
