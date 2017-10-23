@@ -25,6 +25,7 @@ params:
 
 # global configuration
 config:
+  version: 103111.7
   backup_password: '<PASSWORD>'
 
   # global config. Note: currently some other keys are used as global conf
@@ -506,6 +507,7 @@ config:
       extra_fields: [ ],
       admin_fields: ConfigService.adminFields,
       config: {
+      allow_user_resend: false,
       msg: $i18next(ConfigService.auth_msg.msg),
       subject: $i18next(ConfigService.auth_msg.subject,
       {name: ConfigService.organization.orgName}),
@@ -895,6 +897,12 @@ config:
       sms_otp_msg: 'Your code with nVotes is __CODE__'
       # auth message for admins when the auth method is not sms-otp
       other_msg: 'Authenticate with nVotes at  __URL__ with __CODE__'
+
+    # If this option is true, when an user tries to register and the user is
+    # already registered, authapi will return an error with the 'user_exists'
+    # codename. Otherwise, on error, authapi will always return the same generic
+    # error with 'invalid_credentials' codename.
+    show_already_registered: false
 
     # sms otp authentication configuration
     sms_otp:

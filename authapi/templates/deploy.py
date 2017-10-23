@@ -40,6 +40,12 @@ HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/pu
 
 ADMIN_AUTH_ID = 1
 
+# If this option is true, when an user tries to register and the user is
+# already registered, authapi will return an error with the 'user_exists'
+# codename. Otherwise, on error, authapi will always return the same generic
+# error with 'invalid_credentials' codename.
+SHOW_ALREADY_REGISTERED = {% if config.authapi.show_already_registered %}True{% else %}False{% endif %}
+
 {% if config.authapi.sms.enabled %}
 SMS_PROVIDER = "{{config.authapi.sms.provider}}"
 
