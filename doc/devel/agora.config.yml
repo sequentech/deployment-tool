@@ -497,7 +497,6 @@ config:
       theme_css: ''
       },
       layout: 'simple',
-      real: false,
       num_successful_logins_allowed: 0,
       census: {
       voters: [],
