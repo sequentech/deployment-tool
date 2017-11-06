@@ -25,7 +25,7 @@ params:
 
 # global configuration
 config:
-  version: 103111.7
+  version: 103111.8
   backup_password: '<PASSWORD>'
 
   # global config. Note: currently some other keys are used as global conf
@@ -487,8 +487,8 @@ config:
       {
       title: $i18next('avAdmin.sidebar.newel'),
       description: 'This is the description of the election. You can add simple html like <strong>bold</strong> or <a href=\"https://nvotes.com\">links to websites</a>.\\n\\n<br><br>You need to use two br element for new paragraphs.',
-      start_date: '2015-01-27T16:00:00.001',
-      end_date: '2015-01-27T16:00:00.001',
+      start_date: '',
+      end_date: '',
       authorities: ConfigService.authorities,
       director: ConfigService.director,
       presentation: {
