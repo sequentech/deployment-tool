@@ -47,7 +47,7 @@
     - psycopg2==2.5.2
     - uwsgi
     - cryptography==2.0.3
-    - requests[security]
+    - requests==2.0.0
 
 - name: EOrchestra, configure settings
   become: true
