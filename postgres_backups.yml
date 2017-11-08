@@ -53,7 +53,8 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: '\s*#?\s*wal_level\s*=\s*(minimal|archive|hot_standby|logical).*', line: 'wal_level = logical' }
+    - regexp: \s*#?\s*wal_level\s*=\s*'?(minimal|archive|hot_standby|logical)'?.*
+      line: wal_level = 'logical'
     - { regexp: '\s*#?\s*fsync\s*=\s*(on|off).*', line: 'fsync = on' }
     - { regexp: '\s*#?\s*wal_sync_method\s*=\s*(open_datasync|fdatasync|fsync|fsync_writethrough|open_sync).*', line: 'wal_sync_method = fsync' }
     - { regexp: '\s*#?\s*full_page_writes\s*=\s*(on|off).*', line: 'full_page_writes = on' }
