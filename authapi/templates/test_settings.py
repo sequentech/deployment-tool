@@ -40,6 +40,8 @@ SECRET_KEY = 'zct2c=hlij$^0xu0i8o6c^phjc!=m)r(%h90th0yyx9r5dm))+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOW_DEREGISTER = True
+
 ALLOWED_HOSTS = []
 
 ADMIN_AUTH_ID = 1

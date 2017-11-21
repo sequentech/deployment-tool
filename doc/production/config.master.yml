@@ -838,6 +838,22 @@ config:
     # Allowed values: True|False
     debug: False
 
+    # If this option is true, then admin users can be deregistered and
+    # re-registered. Elections from deregistered users still are stored in the
+    # database. When a user re-registers after being de-registered, he will be
+    # able to modify fields that are not the email (in the case of email
+    # authentication) or phone number (in the case of phone-based auth) and once
+    # he is re-registered he will be able to see and manage elections created
+    # before he de-registered.
+    #
+    # Users can only be deregistered while being logged in, using a call to
+    # authapi's url 'api/user/deregister/'. admin.py script in agora_elections
+    # can be used to ease executing this procedure.
+    #
+    # allowed values: true|false
+    # default: true
+    allow_deregister: true
+
     server_email: log@example.com
 
     # Election ids are autoinc integer numbers set when created from the
