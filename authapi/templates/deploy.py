@@ -40,6 +40,22 @@ HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/pu
 
 ADMIN_AUTH_ID = 1
 
+# If this option is true, then admin users can be deregistered and
+# re-registered. Elections from deregistered users still are stored in the
+# database. When a user re-registers after being de-registered, he will be
+# able to modify fields that are not the email (in the case of email
+# authentication) or phone number (in the case of phone-based auth) and once
+# he is re-registered he will be able to see and manage elections created
+# before he de-registered
+#
+# Users can only be deregistered while being logged in, using a call to
+# authapi's url 'api/user/deregister/'. admin.py script in agora_elections
+# can be used to ease executing this procedure.
+#
+# allowed values: true|false
+# default: true
+ALLOW_DEREGISTER = {% if config.authapi.allow_deregister %}True{% else %}False{% endif %}
+
 # If this option is true, when an user tries to register and the user is
 # already registered, authapi will return an error with the 'user_exists'
 # codename. Otherwise, on error, authapi will always return the same generic
