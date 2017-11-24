@@ -1,3 +1,29 @@
+## 103111.9 (24/11/2017)
+
+* Fix some deployment issues on agora-dev-box
+* Remove difference between real and test elections
+* Open onboarding whenever the user has no elections created
+* Duplicated elections didn't preserve question options urls, fixed
+* Hide features link on top navbar on admin login/signup
+* Enable deregistration for admin users
+* Hide input element on tlf/email census config on gui-admin
+
+## 103111.8 (6/11/2017)
+
+* Enable start_date and end_date to be null (upon election creation), correctly update user's last_login field
+* On gui-admin, when user clicks on add question, the question now has two voting options included by default
+* Save drafts of elections
+
+## 103111.7 (23/10/2017)
+
+* Fix problems with resend code button. Add resend option for email. Add allow_user_resend option to allow users to get codes even on closed census elections
+* Add version number to config.yml on agora-dev-box and check it on config_prod_env helper script
+* Fix onboarding error that broke the logic of the app, and didn't show the profile when it's empty. Improve admin fields errors
+* Make profile left column wider
+* Code refactor to fix problem when trying to add CSV text to election census on an election that hasn't been created yet
+* Fix erroneous candidate when clicking on new question while creating an election
+* Add option to authapi to signal that a registration failed because the user already exists
+
 ## 103111.6 (06/10/2017)
 
 * Use new settings widget on all the easy places on gui-admin

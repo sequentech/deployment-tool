@@ -46,6 +46,7 @@
     # modification of frestq
     - psycopg2==2.5.2
     - uwsgi
+    - cryptography==2.0.3
     - requests[security]
 
 - name: EOrchestra, configure settings
