@@ -27,7 +27,7 @@
 {
     "fields": {
         "status": "act",
-        "metadata": "\"{}\"",
+        "metadata": {},
         "tlf": "{{config.authapi.admin_user.tlf}}",
         "event": 1,
         "user": 1
