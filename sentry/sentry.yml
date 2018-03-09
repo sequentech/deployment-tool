@@ -14,6 +14,13 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
+- name: Sentry, pip update
+  become: true
+  become_user: sentry
+  pip: name={{item}} virtualenv=/home/sentry/venv state=latest
+  with_items:
+    - pip
+
 - name: Sentry, Sentry installation
   become: true
   become_user: sentry
