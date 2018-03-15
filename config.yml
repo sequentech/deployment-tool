@@ -25,8 +25,8 @@ params:
 
 # global configuration
 config:
-  version: 103111.8
   backup_password: '<PASSWORD>'
+  version: 103111.9
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
@@ -167,6 +167,12 @@ config:
     # election authorities. This way, you can use one certificate publicly
     # and another internaly.
     internal_tls_calist_path: /srv/certs/selfsigned/calist
+
+    # Simple http authentication protection for all services under nginx.
+    # http_auth:
+    #   user: admin
+    #   password: eengiefe
+    http_auth: false
 
   # some java related configuration options
   java:
