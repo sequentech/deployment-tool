@@ -92,3 +92,8 @@
 - name: OneServer, Restarting nginx
   become: true
   service: name=nginx state=restarted
+
+- name: OneServer, http authentication
+  become: true
+  shell: echo "{{config.http.http_auth.user}}:$(openssl passwd -crypt {{config.http.http_auth.password}})" > /etc/nginx/.htpasswd
+  when: config.http.http_auth
