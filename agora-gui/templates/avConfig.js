@@ -30,6 +30,7 @@ var avConfigData = {
   theme: "{{ config.agora_gui.theme }}",
   baseUrl: "https://{{config.agora_elections.domain}}/elections/api/",
   freeAuthId: 1,
+  auth_methods: [{% for m in config.agora_gui.auth_methods|default(['sms', 'email']) %}'{{m}}'{% if not loop.last %},{% endif %}{% endfor %}],
 
   // Configurable Sign Up link
   signupLink: "{{ config.agora_gui.organization.admin_signup_link }}",

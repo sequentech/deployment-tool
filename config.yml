@@ -367,6 +367,12 @@ config:
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
 
+    # Possible authentication method in the admin
+    auth_methods:
+      - sms
+      - email
+      - user-and-password
+
     # Default language of the application
     language: en
 
