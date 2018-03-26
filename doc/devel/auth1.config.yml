@@ -230,6 +230,7 @@ config:
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
       #- agora_results.pipes.pdf.configure_pdf
       - agora_results.pipes.withdraw_candidates.withdraw_candidates
+      # - agora_results.pipes.ballot_boxes.count_tally_sheets
 
   # agora-elections
   agora_elections:
