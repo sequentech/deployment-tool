@@ -497,7 +497,6 @@ config:
       end_date: '',
       authorities: ConfigService.authorities,
       director: ConfigService.director,
-      has_ballot_boxes: false,
       presentation: {
       theme: 'default',
       share_text: getShareTextDefault(),
@@ -507,6 +506,7 @@ config:
       layout: 'simple',
       num_successful_logins_allowed: 0,
       census: {
+      has_ballot_boxes: false,
       voters: [],
       auth_method: 'email',
       census:'close',
