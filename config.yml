@@ -498,6 +498,7 @@ config:
       end_date: '',
       authorities: ConfigService.authorities,
       director: ConfigService.director,
+      has_ballot_boxes: false,
       presentation: {
       theme: 'default',
       share_text: getShareTextDefault(),
