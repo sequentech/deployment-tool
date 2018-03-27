@@ -42,7 +42,7 @@
   replace:
     "dest=/home/agoragui/{{item}}/Gruntfile.js
     regexp='compress:.*'
-    replace='compress: {% if config.agora_gui.debug == 'false' %}true{% else %}{}{% endif %},'"
+    replace='compress: {% if config.agora_gui.debug == 'false' %}true{% else %}false{% endif %},'"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
