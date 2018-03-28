@@ -230,6 +230,7 @@ config:
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
       #- agora_results.pipes.pdf.configure_pdf
       - agora_results.pipes.withdraw_candidates.withdraw_candidates
+      # - agora_results.pipes.ballot_boxes.count_tally_sheets
 
   # agora-elections
   agora_elections:
@@ -504,6 +505,7 @@ config:
       layout: 'simple',
       num_successful_logins_allowed: 0,
       census: {
+      has_ballot_boxes: false,
       voters: [],
       auth_method: 'email',
       census:'close',
