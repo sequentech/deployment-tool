@@ -862,6 +862,12 @@ config:
     # default: true
     allow_deregister: true
 
+    # callbacks given to agora_elections instances, for now related to sending
+    # the result of uploading tally sheets only. It's a list so that it can
+    # upload multiple agora_elections instances
+    agora_elections_base:
+    - http://127.0.0.1:14443
+
     server_email: log@example.com
 
     # Election ids are autoinc integer numbers set when created from the
