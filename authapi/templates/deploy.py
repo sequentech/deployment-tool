@@ -106,6 +106,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 {% endif %}
 
+AGORA_ELECTIONS_BASE = [
+{% for agora_elections_base in config.authapi.agora_elections_base %}
+"{{ agora_elections_base }}",
+{% endfor %}
+]
+
 SMS_OTP_EXPIRE_SECONDS = {{config.authapi.sms_otp.expire_seconds}}
 
 {% for extra_option in config.authapi.extra_options %}
