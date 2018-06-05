@@ -69,6 +69,18 @@
     - m4
     - p7zip-full
     - nginx
+    - zip
+    - python-pip
+    - python-dev
+    - libxslt1-dev
+    - libxml2-dev
+    - libz-dev
+    - libssl-dev
+    - redis-server
+    - redis-tools
+    - clang
+    - llvm
+    - cmake
 
 - name: Packages, check whether old 9.3 postgres is installed
   shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
