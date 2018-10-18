@@ -904,7 +904,7 @@ config:
 
     # Stablishes the authentication method used for election administrators
     #
-    # Allowed values: (user-and-password|email|sms|sms-otp)
+    # Allowed values: (user-and-password|email|sms|sms-otp|openid-connect)
     auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by
@@ -1004,9 +1004,37 @@ config:
       # Base template for plain text email titles. The __TITLE__ will be
       # replaced by the title, so you can add prefix and suffixes.
       base_title_template: "__TITLE__ - nVotes"
-      
+
       # Possible backends: email|console
       backend: 'console'
+
+    # List of OpenID Connect providers information. Each provider contains
+    # public info that is used by agora-gui to show information about the
+    # providers, and private info that is used by authapi for authentication.
+    #
+    # openid_connect_providers:
+    #   - public_info:
+    #       id: example
+    #       title: Example Or
+    #       description: Some description
+    #       icon: https://example.com/image.png
+    #     private_config:
+    #       version: 1.0
+    #       issuer: https://example.org/OP/1
+    #       authorization_endpoint: https://example.org/OP/1/authz
+    #       token_endpoint: https://example.org/OP/1/token
+    #
+    #   - public_info:
+    #       id: example
+    #       title: Example Or
+    #       description: Some description
+    #       icon: https://example.com/image.png
+    #     private_config:
+    #       version: 1.0
+    #       issuer: https://example.org/OP/1
+    #       authorization_endpoint: https://example.org/OP/1/authz
+    #       token_endpoint: https://example.org/OP/1/token
+    openid_connect_providers: []
 
     # list of extra options, added at the end as configuration lines in the
     # configuration file
