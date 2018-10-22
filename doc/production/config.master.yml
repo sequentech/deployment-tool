@@ -1003,27 +1003,18 @@ config:
     # providers, and private info that is used by authapi for authentication.
     #
     # openid_connect_providers:
-    #   - public_info:
-    #       id: example
-    #       title: Example Or
-    #       description: Some description
-    #       icon: https://example.com/image.png
-    #     private_config:
-    #       version: 1.0
-    #       issuer: https://example.org/OP/1
-    #       authorization_endpoint: https://example.org/OP/1/authz
-    #       token_endpoint: https://example.org/OP/1/token
-    #
-    #   - public_info:
-    #       id: example
-    #       title: Example Or
-    #       description: Some description
-    #       icon: https://example.com/image.png
-    #     private_config:
-    #       version: 1.0
-    #       issuer: https://example.org/OP/1
-    #       authorization_endpoint: https://example.org/OP/1/authz
-    #       token_endpoint: https://example.org/OP/1/token
+    #  - public_info:
+    #      id: example
+    #      title: Authenticate to vote with Example
+    #      description: Authenticate to vote with Example
+    #      icon: https://www.example.com/favicon.ico
+    #      authorization_endpoint: https://accounts.example.com/o/oauth2/v2/auth
+    #      client_id: my_example_client_id.apps.example.com
+    #      issuer: https://accounts.example.com
+    #      token_endpoint: https://oauth2.example.com/token
+    #      jwks_uri: https://www.example.com/oauth2/v3/certs
+    #    private_config:
+    #      client_secret: example_secret
     openid_connect_providers: []
 
   # Authorities
