@@ -26,7 +26,8 @@
   become_user: sentry
   pip: name={{item}} virtualenv=/home/sentry/venv state=present
   with_items:
-    - cryptography==2.0.3
+    - cryptography==2.1.4
+    - pyopenssl==18.0.0
     - sentry[postgres]==8.9.0
 
 - name: Sentry, Creating conf
