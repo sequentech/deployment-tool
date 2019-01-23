@@ -15,5 +15,5 @@
 
 ---
 - name: AgoraVerifier, Creating default user
-  sudo: true
+  become: true
   user: name=agoraverifier shell=/bin/bash

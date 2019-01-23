@@ -15,11 +15,11 @@
 
 ---
 - name: AgoraElections, Updating packages
-  sudo: true
+  become: true
   action: apt update_cache=yes
 
 - name: AgoraElections, Installing packages
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=installed
   with_items:
     - unzip

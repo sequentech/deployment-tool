@@ -16,7 +16,7 @@
 ---
 - name: AgoraGui, copy logo image
   when: config.agora_gui.organization.logo_path != ''
-  sudo: true
+  become: true
   copy:
     "src={{config.agora_gui.organization.logo_path}}
     dest=/home/agoragui/agora-gui-admin/img/agora_voting_logo_white_100.png
@@ -25,8 +25,8 @@
     mode=u=rw,g=r,o=r"
 
 - name: AgoraGui, config beautify options
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
     "dest=/home/agoragui/{{item}}/Gruntfile.js
     regexp='beautify:.*'
@@ -37,12 +37,12 @@
     - agora-gui-booth
 
 - name: AgoraGui, config compress options
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
     "dest=/home/agoragui/{{item}}/Gruntfile.js
     regexp='compress:.*'
-    replace='compress: {% if config.agora_gui.debug == 'false' %}true{% else %}{}{% endif %},'"
+    replace='compress: {% if config.agora_gui.debug == 'false' %}true{% else %}false{% endif %},'"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -50,7 +50,7 @@
 
 - name: AgoraGui, copy static_extra_path
   when: config.agora_gui.static_extra_path != ''
-  sudo: true
+  become: true
   copy:
     "src={{config.agora_gui.static_extra_path}}
     dest=/home/agoragui/static_extra/
@@ -58,8 +58,8 @@
     group=agoragui"
 
 - name: AgoraGui, config election limits
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
     "dest=/home/agoragui/agora-gui-admin/avAdmin/election-limits-service.js
     regexp='{{ item.key }}:.*'
@@ -71,25 +71,54 @@
     - { key: maxLongStringLength, value: "{{ config.election_limits.max_long_string_length }}" }
 
 - name: AgoraGui, config custom html body include
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
     "dest=/home/agoragui/agora-gui-admin/Gruntfile.js
     regexp='admin_html_body_include:.*'
     replace='admin_html_body_include:\"{{ config.agora_gui.texts.admin_html_body_include }}\",'"
 
 - name: AgoraGui, config custom html body include for agora-gui-booth
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
     "dest=/home/agoragui/agora-gui-booth/Gruntfile.js
     regexp='booth_html_body_include:.*'
     replace='booth_html_body_include:\"{{ config.agora_gui.texts.booth_html_body_include }}\",'"
 
 - name: AgoraGui, config custom html body include for agora-gui-elections
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
     "dest=/home/agoragui/agora-gui-elections/Gruntfile.js
     regexp='elections_html_body_include:.*'
     replace='elections_html_body_include:\"{{ config.agora_gui.texts.elections_html_body_include }}\",'"
+
+- name: AgoraGui, check avPluginsConfig.js exists
+  become: true
+  become_user: agoragui
+  stat:
+    path: /home/agoragui/avPluginsConfig.js
+  register: avpluginsconfig_file
+
+- name: AgoraGui, check avConfig version
+  become: true
+  become_user: agoragui
+  shell: cat /home/agoragui/avConfig.js | grep AV_CONFIG_VERSION | sed 's/\s*var\s*AV_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9\.]*\)["|\x27]\s*;\s*/\1/'
+  register: config_version
+  when: avpluginsconfig_file.stat.exists
+
+- name: AgoraGui, check avPluginsConfig version
+  become: true
+  become_user: agoragui
+  shell: cat /home/agoragui/avPluginsConfig.js | grep AV_PLUGINS_CONFIG_VERSION | sed 's/\s*var\s*AV_PLUGINS_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9\.]*\)["|\x27]\s*;\s*/\1/'
+  register: plugins_version
+  when: avpluginsconfig_file.stat.exists
+
+- name: AgoraGui, remove avPluginsConfig.js (a new stub will be automatically generated)
+  become: true
+  become_user: agoragui
+  file: 
+    path: /home/agoragui/avPluginsConfig.js
+    state: absent
+  when: avpluginsconfig_file.stat.exists and config_version.stdout != plugins_version.stdout

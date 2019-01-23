@@ -30,8 +30,8 @@
       dest: agora-results
 
 - name: AgoraElections, update agora-results pipes whitelist
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   replace:
     dest=/home/agoraelections/agora-results/agora-results
     regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
@@ -58,7 +58,7 @@
   become_user: agoraelections
 
 - name: AgoraElections, req.txt
-  sudo: true
+  become: true
   template: src=agora-elections/templates/results.req.txt
             dest=/home/agoraelections/agora-results/results.req.txt
             owner="agoraelections" mode=0655
@@ -84,7 +84,7 @@
   become_user: agoraelections
 
 - name: AgoraResults, results.sh
-  sudo: true
+  become: true
   template: src=agora-elections/templates/results.sh
             dest=/home/agoraelections/agora-elections/admin/results.sh
             owner="agoraelections" mode=0755

@@ -42,7 +42,7 @@
     - { src: archive_command_postgres.sh, dest: /usr/bin/archive_command_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: restore_file_postgres.sh, dest: /usr/bin/restore_file_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
     - { src: restore_script_postgres.sh, dest: /usr/bin/restore_script_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
-    - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf, owner: "postgres", group: "postgres", mode: "0644" }
+    - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf.copy, owner: "postgres", group: "postgres", mode: "0644" }
 
 - name: PostgreSQL Backups, set postgresql 9.4 conf for archiving
   become: true
@@ -53,7 +53,8 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: '\s*#?\s*wal_level\s*=\s*(minimal|archive|hot_standby|logical).*', line: 'wal_level = logical' }
+    - regexp: \s*#?\s*wal_level\s*=\s*'?(minimal|archive|hot_standby|logical)'?.*
+      line: wal_level = 'logical'
     - { regexp: '\s*#?\s*fsync\s*=\s*(on|off).*', line: 'fsync = on' }
     - { regexp: '\s*#?\s*wal_sync_method\s*=\s*(open_datasync|fdatasync|fsync|fsync_writethrough|open_sync).*', line: 'wal_sync_method = fsync' }
     - { regexp: '\s*#?\s*full_page_writes\s*=\s*(on|off).*', line: 'full_page_writes = on' }
@@ -62,7 +63,7 @@
     - { regexp: '\s*#?\s*archive_command\s*=\s*.*', line: "archive_command = 'bash archive_command_postgres.sh %p %f'" }
     - { regexp: '\s*#?\s*archive_timeout\s*=\s*\d+.*', line: "archive_timeout = {{ config.postgres_backups.archive_timeout }}" }
     - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 5' }
-    - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 0' }
+    - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 10' }
 
 - name: PostgreSQL Backups, disable archiving on postgresql 9.4 conf
   become: true
@@ -103,6 +104,15 @@
   cron:
     name: "postgres_backups"
     state: absent
+
+- name: PostgreSQL Backups, ensure recovery.conf is absent on /etc/postgresql/9.4/main
+  become: true
+  when: config.postgres_backups.enabled
+  file:
+    path: /etc/postgresql/9.4/main/recovery.conf
+    state: absent
+    owner: postgres
+    group: postgres
 
 - name: PostgreSQL Backups, restarting postgresql to enable backups
   become: true

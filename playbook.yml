@@ -23,7 +23,6 @@
     - include: java.yml
     - include: packages.yml
     - include: system.yml
-    - include: postgres_backups.yml
     - include: sudoers/main.yml
     - include: agora-tools/main.yml
     - include: eorchestra/main.yml
@@ -34,3 +33,4 @@
     - include: oneserver/main.yml
     - include: agora-verifier/main.yml
     - include: halb/main.yml
+    - include: postgres_backups.yml

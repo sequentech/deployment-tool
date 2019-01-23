@@ -16,8 +16,8 @@
 ---
 # git stash
 - name: AgoraElections, git stash
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   shell: git stash
          chdir=/home/agoraelections/agora-elections
 
@@ -25,8 +25,8 @@
 
 # git stash pop
 - name: AgoraElections, git stash pop
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   shell: git stash pop
          chdir=/home/agoraelections/agora-elections
 
@@ -36,7 +36,7 @@
 - include: results.yml
 
 - name: AgoraElections, Restarting agora-elections service
-  sudo: true
+  become: true
   supervisorctl: name={{ item }} state=restarted
   with_items:
     - agora-elections

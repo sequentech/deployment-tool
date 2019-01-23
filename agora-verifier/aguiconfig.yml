@@ -20,13 +20,13 @@
 
 - name: AgoraVerifier, get hash of verifier
   shell: sha256sum /home/agoraverifier/agora-verifier/agora-verifier | cut -d' ' -f 1
-  sudo: true
-  sudo_user: agoraverifier
+  become: true
+  become_user: agoraverifier
   register: sha256sum
 
 - name: AgoraVerifier, config setup for agora-verifier
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   when: avConfig.stat.exists == True
   replace: 'dest=/home/agoragui/avConfig.js
            regexp="{{item.regexp}}"
@@ -39,7 +39,7 @@
       replace: 'hash: "{{sha256sum.stdout}}",'
 
 - name: AgoraVerifier, building AgoraGui
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   when: avConfig.stat.exists == True
   shell: ./build.sh chdir=/home/agoragui/

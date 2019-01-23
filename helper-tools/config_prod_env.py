@@ -21,6 +21,9 @@ import sys
 import argparse
 import re
 
+INPUT_PROD_VERSION="103111.7"
+INPUT_PRE_VERSION="103111.8"
+OUTPUT_PROD_VERSION="103111.8"
 def store_keyvalue(prod_config, generated_config, keystore, pipe):
   '''
   Updates the keyvalue store
@@ -49,6 +52,29 @@ def replace_keyvalue_match(prod_config, generated_config, keystore, pipe):
   rx = re.compile(pipe['pattern'], re.MULTILINE)
   return re.sub(rx, replacer, generated_config)
 
+def check_keyvalue_match(prod_config, generated_config, staging_config, keystore, pipe):
+  '''
+  Checks version number
+  If it's not the right one, it will raise an exception
+  '''
+  rx = re.compile(pipe['pattern'], re.MULTILINE)
+  if "prod" == pipe['match_file']:
+    match_config = prod_config
+  elif "pre" == pipe['match_file']:
+    match_config = staging_config
+  elif "out" == pipe['match_file']:
+    match_config = generated_config
+
+  search = rx.search(match_config)
+
+  if None == search or 1 > len(search.groups()):
+    raise Exception('Error: version number not found on ' + pipe['match_file'] + ' file.')
+
+  if pipe['match'] != search.group(1):
+    raise Exception('Error: ' + pipe['match_file'] + ' file has version number ' + search.group(1) + ' but it should be ' + pipe['match'])
+
+  return generated_config
+
 def process_pipes(pipes, prod_config, staging_config):
   '''
   Applies the pipe list
@@ -56,15 +82,18 @@ def process_pipes(pipes, prod_config, staging_config):
   keystore = dict()
   generated_config = staging_config
   for pipe in pipes:
-    if pipe["name"] == "store_keyvalue_match":
+    if "store_keyvalue_match" == pipe["name"]:
       generated_config = store_keyvalue_match(prod_config, generated_config,
         keystore, pipe)
-    elif pipe["name"] == "store_keyvalue":
+    elif "store_keyvalue" == pipe["name"]:
       generated_config = store_keyvalue(prod_config, generated_config,
         keystore, pipe)
-    elif pipe["name"] == "replace_keyvalue_match":
+    elif "replace_keyvalue_match" == pipe["name"]:
       generated_config = replace_keyvalue_match(prod_config, generated_config,
         keystore, pipe)
+    elif "check_keyvalue_match" == pipe["name"]:
+      generated_config = check_keyvalue_match(prod_config, generated_config, 
+        staging_config, keystore, pipe)
 
   return generated_config
 
@@ -87,12 +116,26 @@ staging_config_path = args.staging_config
 output_path = args.out
 
 pipes=[
+  # check pre version
+  dict(
+    name="check_keyvalue_match",
+    pattern="\n\s*version:\s*[\"|']?([0-9.a-zA-Z]*)[\"|']?\s*\n",
+    match_file="pre",
+    match=INPUT_PRE_VERSION
+  ),
+  # check prod version
+  dict(
+    name="check_keyvalue_match",
+    pattern="\n\s*version:\s*[\"|']?([0-9.a-zA-Z]*)[\"|']?\s*\n",
+    match_file="prod",
+    match=INPUT_PROD_VERSION
+  ),
   # extract some values from the old production configuration file
   dict(
     name="store_keyvalue_match",
     pattern="^\s*(" + "|".join(["backup_password", "global_secret_key",
-      "eorchestra_password", "db_password", "shared_secret", "keystore_pass",
-      "admin_password", "password", "host", "public_ipaddress",
+      "eorchestra_password", "shared_secret", "keystore_pass",
+      "admin_password", "password", "public_ipaddress",
       "private_ipaddress", "election_start_id", "settings_help_base_url",
       "settings_help_default_url", "admin_signup_link"]) + ")\s*:\s+(.*)\s*$",
     store_key_group=1,
@@ -104,15 +147,16 @@ pipes=[
     data=dict(
       settings_help_base_url="https://nvotes.com/doc-print/en/embedded-docs/",
       settings_help_default_url="https://nvotes.com/doc-print/en/embedded-docs/not-found/",
-      admin_signup_link="https://nvotes.com"
+      admin_signup_link="https://nvotes.com",
+      version=OUTPUT_PROD_VERSION
     )
   ),
   # replace values in the new configuration file
   dict(
     name="replace_keyvalue_match",
-    pattern="^(\s*(" + "|".join(["backup_password", "global_secret_key",
-      "eorchestra_password", "db_password", "shared_secret", "keystore_pass",
-      "admin_password", "password", "host", "public_ipaddress",
+    pattern="^(\s*(" + "|".join(["version", "backup_password", "global_secret_key",
+      "eorchestra_password", "shared_secret", "keystore_pass",
+      "admin_password", "password", "public_ipaddress",
       "private_ipaddress", "election_start_id", "settings_help_base_url",
       "settings_help_default_url", "admin_signup_link"]) + ")\s*:\s+).*(\s*)$",
     lookup_key_group=2,
@@ -161,6 +205,55 @@ pipes=[
     pattern="^(\s*(agora_gui|expiry):.*\n\s*(domain):\s+)(.*)$",
     lookup_key_group=3,
     replace_templ="\\1 {lookup_value}\n"
+  ),
+  # extract host from the production configuration file
+  dict(
+    name="store_keyvalue_match",
+    pattern="^\s*(host):\s*(.*)\s*\n((.*\n)*\s*dnie_auth)",
+    store_key_group=1,
+    store_value_group=2
+  ),
+  # replace host from the production configuration file
+  dict(
+    name="replace_keyvalue_match",
+    pattern="^\s*(host):\s*(.*)\s*\n((.*\n)*\s*dnie_auth)",
+    lookup_key_group=1,
+    replace_templ="\n  \\1: {lookup_value}\n\n\\3"
+  ),
+  #extract agora_elections's db_password from the production configuration file
+  dict(
+    name="store_keyvalue_match",
+    pattern="^(\s*agora_elections:(.*\n)*)\s*(db_password):\s*(.*)\s*\n((.*\n)*\s*sentry:\s*\n)",
+    store_key_group=3,
+    store_value_group=4
+  ),
+  # replace agora_elections's db_password from the production configuration file
+  dict(
+    name="replace_keyvalue_match",
+    pattern="^(\s*agora_elections:(.*\n)*)\s*(db_password):\s*(.*)\s*\n((.*\n)*\s*sentry:\s*\n)",
+    lookup_key_group=3,
+    replace_templ="\\1\n    \\3: {lookup_value}\n\\5"
+  ),
+  # extract sentry's db_password from the production configuration file
+  dict(
+    name="store_keyvalue_match",
+    pattern="^(\s*sentry:(.*\n)*)\s*(db_password):\s*(.*)\s*\n",
+    store_key_group=3,
+    store_value_group=4
+  ),
+  # replace sentry's db_password from the production configuration file
+  dict(
+    name="replace_keyvalue_match",
+    pattern="^(\s*sentry:(.*\n)*)\s*(db_password):\s*(.*)\s*\n",
+    lookup_key_group=3,
+    replace_templ="\\1\n    \\3: {lookup_value}\n"
+  ),
+  # check out version
+  dict(
+    name="check_keyvalue_match",
+    pattern="\n\s*version:\s*[\"|']?([0-9.a-zA-Z]*)[\"|']?\s*\n",
+    match_file="out",
+    match=OUTPUT_PROD_VERSION
   ),
 ]
 

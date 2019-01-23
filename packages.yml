@@ -25,6 +25,17 @@
     state: present
     validate_certs: "{{ not config.has_https_proxy }}"
 
+- name: Packages, add nginx repository
+  become: true
+  apt_repository: repo='deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx' state=present
+
+- name: Packages, add nginx keys
+  become: true
+  apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+    state: present
+    validate_certs: "{{ not config.has_https_proxy }}"
+
 - name: Packages, Updating packages
   become: true
   action: apt update_cache=yes
@@ -39,7 +50,6 @@
     - postgresql-9.4
     - postgresql-9.4-repmgr
     - mercurial
-    - nginx
     - supervisor
     - node
     - libffi-dev
@@ -58,6 +68,19 @@
     - make
     - m4
     - p7zip-full
+    - nginx
+    - zip
+    - python-pip
+    - python-dev
+    - libxslt1-dev
+    - libxml2-dev
+    - libz-dev
+    - libssl-dev
+    - redis-server
+    - redis-tools
+    - clang
+    - llvm
+    - cmake
 
 - name: Packages, check whether old 9.3 postgres is installed
   shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
@@ -92,43 +115,43 @@
   service: name=postgresql state=started
 
 - name: Packages, Download some python packages from ubuntu vivid release (needed for http_proxy)
-  sudo: true
+  become: true
   get_url:
     url={{item.url}}
     sha256sum={{item.sha256sum}}
     dest=/tmp/{{item.pkg}}
     validate_certs={{ not config.has_https_proxy }}
   with_items:
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-pip/python3-pip_1.5.6-5ubuntu2_all.deb
+    - url: https://launchpad.net/ubuntu/+source/python-pip/1.5.6-5ubuntu2/+build/7083213/+files/python3-pip_1.5.6-5ubuntu2_all.deb
       pkg: python3-pip_1.5.6-5ubuntu2_all.deb
       sha256sum: 126e4ca4bc1bdca44972307df95932071af4e5538f2160112de177e4de028623
 
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-virtualenv/python3-virtualenv_1.11.6+ds-1_all.deb
-      pkg: python3-virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: 2e940cfa1b89e1ebfb7909e1f0a62d9c59291383c9698262a2eb192f1a317e68
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-pip/python-pip_1.5.6-5ubuntu2_all.deb
+    - url: https://launchpad.net/ubuntu/+source/python-pip/1.5.6-5ubuntu2/+build/7083213/+files/python-pip_1.5.6-5ubuntu2_all.deb
       pkg: python-pip_1.5.6-5ubuntu2_all.deb
       sha256sum: f879f8ba8b72dd76783c0c314c9e1052007526742ad755768f53966e86177350
 
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-pip/python-pip-whl_1.5.6-5ubuntu2_all.deb
+    - url: https://launchpad.net/ubuntu/+source/python-pip/1.5.6-5ubuntu2/+build/7083213/+files/python-pip-whl_1.5.6-5ubuntu2_all.deb
       pkg: python-pip-whl_1.5.6-5ubuntu2_all.deb
       sha256sum: c8bba42b599e5f1ed962b422102d1a7a7eb8b24e38367ceb351b391ead65841f
 
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-setuptools/python-setuptools-whl_12.2-1_all.deb
-      pkg: python-setuptools-whl_12.2-1_all.deb
-      sha256sum: abd51126da26972e8ae7b59f2315490852129ad3f6db731b580aeb6cc91fbc8e
+    - url: https://launchpad.net/ubuntu/+source/python-virtualenv/1.11.6+ds-1/+build/6530026/+files/python3-virtualenv_1.11.6+ds-1_all.deb
+      pkg: python3-virtualenv_1.11.6+ds-1_all.deb
+      sha256sum: 2e940cfa1b89e1ebfb7909e1f0a62d9c59291383c9698262a2eb192f1a317e68
 
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-virtualenv/python-virtualenv_1.11.6+ds-1_all.deb
+    - url: https://launchpad.net/ubuntu/+source/python-virtualenv/1.11.6+ds-1/+build/6530026/+files/python-virtualenv_1.11.6+ds-1_all.deb
       pkg: python-virtualenv_1.11.6+ds-1_all.deb
       sha256sum: a9e4201a7407a39a387d744b34392d4b36d776dd2fc18ef616a49c86f3c83e3c
 
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-virtualenv/virtualenv_1.11.6+ds-1_all.deb
+    - url: https://launchpad.net/ubuntu/+source/python-virtualenv/1.11.6+ds-1/+build/6530026/+files/virtualenv_1.11.6+ds-1_all.deb
       pkg: virtualenv_1.11.6+ds-1_all.deb
       sha256sum: 1784c739a8f59c70faf2759bb27e96fe7dc231f8f98f9351fb64fc613927a260
 
+    - url: https://launchpad.net/ubuntu/+source/python-setuptools/12.2-1/+build/7016577/+files/python-setuptools-whl_12.2-1_all.deb
+      pkg: python-setuptools-whl_12.2-1_all.deb
+      sha256sum: abd51126da26972e8ae7b59f2315490852129ad3f6db731b580aeb6cc91fbc8e
+
 - name: Packages, Install downloaded python packages
-  sudo: true
+  become: true
   shell: dpkg --skip-same-version -i /tmp/{{item}}
   with_items:
     - python3-pip_1.5.6-5ubuntu2_all.deb
@@ -140,15 +163,15 @@
     - virtualenv_1.11.6+ds-1_all.deb
 
 - name: Packages, Generate UTF-8 locales
-  sudo: true
+  become: true
   shell: locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
 
 - name: Packages, Configure locales
-  sudo: true
+  become: true
   shell: dpkg-reconfigure locales
 
 - name: Packages, Create postgresql cluster
-  sudo: true
+  become: true
   shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.4 main
   register: cmdoutput
   failed_when: "'Error: cluster configuration already exists' not in cmdoutput.stderr and cmdoutput.rc != 0"

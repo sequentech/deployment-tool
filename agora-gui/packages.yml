@@ -15,11 +15,11 @@
 
 ---
 - name: AgoraGui, Updating packages
-  sudo: true
+  become: true
   action: apt update_cache=yes
 
 - name: AgoraGui, Installing packages
-  sudo: true
+  become: true
   action: apt pkg={{item}} state=installed
   with_items:
     - wget

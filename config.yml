@@ -26,6 +26,7 @@ params:
 # global configuration
 config:
   backup_password: '<PASSWORD>'
+  version: 103111.9
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
@@ -167,6 +168,12 @@ config:
     # and another internaly.
     internal_tls_calist_path: /srv/certs/selfsigned/calist
 
+    # Simple http authentication protection for all services under nginx.
+    # http_auth:
+    #   user: admin
+    #   password: eengiefe
+    http_auth: false
+
   # some java related configuration options
   java:
     # maximum size of heap memory in Megabytes (int). Default: 4000. Your total
@@ -198,7 +205,7 @@ config:
     # by agora-elections and also agora-verifier
     pipes_whitelist:
       #- agora_results.pipes.duplicate_questions.duplicate_questions
-      - agora_results.pipes.modifications.apply_modifications
+      #- agora_results.pipes.modifications.apply_modifications
       #- agora_results.pipes.multipart.make_multipart
       #- agora_results.pipes.multipart.election_max_size_corrections
       #- agora_results.pipes.multipart.question_totals_with_corrections
@@ -207,11 +214,14 @@ config:
       #- agora_results.pipes.multipart.data_list_reverse
       #- agora_results.pipes.multipart.multipart_tally_plaintexts_joiner
       #- agora_results.pipes.multipart.append_ballots
-      - agora_results.pipes.parity.proportion_rounded
+      #- agora_results.pipes.parity.proportion_rounded
       - agora_results.pipes.parity.parity_zip_non_iterative
       #- agora_results.pipes.parity.reorder_winners
       #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
+      #- agora_results.pipes.parity.podemos_parity2_loreg_zip_non_iterative
       #- agora_results.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- agora_results.pipes.desborda4.podemos_desborda4
+      #- agora_results.pipes.desborda3.podemos_desborda3
       #- agora_results.pipes.desborda2.podemos_desborda2
       #- agora_results.pipes.desborda.podemos_desborda
       #- agora_results.pipes.pretty_print.pretty_print_stv_winners
@@ -222,6 +232,8 @@ config:
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
       #- agora_results.pipes.pdf.configure_pdf
+      - agora_results.pipes.withdraw_candidates.withdraw_candidates
+      # - agora_results.pipes.ballot_boxes.count_tally_sheets
 
   # agora-elections
   agora_elections:
@@ -266,24 +278,45 @@ config:
     # Download tally retries
     download_tally_retries: 5
 
-    # vote callback allows agora-elections to notify the authentication module
-    # (which can be external) that a vote has been cast.
-    vote_callback:
-      # mode can be one of three values:
-      #
-      # - default: vote callback is enabled but the url is the default one, for
-      #            the authapi deployed in this same server.
-      #
-      # - custom: vote callback is enabled to the url specified in the
-      #           custom_url field.
-      #
-      # - disabled: vote callback is disabled.
-      mode: 'default'
+    # if true, the calculated results are always automatically published
+    # valid values: true, false
+    always_publish: false
 
+    # list of callbacks from agora-elections to authapi
+    # these callbacks are sometimes required for complex behaviour because
+    # agora-elections knows about election states that authapi doesn't know about
+    # and these callbacks allow the agora-elections to call the authapi to
+    # execute actions at certain states
+    # each callback is defined by a name, mode and url
+    # supported callback names: vote, started, published
+    # mode can be one of three values:
+    #
+    # - default: vote callback is enabled but the url is the default one, for
+    #            the authapi deployed in this same server.
+    #
+    # - custom: vote callback is enabled to the url specified in the
+    #           custom_url field.
+    #
+    # - disabled: vote callback is disabled.
+    callbacks:
+      # vote callback allows agora-elections to notify the authentication module
+      # (which can be external) that a vote has been cast.
       # Custom url is only used with 'custom' mode. Note that the url can be
       # dynamic. To substitute the election id in the url, use ${eid}, and to
       # substitute the userid, use ${uid}
-      custom_url: ''
+      - name: vote
+        mode: default
+        url: ''
+      # started callback is triggered by agora-elections when an election
+      # changes to stage 'started'
+      - name: started
+        mode: disabled
+        url: ''
+      # published callback is triggered by agora-elections when an election
+      # changes to stage 'published'
+      - name: published
+        mode: disabled
+        url: ''
 
     # When this setting is true, an election can be virtual and have
     # subelections. A virtual election can have no votes itself and can move
@@ -297,6 +330,25 @@ config:
     # installations.
     virtualElectionsAllowed: false
 
+  # CORS (HTTP Cross-origin resource sharing) is a measure implemented by
+  # web browsers that prevents an user agent to load an external resource if
+  # it is in another domain and that domain doesn't actively allows it with
+  # some CORS-specific headers
+  cors:
+    # Nginx regular expression to match $http_origin variable. If it matches
+    # the $http_origin is allowed with the Access-Control-Allow-Origin header
+    allow_origins_rx: "^$"
+
+    # Sets the Access-Control-Allow-Origin header
+    allow_credentials: "true"
+
+    # Sets the Access-Control-Allow-Methods header
+    allow_methods: GET, POST, OPTIONS
+
+    # Sets the Access-Control-Allow-Headers header
+    allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+
+
   # agora-gui
   agora_gui:
     domain: nvotes.com
@@ -306,6 +358,14 @@ config:
     
     # webpage title
     web_title: 'nVotes'
+
+    # html to be inserted in the gui-admin profile view
+    profile_html: >-
+      <div
+      av-admin-field
+      ng-repeat=\"field in fields_def\"
+      editable=\"{% raw %}{{ field.user_editable }}{% endraw %}\">
+      </div>
     
     # Show 'Success Action' tab in admin agora_gui
     show_success_action: false
@@ -340,11 +400,42 @@ config:
     # allowed values (string): default|podemos|ccoo|bcnencomu
     theme: 'default'
 
+    # help links list
+    # html code for flexibility
+    help_list:
+      - >-
+        <a
+        {% raw %}href=\"{{ helpurl }}\"{% endraw %}
+        target=\"_blank\">
+        <i class=\"fa fa-book\" aria-hidden=\"true\"></i>
+        Documentation
+        </a>
+      - >-
+        <a
+        href=\"mailto:support@nvotes.com\"
+        target=\"_blank\">
+        <i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>
+        Contact Support
+        </a>
+      - >-
+        <a
+        href=\"mailto:support@nvotes.com\"
+        target=\"_blank\">
+        <i class=\"fa fa-comment\" aria-hidden=\"true\"></i>
+        Request free 1-on-1 session
+        </a>
+
     # when debug mode is false, javascript and in general source code is
     # uglified and minified, otherwise it is not to allow better debugging.
     #
     # allowed values (string): true|false
     debug: 'false'
+ 
+    # gui-admin allows to import users from a csv, importing users in batches
+    # this parameter sets the batch size
+    # 0 means doing the import in only one batch always
+    # allowed values: integer number >= 0
+    census_import_batch: 500
 
     # If you want tallies to be linked and downloaded from a different URL,
     # change this variable from false to a string. This could be an example:
@@ -356,9 +447,213 @@ config:
     # 'https://s3-eu-west-2.amazonaws.com/agoravoting/test-tallies/1331/1331.tar'
     custom_public_download_url: false
 
+    # base url used for help on gui-admin
+    settings_help_base_url: https://agora/admin/
+
+    # default url used for help on gui-admin
+    settings_help_default_url: https://agora/admin/help_error.html
+
     # show the documentation links after successfully casting a vote
     # allowed values: true| false
     show_doc_on_vote_cast: false
+
+    # This is the list of admin question layouts shown in the administrative
+    # user interface. If the list is empty, question layouts will not be shown
+    # as a configurable option
+    shown_admin_question_layouts:
+      - accordion
+      #- circles
+      #- simultaneous-questions
+      #- conditional-accordion
+      #- pcandidates-election
+
+    # This is the list of admin question voting systems shown in the
+    # administrative user interface. If the list is empty, question layouts
+    # will not be shown as a configurable option
+    shown_admin_question_voting_systems:
+     - plurality-at-large
+     - borda-nauru
+     - borda
+     #- pairwise-beta
+
+    # default configuration for calculate results on agora-gui-admin
+    calculate_results_default: >-
+      [
+          [
+            "agora_results.pipes.results.do_tallies",
+            {"ignore_invalid_votes": true}
+          ],
+          [
+            "agora_results.pipes.sort.sort_non_iterative",
+            {
+              "question_indexes": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+            }
+          ]
+      ]
+
+    # default template election for gui-admin
+    election_template: >-
+      {
+      title: $i18next('avAdmin.sidebar.newel'),
+      description: 'This is the description of the election. You can add simple html like <strong>bold</strong> or <a href=\"https://nvotes.com\">links to websites</a>.\\n\\n<br><br>You need to use two br element for new paragraphs.',
+      start_date: '',
+      end_date: '',
+      authorities: ConfigService.authorities,
+      director: ConfigService.director,
+      presentation: {
+      theme: 'default',
+      share_text: getShareTextDefault(),
+      urls: [],
+      theme_css: ''
+      },
+      layout: 'simple',
+      num_successful_logins_allowed: 0,
+      census: {
+      has_ballot_boxes: false,
+      voters: [],
+      auth_method: 'email',
+      census:'close',
+      extra_fields: [ ],
+      admin_fields: ConfigService.adminFields,
+      config: {
+      allow_user_resend: false,
+      msg: $i18next(ConfigService.auth_msg.msg),
+      subject: $i18next(ConfigService.auth_msg.subject,
+      {name: ConfigService.organization.orgName}),
+      'authentication-action': {
+      mode: 'vote',
+      'mode-config': {
+      url: ''
+      }
+      },
+      'registration-action': {
+      mode: 'vote',
+      'mode-config': null
+      }
+      }
+      },
+      questions: [
+      {
+      answer_total_votes_percentage: 'over-total-valid-votes',
+      answers: [
+      {
+      category: '',
+      details: 'This is an option with an simple example description.',
+      id: 0,
+      sort_order: 0,
+      text: 'Example option 1',
+      urls: [
+      {
+      title: 'URL',
+      url: ''
+      },
+      {
+      title: 'Image URL',
+      url: ''
+      }
+      ]
+      },
+      {
+      category: '',
+      details: 'An option can contain a description. You can add simple html like <strong>bold</strong> or <a href=\"https://nvotes.com\">links to websites</a>. You can also set an image url below, but be sure it\\\'s HTTPS or else it won\\\'t load.\\n\\n<br><br>You need to use two br element for new paragraphs.',
+      id: 1,
+      sort_order: 1,
+      text: 'Example option 2',
+      urls: [
+      {
+      title: 'URL',
+      url: 'https://nvotes.com'
+      },
+      {
+      title: 'Image URL',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/The_Fabs.JPG/220px-The_Fabs.JPG'
+      }
+      ]
+      },
+      {
+      category: '',
+      details: '',
+      id: 2,
+      sort_order: 2,
+      text: 'Example option 3',
+      urls: [
+      {
+      title: 'URL',
+      url: ''
+      },
+      {
+      title: 'Image URL',
+      url: ''
+      }
+      ]
+      }
+      ],
+      description: 'This is the description of this question. You can have multiple questions. You can add simple html like <strong>bold</strong> or <a href=\"https://nvotes.com\">links to websites</a>.\\n\\n<br><br>You need to use two br element for new paragraphs.',
+      layout: 'accordion',
+      max: 1,
+      min: 1,
+      num_winners: 1,
+      tally_type: 'plurality-at-large',
+      title: 'Test question title',
+      extra_options: {
+      shuffle_categories: true,
+      shuffle_all_options: true,
+      shuffle_category_list: [],
+      show_points: false
+      },
+      active: true
+      }
+      ],
+      extra_data: {}
+      }
+
+    # admin fields
+    admin_fields: []
+    ## free plugin
+      #- name: "expected_census"
+        #label: "Expected Census"
+        #description: "Expected Census"
+        #type: "int"
+        #min: 0
+        #step: 1
+        #value: 1000 # default expected census
+        #required: true
+        #private: true
+    ## legal plugin
+      #- name: "legal_name"
+        #label: "Name"
+        #placeholder: "nVotes SL"
+        #min: 1
+        #type: "text"
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_org"
+        #label: "Organization"
+        #placeholder: "nVotes SL"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_id"
+        #label: "VAT"
+        #placeholder: "X1234567"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private": false
+
+      #- name: "legal_contact"
+        #label: "Contact"
+        #placeholder: "nvotes@nvotes.com"
+        #type: "email"
+        #value: ""
+        #required: true
+        #private: false
 
     # Details pertaining to the organization that runs the software
     organization:
@@ -375,12 +670,30 @@ config:
       # URL that the logo links to
       url: 'https://nvotes.com'
 
+      # Configurable signup link. This link is shown only in /admin/login
+      # and can be set to any valid URL
+      admin_signup_link: '/admin/signup'
+
     contact:
       # Support contact email displayed in the footer links
       email: contact@example.com
       # Sales contact email displayed in the footer links
       sales: sales@example.com
       tlf: ''
+
+    # default authentication message to be sent to users of an election
+    auth_msg:
+      # authentication message (both for email and SMS authentication methods)
+      # the default is the i18next string path, which works for multiple languages
+      # you can use these and other variables:
+      # URL, URL2, CODE, HOME_URL, EVENT_ID... and slugs
+      # example: 'Vote in __URL__ with code __CODE__'
+      # default: 'avAdmin.auth.emaildef'
+      msg: 'avAdmin.auth.emaildef'
+      # authentication message subject (for emails)
+      # example: "Vote now with nVotes"
+      # default: 'avAdmin.auth.emailsubdef'
+      subject: 'avAdmin.auth.emailsubdef'
 
     texts:
 
@@ -406,11 +719,24 @@ config:
 
       # you can include any html text, which will be shown on the documentation
       # page on agora-gui-elections and on help in voting booth (agora-gui-booth)
-      documentation_html_include: ''
+      documentation_html_include: >-
+          <ul>
+          <li>
+          <a
+          href=\"/election/{% raw %}{{election_id}}{% endraw %}/public/extra-legal\"
+          target=\"_blank\"
+          ng-i18next=\"avDocumentation.legal.title\">
+          </a>
+          </li>
+          </ul>
 
       # you can include any html text, which will be shown on the legal page
       # on agora-gui-elections
       legal_html_include: ''
+
+      # html/text to show when the help url for a setting fails to load
+      settings_help_url_error: >-
+          <p style=\"color: red;\">An error has occurred, but don't worry, we're on it!</p>
 
     # path to a directory to be copied recursively because it containing static
     # files that need to be available publicly. Usually these files are
@@ -535,6 +861,28 @@ config:
     # Allowed values: True|False
     debug: True
 
+    # If this option is true, then admin users can be deregistered and
+    # re-registered. Elections from deregistered users still are stored in the
+    # database. When a user re-registers after being de-registered, he will be
+    # able to modify fields that are not the email (in the case of email
+    # authentication) or phone number (in the case of phone-based auth) and once
+    # he is re-registered he will be able to see and manage elections created
+    # before he de-registered.
+    #
+    # Users can only be deregistered while being logged in, using a call to
+    # authapi's url 'api/user/deregister/'. admin.py script in agora_elections
+    # can be used to ease executing this procedure.
+    #
+    # allowed values: true|false
+    # default: true
+    allow_deregister: true
+
+    # callbacks given to agora_elections instances, for now related to sending
+    # the result of uploading tally sheets only. It's a list so that it can
+    # upload multiple agora_elections instances
+    agora_elections_base:
+    - http://127.0.0.1:14443
+
     # configuration of the log sender
     server_email: log@example.com
 
@@ -552,11 +900,11 @@ config:
 
     # Every time authapi is deployed, Authapi's upsert_users command is run with
     # this variable as argument, if the file exists.
-    upsert_file: /home/authapi/usersdata.json
+    upsert_file: ''
 
     # Stablishes the authentication method used for election administrators
     #
-    # Allowed values: (user-and-password|email|sms)
+    # Allowed values: (user-and-password|email|sms|sms-otp)
     auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by
@@ -574,6 +922,25 @@ config:
       # prefixes are entered like "+34" for Spain, for example
       tlf: '+34666666666'
 
+    # authentication message for election admins
+    admin_auth:
+      # auth message for admins when the auth method is sms-otp
+      sms_otp_msg: 'Your code with nVotes is __CODE__'
+      # auth message for admins when the auth method is not sms-otp
+      other_msg: 'Authenticate with nVotes at  __URL__ with __CODE__'
+
+    # If this option is true, when an user tries to register and the user is
+    # already registered, authapi will return an error with the 'user_exists'
+    # codename. Otherwise, on error, authapi will always return the same generic
+    # error with 'invalid_credentials' codename.
+    show_already_registered: false
+
+    # sms otp authentication configuration
+    sms_otp:
+      # how many seconds does a one time toke has until it needs to be renewed.
+      # 5 minutes by default (300 seconds)
+      expire_seconds: 300
+
     # sms configuration
     sms:
       # enable sms configuration. if set to false, the sms configuration doesn't
@@ -582,7 +949,7 @@ config:
       enabled: false
 
       # sms provider
-      # allowed values: esendex
+      # allowed values: esendex|twilio
       provider: esendex
 
       # Each user might have different domain ids. This settings depends on
@@ -601,6 +968,10 @@ config:
 
       # Depends on the provider. Allows you to change the sender id.
       sender_id: 'nvotes'
+      
+      # Depends on the provider. Sender telephone number, to be used by Twilio
+      # for countries that don't support alphanumeric sender ids.
+      sender_number: ''
 
       # Voice lang code. Only for esendex. Default: None.
       voice_lang_code: None
@@ -629,6 +1000,10 @@ config:
       # Base template for plain text email messages. The __MESSAGE__ will be
       # replaced by the message, so you can add prefix and suffixes.
       base_template: "__MESSAGE__\n\n -- nVotes https://nvotes.com"
+
+      # Base template for plain text email titles. The __TITLE__ will be
+      # replaced by the title, so you can add prefix and suffixes.
+      base_title_template: "__TITLE__ - nVotes"
       
       # Possible backends: email|console
       backend: 'console'

@@ -15,7 +15,7 @@
 
 ---
 - name: AuthApi, Downloading the project
-  sudo: true
-  sudo_user: authapi
+  become: true
+  become_user: authapi
   git: repo={{ repos.authapi.repo }} version={{ repos.authapi.version }}
        dest=/home/authapi/authapi force={{ repos.authapi.force }}

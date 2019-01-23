@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '17.04';
+var AV_CONFIG_VERSION = '103111.8';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -30,9 +30,24 @@ var avConfigData = {
   theme: "{{ config.agora_gui.theme }}",
   baseUrl: "https://{{config.agora_elections.domain}}/elections/api/",
   freeAuthId: 1,
+
+  // Configurable Sign Up link
+  signupLink: "{{ config.agora_gui.organization.admin_signup_link }}",
   
   // Webpage title
   webTitle: "{{ config.agora_gui.web_title }}",
+  
+  // html to be inserted in the gui-admin profile view
+  profileHtml: "{{ config.agora_gui.profile_html }}",
+  
+  // base url used for help on gui-admin
+  settingsHelpBaseUrl: "{{ config.agora_gui.settings_help_base_url }}",
+
+  // default url used for help on gui-admin
+  settingsHelpDefaultUrl: "{{ config.agora_gui.settings_help_default_url }}",
+
+  // html/text to show when the help url for a setting fails to load
+  settingsHelpUrlError: "{{ config.agora_gui.texts.settings_help_url_error }}",
   
   // Show 'Success Action' tab in admin agora_gui
   showSuccessAction: {% if config.agora_gui.show_success_action %}true{% else %}false{% endif %},
@@ -58,8 +73,105 @@ var avConfigData = {
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
 
+  // if true, the calculated results are always automatically published
+  // valid values: true, false
+  always_publish: {% if config.agora_elections.always_publish %}true{% else %}false{% endif %},
+
+  calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
+
+  // default template election for gui-admin
+  electionTemplate: "{{ config.agora_gui.election_template }}",
+
+  // help links list
+  // html code for flexibility
+  helpList: [
+    {% for help_item in config.agora_gui.help_list %}
+    "{{ help_item  }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+
+  // This is the list of admin question layouts shown in the administrative
+  // user interface. If the list is empty, question layouts will not be shown
+  // as a configurable option
+  shownAdminQuestionLayouts: [
+    {% if config.agora_gui.shown_admin_question_layouts %}
+      {% for item in config.agora_gui.shown_admin_question_layouts %}
+        "{{ item  }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+  ],
+
+  // This is the list of admin question voting systems shown in the
+  // administrative user interface. If the list is empty, question layouts
+  // will not be shown as a configurable option
+  shownAdminQuestionVotingSystems: [
+    {% if config.agora_gui.shown_admin_question_voting_systems %}
+      {% for item in config.agora_gui.shown_admin_question_voting_systems %}
+        "{{ item  }}"{% if not loop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+  ],
+
+  // admin fields
+  adminFields: [
+      {% for field in config.agora_gui.admin_fields %}
+
+      {
+          name: "{{ field.name }}",
+      {% if field.label is defined %}
+
+          label: "{{ field.label }}",
+      {% endif %}
+      {% if field.description is defined %}
+
+          description: "{{ field.description }}",
+      {% endif %}
+      {% if field.placeholder is defined %}
+
+          placeholder: "{{ field.placeholder }}",
+      {% endif %}
+      {% if field.min is defined %}
+
+          min: {{ field.min }},
+      {% endif %}
+      {% if field.max is defined %}
+
+          max: {{ field.max }},
+      {% endif %}
+      {% if field.step is defined %}
+
+          step: {{ field.step }},
+      {% endif %}
+      {% if field.value is string %}
+
+          value: "{{ field.value }}",
+      {% else %}
+
+          value: {{ field.value }},
+      {% endif %}
+      {% if field.required is defined %}
+
+          required: {% if field.required %}true{% else %}false{% endif %},
+      {% endif %}
+      {% if field.private is defined %}
+
+          private: true,
+      {% endif %}
+
+          type: "{{ field.type }}"
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
+
+  ],
+
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.agora_gui.min_loading_time }},
+
+  // gui-admin allows to import users from a csv, importing users in batches
+  // this parameter sets the batch size
+  // 0 means doing the import in only one batch always
+  // allowed values: integer number >= 0
+  censusImportBatch: {{ config.agora_gui.census_import_batch|int }},
 
   resourceUrlWhitelist: [
     // Allow same origin resource loads.
@@ -156,6 +268,21 @@ var avConfigData = {
     // Sales contact email displayed in the footer links
     sales: "{{ config.agora_gui.contact.sales }}",
     tlf: "{{ config.agora_gui.contact.tlf }}"
+  },
+
+  // default authentication message to be sent to users of an election
+  auth_msg: {
+    // authentication message (both for email and SMS authentication methods)
+    // the default is the i18next string path, which works for multiple languages
+    // you can use these and other variables:
+    // URL, URL2, CODE, HOME_URL, EVENT_ID... and slugs
+    // example: 'Vote in __URL__ with code __CODE__'
+    // default: 'avAdmin.auth.emaildef'
+    msg: "{{ config.agora_gui.auth_msg.msg }}",
+    // authentication message subject (for emails)
+    // example: "Vote now with nVotes"
+    // default: 'avAdmin.auth.emailsubdef'
+    subject: "{{ config.agora_gui.auth_msg.subject }}"
   },
 
   // social networks footer links
