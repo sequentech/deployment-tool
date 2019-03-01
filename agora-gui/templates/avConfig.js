@@ -295,6 +295,8 @@ var avConfigData = {
       github: "{{ config.agora_gui.social.github }}"
   },
 
+  auth_methods: ['email', 'sms', 'sms-otp'],
+
   // technology footer links
   technology: {
     aboutus: "{{ config.agora_gui.technology.aboutus }}",
