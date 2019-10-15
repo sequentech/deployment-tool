@@ -51,7 +51,8 @@
     - postgresql-9.4-repmgr
     - mercurial
     - supervisor
-    - node
+    - nodejs
+    - openjdk-8-jdk-headless
     - libffi-dev
     - virtualenvwrapper
     - libjpeg8-dev
@@ -71,6 +72,9 @@
     - nginx
     - zip
     - python-pip
+    - python-pip-whl
+    - python3-virtualenv
+    - virtualenv
     - python-dev
     - libxslt1-dev
     - libxml2-dev
@@ -82,29 +86,10 @@
     - llvm
     - cmake
 
-- name: Packages, check whether old 9.3 postgres is installed
-  shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
-  register: old_postgres_is_installed
-  ignore_errors: true
-
 - name: Packages, stop postgresql service
   become: true
   when: old_postgres_is_installed|succeeded
   service: name=postgresql state=stopped
-
-- name: Packages, upgrade postgresql db to 9.4
-  become: true
-  become_user: postgres
-  when: old_postgres_is_installed|succeeded
-  shell: cd && /usr/lib/postgresql/9.4/bin/pg_upgrade -b /usr/lib/postgresql/9.3/bin -B /usr/lib/postgresql/9.4/bin -d /etc/postgresql/9.3/main -D /etc/postgresql/9.4/main
-
-- name: Packages, remove postgresql 9.3 if exists
-  become: true
-  when: old_postgres_is_installed|succeeded
-  action: apt pkg={{item}} purge=yes state=absent
-  with_items:
-    - postgresql-9.3
-    - postgresql-client-9.3
 
 - name: Packages, set postgresql 9.4 service port
   become: true
@@ -114,61 +99,13 @@
   become: true
   service: name=postgresql state=started
 
-- name: Packages, Download some python packages from ubuntu vivid release (needed for http_proxy)
-  become: true
-  get_url:
-    url={{item.url}}
-    sha256sum={{item.sha256sum}}
-    dest=/tmp/{{item.pkg}}
-    validate_certs={{ not config.has_https_proxy }}
-  with_items:
-    - url: https://launchpad.net/ubuntu/+source/python-pip/1.5.6-5ubuntu2/+build/7083213/+files/python3-pip_1.5.6-5ubuntu2_all.deb
-      pkg: python3-pip_1.5.6-5ubuntu2_all.deb
-      sha256sum: 126e4ca4bc1bdca44972307df95932071af4e5538f2160112de177e4de028623
-
-    - url: https://launchpad.net/ubuntu/+source/python-pip/1.5.6-5ubuntu2/+build/7083213/+files/python-pip_1.5.6-5ubuntu2_all.deb
-      pkg: python-pip_1.5.6-5ubuntu2_all.deb
-      sha256sum: f879f8ba8b72dd76783c0c314c9e1052007526742ad755768f53966e86177350
-
-    - url: https://launchpad.net/ubuntu/+source/python-pip/1.5.6-5ubuntu2/+build/7083213/+files/python-pip-whl_1.5.6-5ubuntu2_all.deb
-      pkg: python-pip-whl_1.5.6-5ubuntu2_all.deb
-      sha256sum: c8bba42b599e5f1ed962b422102d1a7a7eb8b24e38367ceb351b391ead65841f
-
-    - url: https://launchpad.net/ubuntu/+source/python-virtualenv/1.11.6+ds-1/+build/6530026/+files/python3-virtualenv_1.11.6+ds-1_all.deb
-      pkg: python3-virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: 2e940cfa1b89e1ebfb7909e1f0a62d9c59291383c9698262a2eb192f1a317e68
-
-    - url: https://launchpad.net/ubuntu/+source/python-virtualenv/1.11.6+ds-1/+build/6530026/+files/python-virtualenv_1.11.6+ds-1_all.deb
-      pkg: python-virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: a9e4201a7407a39a387d744b34392d4b36d776dd2fc18ef616a49c86f3c83e3c
-
-    - url: https://launchpad.net/ubuntu/+source/python-virtualenv/1.11.6+ds-1/+build/6530026/+files/virtualenv_1.11.6+ds-1_all.deb
-      pkg: virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: 1784c739a8f59c70faf2759bb27e96fe7dc231f8f98f9351fb64fc613927a260
-
-    - url: https://launchpad.net/ubuntu/+source/python-setuptools/12.2-1/+build/7016577/+files/python-setuptools-whl_12.2-1_all.deb
-      pkg: python-setuptools-whl_12.2-1_all.deb
-      sha256sum: abd51126da26972e8ae7b59f2315490852129ad3f6db731b580aeb6cc91fbc8e
-
-- name: Packages, Install downloaded python packages
-  become: true
-  shell: dpkg --skip-same-version -i /tmp/{{item}}
-  with_items:
-    - python3-pip_1.5.6-5ubuntu2_all.deb
-    - python3-virtualenv_1.11.6+ds-1_all.deb
-    - python-pip_1.5.6-5ubuntu2_all.deb
-    - python-pip-whl_1.5.6-5ubuntu2_all.deb
-    - python-setuptools-whl_12.2-1_all.deb
-    - python-virtualenv_1.11.6+ds-1_all.deb
-    - virtualenv_1.11.6+ds-1_all.deb
-
 - name: Packages, Generate UTF-8 locales
   become: true
   shell: locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
 
 - name: Packages, Configure locales
   become: true
-  shell: dpkg-reconfigure locales
+  shell: dpkg-reconfigure --frontend noninteractive locales
 
 - name: Packages, Create postgresql cluster
   become: true

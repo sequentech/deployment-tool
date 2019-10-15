@@ -24,6 +24,7 @@
 
 - name: High Availability & Load Balancing [master], ensure memcached service is restarted
   when: config.load_balancing.is_master
+  become: true
   service: name=memcached state=restarted
 
 - name: High Availability & Load Balancing [master], Using agora-elections local memcached address
