@@ -88,7 +88,6 @@
 
 - name: Packages, stop postgresql service
   become: true
-  when: old_postgres_is_installed|succeeded
   service: name=postgresql state=stopped
 
 - name: Packages, set postgresql 9.4 service port
