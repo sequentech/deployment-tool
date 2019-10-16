@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var AV_CONFIG_VERSION = '17.04';
+var AV_CONFIG_VERSION = '103111.8';
 
 var avConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
@@ -162,6 +162,17 @@ var avConfigData = {
       }{% if not loop.last %},{% endif %}
       {% endfor %}
 
+  ],
+
+  // Information regarding OpenID Connect authentication
+  openIDConnectProviders: [
+      {% for provider in config.authapi.openid_connect_providers %}
+      {
+        {% for key, value in provider.public_info.items() %}
+          "{{key}}": "{{value}}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+      }{% if not loop.last %},{% endif %}
+      {% endfor %}
   ],
 
   //Minimum loading time (milliseconds)

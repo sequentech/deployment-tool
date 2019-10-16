@@ -898,7 +898,7 @@ config:
 
     # Stablishes the authentication method used for election administrators
     #
-    # Allowed values: (user-and-password|email|sms|sms-otp)
+    # Allowed values: (user-and-password|email|sms|sms-otp|openid-connect)
     auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by
@@ -1005,6 +1005,31 @@ config:
     # configuration file
     extra_options: []
       # - WHATEVER = 'VALUE'
+
+    # List of OpenID Connect providers information. Each provider contains
+    # public info that is used by agora-gui to show information about the
+    # providers, and private info that is used by authapi for authentication.
+    #
+    # The logout_redirect_uri is used in case the election is configured to
+    # show a way to logout or even redirect after voting, and this URI can
+    # contain a __EVENT_ID__ that will be changed to the appropiate event_id
+    # before sending the user to it.
+    #
+    # openid_connect_providers:
+    #  - public_info:
+    #      id: example
+    #      title: Authenticate to vote with Example
+    #      description: Authenticate to vote with Example
+    #      icon: https://www.example.com/favicon.ico
+    #      authorization_endpoint: https://accounts.example.com/o/oauth2/v2/auth
+    #      client_id: my_example_client_id.apps.example.com
+    #      issuer: https://accounts.example.com
+    #      token_endpoint: https://oauth2.example.com/token
+    #      jwks_uri: https://www.example.com/oauth2/v3/certs
+    #      logout_uri: https://accounts.example.com/o/oauth2/v2/auth_logout
+    #    private_config:
+    #      client_secret: example_secret
+    openid_connect_providers: []
 
   # Authorities
 
