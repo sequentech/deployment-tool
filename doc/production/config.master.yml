@@ -890,7 +890,7 @@ config:
 
     # Stablishes the authentication method used for election administrators
     #
-    # Allowed values: (user-and-password|email|sms|sms-otp|openid-connect)
+    # Allowed values: (user-and-password|email|email-otp|sms|sms-otp|openid-connect)
     auth_method: 'user-and-password'
 
     # Defines the extra fields used in authentication and registration. Empty by

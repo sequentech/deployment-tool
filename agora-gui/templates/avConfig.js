@@ -306,7 +306,7 @@ var avConfigData = {
       github: "{{ config.agora_gui.social.github }}"
   },
 
-  auth_methods: ['email', 'sms', 'sms-otp'],
+  auth_methods: ['email', 'email-otp', 'sms', 'sms-otp'],
 
   // technology footer links
   technology: {
