@@ -24,7 +24,6 @@
   become: true
   file: path=/etc/eopeers state=directory mode=0755
 
-- include: playframework.yml
 - include: postgres.yml
 - include: repo.yml
 - include: admin.yml
