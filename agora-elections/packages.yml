@@ -26,3 +26,23 @@
     - expect
     - memcached
     - libz-dev
+
+- name: AgoraElections, Check if sbt is installed
+  command: dpkg-query -W sbt
+  register: sbt_check_deb
+  failed_when: sbt_check_deb.rc > 1
+  changed_when: sbt_check_deb.rc == 1
+
+- name: AgoraElections, Download sbt-0.13.7.deb
+  get_url:
+    url="https://dl.bintray.com/sbt/debian/sbt-0.13.7.deb"
+    sha256sum=7b503a255e75f8678a43258beccef571a1cf751179ee9257fd5fd55b3aa498c5
+    dest="/tmp/sbt-0.13.7.deb"
+    validate_certs={{ not config.has_https_proxy }}
+  when: sbt_check_deb.rc == 1
+
+- name: AgoraElections, Install sbt-0.13.7.deb
+  become: true
+  apt: deb="/tmp/sbt-0.13.7.deb" state=present
+  when: sbt_check_deb.rc == 1
+

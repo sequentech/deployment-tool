@@ -35,4 +35,3 @@
   become_user: agoraelections
   lineinfile: dest=/home/agoraelections/.bashrc line="export PATH=$PATH:~/activator-1.2.12-minimal" state=present
 
-
