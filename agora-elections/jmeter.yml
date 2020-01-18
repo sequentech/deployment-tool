@@ -17,9 +17,9 @@
   become: true
   become_user: agoraelections
   get_url:
-    url: http://ftp.cixug.es/apache/jmeter/binaries/apache-jmeter-5.1.tgz
-    dest: /home/agoraelections/apache-jmeter-5.1.tgz
-    checksum: sha256:9fddbe17c3ca50179feeb178aae54c46a076d12b5cd4a9e1cf3e1ef272d6c712
+    url: https://archive.apache.org/dist/jmeter/binaries/jakarta-jmeter-2.5.1.tgz
+    dest: /home/agoraelections/jakarta-jmeter-5.2.1.tgz
+    checksum: sha256:45f786d4b04f61614ec670c9c0a2372f9f3b63b1435f9c747d1399a6c8d62200
 
 - name: AgoraElections, create jmeter folder
   become: true
@@ -36,5 +36,5 @@
   become_user: agoraelections
   unarchive:
     copy: no
-    src: /home/agoraelections/apache-jmeter-5.1.tgz
+    src: /home/agoraelections/jakarta-jmeter-5.2.1.tgz
     dest: /home/agoraelections/jmeter
