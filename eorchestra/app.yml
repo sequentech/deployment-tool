@@ -27,11 +27,17 @@
 - name: EOrchestra, frestq python packages
   become: true
   become_user: eorchestra
-  pip: virtualenv=/home/eorchestra/venv state=present
-       requirements=/home/eorchestra/frestq/requirements.txt
+  pip:
+    virtualenv: /home/eorchestra/venv
+    virtualenv_python: python3
+    state: present
+    requirements: /home/eorchestra/frestq/requirements.txt
 
 - name: EOrchestra, eorchestra python packages
   become: true
   become_user: eorchestra
-  pip: virtualenv=/home/eorchestra/venv state=present
-       requirements=/home/eorchestra/election-orchestra/requirements.txt
+  pip:
+    virtualenv: /home/eorchestra/venv
+    virtualenv_python: python3
+    state: present
+    requirements: /home/eorchestra/election-orchestra/requirements.txt
