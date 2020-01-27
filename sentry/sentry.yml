@@ -17,22 +17,34 @@
 - name: Sentry, pip update
   become: true
   become_user: sentry
-  pip: name={{item}} virtualenv=/home/sentry/venv state=latest
+  pip:
+    name: {{item}}
+    virtualenv: /home/sentry/venv
+    virtualenv_python: python2
+    state: latest
   with_items:
     - pip
 
 - name: Sentry, Sentry installation
   become: true
   become_user: sentry
-  pip: name={{item}} virtualenv=/home/sentry/venv state=present
+  pip:
+    name: {{item}}
+    virtualenv: /home/sentry/venv
+    virtualenv_python: python3
+    state: latest
   with_items:
-    - cryptography==2.1.4
+    - cryptography==2.8
     - pyopenssl==18.0.0
-    - sentry[postgres]==8.9.0
+    - beautifulsoup4==4.8.2 sentry[postgres]==9.1.2
 
 - name: Sentry, Creating conf
   become: true
-  template: src=sentry/templates/sentry.conf.py dest=/home/sentry/sentry.conf.py owner="sentry" mode=0644
+  template:
+    src: sentry/templates/sentry.conf.py
+    dest: /home/sentry/sentry.conf.py
+    owner: sentry
+    mode: 0644
 
 - name: Sentry, Create Database User
   become: true
