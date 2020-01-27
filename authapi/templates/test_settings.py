@@ -85,7 +85,6 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'wrap.LoggingMiddleware'
@@ -151,7 +150,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # cors
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-        'localhost:9001',
+        'http://localhost:9001',
 )
 
 ENABLE_CAPTCHA = True
