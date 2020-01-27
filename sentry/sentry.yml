@@ -18,7 +18,7 @@
   become: true
   become_user: sentry
   pip:
-    name: {{item}}
+    name: "{{item}}"
     virtualenv: /home/sentry/venv
     virtualenv_python: python2
     state: latest
@@ -29,14 +29,14 @@
   become: true
   become_user: sentry
   pip:
-    name: {{item}}
+    name: "{{item}}"
     virtualenv: /home/sentry/venv
     virtualenv_python: python3
     state: latest
   with_items:
     - cryptography==2.8
     - pyopenssl==18.0.0
-    - beautifulsoup4==4.8.2 sentry[postgres]==9.1.2
+    - entry[postgres]==9.1.2
 
 - name: Sentry, Creating conf
   become: true
