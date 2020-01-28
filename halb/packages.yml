@@ -16,11 +16,14 @@
 ---
 - name: High Availability & Load Balancing, Updating packages
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: High Availability & Load Balancing, Installing packages
   become: true
-  action: apt pkg={{item}} state=installed
+  apt:
+    pkg: "{{item}}"
+    state: installed
   with_items:
     - memcached
     - rsync
@@ -32,24 +35,26 @@
 
 - name: High Availability & Load Balancing, non-local memcached.conf
   lineinfile:
-    dest=dest=/etc/sudoers
-    state=absent
-    line="-l 127.0.0.1"
+    dest: dest=/etc/sudoers
+    state: absent
+    line: "-l 127.0.0.1"
 
 - name: High Availability & Load Balancing, Restart memcached
   become: true
-  service: name=memcached state=restarted
+  service:
+    name: memcached
+    state: restarted
 
 - name: High Availability & Load Balancing, Create ssh key for agoraelections, postgres
   become: true
   user:
-    name={{item}}
-    generate_ssh_key=yes
-    state=present
-    ssh_key_type=rsa
-    ssh_key_comment="{{ item }}@{{ ansible_nodename }}/ansible-generated"
-    ssh_key_bits=4096
-    ssh_key_file=.ssh/id_rsa
+    name: "{{item}}"
+    generate_ssh_key: yes
+    state: present
+    ssh_key_type: rsa
+    ssh_key_comment: "{{ item }}@{{ ansible_nodename }}/ansible-generated"
+    ssh_key_bits: 4096
+    ssh_key_file: .ssh/id_rsa
   with_items:
    - agoraelections
    - postgres
@@ -58,16 +63,16 @@
   become: true
   when: config.load_balancing.is_master
   authorized_key:
-    user=agoraelections
-    key="{{ item }}"
+    user: agoraelections
+    key: "{{ item }}"
   with_items: "{{ config.load_balancing.master.slave_agoraelections_ssh_keys }}"
 
 - name: High Availability & Load Balancing [master], Authorizing postgres slave keys
   become: true
   when: config.load_balancing.is_master
   authorized_key:
-    user=postgres
-    key="{{ item }}"
+    user: postgres
+    key: "{{ item }}"
   with_items: "{{ config.load_balancing.master.slave_postgres_ssh_keys }}"
 
 - name: High Availability & Load Balancing [slave], Authorizing postgres slave keys

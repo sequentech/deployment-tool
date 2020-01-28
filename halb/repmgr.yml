@@ -19,9 +19,9 @@
   become_user: postgres
   when: config.load_balancing.is_master
   lineinfile:
-    dest=/etc/postgresql/9.4/main/pg_hba.conf
-    line="{{item}}"
-    state="{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
+    dest: /etc/postgresql/9.4/main/pg_hba.conf
+    line: "{{item}}"
+    state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
   with_items:
     - "host    repmgr          repmgr  {{config.load_balancing.master.slave_cidr_address}}         trust"
     - "host    replication     repmgr  {{config.load_balancing.master.slave_cidr_address}}         trust"
@@ -34,10 +34,10 @@
   become_user: postgres
   when: config.load_balancing.is_master
   lineinfile:
-    dest=/etc/postgresql/9.4/main/postgresql.conf
-    line="{{item.line}}"
-    regexp="{{item.rx}}"
-    state="{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    line: "{{item.line}}"
+    regexp: "{{item.rx}}"
+    state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
   with_items:
     - line: "listen_addresses = '*'"
       rx: "listen_addresses[ \t]*="
@@ -62,11 +62,16 @@
 
 - name: High Availability & Load Balancing, Start postgresql
   become: true
-  service: name=postgresql state=restarted
+  service:
+    name: postgresql
+    state: restarted
 
 - name: High Availability & Load Balancing, Create repmgr user
   become: true
-  user: name=repmgr shell=/bin/bash home=/home/repmgr
+  user:
+    name: repmgr
+    shell: /bin/bash
+    home: /home/repmgr
 
 - name: High Availability & Load Balancing, Check if repmgr is installed
   shell: /usr/lib/postgresql/9.4/bin/repmgr --version
@@ -78,10 +83,10 @@
   become_user: repmgr
   when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   get_url:
-    url=https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
-    sha256sum=2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
-    dest=/home/repmgr/repmgr.tar.gz
-    validate_certs={{ not config.has_https_proxy }}
+    url: https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
+    sha256sum: 2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
+    dest: /home/repmgr/repmgr.tar.gz
+    validate_certs: "{{ not config.has_https_proxy }}"
 
 - name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
   become: true
@@ -96,15 +101,17 @@
   become_user: repmgr
   when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   unarchive:
-    copy=no
-    src=/home/repmgr/repmgr.tar.gz
-    dest=/home/repmgr/
+    copy: no
+    src: /home/repmgr/repmgr.tar.gz
+    dest: /home/repmgr/
 
 - name: High Availability & Load Balancing, make install
   become: true
   become_user: root
   when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
-  shell: make USE_PGXS=1 install chdir=/home/repmgr/repmgr-3.0.2/
+  shell:
+    cmd: make USE_PGXS=1 install
+    chdir: /home/repmgr/repmgr-3.0.2/
 
 - name: High Availability & Load Balancing [master], check if repmgr postgres user exists
   become: true
@@ -117,46 +124,49 @@
   become: true
   become_user: postgres
   when: "config.load_balancing.is_master and '1' not in repmgr_user_exists.stdout"
-  postgresql_user: name=repmgr role_attr_flags=SUPERUSER state=present
+  postgresql_user:
+    name: repmgr
+    role_attr_flags: SUPERUSER
+    state: present
 
 - name: High Availability & Load Balancing [master], create repmgr postgres db
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
   postgresql_db:
-    name=repmgr
-    owner=repmgr
-    encoding="utf-8"
-    lc_collate='en_US.UTF-8'
-    lc_ctype='en_US.UTF-8'
-    template='template0'
-    state=present
+    name: repmgr
+    owner: repmgr
+    encoding: "utf-8"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    template: 'template0'
+    state: present
 
 - name: High Availability & Load Balancing, creating /etc/repmgr
   become: true
   file:
-    path="/etc/repmgr"
-    owner="root"
-    group="root"
-    mode="755"
-    state=directory
+    path: /etc/repmgr
+    owner: root
+    group: root
+    mode: "755"
+    state: directory
 
 - name: High Availability & Load Balancing, creating repmgr.conf
   become: true
   file:
-    path="/etc/repmgr/repmgr.conf"
-    owner="root"
-    group="root"
-    mode="0644"
-    state=touch
+    path: /etc/repmgr/repmgr.conf
+    owner: root
+    group: root
+    mode: "0644"
+    state: touch
 
 - name: High Availability & Load Balancing, configure repmgr.conf
   become: true
   lineinfile:
-    dest=/etc/repmgr/repmgr.conf
-    line="{{item.line}}"
-    state=present
-    regexp="{{item.regexp}}"
+    dest: /etc/repmgr/repmgr.conf
+    line: "{{item.line}}"
+    state: present
+    regexp: "{{item.regexp}}"
   with_items:
     - line: "cluster=agoraelections"
       regexp: "cluster=agoraelections"
@@ -193,7 +203,9 @@
 - name: High Availability & Load Balancing [slave], stopping postgresql
   become: true
   when: not config.load_balancing.is_master
-  service: name=postgresql state=stopped
+  service:
+    name: postgresql
+    state: stopped
 
 - name: High Availability & Load Balancing [slave], create the standby
   become: true
@@ -204,7 +216,9 @@
 - name: High Availability & Load Balancing [slave], started postgresql
   become: true
   when: not config.load_balancing.is_master
-  service: name=postgresql state=started
+  service:
+    name: postgresql
+    state: started
 
 - name: High Availability & Load Balancing [slave], check node id
   become: true

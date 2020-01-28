@@ -16,11 +16,14 @@
 ---
 - name: AuthApi, Updating packages
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
-- name: AuthApi,  Installing packages
+- name: AuthApi, Installing packages
   become: true
-  action: apt pkg={{item}} state=installed
+  apt:
+    pkg: "{{item}}"
+    state: installed
   with_items:
     - nginx
     - git

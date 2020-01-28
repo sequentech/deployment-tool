@@ -16,7 +16,9 @@
 ---
 - name: Packages, add postgresql 9.4 repo
   become: true
-  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4' state=present
+  apt_repository:
+    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4'
+    state: present
 
 - name: Packages, add postgresql repo keys
   become: true
@@ -27,7 +29,9 @@
 
 - name: Packages, add nginx repository
   become: true
-  apt_repository: repo='deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx' state=present
+  apt_repository:
+    repo: 'deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx'
+    state: present
 
 - name: Packages, add nginx keys
   become: true
@@ -38,11 +42,15 @@
 
 - name: Packages, Updating packages
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Packages, Installing packages
   become: true
-  action: apt pkg={{item}} state=installed force=yes
+  apt:
+    pkg: "{{item}}"
+    state: installed
+    force: yes
   with_items:
     - git
     - htop
@@ -88,15 +96,22 @@
 
 - name: Packages, stop postgresql service
   become: true
-  service: name=postgresql state=stopped
+  service:
+    name: postgresql
+    state: stopped
 
 - name: Packages, set postgresql 9.4 service port
   become: true
-  lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf regexp="\s*port\s*=\s*\d+.*" line="port = 5432"
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    regexp: "\s*port\s*=\s*\d+.*"
+    line: "port = 5432"
 
 - name: Packages, start postgresql service
   become: true
-  service: name=postgresql state=started
+  service:
+    name: postgresql
+    state: started
 
 - name: Packages, Generate UTF-8 locales
   become: true

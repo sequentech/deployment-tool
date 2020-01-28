@@ -16,8 +16,14 @@
 ---
 - name: AgoraGui, Creating nginx conf
   become: true
-  template: src=agora-gui/templates/nginx.conf dest=/etc/nginx/conf.d/agoragui.conf owner="root" mode=0644
+  template:
+    src: agora-gui/templates/nginx.conf
+    dest: /etc/nginx/conf.d/agoragui.conf
+    owner: root
+    mode: '0644'
 
 - name: AgoraGui, Restarting nginx
   become: true
-  service: name=nginx state=restarted
+  service:
+    name: nginx
+    state: restarted

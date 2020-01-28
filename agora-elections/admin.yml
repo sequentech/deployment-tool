@@ -27,5 +27,7 @@
 - name: AgoraElections, installing admin requierements
   become: true
   become_user: agoraelections
-  pip: virtualenv=/home/agoraelections/env state=present
-       requirements=/home/agoraelections/agora-elections/admin/requirements.txt
+  pip:
+    virtualenv: /home/agoraelections/env
+    state: present
+    requirements: /home/agoraelections/agora-elections/admin/requirements.txt

@@ -17,13 +17,19 @@
 - name: Sentry, creating sentryconf.py
   become: true
   become_user: sentry
-  template: src=sentry/templates/sentryconf.py dest=/home/sentry/sentryconf.py owner="sentry" mode=0744
+  template:
+    src: sentry/templates/sentryconf.py
+    dest: /home/sentry/sentryconf.py
+    owner: sentry
+    mode: '0744'
 
 # sentryconf.py creates default project and set the dsn in a file
 - name: Sentry, running sentryconf.py
   become: true
   become_user: sentry
-  shell: /home/sentry/venv/bin/python /home/sentry/sentryconf.py chdir=/home/sentry/
+  shell:
+    cmd: /home/sentry/venv/bin/python /home/sentry/sentryconf.py
+    chdir: /home/sentry/
   register: dsn_contents
 
 - name: Sentry-AuthApi install raven
@@ -34,17 +40,28 @@
 - name: Sentry, creating deploy_sentry.py
   become: true
   become_user: authapi
-  template: src=sentry/templates/deploy_sentry.py dest=/home/authapi/authapi/authapi/authapi/deploy_sentry.py owner="authapi" mode=0644
+  template:
+    src: sentry/templates/deploy_sentry.py
+    dest: /home/authapi/authapi/authapi/authapi/deploy_sentry.py
+    owner: authapi
+    mode: '0644'
 
 - name: Sentry, Configuring authapi
   become: true
   become_user: authapi
-  lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py line="import authapi.deploy_sentry; authapi.deploy_sentry.update(globals())" state=present
+  lineinfile:
+    dest: /home/authapi/authapi/authapi/authapi/deploy.py
+    line: "import authapi.deploy_sentry; authapi.deploy_sentry.update(globals())"
+    state: present
 
 - name: Sentry, restarting authapi
   become: true
-  supervisorctl: name=authapi state=restarted
+  supervisorctl:
+    name: authapi
+    state: restarted
 
 - name: Sentry, restarting authapi_celery
   become: true
-  supervisorctl: name=authapi_celery state=restarted
+  supervisorctl:
+    name: authapi_celery
+    state: restarted

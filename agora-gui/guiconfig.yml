@@ -18,19 +18,19 @@
   when: config.agora_gui.organization.logo_path != ''
   become: true
   copy:
-    "src={{config.agora_gui.organization.logo_path}}
-    dest=/home/agoragui/agora-gui-admin/img/agora_voting_logo_white_100.png
-    owner=agoragui
-    group=agoragui
-    mode=u=rw,g=r,o=r"
+    src: "{{config.agora_gui.organization.logo_path}}"
+    dest: /home/agoragui/agora-gui-admin/img/agora_voting_logo_white_100.png
+    owner: agoragui
+    group: agoragui
+    mode: u=rw,g=r,o=r
 
 - name: AgoraGui, config beautify options
   become: true
   become_user: agoragui
   replace:
-    "dest=/home/agoragui/{{item}}/Gruntfile.js
-    regexp='beautify:.*'
-    replace='beautify: {% if config.agora_gui.debug == 'true' %}true{% else %}false{% endif %}'"
+    dest: "/home/agoragui/{{item}}/Gruntfile.js"
+    regexp: 'beautify:.*'
+    replace: 'beautify: {% if config.agora_gui.debug == 'true' %}true{% else %}false{% endif %}'
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -40,9 +40,9 @@
   become: true
   become_user: agoragui
   replace:
-    "dest=/home/agoragui/{{item}}/Gruntfile.js
-    regexp='compress:.*'
-    replace='compress: {% if config.agora_gui.debug == 'false' %}{}{% else %}false{% endif %},'"
+    dest: "/home/agoragui/{{item}}/Gruntfile.js"
+    regexp: 'compress:.*'
+    replace: 'compress: {% if config.agora_gui.debug == 'false' %}{}{% else %}false{% endif %},'
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -52,47 +52,54 @@
   when: config.agora_gui.static_extra_path != ''
   become: true
   copy:
-    "src={{config.agora_gui.static_extra_path}}
-    dest=/home/agoragui/static_extra/
-    owner=agoragui
-    group=agoragui"
+    src: "{{config.agora_gui.static_extra_path}}"
+    dest: /home/agoragui/static_extra/
+    owner: agoragui
+    group: agoragui
 
 - name: AgoraGui, config election limits
   become: true
   become_user: agoragui
   replace:
-    "dest=/home/agoragui/agora-gui-admin/avAdmin/election-limits-service.js
-    regexp='{{ item.key }}:.*'
-    replace='{{ item.key }}: {{ item.value }},'"
+    dest: /home/agoragui/agora-gui-admin/avAdmin/election-limits-service.js
+    regexp: '{{ item.key }}:.*'
+    replace: '{{ item.key }}: {{ item.value }},'
   with_items:
-    - { key: maxNumQuestions, value: "{{ config.election_limits.max_num_questions }}" }
-    - { key: maxNumAnswers, value: "{{ config.election_limits.max_num_answers }}" }
-    - { key: maxShortStringLength, value: "{{ config.election_limits.max_short_string_length }}" }
-    - { key: maxLongStringLength, value: "{{ config.election_limits.max_long_string_length }}" }
+    - key: maxNumQuestions
+      value: "{{ config.election_limits.max_num_questions }}"
+
+    - key: maxNumAnswers
+      value: "{{ config.election_limits.max_num_answers }}"
+
+    - key: maxShortStringLength
+      value: "{{ config.election_limits.max_short_string_length }}"
+
+    - key: maxLongStringLength
+      value: "{{ config.election_limits.max_long_string_length }}"
 
 - name: AgoraGui, config custom html body include
   become: true
   become_user: agoragui
   replace:
-    "dest=/home/agoragui/agora-gui-admin/Gruntfile.js
-    regexp='admin_html_body_include:.*'
-    replace='admin_html_body_include:\"{{ config.agora_gui.texts.admin_html_body_include }}\",'"
+    dest: /home/agoragui/agora-gui-admin/Gruntfile.js
+    regexp: 'admin_html_body_include:.*'
+    replace: 'admin_html_body_include:\"{{ config.agora_gui.texts.admin_html_body_include }}\",'
 
 - name: AgoraGui, config custom html body include for agora-gui-booth
   become: true
   become_user: agoragui
   replace:
-    "dest=/home/agoragui/agora-gui-booth/Gruntfile.js
-    regexp='booth_html_body_include:.*'
-    replace='booth_html_body_include:\"{{ config.agora_gui.texts.booth_html_body_include }}\",'"
+    dest: /home/agoragui/agora-gui-booth/Gruntfile.js
+    regexp: 'booth_html_body_include:.*'
+    replace: 'booth_html_body_include:\"{{ config.agora_gui.texts.booth_html_body_include }}\",'
 
 - name: AgoraGui, config custom html body include for agora-gui-elections
   become: true
   become_user: agoragui
   replace:
-    "dest=/home/agoragui/agora-gui-elections/Gruntfile.js
-    regexp='elections_html_body_include:.*'
-    replace='elections_html_body_include:\"{{ config.agora_gui.texts.elections_html_body_include }}\",'"
+    dest: /home/agoragui/agora-gui-elections/Gruntfile.js
+    regexp: 'elections_html_body_include:.*'
+    replace: 'elections_html_body_include:\"{{ config.agora_gui.texts.elections_html_body_include }}\",'
 
 - name: AgoraGui, check avPluginsConfig.js exists
   become: true

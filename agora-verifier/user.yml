@@ -16,4 +16,6 @@
 ---
 - name: AgoraVerifier, Creating default user
   become: true
-  user: name=agoraverifier shell=/bin/bash
+  user:
+    name: agoraverifier
+    shell: /bin/bash

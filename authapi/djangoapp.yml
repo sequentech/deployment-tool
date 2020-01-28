@@ -28,9 +28,9 @@
   become: true
   become_user: authapi
   pip:
-    executable=/home/authapi/env/bin/pip
-    requirements=/home/authapi/authapi/requirements.txt
-    state=present
+    executable: /home/authapi/env/bin/pip
+    requirements: /home/authapi/authapi/requirements.txt
+    state: present
 
 - name: AuthApi, Migrate
   become: true

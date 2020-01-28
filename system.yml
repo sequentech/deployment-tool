@@ -16,23 +16,36 @@
 ---
 - name: System, setting hostname
   become: true
-  hostname: name={{ config.host }}
+  hostname:
+    name: "{{ config.host }}"
 
 - name: System, private ip in /etc/hosts
   become: true
-  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.host }}" state=present
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ config.private_ipaddress }} {{ config.host }}" 
+    state: present
 
 - name: System, domain in /etc/hosts
   become: true
-  lineinfile: dest=/etc/hosts line="{{ config.private_ipaddress }} {{ config.agora_elections.domain }}" state=present
+  lineinfile:
+    dest: /etc/hosts
+    line="{{ config.private_ipaddress }} {{ config.agora_elections.domain }}"
+    state: present
 
 - name: System, Creating nginx group
   become: true
-  group: name=nginx state=present
+  group:
+    name: nginx
+    state: present
 
 - name: System, Creating nginx user
   become: true
-  user: name=nginx shell=/bin/false home=/nonexistent group=nginx
+  user:
+    name: nginx
+    shell: /bin/false
+    home: /nonexistent
+    group: nginx
 
 - name: System, nginx log directory permissions
   become: true
@@ -43,19 +56,28 @@
 
 - name: System, cert directories creation
   become: true
-  file: path=/srv/certs/selfsigned recurse=yes state=directory owner=root group=users
+  file:
+    path: /srv/certs/selfsigned
+    recurse: yes
+    state: directory
+    owner: root
+    group: users
 
 - name: System, self-signed certificate creation
   become: true
-  template: src=templates/cert.sh
-            dest=/root/cert.sh
-            owner=root mode=0755
+  template:
+    src: templates/cert.sh
+    dest: /root/cert.sh
+    owner: root
+    mode: '0755'
 
 - name: System, self-signed certificate creation
   become: true
-  template: src=templates/cert.py
-            dest=/root/cert.py
-            owner=root mode=0755
+  template:
+    src: templates/cert.py
+    dest: /root/cert.py
+    owner: root
+    mode: '0755'
 
 - name: System, self-signed certificate creation
   become: true
@@ -63,13 +85,17 @@
 
 - name: System, populating /etc/hosts
   become: true
-  lineinfile: dest=/etc/hosts line="{{ item.ip }} {{ item.hostname }}" state=present
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ item.ip }} {{ item.hostname }}"
+    state: present
   with_items: "{{ config.hosts }}"
 
 
 - name: System, updating /etc/screenrc
   become: true
   template:
-    src=templates/screenrc
-    dest=/etc/screenrc
-    owner=root mode=0644
+    src: templates/screenrc
+    dest: /etc/screenrc
+    owner: root
+    mode: '0644'

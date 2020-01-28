@@ -16,5 +16,8 @@
 ---
 - name: AgoraTools, Downloading agora-tools
   become: true
-  git: repo={{ repos.atools.repo }} version={{ repos.atools.version }}
-       dest=/srv/agora-tools force={{ repos.atools.force }}
+  git:
+    repo: "{{ repos.atools.repo }}"
+    version: "{{ repos.atools.version }}"
+    dest: /srv/agora-tools
+    force: "{{ repos.atools.force }}"

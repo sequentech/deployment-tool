@@ -19,7 +19,11 @@
 
 - name: AgoraTools, commands
   become: true
-  template: src=agora-tools/templates/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  template:
+    src: "agora-tools/templates/{{item.script}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
     - { script: eoconf.json, dest: /etc/eoconf.json, owner: "root", mode: "0600" }
     - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0755" }

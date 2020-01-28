@@ -20,11 +20,14 @@
 
 - name: Sentry, apt-cache update
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Sentry, Installing packages
   become: true
-  action: apt pkg={{item}} state=latest
+  apt:
+    pkg: "{{item}}"
+    state: latest
   with_items:
     - python-setuptools
     - python-pip

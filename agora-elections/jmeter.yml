@@ -29,7 +29,7 @@
     state: directory
     owner: agoraelections
     group: agoraelections
-    mode: 0755
+    mode: '0755'
 
 - name: AgoraElections, untar jmeter
   become: true

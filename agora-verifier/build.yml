@@ -17,29 +17,33 @@
 - name: AgoraVerifier, building agora-verifier
   become: true
   become_user: agoraverifier
-  command: /usr/bin/sbt clean proguard:proguard chdir=/home/agoraverifier/agora-verifier
+  command:
+    cmd: /usr/bin/sbt clean proguard:proguard
+    chdir: /home/agoraverifier/agora-verifier
 
 - name: AgoraVerifier, package agora-verifier
   become: true
   become_user: agoraverifier
-  command: sh ./package.sh chdir=/home/agoraverifier/agora-verifier
+  command:
+    cmd: sh ./package.sh
+    chdir: /home/agoraverifier/agora-verifier
 
 - name: AgoraVerifier, create dist dir
   become: true
   become_user: agoraverifier
   file:
-    path=/home/agoraverifier/dist/
-    state=directory
-    mode=0755
-    owner=agoraverifier
-    group=agoraverifier
+    path: /home/agoraverifier/dist/
+    state: directory
+    mode: '0755'
+    owner: agoraverifier
+    group: agoraverifier
 
 - name: AgoraVerifier, link dist binary
   become: true
   become_user: agoraverifier
   file:
-    src=/home/agoraverifier/agora-verifier/agora-verifier
-    dest=/home/agoraverifier/dist/agora-verifier
-    state=link
-    owner=agoraverifier
-    group=agoraverifier
+    src: /home/agoraverifier/agora-verifier/agora-verifier
+    dest: /home/agoraverifier/dist/agora-verifier
+    state: link
+    owner: agoraverifier
+    group: agoraverifier

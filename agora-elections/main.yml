@@ -18,11 +18,16 @@
 
 - name: AgoraElections, Creating default user
   become: true
-  user: name=agoraelections shell=/bin/bash
+  user:
+    name: agoraelections
+    shell: /bin/bash
 
 - name: AgoraElections, Creating /etc/eopeers
   become: true
-  file: path=/etc/eopeers state=directory mode=0755
+  file:
+    path: /etc/eopeers
+    state: directory
+    mode: '0755'
 
 - import_tasks: postgres.yml
 - import_tasks: repo.yml
@@ -33,54 +38,81 @@
 - name: AgoraElections, Default conf
   become: true
   become_user: agoraelections
-  template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
+  template:
+    src: agora-elections/templates/application.local.conf
+    dest: /home/agoraelections/agora-elections/conf/application.local.conf
+    owner: agoraelections
+    mode: '0644'
 
 - name: AgoraElections, Pipes whitelist
   become: true
   become_user: agoraelections
   template:
-    src=agora-elections/templates/pipes_whitelist
-    dest=/home/agoraelections/agora-elections/conf/pipes_whitelist
-    owner="agoraelections"
-    mode=0644
+    src: agora-elections/templates/pipes_whitelist
+    dest: /home/agoraelections/agora-elections/conf/pipes_whitelist
+    owner: agoraelections
+    mode: '0644'
 
 - name: AgoraElections, postgres connection password setup
   become: true
   become_user: agoraelections
-  template: src=agora-elections/templates/.pg_service.conf dest=/home/agoraelections/.pg_service.conf owner="agoraelections" mode=0600
+  template:
+    src: agora-elections/templates/.pg_service.conf
+    dest: /home/agoraelections/.pg_service.conf
+    owner: agoraelections
+    mode: '0600'
 
 - name: AgoraElections, Test conf
   become: true
   become_user: agoraelections
-  template: src=agora-elections/templates/test.local.conf dest=/home/agoraelections/agora-elections/conf/test.local.conf owner="agoraelections" mode=0644
+  template:
+    src: agora-elections/templates/test.local.conf
+    dest: /home/agoraelections/agora-elections/conf/test.local.conf
+    owner: agoraelections
+    mode: '0644'
 
 - name: AgoraElections, datastore dir
   become: true
   become_user: agoraelections
-  file: path=/home/agoraelections/datastore state=directory owner=agoraelections group=agoraelections
+  file:
+    path: /home/agoraelections/datastore
+    state: directory
+    owner: agoraelections
+    group: agoraelections
 
 - name: AgoraElections, public datastore dir
   become: true
   become_user: agoraelections
-  file: path=/home/agoraelections/datastore/public state=directory owner=agoraelections group=agoraelections recurse=true
+  file:
+    path: /home/agoraelections/datastore/public
+    state: directory
+    owner: agoraelections 
+    group: agoraelections
+    recurse: true
 
 - name: AgoraElections, private datastore dir
   become: true
   become_user: agoraelections
-  file: path=/home/agoraelections/datastore/private state=directory owner=agoraelections group=agoraelections
+  file:
+    path: /home/agoraelections/datastore/private
+    state: directory
+    owner: agoraelections
+    group: agoraelections
 
 # Key store set up
 - name: AgoraElections, Key store setup (1)
   become: true
   become_user: agoraelections
-  shell: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
-         chdir=/home/agoraelections/
+  shell:
+    cmd: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
+    chdir: /home/agoraelections/
 
 - name: AgoraElections, Key store setup (2)
   become: true
   become_user: agoraelections
-  shell: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
-         chdir=/home/agoraelections/
+  shell: 
+    cmd: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
+    chdir: /home/agoraelections/
 
 # Admin tool setup
 - name: AgoraElections, Admin chmod
@@ -117,8 +149,10 @@
 - name: AgoraElections, Admin setup (4)
   become: true
   become_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
-              regexp="IVY=.*$" replace="IVY=$HOME/.ivy2/cache"
+  replace: 
+    dest: /home/agoraelections/agora-elections/admin/encrypt.sh
+    regexp: "IVY=.*$"
+    replace: "IVY=$HOME/.ivy2/cache"
 
 - name: AgoraElections, Admin setup (5)
   become: true
@@ -183,7 +217,11 @@
 
 - name: AgoraElections, supervisor file
   become: true
-  template: src=agora-elections/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  template:
+    src: "agora-elections/templates/{{item.f}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
     - f: agora-elections.conf
       dest: /etc/supervisor/conf.d/agora-elections.conf

@@ -18,7 +18,9 @@
   become: true
   become_user: agoragui
   when: config.has_https_proxy
-  shell: npm --https-proxy=$http_proxy --registry=http://registry.npmjs.org/ --phantomjs_cdnurl=https://cnpmjs.org/downloads install chdir=/home/agoragui/{{ item }}
+  shell: 
+    cmd: npm --https-proxy=$http_proxy --registry=http://registry.npmjs.org/ --phantomjs_cdnurl=https://cnpmjs.org/downloads install 
+    chdir: "/home/agoragui/{{ item }}"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -28,7 +30,8 @@
   become: true
   become_user: agoragui
   when: not config.has_https_proxy
-  npm: path=/home/agoragui/{{ item }}
+  npm:
+    path: "/home/agoragui/{{ item }}"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -38,7 +41,9 @@
   become: true
   become_user: agoragui
   when: config.has_https_proxy
-  shell: http_proxy=$http_proxy https_proxy=$http_proxy bower install --config.interactive=false chdir=/home/agoragui/{{ item }}
+  shell:
+    cmd: http_proxy=$http_proxy https_proxy=$http_proxy bower install --config.interactive=false
+    chdir: "/home/agoragui/{{ item }}"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -48,7 +53,9 @@
   become: true
   become_user: agoragui
   when: not config.has_https_proxy
-  shell: bower install --config.interactive=false chdir=/home/agoragui/{{ item }}
+  shell:
+    cmd: bower install --config.interactive=false
+    chdir: "/home/agoragui/{{ item }}"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -56,9 +63,16 @@
 
 - name: AgoraGui, Creating build.sh
   become: true
-  template: src=agora-gui/templates/build.sh dest=/home/agoragui/build.sh owner="agoragui" group="agoragui" mode=0744
+  template:
+    src: agora-gui/templates/build.sh
+    dest: /home/agoragui/build.sh
+    owner: agoragui
+    group: agoragui
+    mode: '0744'
 
 - name: AgoraGui, building
   become: true
   become_user: agoragui
-  shell: ./build.sh chdir=/home/agoragui/
+  shell:
+    cmd: ./build.sh
+    chdir: /home/agoragui/

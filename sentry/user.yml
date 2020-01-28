@@ -16,4 +16,6 @@
 ---
 - name: Sentry, Creating default user
   become: true
-  user: name=sentry shell=/bin/bash
+  user:
+    name: sentry
+    shell: /bin/bash

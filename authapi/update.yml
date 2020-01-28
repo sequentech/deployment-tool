@@ -19,7 +19,9 @@
 
 - name: AuthApi, Restarting service
   become: true
-  supervisorctl: name={{ item }} state=restarted
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
   with_items:
     - authapi
     - authapi_celery

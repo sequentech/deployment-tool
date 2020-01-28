@@ -57,7 +57,7 @@
     dest: /home/agoragui/avConfig.js
     owner: agoragui
     group: agoragui
-    mode: 0644
+    mode: '0644'
 
 - name: AgoraGui, linking avConfig.js in all agora-gui-*
   become: true

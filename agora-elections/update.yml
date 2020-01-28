@@ -18,8 +18,9 @@
 - name: AgoraElections, git stash
   become: true
   become_user: agoraelections
-  shell: git stash
-         chdir=/home/agoraelections/agora-elections
+  shell:
+    cmd: git stash
+    chdir: /home/agoraelections/agora-elections
 
 - import_tasks: repo.yml
 
@@ -27,8 +28,9 @@
 - name: AgoraElections, git stash pop
   become: true
   become_user: agoraelections
-  shell: git stash pop
-         chdir=/home/agoraelections/agora-elections
+  shell:
+    cmd: git stash pop
+    chdir: /home/agoraelections/agora-elections
 
 - import_tasks: admin.yml
 - import_tasks: app.yml
@@ -37,6 +39,8 @@
 
 - name: AgoraElections, Restarting agora-elections service
   become: true
-  supervisorctl: name={{ item }} state=restarted
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
   with_items:
     - agora-elections

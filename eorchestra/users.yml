@@ -16,4 +16,7 @@
 ---
 - name: EOrchestra, Creating eorchestra user
   become: true
-  user: name=eorchestra shell=/bin/bash home=/home/eorchestra
+  user:
+    name: eorchestra
+    shell: /bin/bash
+    home: /home/eorchestra

@@ -17,5 +17,6 @@
 - name: AgoraElections, sbt clean & stage
   become: true
   become_user: agoraelections
-  shell: sbt clean stage
-         chdir=/home/agoraelections/agora-elections
+  shell:
+    cmd: sbt clean stage
+    chdir: /home/agoraelections/agora-elections

@@ -16,7 +16,11 @@
 ---
 - name: EOrchestra, creating commands
   become: true
-  template: src=eorchestra/templates/commands/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  template:
+    src: "eorchestra/templates/commands/{{item.script}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
     - { script: backup_password, dest: /root/.backup_password, owner: "root", mode: "0600" }
     - { script: create_backup.sh, dest: /usr/bin/create_backup.sh, owner: "root", mode: "0755" }
@@ -28,15 +32,26 @@
 
 - name: EOrchestra, creating /srv/eotests
   become: true
-  file: path="/srv/eotests" owner="eorchestra" group="users" state=directory
+  file:
+    path: /srv/eotests
+    owner: eorchestra
+    group: users
+    state: directory
 
 - name: EOrchestra, creating /srv/eotests/encrypt-deps
   become: true
-  file: path="/srv/eotests/encrypt-deps" owner="eorchestra" group="users" state=directory
+  file:
+    path: /srv/eotests/encrypt-deps
+    owner: eorchestra
+    group: users
+    state: directory
 
 - name: EOrchestra, encrypt.js deps
   become: true
-  get_url: url={{ item }} dest=/srv/eotests/encrypt-deps/ validate_certs={{ not config.has_https_proxy }}
+  get_url:
+    url: "{{ item }}"
+    dest: /srv/eotests/encrypt-deps/
+    validate_certs: "{{ not config.has_https_proxy }}"
   with_items:
     - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/jsbn.js
     - https://github.com/agoravoting/agora-gui-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/jsbn2.js
@@ -51,4 +66,8 @@
 
 - name: EOrchestra, encrypt.js
   become: true
-  template: src=eorchestra/templates/commands/encrypt.js dest=/srv/eotests/encrypt.js owner=root mode=0755
+  template:
+    src: eorchestra/templates/commands/encrypt.js
+    dest: /srv/eotests/encrypt.js
+    owner: root
+    mode: '0755'

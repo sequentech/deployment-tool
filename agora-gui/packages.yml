@@ -16,11 +16,14 @@
 ---
 - name: AgoraGui, Updating packages
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: AgoraGui, Installing packages
   become: true
-  action: apt pkg={{item}} state=installed
+  apt:
+    pkg: "{{item}}"
+    state: installed
   with_items:
     - wget
     - gcc

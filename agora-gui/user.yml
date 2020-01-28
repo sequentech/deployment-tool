@@ -16,4 +16,6 @@
 ---
 - name: AgoraGui, Creating default user
   become: true
-  user: name=agoragui shell=/bin/bash
+  user:
+    name: agoragui
+    shell: /bin/bash

@@ -16,4 +16,6 @@
 ---
 - name: AuthApi, Creating default user
   become: true
-  user: name=authapi shell=/bin/bash
+  user:
+    name: authapi
+    shell: /bin/bash

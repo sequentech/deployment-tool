@@ -19,6 +19,8 @@
 
 - name: EOrchestra, Restarting eorchestra service
   become: true
-  supervisorctl: name={{ item }} state=restarted
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
   with_items:
     - eorchestra

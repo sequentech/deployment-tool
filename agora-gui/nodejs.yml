@@ -29,21 +29,24 @@
   become: true
   become_user: agoragui
   when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell: tar -xzvf /home/agoragui/node-v10.15.0.tar.gz
-         chdir=/home/agoragui/
+  shell:
+    cmd: tar -xzvf /home/agoragui/node-v10.15.0.tar.gz
+    chdir: /home/agoragui/
 
 - name: AgoraGui, Install Nodejs 3/5
   become: true
   become_user: agoragui
   when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell: ./configure && make
-         chdir=/home/agoragui/node-v10.15.0
+  shell: 
+    cmd: ./configure && make
+    chdir: /home/agoragui/node-v10.15.0
 
 - name: AgoraGui, Install Nodejs 4/5
   become: true
   when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell: make install
-         chdir=/home/agoragui/node-v10.15.0
+  shell: 
+    cmd: make install
+    chdir: /home/agoragui/node-v10.15.0
 
 - name: AgoraGui, configure npm proxy settings
   become: true
@@ -61,7 +64,10 @@
 
 - name: AgoraGui, Install Nodejs 5/5
   become: true
-  npm: name={{item}} global=yes state=present
+  npm:
+    name: "{{item}}"
+    global: yes
+    state: present
   when: not config.has_https_proxy
   with_items:
     - grunt-cli
