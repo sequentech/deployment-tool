@@ -69,7 +69,6 @@
   user: name=repmgr shell=/bin/bash home=/home/repmgr
 
 - name: High Availability & Load Balancing, Check if repmgr is installed
-  register: repmgr
   shell: /usr/lib/postgresql/9.4/bin/repmgr --version
   register: repmgr_version
   ignore_errors: true
