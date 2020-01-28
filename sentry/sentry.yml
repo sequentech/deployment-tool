@@ -31,12 +31,12 @@
   pip:
     name: "{{item}}"
     virtualenv: /home/sentry/venv
-    virtualenv_python: python3
+    virtualenv_python: python2
     state: latest
   with_items:
     - cryptography==2.8
-    - pyopenssl==18.0.0
-    - sentry[postgres]==9.1.2
+    - pyopenssl==19.1.0
+    - sentry[postgres]==8.22.0
 
 - name: Sentry, Creating conf
   become: true
@@ -50,27 +50,33 @@
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
-  postgresql_user: user=sentry password='{{config.sentry.db_password}}' port=5432
+  postgresql_user:
+    user: sentry
+    password: '{{config.sentry.db_password}}'
+    port: 5432
 
 - name: Sentry, Create Database
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
   postgresql_db:
-    name=sentry
-    owner=sentry
-    encoding="utf-8"
-    lc_collate='en_US.UTF-8'
-    lc_ctype='en_US.UTF-8'
-    template='template0'
-    state=present
+    name: sentry
+    owner: sentry
+    encoding: "utf-8"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    template: 'template0'
+    state: present
  
 # sentry upgrade bug workaround
 # https://github.com/getsentry/sentry/issues/5908
 - name: Sentry, sentry upgrade bug workaround
   become: true
   become_user: sentry
-  pip: name=redis virtualenv=/home/sentry/venv version=2.10.5
+  pip:
+    name: redis
+    virtualenv: /home/sentry/venv
+    version: 2.10.5
 
 - name: Sentry upgrade
   become: true
