@@ -22,11 +22,15 @@
 
 - name: EOrchestra, Updating packages
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: EOrchestra, Installing packages
   become: true
-  action: apt pkg={{item}} state=installed force=yes
+  apt:
+    pkg: "{{item}}"
+    state: installed
+    force: yes
   with_items:
     - libpcre3
     - libpcre3-dev
@@ -34,27 +38,13 @@
     - libffi-dev
     - libssl-dev
 
-# - name: EOrchestra, installing extra pip packages
-#   become: true
-#   become_user: eorchestra
-#   pip: name={{item}} virtualenv=/home/eorchestra/venv state=present
-#   with_items:
-#     - setuptools==18.5
-#     # HACK: Frestq needs to install this, but its installation will fail once
-#     # requests[security] (and in particular PyOpenSSL) is installed
-#     # TODO: Upgrade pip, as that fixes this issue, but it also requires a small
-#     # modification of frestq
-#     - psycopg2==2.5.2
-#     - uwsgi
-#     - cffi==1.11.2
-#     - cryptography==2.4.2
-#     - requests==2.20.0
-
 - name: EOrchestra, configure settings
   become: true
-  template: src=eorchestra/templates/base_settings.py
-            dest=/home/eorchestra/election-orchestra/base_settings.py
-            owner=eorchestra mode=0755
+  template:
+    src: eorchestra/templates/base_settings.py
+    dest: /home/eorchestra/election-orchestra/base_settings.py
+    owner: eorchestra
+    mode: '0755'
 
 - import_tasks: app.yml
 
@@ -67,24 +57,50 @@
 # post inst files
 - name: EOrchestra, postinst files
   become: true
-  template: src=eorchestra/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  template:
+    src: "eorchestra/templates/{{item.f}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
-    - { f: auth.ini, dest: /home/eorchestra/election-orchestra/auth.ini, owner: "eorchestra", mode: "0644" }
-    - { f: launch.sh, dest: /home/eorchestra/launch.sh, owner: "eorchestra", mode: "0755" }
-    - { f: nginx.conf, dest: /etc/nginx/nginx.conf, owner: "root", mode: "0644" }
-    - { f: election-orchestra.conf, dest: /etc/supervisor/conf.d/election-orchestra.conf, owner: "root", mode: "0644" }
+    - f: auth.ini
+      dest: /home/eorchestra/election-orchestra/auth.ini
+      owner: eorchestra
+      mode: '0644'
+
+    - f: launch.sh
+      dest: /home/eorchestra/launch.sh
+      owner: eorchestra
+      mode: '0755'
+
+    - f: nginx.conf
+      dest: /etc/nginx/nginx.conf
+      owner: root
+      mode: '0644'
+
+    - f: election-orchestra.conf
+      dest: /etc/supervisor/conf.d/election-orchestra.conf
+      owner: root
+      mode: '0644'
 
 - name: EOrchestra, directories creation
   become: true
-  file: path={{ item }} recurse=yes state=directory owner=eorchestra group=users
+  file:
+    path: "{{ item }}"
+    recurse: yes
+    state: directory
+    owner: eorchestra
+    group: users
   with_items:
     - /srv/election-orchestra/server1/public/
 
 - name: EOrchestra, restarting supervisor
   become: true
-  service: name={{ item.name }} state=restarted sleep={{ item.sleep }}
+  service:
+    name: "{{ item }}"
+    state: restarted
   with_items:
-    - { name: supervisor, sleep: "{{ params.sleep.slow }}" }
-    - { name: nginx, sleep: "{{ params.sleep.fast }}" }
+    - supervisor
+    - nginx
 
 - import_tasks: auth.yml

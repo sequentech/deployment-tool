@@ -32,17 +32,66 @@
 - name: PostgreSQL Backups, create postgresql backup commands and recovery config
   become: true
   when: config.postgres_backups.enabled
-  template: src=templates/{{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  template:
+    src: "templates/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
   with_items:
-    - { src: create_backup_postgres.sh, dest: /usr/bin/create_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
-    - { src: clean_old_postgres_backups.sh, dest: /usr/bin/clean_old_postgres_backups.sh, owner: "root", group: "root", mode: "0755" }
-    - { src: restore_backup_postgres.sh, dest: /usr/bin/restore_backup_postgres.sh, owner: "root", group: "root", mode: "0755" }
-    - { src: copy_wal_postgres.sh, dest: /usr/bin/copy_wal_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
-    - { src: recovery_end.sh, dest: /usr/bin/recovery_end.sh, owner: "postgres", group: "postgres", mode: "0755" }
-    - { src: archive_command_postgres.sh, dest: /usr/bin/archive_command_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
-    - { src: restore_file_postgres.sh, dest: /usr/bin/restore_file_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
-    - { src: restore_script_postgres.sh, dest: /usr/bin/restore_script_postgres.sh, owner: "postgres", group: "postgres", mode: "0755" }
-    - { src: recovery.conf, dest: /etc/postgresql/9.4/main/recovery.conf.copy, owner: "postgres", group: "postgres", mode: "0644" }
+    - src: create_backup_postgres.sh
+      dest: /usr/bin/create_backup_postgres.sh
+      owner: root
+      group: root
+      mode: '0755'
+
+    - src: clean_old_postgres_backups.sh
+      dest: /usr/bin/clean_old_postgres_backups.sh
+      owner: root
+      group: root
+      mode: '0755'
+
+    - src: restore_backup_postgres.sh
+      dest: /usr/bin/restore_backup_postgres.sh
+      owner: root
+      group: root
+      mode: '0755'
+
+    - src: copy_wal_postgres.sh
+      dest: /usr/bin/copy_wal_postgres.sh
+      owner: postgres
+      group: postgres
+      mode: '0755'
+
+    - src: recovery_end.sh
+      dest: /usr/bin/recovery_end.sh
+      owner: postgres
+      group: postgres
+      mode: '0755'
+
+    - src: archive_command_postgres.sh
+      dest: /usr/bin/archive_command_postgres.sh
+      owner: postgres
+      group: postgres
+      mode: '0755'
+
+    - src: restore_file_postgres.sh
+      dest: /usr/bin/restore_file_postgres.sh
+      owner: postgres
+      group: postgres
+      mode: '0755'
+
+    - src: restore_script_postgres.sh
+      dest: /usr/bin/restore_script_postgres.sh
+      owner: postgres
+      group: postgres
+      mode: '0755'
+
+    - src: recovery.conf
+      dest: /etc/postgresql/9.4/main/recovery.conf.copy
+      owner: postgres
+      group: postgres
+      mode: '0644'
 
 - name: PostgreSQL Backups, set postgresql 9.4 conf for archiving
   become: true
@@ -117,7 +166,9 @@
 - name: PostgreSQL Backups, restarting postgresql to enable backups
   become: true
   when: config.postgres_backups.enabled
-  service: name=postgresql state=restarted sleep={{ params.sleep.fast }}
+  service:
+    name: postgresql
+    state: restarted
 
 - name: PostgreSQL Backups, create base backups
   become: true

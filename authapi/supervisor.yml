@@ -16,21 +16,38 @@
 ---
 - name: AuthApi, Creating authapi_celery.sh
   become: true
-  template: src=authapi/templates/authapi_celery.sh dest=/home/authapi/authapi_celery.sh owner="authapi" mode=0744
+  template: 
+    src: authapi/templates/authapi_celery.sh
+    dest: /home/authapi/authapi_celery.sh
+    owner: authapi
+    mode: '0744'
 
 - name: AuthApi, Creating authapi.sh
   become: true
-  template: src=authapi/templates/authapi.sh dest=/home/authapi/authapi.sh owner="authapi" mode=0744
+  template:
+    src: authapi/templates/authapi.sh
+    dest: /home/authapi/authapi.sh
+    owner: authapi
+    mode: '0744'
 
 - name: AuthApi, Creating supervisord conf
   become: true
-  template: src=authapi/templates/supervisor.conf dest=/etc/supervisor/conf.d/authapi.conf owner="root" mode=0644
+  template:
+    src: authapi/templates/supervisor.conf
+    dest: /etc/supervisor/conf.d/authapi.conf
+    owner: root
+    mode: '0644'
 
 - name: AuthApi, Creating celery supervisord conf
   become: true
-  template: src=authapi/templates/supervisor_celery.conf dest=/etc/supervisor/conf.d/authapi_celery.conf owner="root" mode=0644
+  template:
+    src: authapi/templates/supervisor_celery.conf
+    dest: /etc/supervisor/conf.d/authapi_celery.conf
+    owner: root
+    mode: '0644'
 
 - name: AuthApi, Restarting supervisord
   become: true
-  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
-
+  service:
+    name: supervisor
+    state: restarted

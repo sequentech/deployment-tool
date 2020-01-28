@@ -17,23 +17,29 @@
 - name: High Availability & Load Balancing, Creating syncdirs_from_master.conf
   become: true
   template:
-    src=halb/templates/syncdirs_from_master.conf
-    dest=/etc/supervisor/conf.d/syncdirs_from_master.conf
-    owner="root"
-    mode=0644
+    src: halb/templates/syncdirs_from_master.conf
+    dest: /etc/supervisor/conf.d/syncdirs_from_master.conf
+    owner: root
+    mode: '0644'
 
 - name: High Availability & Load Balancing, Changing permissions of the shared certificate
   become: true
-  file: path=/srv/certs/selfsigned/ recurse=yes owner=agoraelections group=users
+  file:
+    path: /srv/certs/selfsigned/
+    recurse: yes
+    owner: agoraelections
+    group: users
 
 - name: High Availability & Load Balancing, Creating syncdirs_from_master.sh
   become: true
   template:
-    src=halb/templates/syncdirs_from_master.sh
-    dest=/usr/bin/syncdirs_from_master.sh
-    owner="agoraelections"
-    mode=0744
+    src: halb/templates/syncdirs_from_master.sh
+    dest: /usr/bin/syncdirs_from_master.sh
+    owner: agoraelections
+    mode: '0744'
 
 - name: High Availability & Load Balancing, Restarting supervisord
   become: true
-  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
+  service:
+    name: supervisor
+    state: restarted

@@ -86,25 +86,33 @@
 - name: AgoraElections, Admin chmod
   become: true
   become_user: agoraelections
-  shell: chmod u+x /home/agoraelections/agora-elections/admin/admin.py
+  file:
+    path: /home/agoraelections/agora-elections/admin/admin.py
+    mode: "700"
 
 - name: AgoraElections, Admin setup (1)
   become: true
   become_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections.shared_secret}}'"
+  replace: 
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "shared_secret = .*$"
+    replace: "shared_secret = '{{config.agora_elections.shared_secret}}'"
 
 - name: AgoraElections, Admin setup (2)
   become: true
   become_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="db_password = .*$" replace="db_password = '{{config.agora_elections.db_password}}'"
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "db_password = .*$"
+    replace: "db_password = '{{config.agora_elections.db_password}}'"
 
 - name: AgoraElections, Admin setup (3)
   become: true
   become_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="app_host = .*$" replace="app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "app_host = .*$"
+    replace: "app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
 
 - name: AgoraElections, Admin setup (4)
   become: true
@@ -115,53 +123,61 @@
 - name: AgoraElections, Admin setup (5)
   become: true
   become_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
-              regexp="AGORA_HOME=.*$" replace="AGORA_HOME=$HOME/agora-elections"
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/encrypt.sh
+    regexp: "AGORA_HOME=.*$"
+    replace: "AGORA_HOME=$HOME/agora-elections"
 
 - name: AgoraElections, Admin setup (6)
   become: true
   become_user: agoraelections
   replace:
-    dest=/home/agoraelections/agora-elections/admin/cycle.py
-    regexp="public_ds = .*$"
-    replace="public_ds = '/home/agoraelections/datastore/public'"
+    dest: /home/agoraelections/agora-elections/admin/cycle.py
+    regexp: "public_ds = .*$"
+    replace: "public_ds = '/home/agoraelections/datastore/public'"
 
 - name: AgoraElections, Admin setup (7)
   become: true
   become_user: agoraelections
   replace:
-    dest=/home/agoraelections/agora-elections/admin/cycle.py
-    regexp="private_ds = .*$"
-    replace="private_ds = '/home/agoraelections/datastore/private'"
+    dest: /home/agoraelections/agora-elections/admin/cycle.py
+    regexp: "private_ds = .*$"
+    replace: "private_ds = '/home/agoraelections/datastore/private'"
 
 - name: AgoraElections, Admin setup (8)
   become: true
   become_user: agoraelections
   replace:
-    dest=/home/agoraelections/agora-elections/admin/admin.py
-    regexp="authapi_port = .*$"
-    replace="authapi_port = 10081"
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "authapi_port = .*$"
+    replace: "authapi_port = 10081"
 
 - name: AgoraElections, Admin setup (9)
   become: true
   become_user: agoraelections
   when: config.authapi.auth_method == 'user-and-password'
   replace:
-    dest=/home/agoraelections/agora-elections/admin/admin.py
-    regexp="authapi_credentials = .*$"
-    replace="authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "authapi_credentials = .*$"
+    replace: "authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
 
 - import_tasks: app.yml
 
 # Run script
 - name: AgoraElections, ensure memcached service is restarted
   become: true
-  service: name=memcached state=restarted
+  service:
+    name: memcached
+    state: restarted
 
 - name: AgoraElections, Run script
   become: true
   become_user: agoraelections
-  template: src=agora-elections/templates/run.sh dest=/home/agoraelections/run.sh owner="agoraelections" mode=0744
+  template:
+    src: agora-elections/templates/run.sh
+    dest: /home/agoraelections/run.sh
+    owner: agoraelections
+    mode: '0744'
 
 - import_tasks: nginx.yml
 
@@ -169,11 +185,16 @@
   become: true
   template: src=agora-elections/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
   with_items:
-    - { f: agora-elections.conf, dest: /etc/supervisor/conf.d/agora-elections.conf, owner: "root", mode: "0644" }
+    - f: agora-elections.conf
+      dest: /etc/supervisor/conf.d/agora-elections.conf
+      owner: root
+      mode: '0644'
 
 - name: AgoraElections, restarting supervisor
   become: true
-  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
+  service:
+    name: supervisor
+    state: restarted
 
 # jmeter for testing
 - import_tasks: jmeter.yml
