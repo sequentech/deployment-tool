@@ -18,43 +18,43 @@
   become: true
   become_user: agoraverifier
   git:
-    repo={{ repos.averifier.repo }}
-    version={{ repos.averifier.version }}
-    dest=/home/agoraverifier/agora-verifier
-    force={{ repos.averifier.force }}
+    repo: "{{ repos.averifier.repo }}"
+    version: "{{ repos.averifier.version }}"
+    dest: /home/agoraverifier/agora-verifier
+    force: "{{ repos.averifier.force }}"
 
 - name: AgoraVerifier, Downloading agora-tally repo
   become: true
   become_user: agoraverifier
   git:
-    repo={{ repos.tally.repo }}
-    version={{ repos.tally.version }}
-    dest=/home/agoraverifier/agora-tally
-    force={{ repos.tally.force }}
+    repo: "{{ repos.tally.repo }}"
+    version: "{{ repos.tally.version }}"
+    dest: /home/agoraverifier/agora-tally
+    force: "{{ repos.tally.force }}"
 
 - name: AgoraVerifier, Downloading agora-results repo
   become: true
   become_user: agoraverifier
   git:
-    repo={{ repos.results.repo }}
-    version={{ repos.results.version }}
-    dest=/home/agoraverifier/agora-results
-    force={{ repos.results.force }}
+    repo: "{{ repos.results.repo }}"
+    version: "{{ repos.results.version }}"
+    dest: /home/agoraverifier/agora-results
+    force: "{{ repos.results.force }}"
 
 - name: AgoraVerifier, update pipes whitelist
   become: true
   become_user: agoraverifier
   replace:
-    dest=/home/agoraverifier/agora-results/agora-results
-    regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
-    replace='\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+    dest: /home/agoraverifier/agora-results/agora-results
+    regexp: "(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
+    replace: '\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
 - name: AgoraVerifier, fresh start
   become: true
   become_user: agoraverifier
   file:
-    path='{{ item }}'
-    state=absent
+    path: '{{ item }}'
+    state: absent
   with_items:
     - /home/agoraverifier/agora-verifier/agora_tally
     - /home/agoraverifier/agora-verifier/agora_results
@@ -78,10 +78,10 @@
   become: true
   become_user: agoraverifier
   file:
-    path={{ item }}
-    state=file
-    mode=0744
-    owner=agoraverifier
+    path: "{{ item }}"
+    state: file
+    mode: 0744
+    owner: agoraverifier
   with_items:
       - /home/agoraverifier/agora-verifier/package.sh
       - /home/agoraverifier/agora-verifier/pverify.sh

@@ -17,8 +17,11 @@
 - name: EOrchestra, Downloading agora-tools, agora-results
   become: true
   become_user: eorchestra
-  git: repo={{ item.repo }} version={{ item.version }}
-       dest=/home/eorchestra/{{ item.dest }} force={{ item.force }}
+  git:
+    repo: "{{ item.repo }}"
+    version: "{{ item.version }}"
+    dest: "/home/eorchestra/{{ item.dest }}"
+    force: "{{ item.force }}"
   with_items:
     - repo: "{{ repos.atools.repo }}"
       version: "{{ repos.atools.version }}"
@@ -33,9 +36,9 @@
   become: true
   become_user: eorchestra
   replace:
-    dest=/home/eorchestra/agora-results/agora-results
-    regexp="(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
-    replace='\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+    dest: /home/eorchestra/agora-results/agora-results
+    regexp: "(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
+    replace: '\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
 # this block&rescue is only a workaround so that it works in ansible 2.2.0,
 # 2.2.1 should have a fix for the issue, see
@@ -58,15 +61,19 @@
 
 - name: EOrchestra, agora-tools config_example.json
   become: true
-  template: src=eorchestra/templates/config_example.json
-            dest=/home/eorchestra/agora-tools/config/config_example.json
-            owner="eorchestra" mode=0655
+  template:
+    src: eorchestra/templates/config_example.json
+    dest: /home/eorchestra/agora-tools/config/config_example.json
+    owner: eorchestra
+    mode: 0655
 
 - name: EOrchestra, agora-results req.txt
   become: true
-  template: src=agora-elections/templates/results.req.txt
-            dest=/home/eorchestra/agora-results/results.req.txt
-            owner="eorchestra" mode=0655
+  template:
+    src: agora-elections/templates/results.req.txt
+    dest: /home/eorchestra/agora-results/results.req.txt
+    owner: eorchestra
+    mode: 0655
 
 # this block&rescue is only a workaround so that it works in ansible 2.2.0,
 # 2.2.1 should have a fix for the issue, see
@@ -89,6 +96,8 @@
 
 - name: EOrchestra, agora-results results.sh
   become: true
-  template: src=eorchestra/templates/results.sh
-            dest=/home/eorchestra/agora-tools/results.sh
-            owner="eorchestra" mode=0755
+  template:
+    src: eorchestra/templates/results.sh
+    dest: /home/eorchestra/agora-tools/results.sh
+    owner: eorchestra
+    mode: 0755

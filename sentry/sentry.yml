@@ -23,20 +23,24 @@
     virtualenv_python: python2
     state: latest
   with_items:
-    - pip
+    - pip==20.0.2
+
+- name: Sentry, Creating sentry requirements.txt
+  become: true
+  template:
+    src: sentry/templates/sentry_requirements.txt
+    dest: /home/sentry/sentry_requirements.txt
+    owner: sentry
+    mode: 0644
 
 - name: Sentry, Sentry installation
   become: true
   become_user: sentry
   pip:
-    name: "{{item}}"
     virtualenv: /home/sentry/venv
     virtualenv_python: python2
     state: latest
-  with_items:
-    - cryptography==2.8
-    - pyopenssl==19.1.0
-    - sentry[postgres]==8.22.0
+    requirements: /home/sentry/sentry_requirements.txt
 
 - name: Sentry, Creating conf
   become: true

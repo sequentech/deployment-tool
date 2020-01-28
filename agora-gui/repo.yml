@@ -17,40 +17,55 @@
 - name: AgoraGui, Git clone agora-gui-common
   become: true
   become_user: agoragui
-  git: repo={{ repos.guicommon.repo }} version={{ repos.guicommon.version }}
-       dest=/home/agoragui/agora-gui-common force={{ repos.guicommon.force }}
+  git:
+    repo: "{{ repos.guicommon.repo }}"
+    version: "{{ repos.guicommon.version }}"
+    dest: /home/agoragui/agora-gui-common
+    force: "{{ repos.guicommon.force }}"
 
 - name: AgoraGui, Git clone agora-gui-admin
   become: true
   become_user: agoragui
-  git: repo={{ repos.guiadmin.repo }} version={{ repos.guiadmin.version }}
-       dest=/home/agoragui/agora-gui-admin force={{ repos.guiadmin.force }}
+  git:
+    repo: "{{ repos.guiadmin.repo }}"
+    version: "{{ repos.guiadmin.version }}"
+    dest: /home/agoragui/agora-gui-admin
+    force: "{{ repos.guiadmin.force }}"
 
 - name: AgoraGui, Git clone agora-gui-elections
   become: true
   become_user: agoragui
-  git: repo={{ repos.guielections.repo }} version={{ repos.guielections.version }}
-       dest=/home/agoragui/agora-gui-elections force={{ repos.guielections.force }}
+  git:
+    repo: "{{ repos.guielections.repo }}"
+    version: "{{ repos.guielections.version }}"
+    dest: /home/agoragui/agora-gui-elections
+    force: "{{ repos.guielections.force }}"
 
 - name: AgoraGui, Git clone agora-gui-booth
   become: true
   become_user: agoragui
-  git: repo={{ repos.guibooth.repo }} version={{ repos.guibooth.version }}
-       dest=/home/agoragui/agora-gui-booth force={{ repos.guibooth.force }}
+  git:
+    repo: "{{ repos.guibooth.repo }}"
+    version: "{{ repos.guibooth.version }}"
+    dest: /home/agoragui/agora-gui-booth
+    force: "{{ repos.guibooth.force }}"
 
 - name: AgoraGui, config setup
   become: true
   template:
-    src=agora-gui/templates/avConfig.js
-    dest=/home/agoragui/avConfig.js
-    owner=agoragui
-    group=agoragui
-    mode=0644
+    src: agora-gui/templates/avConfig.js
+    dest: /home/agoragui/avConfig.js
+    owner: agoragui
+    group: agoragui
+    mode: 0644
 
 - name: AgoraGui, linking avConfig.js in all agora-gui-*
   become: true
   become_user: agoragui
-  file: src=/home/agoragui/avConfig.js dest=/home/agoragui/{{ item }}/avConfig.js state=link
+  file:
+    src: /home/agoragui/avConfig.js
+    dest: "/home/agoragui/{{ item }}/avConfig.js"
+    state: link
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -60,8 +75,8 @@
   become: true
   become_user: agoragui
   file:
-    path=/home/agoragui/{{item}}/bower_components/avCommon
-    state=absent
+    path: "/home/agoragui/{{item}}/bower_components/avCommon"
+    state: absent
   with_items:
     - agora-gui-admin
     - agora-gui-elections
@@ -71,9 +86,9 @@
   become: true
   become_user: agoragui
   replace:
-    dest=/home/agoragui/{{item}}/bower.json
-    regexp='"avCommon"(.) "[^"]+(".*)$'
-    replace='"avCommon"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+    dest: /home/agoragui/{{item}}/bower.json
+    regexp: '"avCommon"(.) "[^"]+(".*)$'
+    replace: '"avCommon"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
   with_items:
     - agora-gui-admin
     - agora-gui-elections
