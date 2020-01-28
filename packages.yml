@@ -104,7 +104,7 @@
   become: true
   lineinfile:
     dest: /etc/postgresql/9.4/main/postgresql.conf
-    regexp: "\s*port\s*=\s*\d+.*"
+    regexp: '\s*port\s*=\s*\d+.*'
     line: "port = 5432"
 
 - name: Packages, start postgresql service

@@ -20,7 +20,7 @@
   become_user: sentry
   when: config.load_balancing.is_master
   lineinfile:
-    dest=/home/sentry/sentry.conf.py
+    dest: /home/sentry/sentry.conf.py
     line: "        'HOST': 'localhost',"
     regexp: '        .HOST'
     state: present

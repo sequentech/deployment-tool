@@ -24,8 +24,8 @@
 - name: OneServer, secure.conf
   become: true
   template:
-    src: "oneserver/templates/{{ item }}""
-    dest: "/etc/nginx/{{ item }}""
+    src: "oneserver/templates/{{ item }}"
+    dest: "/etc/nginx/{{ item }}"
     owner: root
     mode: '0644'
   with_items:
