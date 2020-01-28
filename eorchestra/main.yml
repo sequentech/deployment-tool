@@ -14,11 +14,11 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: users.yml
-- include: commands.yml
-- include: postgres.yml
-- include: repo.yml
-- include: vfork.yml
+- import_tasks: users.yml
+- import_tasks: commands.yml
+- import_tasks: postgres.yml
+- import_tasks: repo.yml
+- import_tasks: vfork.yml
 
 - name: EOrchestra, Updating packages
   become: true
@@ -56,7 +56,7 @@
             dest=/home/eorchestra/election-orchestra/base_settings.py
             owner=eorchestra mode=0755
 
-- include: app.yml
+- import_tasks: app.yml
 
 - name: EOrchestra, createdb
   become: true
@@ -87,4 +87,4 @@
     - { name: supervisor, sleep: "{{ params.sleep.slow }}" }
     - { name: nginx, sleep: "{{ params.sleep.fast }}" }
 
-- include: auth.yml
+- import_tasks: auth.yml

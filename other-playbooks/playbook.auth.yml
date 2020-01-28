@@ -20,8 +20,8 @@
     - include_vars: config.yml
     - include_vars: repos.yml
 
-    - include: java.yml
-    - include: packages.yml
-    - include: system.yml
-    - include: agora-tools/main.yml
-    - include: eorchestra/main.yml
+    - import_tasks: java.yml
+    - import_tasks: packages.yml
+    - import_tasks: system.yml
+    - import_tasks: agora-tools/main.yml
+    - import_tasks: eorchestra/main.yml

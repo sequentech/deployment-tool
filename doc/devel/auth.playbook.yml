@@ -20,9 +20,9 @@
     - include_vars: config.yml
     - include_vars: repos.yml
 
-    - include: packages.yml
-    - include: system.yml
-    - include: sudoers/main.yml
-    - include: agora-tools/main.yml
-    - include: eorchestra/main.yml
-    - include: postgres_backups.yml
+    - import_tasks: packages.yml
+    - import_tasks: system.yml
+    - import_tasks: sudoers/main.yml
+    - import_tasks: agora-tools/main.yml
+    - import_tasks: eorchestra/main.yml
+    - import_tasks: postgres_backups.yml

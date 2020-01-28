@@ -20,5 +20,5 @@
     - include_vars: config.yml
     - include_vars: repos.yml
 
-    - include: system.yml
-    - include: authapi/main.yml
+    - import_tasks: system.yml
+    - import_tasks: authapi/main.yml

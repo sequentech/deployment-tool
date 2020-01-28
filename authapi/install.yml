@@ -14,7 +14,7 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: repo.yml
+- import_tasks: repo.yml
 
 - name: AuthApi, Creating deploy settings
   become: true
@@ -65,7 +65,7 @@
     - uwsgi
     - psycopg2
 
-- include: djangoapp.yml
+- import_tasks: djangoapp.yml
 
 - name: AuthApi, Load fixture (admin user)
   become: true

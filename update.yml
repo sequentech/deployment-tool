@@ -20,8 +20,8 @@
     - include_vars: config.yml
     - include_vars: repos.yml
 
-    - include: agora-tools/update.yml
-    - include: eorchestra/update.yml
-    - include: agora-elections/update.yml
-    - include: authapi/update.yml
-    - include: agora-gui/update.yml
+    - import_tasks: agora-tools/update.yml
+    - import_tasks: eorchestra/update.yml
+    - import_tasks: agora-elections/update.yml
+    - import_tasks: authapi/update.yml
+    - import_tasks: agora-gui/update.yml

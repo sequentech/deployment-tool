@@ -14,7 +14,7 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: packages.yml
+- import_tasks: packages.yml
 
 - name: AgoraElections, Creating default user
   become: true
@@ -24,10 +24,10 @@
   become: true
   file: path=/etc/eopeers state=directory mode=0755
 
-- include: postgres.yml
-- include: repo.yml
-- include: admin.yml
-- include: results.yml
+- import_tasks: postgres.yml
+- import_tasks: repo.yml
+- import_tasks: admin.yml
+- import_tasks: results.yml
 
 # Config files
 - name: AgoraElections, Default conf
@@ -151,7 +151,7 @@
     regexp="authapi_credentials = .*$"
     replace="authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
 
-- include: app.yml
+- import_tasks: app.yml
 
 # Run script
 - name: AgoraElections, ensure memcached service is restarted
@@ -163,7 +163,7 @@
   become_user: agoraelections
   template: src=agora-elections/templates/run.sh dest=/home/agoraelections/run.sh owner="agoraelections" mode=0744
 
-- include: nginx.yml
+- import_tasks: nginx.yml
 
 - name: AgoraElections, supervisor file
   become: true
@@ -176,4 +176,4 @@
   service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
 
 # jmeter for testing
-- include: jmeter.yml
+- import_tasks: jmeter.yml

@@ -15,8 +15,8 @@
 
 # NOTE: depends on /java.yml
 ---
-- include: user.yml
-- include: packages.yml
-- include: repo.yml
-- include: build.yml
-- include: aguiconfig.yml
+- import_tasks: user.yml
+- import_tasks: packages.yml
+- import_tasks: repo.yml
+- import_tasks: build.yml
+- import_tasks: aguiconfig.yml
