@@ -49,7 +49,7 @@
   become: true
   apt:
     pkg: "{{item}}"
-    state: installed
+    state: present
     force: yes
   with_items:
     - git
