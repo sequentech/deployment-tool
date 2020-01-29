@@ -37,7 +37,7 @@
   become_user: eorchestra
   replace:
     dest: /home/eorchestra/agora-results/agora-results
-    regexp: "(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])"
+    regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
     replace: '\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
 # this block&rescue is only a workaround so that it works in ansible 2.2.0,
