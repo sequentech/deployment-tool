@@ -28,15 +28,14 @@
 - name: EOrchestra, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - libpcre3
+      - libpcre3-dev
+      - python-dev
+      - libffi-dev
+      - libssl-dev    
     state: present
     force: yes
-  with_items:
-    - libpcre3
-    - libpcre3-dev
-    - python-dev
-    - libffi-dev
-    - libssl-dev
 
 - name: EOrchestra, configure settings
   become: true

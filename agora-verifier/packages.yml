@@ -43,7 +43,6 @@
 - name: AgoraVerifier, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - sharutils
     state: present
-  with_items:
-    - sharutils

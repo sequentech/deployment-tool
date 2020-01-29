@@ -22,13 +22,12 @@
 - name: AgoraElections, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - unzip
+      - expect
+      - memcached
+      - libz-dev
     state: present
-  with_items:
-    - unzip
-    - expect
-    - memcached
-    - libz-dev
 
 - name: AgoraElections, Check if sbt is installed
   command: dpkg-query -W sbt

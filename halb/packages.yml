@@ -22,16 +22,15 @@
 - name: High Availability & Load Balancing, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - memcached
+      - rsync
+      - libedit-dev
+      - libpam-dev
+      - libselinux-dev
+      - postgresql-server-dev-9.4
+      - libkrb5-dev
     state: present
-  with_items:
-    - memcached
-    - rsync
-    - libedit-dev
-    - libpam-dev
-    - libselinux-dev
-    - postgresql-server-dev-9.4
-    - libkrb5-dev
 
 - name: High Availability & Load Balancing, non-local memcached.conf
   lineinfile:

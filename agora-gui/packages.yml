@@ -22,10 +22,9 @@
 - name: AgoraGui, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - wget
+      - gcc
+      - g++
+      - binutils    
     state: present
-  with_items:
-    - wget
-    - gcc
-    - g++
-    - binutils

@@ -39,8 +39,7 @@
 - name: Java, install java packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - oracle-java8-installer
+      - oracle-java8-set-default    
     state: present
-  with_items:
-    - oracle-java8-installer
-    - oracle-java8-set-default

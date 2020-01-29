@@ -26,22 +26,21 @@
 - name: Sentry, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - python-setuptools
+      - python-pip
+      - python-dev
+      - libxslt1-dev
+      - libxml2-dev
+      - libz-dev
+      - libffi-dev
+      - libssl-dev
+      - redis-server
+      - redis-tools
+      - clang
+      - llvm
+      - cmake
     state: latest
-  with_items:
-    - python-setuptools
-    - python-pip
-    - python-dev
-    - libxslt1-dev
-    - libxml2-dev
-    - libz-dev
-    - libffi-dev
-    - libssl-dev
-    - redis-server
-    - redis-tools
-    - clang
-    - llvm
-    - cmake
 
 - name: Sentry, Check CMake version
   become: true

@@ -48,51 +48,50 @@
 - name: Packages, Installing packages
   become: true
   apt:
-    pkg: "{{item}}"
+    pkg:
+      - git
+      - htop
+      - curl
+      - postgresql-9.4
+      - postgresql-9.4-repmgr
+      - mercurial
+      - supervisor
+      - nodejs
+      - openjdk-8-jdk-headless
+      - libffi-dev
+      - virtualenvwrapper
+      - libjpeg8-dev
+      - libpq-dev=9.4*
+      - libpq5=9.4*
+      - python-psycopg2
+      - python3-pip
+      - python3
+      - python-setuptools
+      - build-essential
+      - python-dev
+      - vim
+      - libgmp-dev
+      - make
+      - m4
+      - p7zip-full
+      - nginx
+      - zip
+      - python-pip
+      - python-pip-whl
+      - python3-virtualenv
+      - virtualenv
+      - python-dev
+      - libxslt1-dev
+      - libxml2-dev
+      - libz-dev
+      - libssl-dev
+      - redis-server
+      - redis-tools
+      - clang
+      - llvm
+      - cmake
     state: present
     force: yes
-  with_items:
-    - git
-    - htop
-    - curl
-    - postgresql-9.4
-    - postgresql-9.4-repmgr
-    - mercurial
-    - supervisor
-    - nodejs
-    - openjdk-8-jdk-headless
-    - libffi-dev
-    - virtualenvwrapper
-    - libjpeg8-dev
-    - libpq-dev=9.4*
-    - libpq5=9.4*
-    - python-psycopg2
-    - python3-pip
-    - python3
-    - python-setuptools
-    - build-essential
-    - python-dev
-    - vim
-    - libgmp-dev
-    - make
-    - m4
-    - p7zip-full
-    - nginx
-    - zip
-    - python-pip
-    - python-pip-whl
-    - python3-virtualenv
-    - virtualenv
-    - python-dev
-    - libxslt1-dev
-    - libxml2-dev
-    - libz-dev
-    - libssl-dev
-    - redis-server
-    - redis-tools
-    - clang
-    - llvm
-    - cmake
 
 - name: Packages, stop postgresql service
   become: true
