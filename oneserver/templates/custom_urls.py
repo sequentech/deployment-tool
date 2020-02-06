@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import include, path
+from django.urls import include, path
 from django.contrib import admin
 
 urlpatterns = [
