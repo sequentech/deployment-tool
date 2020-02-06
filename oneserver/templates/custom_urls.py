@@ -13,10 +13,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import include, url
+from django.conf.urls import include, path
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^authapi/api/', include('api.urls')),
-    url(r'^authapi/admin/', include(admin.site.urls)),
+    path(r'^authapi/api/', include('api.urls')),
+    path(r'^authapi/admin/', include(admin.site.urls)),
 ]
