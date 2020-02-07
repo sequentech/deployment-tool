@@ -17,6 +17,6 @@ from django.urls import include, path
 from django.contrib import admin
 
 urlpatterns = [
-    path(r'^authapi/api/', include('api.urls')),
-    path(r'^authapi/admin/', admin.site.urls),
+    path('authapi/api/', include('api.urls')),
+    path('authapi/admin/', admin.site.urls),
 ]
