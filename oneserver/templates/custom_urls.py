@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     path(r'^authapi/api/', include('api.urls')),
-    path(r'^authapi/admin/', include(admin.site.urls)),
+    path(r'^authapi/admin/', admin.site.urls),
 ]
