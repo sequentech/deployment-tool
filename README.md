@@ -1,5 +1,10 @@
 # Ansible script to deploy an Agora server
 
+## Requirements
+
+It's been tested with ansible 2.9.4, and python 3.5.2. It also requires
+the installation of `python3-psycopg2` (via `apt install`).
+
 ## How to run it:
 
  * New vagrant virtual machine:
@@ -86,7 +91,7 @@ using the following authorities:
 
 # License
 
-Copyright (C) 2019 Agora Voting SL and/or its subsidiary(-ies).
+Copyright (C) 2020 Agora Voting SL and/or its subsidiary(-ies).
 Contact: legal@nvotes.com
 
 This file is part of the agora-dev-box module of the Agora Voting project.

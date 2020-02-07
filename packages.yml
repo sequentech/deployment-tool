@@ -64,6 +64,7 @@
       - libpq-dev=9.4*
       - libpq5=9.4*
       - python-psycopg2
+      - python3-psycopg2
       - python3-pip
       - python3
       - python-setuptools
