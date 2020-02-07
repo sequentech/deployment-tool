@@ -18,12 +18,11 @@
   become: true
   become_user: sentry
   pip:
-    name: "{{item}}"
+    name:
+      - pip==20.0.2
     virtualenv: /home/sentry/venv
     virtualenv_python: python2
     state: latest
-  with_items:
-    - pip==20.0.2
 
 - name: Sentry, Creating sentry requirements.txt
   become: true

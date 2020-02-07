@@ -74,12 +74,11 @@
   become: true
   become_user: authapi
   pip:
-    name: "{{item}}"
+    name:
+      - uwsgi
+      - psycopg2
     executable: /home/authapi/env/bin/pip
     state: present
-  with_items:
-    - uwsgi
-    - psycopg2
 
 - import_tasks: djangoapp.yml
 
