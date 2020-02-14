@@ -82,12 +82,24 @@
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, ensuring latest version of agora-gui-common gets reinstalled removing it
+# this is not slow because yarn caches dependencies
+- name: AgoraGui, removing node_modules directory to start fresh
   become: true
   become_user: agoragui
   file:
-    path: "/home/agoragui/{{item}}/node_modules/agora-gui-common"
+    path: "/home/agoragui/{{item}}/node_modules"
     state: absent
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, make sure to upgrade agora-gui-common dependency repo
+  become: true
+  become_user: agoragui
+  shell:
+    chdir: "/home/agoragui/{{item}}/"
+    cmd: yarn upgrade agora-gui-common
   with_items:
     - agora-gui-admin
     - agora-gui-elections
