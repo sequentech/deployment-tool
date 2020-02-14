@@ -14,7 +14,7 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, install yarn
+- name: AgoraGui, install yarn (proxy)
   become: true
   when: config.has_https_proxy
   shell: 
