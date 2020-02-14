@@ -22,7 +22,6 @@
 
 - name: AgoraGui, install yarn
   become: true
-  become_user: agoragui
   when: not config.has_https_proxy
   shell: 
     cmd: npm -g install yarn@1.22.0
