@@ -59,6 +59,17 @@
     group: agoragui
     mode: '0644'
 
+- name: AgoraGui, removing previous avConfig.js in all agora-gui-*
+  become: true
+  become_user: agoragui
+  file:
+    path: "/home/agoragui/{{ item }}/avConfig.js"
+    state: absent
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
 - name: AgoraGui, linking avConfig.js in all agora-gui-*
   become: true
   become_user: agoragui
