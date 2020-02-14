@@ -14,47 +14,37 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, npm install
+- name: AgoraGui, install yarn
   become: true
-  become_user: agoragui
   when: config.has_https_proxy
   shell: 
-    cmd: npm --https-proxy=$http_proxy --registry=http://registry.npmjs.org/ --phantomjs_cdnurl=https://cnpmjs.org/downloads install 
-    chdir: "/home/agoragui/{{ item }}"
-  with_items:
-    - agora-gui-admin
-    - agora-gui-elections
-    - agora-gui-booth
+    cmd: npm --https-proxy=$http_proxy -g install yarn@1.22.0
 
-- name: AgoraGui, npm install
+- name: AgoraGui, install yarn
   become: true
   become_user: agoragui
   when: not config.has_https_proxy
-  npm:
-    path: "/home/agoragui/{{ item }}"
-  with_items:
-    - agora-gui-admin
-    - agora-gui-elections
-    - agora-gui-booth
+  shell: 
+    cmd: npm --https-proxy=$http_proxy -g install yarn@1.22.0
 
-- name: AgoraGui, bower install (proxy)
+- name: AgoraGui, yarn (proxy)
   become: true
   become_user: agoragui
   when: config.has_https_proxy
   shell:
-    cmd: http_proxy=$http_proxy https_proxy=$http_proxy bower install --config.interactive=false
+    cmd: http_proxy=$http_proxy https_proxy=$http_proxy yarn --non-interactive
     chdir: "/home/agoragui/{{ item }}"
   with_items:
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, bower install
+- name: AgoraGui, yarn
   become: true
   become_user: agoragui
   when: not config.has_https_proxy
   shell:
-    cmd: bower install --config.interactive=false
+    cmd: yarn --non-interactive
     chdir: "/home/agoragui/{{ item }}"
   with_items:
     - agora-gui-admin

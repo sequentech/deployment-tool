@@ -75,7 +75,7 @@
   become: true
   become_user: agoragui
   file:
-    path: "/home/agoragui/{{item}}/bower_components/avCommon"
+    path: "/home/agoragui/{{item}}/node_modules/agora-gui-common"
     state: absent
   with_items:
     - agora-gui-admin
@@ -86,9 +86,9 @@
   become: true
   become_user: agoragui
   replace:
-    dest: /home/agoragui/{{item}}/bower.json
-    regexp: '"avCommon"(.) "[^"]+(".*)$'
-    replace: '"avCommon"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+    dest: /home/agoragui/{{item}}/package.json
+    regexp: '"agora-gui-common"(.) "[^"]+(".*)$'
+    replace: '"agora-gui-common"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
   with_items:
     - agora-gui-admin
     - agora-gui-elections

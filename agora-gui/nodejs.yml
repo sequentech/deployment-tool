@@ -55,7 +55,7 @@
 
 - name: AgoraGui, Install Nodejs 5/5 (with proxy)
   become: true
-  shell: npm --https-proxy=$http_proxy --registry=http://registry.npmjs.org/ --global --force install {{item}}
+  shell: npm --https-proxy=$http_proxy --registry=https://registry.npmjs.org/ --global --force install {{item}}
   when: config.has_https_proxy
   with_items:
     - grunt-cli
