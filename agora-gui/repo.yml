@@ -94,18 +94,6 @@
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, install yarn (proxy)
-  become: true
-  when: config.has_https_proxy
-  shell:
-    cmd: npm --https-proxy=$http_proxy -g install yarn@1.22.0
-
-- name: AgoraGui, install yarn
-  become: true
-  when: not config.has_https_proxy
-  shell:
-    cmd: npm -g install yarn@1.22.0
-
 - name: AgoraGui, make sure to upgrade agora-gui-common dependency repo
   become: true
   become_user: agoragui
