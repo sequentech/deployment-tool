@@ -17,7 +17,7 @@
 repos:
     aelections:
         repo: https://github.com/agoravoting/agora_elections.git
-        version: next
+        version: dep-updates
         force: yes
     results:
         repo: https://github.com/agoravoting/agora-results.git
@@ -29,19 +29,19 @@ repos:
         force: yes
     authapi:
         repo: https://github.com/agoravoting/authapi.git
-        version: next
+        version: dep-updates
         force: yes
     atools:
         repo: https://github.com/agoravoting/agora-tools.git
-        version: next
+        version: dep-updates
         force: yes
     frestq:
         repo: https://github.com/agoravoting/frestq
-        version: next
+        version: dep-updates
         force: yes
     eorchestra:
         repo: https://github.com/agoravoting/election-orchestra
-        version: next
+        version: dep-updates
         force: yes
     vfork:
         repo: https://github.com/agoravoting/vfork
@@ -53,17 +53,17 @@ repos:
         force: yes
     guicommon:
         repo: https://github.com/agoravoting/agora-gui-common.git
-        version: next
+        version: dep-updates
         force: yes
     guiadmin:
         repo: https://github.com/agoravoting/agora-gui-admin.git
-        version: next
+        version: dep-updates
         force: yes
     guibooth:
         repo: https://github.com/agoravoting/agora-gui-booth.git
-        version: next
+        version: dep-updates
         force: yes
     guielections:
         repo: https://github.com/agoravoting/agora-gui-elections.git
-        version: next
+        version: dep-updates
         force: yes
