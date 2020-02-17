@@ -24,6 +24,15 @@
   # http://stackoverflow.com/questions/128035/how-do-i-pull-from-a-git-repository-through-an-http-proxy/32744849#32744849
   # http://jgoodall.me/posts/2013/05/29/git-use-https/
 
+- name: EOrchestra, ensure working pip version (19.3.1)
+  become: true
+  become_user: eorchestra
+  pip:
+    virtualenv: /home/eorchestra/venv
+    virtualenv_python: python3
+    state: present
+    name: pip==19.3.1
+
 - name: EOrchestra, frestq python packages
   become: true
   become_user: eorchestra
