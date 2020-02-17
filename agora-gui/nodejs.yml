@@ -60,7 +60,7 @@
   with_items:
     - grunt-cli
     - grunt
-    - yarn@1.22.0
+    - yarn
 
 - name: AgoraGui, Install Nodejs 5/5: dependencies
   become: true
@@ -72,5 +72,5 @@
   with_items:
     - grunt-cli
     - grunt
-    - yarn@1.22.0
+    - yarn
 
