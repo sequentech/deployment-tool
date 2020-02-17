@@ -82,6 +82,7 @@
   pip:
     name: redis
     virtualenv: /home/sentry/venv
+    virtualenv_python: python2
     version: 2.10.5
 
 - name: Sentry upgrade

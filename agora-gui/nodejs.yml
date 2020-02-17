@@ -45,7 +45,7 @@
   become: true
   when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
   shell: 
-    cmd: make install
+    cmd: make && make install
     chdir: /home/agoragui/node-v10.15.0
 
 - name: AgoraGui, configure npm proxy settings
