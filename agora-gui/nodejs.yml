@@ -53,7 +53,7 @@
   when: config.has_https_proxy
   shell: npm --global set proxy $http_proxy && npm --global set https-proxy $https_proxy
 
-- name: AgoraGui, Install Nodejs 5/5 (with proxy): dependencies
+- name: AgoraGui, Install Nodejs 5/5 (with proxy), dependencies
   become: true
   shell: npm --https-proxy=$http_proxy --registry=https://registry.npmjs.org/ --global --force install {{item}}
   when: config.has_https_proxy
@@ -62,7 +62,7 @@
     - grunt
     - yarn
 
-- name: AgoraGui, Install Nodejs 5/5: dependencies
+- name: AgoraGui, Install Nodejs 5/5, dependencies
   become: true
   npm:
     name: "{{item}}"
