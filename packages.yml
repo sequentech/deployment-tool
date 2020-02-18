@@ -113,6 +113,12 @@
     name: postgresql
     state: started
 
+- name: Packages, ensure postgresql starts on boot
+  become: true
+  systemd:
+    name: postgresql
+    enabled: true
+
 - name: Packages, Generate UTF-8 locales
   become: true
   shell: locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
