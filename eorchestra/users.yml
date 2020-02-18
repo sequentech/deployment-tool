@@ -20,3 +20,11 @@
     name: eorchestra
     shell: /bin/bash
     home: /home/eorchestra
+
+- name: EOrchestra, Creating /home/eorchestra/.ansible/tmp dir
+  become: true
+  become_user: eorchestra
+  file:
+    path: /home/eorchestra/.ansible/tmp
+    state: directory
+    mode: '0700'

@@ -19,3 +19,11 @@
   user:
     name: agoraverifier
     shell: /bin/bash
+
+- name: AgoraVerifier, Creating /home/agoraverifier/.ansible/tmp dir
+  become: true
+  become_user: agoraverifier
+  file:
+    path: /home/agoraverifier/.ansible/tmp
+    state: directory
+    mode: '0700'

@@ -29,6 +29,14 @@
     state: directory
     mode: '0755'
 
+- name: AgoraElections, Creating /home/agoraelections/.ansible/tmp dir
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/.ansible/tmp
+    state: directory
+    mode: '0700'
+
 - import_tasks: postgres.yml
 - import_tasks: repo.yml
 - import_tasks: admin.yml

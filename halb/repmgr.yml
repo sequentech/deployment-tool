@@ -73,6 +73,14 @@
     shell: /bin/bash
     home: /home/repmgr
 
+- name: High Availability & Load Balancing, Creating /home/repmgr/.ansible/tmp dir
+  become: true
+  become_user: repmgr
+  file:
+    path: /home/repmgr/.ansible/tmp
+    state: directory
+    mode: '0700'
+
 - name: High Availability & Load Balancing, Check if repmgr is installed
   shell: /usr/lib/postgresql/9.4/bin/repmgr --version
   register: repmgr_version

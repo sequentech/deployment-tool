@@ -20,6 +20,14 @@
     name: postgresql
     state: started
 
+- name: EOrchestra, Creating /var/lib/postgresql/.ansible/tmp
+  become: true
+  become_user: postgres
+  file:
+    path: /var/lib/postgresql/.ansible/tmp
+    state: directory
+    mode: '0700'
+
 - name: AgoraElections, Create Database User
   become: true
   become_user: postgres

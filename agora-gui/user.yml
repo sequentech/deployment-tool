@@ -19,3 +19,11 @@
   user:
     name: agoragui
     shell: /bin/bash
+
+- name: AgoraGui, Creating /home/agoragui/.ansible/tmp dir
+  become: true
+  become_user: agoragui
+  file:
+    path: /home/agoragui/.ansible/tmp
+    state: directory
+    mode: '0700'
