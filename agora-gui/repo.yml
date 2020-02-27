@@ -111,7 +111,7 @@
   become_user: agoragui
   shell:
     chdir: "/home/agoragui/{{item}}/"
-    cmd: yarn upgrade agora-gui-common
+    cmd: yarn && yarn upgrade agora-gui-common
   with_items:
     - agora-gui-admin
     - agora-gui-elections
