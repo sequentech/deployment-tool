@@ -94,17 +94,6 @@
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, make sure to upgrade agora-gui-common dependency repo
-  become: true
-  become_user: agoragui
-  shell:
-    chdir: "/home/agoragui/{{item}}/"
-    cmd: yarn upgrade agora-gui-common
-  with_items:
-    - agora-gui-admin
-    - agora-gui-elections
-    - agora-gui-booth
-
 - name: AgoraGui, configuring agora-gui-common version in agora-gui-*
   become: true
   become_user: agoragui
@@ -112,6 +101,17 @@
     dest: /home/agoragui/{{item}}/package.json
     regexp: '"agora-gui-common"(.) "[^"]+(".*)$'
     replace: '"agora-gui-common"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, make sure to upgrade agora-gui-common dependency repo
+  become: true
+  become_user: agoragui
+  shell:
+    chdir: "/home/agoragui/{{item}}/"
+    cmd: yarn upgrade agora-gui-common
   with_items:
     - agora-gui-admin
     - agora-gui-elections
