@@ -26,7 +26,7 @@ export https_proxy=$http_proxy
 # compile all the modules, one by one. stop if they don't build, because
 # otherwise we would put in production a non-working version of the software
 cd $guib/agora-gui-admin/
-bower update --config.interactive=false && grunt build
+yarn --non-interactive && grunt build
 if [ $? -ne 0 ]
 then
   echo "build error in agora-gui-admin"
@@ -34,7 +34,7 @@ then
 fi
 
 cd $guib/agora-gui-booth/
-bower update --config.interactive=false && grunt build
+yarn --non-interactive && grunt build
 if [ $? -ne 0 ]
 then
   echo "build error in agora-gui-booth"
@@ -42,7 +42,7 @@ then
 fi
 
 cd $guib/agora-gui-elections/
-bower update --config.interactive=false && grunt build
+yarn --non-interactive && grunt build
 if [ $? -ne 0 ]
 then
   echo "build error in agora-gui-elections"

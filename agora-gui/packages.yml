@@ -15,14 +15,16 @@
 
 ---
 - name: AgoraGui, Updating packages
-  sudo: true
-  action: apt update_cache=yes
+  become: true
+  apt:
+    update_cache: yes
 
 - name: AgoraGui, Installing packages
-  sudo: true
-  action: apt pkg={{item}} state=installed
-  with_items:
-    - wget
-    - gcc
-    - g++
-    - binutils
+  become: true
+  apt:
+    pkg:
+      - wget
+      - gcc
+      - g++
+      - binutils    
+    state: present

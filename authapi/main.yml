@@ -14,9 +14,9 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: packages.yml
-- include: postgres.yml
-- include: user.yml
-- include: install.yml
-- include: supervisor.yml
-- include: nginx.yml
+- import_tasks: packages.yml
+- import_tasks: postgres.yml
+- import_tasks: user.yml
+- import_tasks: install.yml
+- import_tasks: supervisor.yml
+- import_tasks: nginx.yml

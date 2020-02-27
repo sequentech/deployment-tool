@@ -16,27 +16,31 @@
 ---
 # git stash
 - name: AgoraElections, git stash
-  sudo: true
-  sudo_user: agoraelections
-  shell: git stash
-         chdir=/home/agoraelections/agora-elections
+  become: true
+  become_user: agoraelections
+  shell:
+    cmd: git stash
+    chdir: /home/agoraelections/agora-elections
 
-- include: repo.yml
+- import_tasks: repo.yml
 
 # git stash pop
 - name: AgoraElections, git stash pop
-  sudo: true
-  sudo_user: agoraelections
-  shell: git stash pop
-         chdir=/home/agoraelections/agora-elections
+  become: true
+  become_user: agoraelections
+  shell:
+    cmd: git stash pop
+    chdir: /home/agoraelections/agora-elections
 
-- include: admin.yml
-- include: app.yml
+- import_tasks: admin.yml
+- import_tasks: app.yml
 
-- include: results.yml
+- import_tasks: results.yml
 
 - name: AgoraElections, Restarting agora-elections service
-  sudo: true
-  supervisorctl: name={{ item }} state=restarted
+  become: true
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
   with_items:
     - agora-elections

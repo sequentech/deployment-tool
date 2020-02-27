@@ -1,3 +1,68 @@
+## 103111.6 (06/10/2017)
+
+* Use new settings widget on all the easy places on gui-admin
+* Set abstract settings widgets to collapsed by default
+* Add as global variables election and isDemo on booth to be used by external scripts
+* Fix uncommented comment on dev-box helper script
+* Use intl-tel-input library for phone logins
+* Fix problem with int params on admin interface
+* Some countries (Colombia, India) can't receive sms with alphanumeric senders, use phone number instead
+* Don't collapse most admin settings, show collapse/expand sign on hover
+* While creating an election on gui-admin, don't allow to add the auth method as an extra field, as it generated problems
+* Redirect default route to admin login
+* Added Onboarding Tour when the user first logins
+
+## 103111.5 (20/09/2017)
+
+* Add twilio backend for SMS messages
+* Fix html question descriptions on gui-elections
+* Set upsert defaults to an empty string on agora-dev-box
+* Improve repmgr deployment on agora-dev-box
+* Solve encoding checking issue in booth
+* Check if admin profile needs to be reopened when it's closed
+* Add a template election parameter to dev-box to make it easily configurable
+* Add default name to extra fields, fixing undefined name issue while creating the election
+* Simplify footer: powered by and social links
+* Enable using profile variables on new election template
+* Fix script to copy config from one env to another
+* Fix logo css on gui-admin
+* Fix some public urls
+
+## 103111.4 (17-09-2017)
+
+* Make configurable at deployment which layouts and electoral systems are available as options in the administrative interface
+* Add configurable help menu list
+* fix configurable signup link on gui-admin
+* Add admin profile modal, and a header menu to access it
+* Fix slave deployment connection with master, related to postgres backup configuration
+* Solve a number of small issues with agora-dev-box deployment
+* Add script to  export configuration from staging environment to production env
+
+## 103111.3 (14-08-2017)
+
+- Fixed issue on gui-admin with int fields
+- Fixed issue with parameters of error strings on gui-admin
+- Improve logging on authmethods
+- Use new settings interface on 'Basic details' on gui-admin
+- Add auth messages for admins as config params on agora-dev-box
+
+## 103111.2 (27-07-2017)
+
+- Define admin-fields to agora-dev-box.
+- Fixes to postgres backups.
+- Add always_publish parameter to agora-dev-box.
+- Enable multiple logins at once on the same browser.
+- Add check for encoding overflow on gui-booth
+- Configure auth msg defaults from agora-dev-box's config.yml
+
+## 103111.1 (30-06-2017)
+
+- Add desborda2 voting system.
+- Warn about void values on import tsv on agora-tools.
+- Fix java 7 use on agora-verifier.
+- Add support for SMS OTP method for admins.
+- Add SaaS features.
+
 ## 17.04 (29-04-2017)
 
 - Add desborda voting system.

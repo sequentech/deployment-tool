@@ -19,8 +19,8 @@
   tasks:
     - include_vars: config.yml
 
-    - include: system.yml
-    - include: java.yml
-    - include: packages.yml
-    - include: agora-tools/main.yml
-    - include: agora-elections/main.yml
+    - import_tasks: system.yml
+    - import_tasks: java.yml
+    - import_tasks: packages.yml
+    - import_tasks: agora-tools/main.yml
+    - import_tasks: agora-elections/main.yml

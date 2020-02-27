@@ -14,10 +14,10 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: packages.yml
-- include: user.yml
-- include: nodejs.yml
-- include: repo.yml
-- include: guiconfig.yml
-- include: app.yml
-- include: nginx.yml
+- import_tasks: packages.yml
+- import_tasks: user.yml
+- import_tasks: nodejs.yml
+- import_tasks: repo.yml
+- import_tasks: guiconfig.yml
+- import_tasks: app.yml
+- import_tasks: nginx.yml

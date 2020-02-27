@@ -15,5 +15,15 @@
 
 ---
 - name: Sentry, Creating default user
-  sudo: true
-  user: name=sentry shell=/bin/bash
+  become: true
+  user:
+    name: sentry
+    shell: /bin/bash
+
+- name: Sentry, Creating /home/sentry/.ansible/tmp dir
+  become: true
+  become_user: sentry
+  file:
+    path: /home/sentry/.ansible/tmp
+    state: directory
+    mode: '0700'

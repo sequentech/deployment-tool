@@ -14,12 +14,14 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: repo.yml
-- include: djangoapp.yml
+- import_tasks: repo.yml
+- import_tasks: djangoapp.yml
 
 - name: AuthApi, Restarting service
-  sudo: true
-  supervisorctl: name={{ item }} state=restarted
+  become: true
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
   with_items:
     - authapi
     - authapi_celery

@@ -15,11 +15,15 @@
 
 ---
 - name: Java, Accept license
-  sudo: true
-  debconf: name='oracle-java7-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+  become: true
+  debconf:
+    name: oracle-java7-installer
+    question: shared/accepted-oracle-license-v1-1
+    value: true
+    vtype: select
 
 - name: Java, Install PPA repository
-  sudo: true
+  become: true
   shell: apt-add-repository ppa:webupd8team/java -y
   # NOTE: we don't use apt_repository here because it fails when
   # config.has_https_proxy=true, see
@@ -28,12 +32,14 @@
   # apt_repository: repo='ppa:webupd8team/java'
 
 - name: Java, apt-get update
-  sudo: true
-  apt: update_cache=yes
+  become: true
+  apt:
+    update_cache: yes
 
 - name: Java, install java packages
-  sudo: true
-  action: apt pkg={{item}} state=installed
-  with_items:
-    - oracle-java8-installer
-    - oracle-java8-set-default
+  become: true
+  apt:
+    pkg:
+      - oracle-java8-installer
+      - oracle-java8-set-default    
+    state: present

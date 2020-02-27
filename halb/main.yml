@@ -14,8 +14,8 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: cache.yml
-- include: packages.yml
-- include: rsync.yml
-- include: repmgr.yml
-- include: sentry.yml
+- import_tasks: cache.yml
+- import_tasks: packages.yml
+- import_tasks: rsync.yml
+- import_tasks: repmgr.yml
+- import_tasks: sentry.yml

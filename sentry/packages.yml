@@ -15,30 +15,32 @@
 
 ---
 - name: Sentry, Adding redis-server ppa
-  sudo: true
+  become: true
   shell: apt-add-repository ppa:chris-lea/redis-server -y
 
 - name: Sentry, apt-cache update
-  sudo: true
-  action: apt update_cache=yes
+  become: true
+  apt:
+    update_cache: yes
 
 - name: Sentry, Installing packages
-  sudo: true
-  action: apt pkg={{item}} state=latest
-  with_items:
-    - python-setuptools
-    - python-pip
-    - python-dev
-    - libxslt1-dev
-    - libxml2-dev
-    - libz-dev
-    - libffi-dev
-    - libssl-dev
-    - redis-server
-    - redis-tools
-    - clang
-    - llvm
-    - cmake
+  become: true
+  apt:
+    pkg:
+      - python-setuptools
+      - python-pip
+      - python-dev
+      - libxslt1-dev
+      - libxml2-dev
+      - libz-dev
+      - libffi-dev
+      - libssl-dev
+      - redis-server
+      - redis-tools
+      - clang
+      - llvm
+      - cmake
+    state: latest
 
 - name: Sentry, Check CMake version
   become: true
@@ -48,7 +50,7 @@
 
 - name: Sentry, download CMake
   become: true
-  when: cmake_is_installed|failed
+  when: cmake_is_installed is failed
   get_url: 
     url: https://cmake.org/files/v3.6/cmake-3.6.2.tar.gz
     dest: /tmp/cmake.tar.gz
@@ -56,14 +58,14 @@
 
 - name: Sentry, extract CMake
   become: true
-  when: cmake_is_installed|failed
+  when: cmake_is_installed is failed
   shell: tar xvf /tmp/cmake.tar.gz
   args:
     chdir: /tmp
 
 - name: Sentry, compile and install CMake
   become: true
-  when: cmake_is_installed|failed
+  when: cmake_is_installed is failed
   shell: cmake . && make && make install
   args:
     chdir: /tmp/cmake-3.6.2

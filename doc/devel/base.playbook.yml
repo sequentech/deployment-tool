@@ -20,7 +20,6 @@
     - include_vars: config.yml
     - include_vars: repos.yml
 
-    - include: java.yml
-    - include: packages.yml
-    - include: system.yml
-    - include: sudoers/main.yml
+    - import_tasks: packages.yml
+    - import_tasks: system.yml
+    - import_tasks: sudoers/main.yml

@@ -25,7 +25,7 @@
 # 2: remove /var/lib/postgresql/9.4/main
 # 3: unzip base backup from /home/eorchestra/postgres_backups/base/whatever and copy it to /var/lib/postgresql/9.4/main
 # 4: unzip wal files from  /home/eorchestra/postgres_backups/wal to a folder F_WAL
-# 5: copy /etc/postgresql/9.4/main/recovery.conf to the data folder: /var/lib/postgresql/9.4/main/recovery.conf
+# 5: copy /etc/postgresql/9.4/main/recovery.conf.copy to the data folder: /var/lib/postgresql/9.4/main/recovery.conf
 # 6: edit restore_command variable from recovery.conf to copy files from F_WAL, edit recovery_target_time if you want recover up to a specific date
 # 7: start postgres
 
@@ -161,7 +161,7 @@ else
   # restore backup
   mkdir $POSTGRES_DATA_DIR
   tar -zxvf $BACKUP_DIR/base/$BASE_BACKUP_NAME/base.tar.gz -C $POSTGRES_DATA_DIR
-  cp $POSTGRES_CONFIG_DIR/recovery.conf $POSTGRES_DATA_DIR/recovery.conf
+  cp $POSTGRES_CONFIG_DIR/recovery.conf.copy $POSTGRES_DATA_DIR/recovery.conf
 
   # set backup date
   if [[ $# -ge 2 ]]; then

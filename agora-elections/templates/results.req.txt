@@ -1,4 +1,3 @@
--e git+https://github.com/agoravoting/openstv.git@next#egg=openstv
 -e git+{{ repos.tally.repo }}@{{ repos.tally.version }}#egg=agora-tally
 reportlab==3.3.0
 requests==2.12.3

@@ -14,167 +14,233 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: packages.yml
+- import_tasks: packages.yml
 
 - name: AgoraElections, Creating default user
-  sudo: true
-  user: name=agoraelections shell=/bin/bash
+  become: true
+  user:
+    name: agoraelections
+    shell: /bin/bash
 
 - name: AgoraElections, Creating /etc/eopeers
-  sudo: true
-  file: path=/etc/eopeers state=directory mode=0755
+  become: true
+  file:
+    path: /etc/eopeers
+    state: directory
+    mode: '0755'
 
-- include: playframework.yml
-- include: postgres.yml
-- include: repo.yml
-- include: admin.yml
-- include: results.yml
+- name: AgoraElections, Creating /home/agoraelections/.ansible/tmp dir
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/.ansible/tmp
+    state: directory
+    mode: '0700'
+
+- import_tasks: postgres.yml
+- import_tasks: repo.yml
+- import_tasks: admin.yml
+- import_tasks: results.yml
 
 # Config files
 - name: AgoraElections, Default conf
-  sudo: true
-  sudo_user: agoraelections
-  template: src=agora-elections/templates/application.local.conf dest=/home/agoraelections/agora-elections/conf/application.local.conf owner="agoraelections" mode=0644
+  become: true
+  become_user: agoraelections
+  template:
+    src: agora-elections/templates/application.local.conf
+    dest: /home/agoraelections/agora-elections/conf/application.local.conf
+    owner: agoraelections
+    mode: '0644'
 
 - name: AgoraElections, Pipes whitelist
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   template:
-    src=agora-elections/templates/pipes_whitelist
-    dest=/home/agoraelections/agora-elections/conf/pipes_whitelist
-    owner="agoraelections"
-    mode=0644
+    src: agora-elections/templates/pipes_whitelist
+    dest: /home/agoraelections/agora-elections/conf/pipes_whitelist
+    owner: agoraelections
+    mode: '0644'
 
 - name: AgoraElections, postgres connection password setup
-  sudo: true
-  sudo_user: agoraelections
-  template: src=agora-elections/templates/.pg_service.conf dest=/home/agoraelections/.pg_service.conf owner="agoraelections" mode=0600
+  become: true
+  become_user: agoraelections
+  template:
+    src: agora-elections/templates/.pg_service.conf
+    dest: /home/agoraelections/.pg_service.conf
+    owner: agoraelections
+    mode: '0600'
 
 - name: AgoraElections, Test conf
-  sudo: true
-  sudo_user: agoraelections
-  template: src=agora-elections/templates/test.local.conf dest=/home/agoraelections/agora-elections/conf/test.local.conf owner="agoraelections" mode=0644
+  become: true
+  become_user: agoraelections
+  template:
+    src: agora-elections/templates/test.local.conf
+    dest: /home/agoraelections/agora-elections/conf/test.local.conf
+    owner: agoraelections
+    mode: '0644'
 
 - name: AgoraElections, datastore dir
-  sudo: true
-  sudo_user: agoraelections
-  file: path=/home/agoraelections/datastore state=directory owner=agoraelections group=agoraelections
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/datastore
+    state: directory
+    owner: agoraelections
+    group: agoraelections
 
 - name: AgoraElections, public datastore dir
-  sudo: true
-  sudo_user: agoraelections
-  file: path=/home/agoraelections/datastore/public state=directory owner=agoraelections group=agoraelections recurse=true
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/datastore/public
+    state: directory
+    owner: agoraelections 
+    group: agoraelections
+    recurse: true
 
 - name: AgoraElections, private datastore dir
-  sudo: true
-  sudo_user: agoraelections
-  file: path=/home/agoraelections/datastore/private state=directory owner=agoraelections group=agoraelections
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/datastore/private
+    state: directory
+    owner: agoraelections
+    group: agoraelections
 
 # Key store set up
 - name: AgoraElections, Key store setup (1)
-  sudo: true
-  sudo_user: agoraelections
-  shell: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
-         chdir=/home/agoraelections/
+  become: true
+  become_user: agoraelections
+  shell:
+    cmd: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
+    chdir: /home/agoraelections/
 
 - name: AgoraElections, Key store setup (2)
-  sudo: true
-  sudo_user: agoraelections
-  shell: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
-         chdir=/home/agoraelections/
+  become: true
+  become_user: agoraelections
+  shell: 
+    cmd: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
+    chdir: /home/agoraelections/
 
 # Admin tool setup
 - name: AgoraElections, Admin chmod
-  sudo: true
-  sudo_user: agoraelections
-  shell: chmod u+x /home/agoraelections/agora-elections/admin/admin.py
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/agora-elections/admin/admin.py
+    mode: "700"
 
 - name: AgoraElections, Admin setup (1)
-  sudo: true
-  sudo_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="shared_secret = .*$" replace="shared_secret = '{{config.agora_elections.shared_secret}}'"
+  become: true
+  become_user: agoraelections
+  replace: 
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "shared_secret = .*$"
+    replace: "shared_secret = '{{config.agora_elections.shared_secret}}'"
 
 - name: AgoraElections, Admin setup (2)
-  sudo: true
-  sudo_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="db_password = .*$" replace="db_password = '{{config.agora_elections.db_password}}'"
+  become: true
+  become_user: agoraelections
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "db_password = .*$"
+    replace: "db_password = '{{config.agora_elections.db_password}}'"
 
 - name: AgoraElections, Admin setup (3)
-  sudo: true
-  sudo_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/admin.py
-              regexp="app_host = .*$" replace="app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
+  become: true
+  become_user: agoraelections
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "app_host = .*$"
+    replace: "app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
 
 - name: AgoraElections, Admin setup (4)
-  sudo: true
-  sudo_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
-              regexp="IVY=.*$" replace="IVY=$HOME/.ivy2/cache"
+  become: true
+  become_user: agoraelections
+  replace: 
+    dest: /home/agoraelections/agora-elections/admin/encrypt.sh
+    regexp: "IVY=.*$"
+    replace: "IVY=$HOME/.ivy2/cache"
 
 - name: AgoraElections, Admin setup (5)
-  sudo: true
-  sudo_user: agoraelections
-  replace: dest=/home/agoraelections/agora-elections/admin/encrypt.sh
-              regexp="AGORA_HOME=.*$" replace="AGORA_HOME=$HOME/agora-elections"
+  become: true
+  become_user: agoraelections
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/encrypt.sh
+    regexp: "AGORA_HOME=.*$"
+    replace: "AGORA_HOME=$HOME/agora-elections"
 
 - name: AgoraElections, Admin setup (6)
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   replace:
-    dest=/home/agoraelections/agora-elections/admin/cycle.py
-    regexp="public_ds = .*$"
-    replace="public_ds = '/home/agoraelections/datastore/public'"
+    dest: /home/agoraelections/agora-elections/admin/cycle.py
+    regexp: "public_ds = .*$"
+    replace: "public_ds = '/home/agoraelections/datastore/public'"
 
 - name: AgoraElections, Admin setup (7)
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   replace:
-    dest=/home/agoraelections/agora-elections/admin/cycle.py
-    regexp="private_ds = .*$"
-    replace="private_ds = '/home/agoraelections/datastore/private'"
+    dest: /home/agoraelections/agora-elections/admin/cycle.py
+    regexp: "private_ds = .*$"
+    replace: "private_ds = '/home/agoraelections/datastore/private'"
 
 - name: AgoraElections, Admin setup (8)
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   replace:
-    dest=/home/agoraelections/agora-elections/admin/admin.py
-    regexp="authapi_port = .*$"
-    replace="authapi_port = 10081"
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "authapi_port = .*$"
+    replace: "authapi_port = 10081"
 
 - name: AgoraElections, Admin setup (9)
-  sudo: true
-  sudo_user: agoraelections
+  become: true
+  become_user: agoraelections
   when: config.authapi.auth_method == 'user-and-password'
   replace:
-    dest=/home/agoraelections/agora-elections/admin/admin.py
-    regexp="authapi_credentials = .*$"
-    replace="authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "authapi_credentials = .*$"
+    replace: "authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
 
-- include: app.yml
+- import_tasks: app.yml
 
 # Run script
 - name: AgoraElections, ensure memcached service is restarted
-  sudo: true
-  service: name=memcached state=restarted
+  become: true
+  service:
+    name: memcached
+    state: restarted
 
 - name: AgoraElections, Run script
-  sudo: true
-  sudo_user: agoraelections
-  template: src=agora-elections/templates/run.sh dest=/home/agoraelections/run.sh owner="agoraelections" mode=0744
+  become: true
+  become_user: agoraelections
+  template:
+    src: agora-elections/templates/run.sh
+    dest: /home/agoraelections/run.sh
+    owner: agoraelections
+    mode: '0744'
 
-- include: nginx.yml
+- import_tasks: nginx.yml
 
 - name: AgoraElections, supervisor file
-  sudo: true
-  template: src=agora-elections/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  become: true
+  template:
+    src: "agora-elections/templates/{{item.f}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
-    - { f: agora-elections.conf, dest: /etc/supervisor/conf.d/agora-elections.conf, owner: "root", mode: "0644" }
+    - f: agora-elections.conf
+      dest: /etc/supervisor/conf.d/agora-elections.conf
+      owner: root
+      mode: '0644'
 
 - name: AgoraElections, restarting supervisor
-  sudo: true
-  service: name=supervisor state=restarted sleep={{ params.sleep.slow }}
+  become: true
+  service:
+    name: supervisor
+    state: restarted
 
 # jmeter for testing
-- include: jmeter.yml
+- import_tasks: jmeter.yml

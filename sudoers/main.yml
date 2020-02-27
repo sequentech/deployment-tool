@@ -15,11 +15,11 @@
 
 ---
 - name: Sudoers, add sudoers files
-  sudo: true
+  become: true
   when: config.sudoers.is_enabled
   template:
     src: sudoers/templates/80-agora-sudoers
     dest: /etc/sudoers.d/80-agora-sudoers
     owner: root
     group: root
-    mode: 440
+    mode: '440'

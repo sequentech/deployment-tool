@@ -14,8 +14,9 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraElections, activator clean & stage
-  sudo: true
-  sudo_user: agoraelections
-  shell: /home/agoraelections/activator-1.2.12-minimal/activator clean; /home/agoraelections/activator-1.2.12-minimal/activator stage
-         chdir=/home/agoraelections/agora-elections
+- name: AgoraElections, sbt clean & stage
+  become: true
+  become_user: agoraelections
+  shell:
+    cmd: sbt clean stage
+    chdir: /home/agoraelections/agora-elections

@@ -14,75 +14,92 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: users.yml
-- include: commands.yml
-- include: postgres.yml
-- include: repo.yml
-- include: vfork.yml
+- import_tasks: users.yml
+- import_tasks: commands.yml
+- import_tasks: postgres.yml
+- import_tasks: repo.yml
+- import_tasks: vfork.yml
 
 - name: EOrchestra, Updating packages
-  sudo: true
-  action: apt update_cache=yes
+  become: true
+  apt:
+    update_cache: yes
 
 - name: EOrchestra, Installing packages
-  sudo: true
-  action: apt pkg={{item}} state=installed force=yes
-  with_items:
-    - libpcre3
-    - libpcre3-dev
-    - python-dev
-    - libffi-dev
-    - libssl-dev
-
-- name: EOrchestra, installing extra pip packages
-  sudo: true
-  sudo_user: eorchestra
-  pip: name={{item}} virtualenv=/home/eorchestra/venv state=present
-  with_items:
-    - setuptools
-    # HACK: Frestq needs to install this, but its installation will fail once
-    # requests[security] (and in particular PyOpenSSL) is installed
-    # TODO: Upgrade pip, as that fixes this issue, but it also requires a small 
-    # modification of frestq
-    - psycopg2==2.5.2
-    - uwsgi
-    - requests[security]
+  become: true
+  apt:
+    pkg:
+      - libpcre3
+      - libpcre3-dev
+      - python-dev
+      - libffi-dev
+      - libssl-dev    
+    state: present
+    force: yes
 
 - name: EOrchestra, configure settings
-  sudo: true
-  template: src=eorchestra/templates/base_settings.py
-            dest=/home/eorchestra/election-orchestra/base_settings.py
-            owner=eorchestra mode=0755
+  become: true
+  template:
+    src: eorchestra/templates/base_settings.py
+    dest: /home/eorchestra/election-orchestra/base_settings.py
+    owner: eorchestra
+    mode: '0755'
 
-- include: app.yml
+- import_tasks: app.yml
 
 - name: EOrchestra, createdb
-  sudo: true
-  sudo_user: eorchestra
+  become: true
+  become_user: eorchestra
   shell: export FRESTQ_SETTINGS=base_settings.py; /home/eorchestra/venv/bin/python app.py --createdb
          chdir=/home/eorchestra/election-orchestra
 
 # post inst files
 - name: EOrchestra, postinst files
-  sudo: true
-  template: src=eorchestra/templates/{{item.f}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  become: true
+  template:
+    src: "eorchestra/templates/{{item.f}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
-    - { f: auth.ini, dest: /home/eorchestra/election-orchestra/auth.ini, owner: "eorchestra", mode: "0644" }
-    - { f: launch.sh, dest: /home/eorchestra/launch.sh, owner: "eorchestra", mode: "0755" }
-    - { f: nginx.conf, dest: /etc/nginx/nginx.conf, owner: "root", mode: "0644" }
-    - { f: election-orchestra.conf, dest: /etc/supervisor/conf.d/election-orchestra.conf, owner: "root", mode: "0644" }
+    - f: auth.ini
+      dest: /home/eorchestra/election-orchestra/auth.ini
+      owner: eorchestra
+      mode: '0644'
+
+    - f: launch.sh
+      dest: /home/eorchestra/launch.sh
+      owner: eorchestra
+      mode: '0755'
+
+    - f: nginx.conf
+      dest: /etc/nginx/nginx.conf
+      owner: root
+      mode: '0644'
+
+    - f: election-orchestra.conf
+      dest: /etc/supervisor/conf.d/election-orchestra.conf
+      owner: root
+      mode: '0644'
 
 - name: EOrchestra, directories creation
-  sudo: true
-  file: path={{ item }} recurse=yes state=directory owner=eorchestra group=users
+  become: true
+  file:
+    path: "{{ item }}"
+    recurse: yes
+    state: directory
+    owner: eorchestra
+    group: users
   with_items:
     - /srv/election-orchestra/server1/public/
 
 - name: EOrchestra, restarting supervisor
-  sudo: true
-  service: name={{ item.name }} state=restarted sleep={{ item.sleep }}
+  become: true
+  service:
+    name: "{{ item }}"
+    state: restarted
   with_items:
-    - { name: supervisor, sleep: "{{ params.sleep.slow }}" }
-    - { name: nginx, sleep: "{{ params.sleep.fast }}" }
+    - supervisor
+    - nginx
 
-- include: auth.yml
+- import_tasks: auth.yml

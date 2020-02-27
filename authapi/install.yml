@@ -14,26 +14,40 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: repo.yml
+- import_tasks: repo.yml
 
 - name: AuthApi, Creating deploy settings
-  sudo: true
-  template: src=authapi/templates/deploy.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644
+  become: true
+  template:
+    src: authapi/templates/deploy.py
+    dest: /home/authapi/authapi/authapi/authapi/
+    owner: authapi
+    mode: '0644'
   
 - name: AuthApi, Creating test settings
   become: true
-  template: src=authapi/templates/test_settings.py dest=/home/authapi/authapi/authapi/authapi/ owner=authapi mode=0644 force=yes
+  template:
+    src: authapi/templates/test_settings.py
+    dest: /home/authapi/authapi/authapi/authapi/
+    owner: authapi
+    mode: '0644'
+    force: yes
 
 - name: AuthApi, Creating uwsgi settings
-  sudo: true
-  template: src=authapi/templates/uwsgi.ini dest=/home/authapi/uwsgi.ini owner=authapi mode=0644
+  become: true
+  template:
+    src: authapi/templates/uwsgi.ini
+    dest: /home/authapi/uwsgi.ini
+    owner: authapi
+    mode: '0644'
 
 - name: AuthApi, creating some shell commands
-  sudo: true
+  become: true
   template:
-    src="authapi/templates/{{item.name}}"
-    dest="/home/authapi/{{item.name}}"
-    owner=authapi mode="{{item.perm}}"
+    src: "authapi/templates/{{item.name}}"
+    dest: "/home/authapi/{{item.name}}"
+    owner: authapi
+    mode: "{{item.perm}}"
   with_items:
     - name: launchshell.sh
       perm: "0744"
@@ -45,69 +59,70 @@
       perm: "0644"
 
 - name: AuthApi, Creates webstatic directory
-  sudo: true
-  sudo_user: authapi
-  file: path=/home/authapi/webstatic state=directory
+  become: true
+  become_user: authapi
+  file:
+    path: /home/authapi/webstatic
+    state: directory
 
 - name: AuthApi, Creating the virtualenv
-  sudo: true
-  sudo_user: authapi
+  become: true
+  become_user: authapi
   shell: '[ -d "/home/authapi/env" ] || virtualenv -p /usr/bin/python3 /home/authapi/env'
 
 - name: AuthApi, Installing python uwsgi, psycopg2
-  sudo: true
-  sudo_user: authapi
+  become: true
+  become_user: authapi
   pip:
-    name={{item}}
-    executable=/home/authapi/env/bin/pip
-    state=present
-  with_items:
-    - uwsgi
-    - psycopg2
+    name:
+      - uwsgi
+      - psycopg2
+    executable: /home/authapi/env/bin/pip
+    state: present
 
-- include: djangoapp.yml
+- import_tasks: djangoapp.yml
 
 - name: AuthApi, Load fixture (admin user)
-  sudo: true
-  sudo_user: authapi
+  become: true
+  become_user: authapi
   django_manage:
-    command=loaddata
-    fixtures=/home/authapi/fixture.json
+    command: loaddata
+    fixtures: /home/authapi/fixture.json
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env
     settings: "authapi.deploy"
 
 - name: AuthApi, set password
-  sudo: true
-  sudo_user: authapi
+  become: true
+  become_user: authapi
   shell: /home/authapi/changepassword.sh admin "{{config.authapi.admin_user.password}}"
 
 - name: Authapi, set authapi election start id
-  sudo: true
-  sudo_user: postgres
+  become: true
+  become_user: postgres
   when: config.load_balancing.is_master
   shell: psql authapi -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.authapi.election_start_id}}));"
 
 - name: Authapi, copy usersdata file
   when: config.authapi.upsert_file != ''
-  sudo: true
+  become: true
   copy:
-    "src={{config.authapi.upsert_file}}
-     dest=/home/authapi/upsert_users.json
-     owner=authapi
-     group=authapi"
+    src: "{{config.authapi.upsert_file}}"
+    dest: /home/authapi/upsert_users.json
+    owner: authapi
+    group: authapi
 
 - name: AuthApi, upsert users
-  sudo: true
-  sudo_user: authapi
+  become: true
+  become_user: authapi
   when: config.authapi.upsert_file != ''
   django_manage:
-    command="upsert_users /home/authapi/upsert_users.json"
+    command: upsert_users /home/authapi/upsert_users.json
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env
-    settings: "authapi.deploy"
+    settings: authapi.deploy
 
 - name: Authapi, allow authapi user to create databases (for example the test db)
   become: true

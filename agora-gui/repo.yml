@@ -15,65 +15,103 @@
 
 ---
 - name: AgoraGui, Git clone agora-gui-common
-  sudo: true
-  sudo_user: agoragui
-  git: repo={{ repos.guicommon.repo }} version={{ repos.guicommon.version }}
-       dest=/home/agoragui/agora-gui-common force={{ repos.guicommon.force }}
+  become: true
+  become_user: agoragui
+  git:
+    repo: "{{ repos.guicommon.repo }}"
+    version: "{{ repos.guicommon.version }}"
+    dest: /home/agoragui/agora-gui-common
+    force: "{{ repos.guicommon.force }}"
 
 - name: AgoraGui, Git clone agora-gui-admin
-  sudo: true
-  sudo_user: agoragui
-  git: repo={{ repos.guiadmin.repo }} version={{ repos.guiadmin.version }}
-       dest=/home/agoragui/agora-gui-admin force={{ repos.guiadmin.force }}
+  become: true
+  become_user: agoragui
+  git:
+    repo: "{{ repos.guiadmin.repo }}"
+    version: "{{ repos.guiadmin.version }}"
+    dest: /home/agoragui/agora-gui-admin
+    force: "{{ repos.guiadmin.force }}"
 
 - name: AgoraGui, Git clone agora-gui-elections
-  sudo: true
-  sudo_user: agoragui
-  git: repo={{ repos.guielections.repo }} version={{ repos.guielections.version }}
-       dest=/home/agoragui/agora-gui-elections force={{ repos.guielections.force }}
+  become: true
+  become_user: agoragui
+  git:
+    repo: "{{ repos.guielections.repo }}"
+    version: "{{ repos.guielections.version }}"
+    dest: /home/agoragui/agora-gui-elections
+    force: "{{ repos.guielections.force }}"
 
 - name: AgoraGui, Git clone agora-gui-booth
-  sudo: true
-  sudo_user: agoragui
-  git: repo={{ repos.guibooth.repo }} version={{ repos.guibooth.version }}
-       dest=/home/agoragui/agora-gui-booth force={{ repos.guibooth.force }}
+  become: true
+  become_user: agoragui
+  git:
+    repo: "{{ repos.guibooth.repo }}"
+    version: "{{ repos.guibooth.version }}"
+    dest: /home/agoragui/agora-gui-booth
+    force: "{{ repos.guibooth.force }}"
 
 - name: AgoraGui, config setup
-  sudo: true
+  become: true
   template:
-    src=agora-gui/templates/avConfig.js
-    dest=/home/agoragui/avConfig.js
-    owner=agoragui
-    group=agoragui
-    mode=0644
+    src: agora-gui/templates/avConfig.js
+    dest: /home/agoragui/avConfig.js
+    owner: agoragui
+    group: agoragui
+    mode: '0644'
 
-- name: AgoraGui, linking avConfig.js in all agora-gui-*
-  sudo: true
-  sudo_user: agoragui
-  file: src=/home/agoragui/avConfig.js dest=/home/agoragui/{{ item }}/avConfig.js state=link
+- name: AgoraGui, removing previous avConfig.js in all agora-gui-*
+  become: true
+  become_user: agoragui
+  file:
+    path: "/home/agoragui/{{ item }}/avConfig.js"
+    state: absent
   with_items:
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, ensuring latest version of agora-gui-common gets reinstalled removing it
-  sudo: true
-  sudo_user: agoragui
+- name: AgoraGui, linking avConfig.js in all agora-gui-*
+  become: true
+  become_user: agoragui
   file:
-    path=/home/agoragui/{{item}}/bower_components/avCommon
-    state=absent
+    src: /home/agoragui/avConfig.js
+    dest: "/home/agoragui/{{ item }}/avConfig.js"
+    state: link
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+# this is not slow because yarn caches dependencies
+- name: AgoraGui, removing node_modules directory to start fresh
+  become: true
+  become_user: agoragui
+  file:
+    path: "/home/agoragui/{{item}}/node_modules"
+    state: absent
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
+- name: AgoraGui, make sure to upgrade agora-gui-common dependency repo
+  become: true
+  become_user: agoragui
+  shell:
+    chdir: "/home/agoragui/{{item}}/"
+    cmd: yarn upgrade agora-gui-common
   with_items:
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
 
 - name: AgoraGui, configuring agora-gui-common version in agora-gui-*
-  sudo: true
-  sudo_user: agoragui
+  become: true
+  become_user: agoragui
   replace:
-    dest=/home/agoragui/{{item}}/bower.json
-    regexp='"avCommon"(.) "[^"]+(".*)$'
-    replace='"avCommon"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+    dest: /home/agoragui/{{item}}/package.json
+    regexp: '"agora-gui-common"(.) "[^"]+(".*)$'
+    replace: '"agora-gui-common"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
   with_items:
     - agora-gui-admin
     - agora-gui-elections

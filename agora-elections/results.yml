@@ -17,8 +17,11 @@
 - name: AgoraElections, Downloading agora-tools, agora-results
   become: true
   become_user: agoraelections
-  git: repo={{ item.repo }} version={{ item.version }}
-       dest=/home/agoraelections/{{ item.dest }} force={{ item.force }}
+  git:
+    repo: "{{ item.repo }}"
+    version: "{{ item.version }}"
+    dest: "/home/agoraelections/{{ item.dest }}"
+    force: "{{ item.force }}"
   with_items:
     - repo: "{{ repos.atools.repo }}"
       version: "{{ repos.atools.version }}"
@@ -28,6 +31,15 @@
       version: "{{ repos.results.version }}"
       force: "{{ repos.results.force }}"
       dest: agora-results
+
+- name: AgoraElections, update agora-results pipes whitelist
+  become: true
+  become_user: agoraelections
+  replace:
+    dest: /home/agoraelections/agora-results/agora-results
+    regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
+    replace: '\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+
 
 # this block&rescue is only a workaround so that it works in ansible 2.2.0,
 # 2.2.1 should have a fix for the issue, see
@@ -49,11 +61,12 @@
   become_user: agoraelections
 
 - name: AgoraElections, req.txt
-  sudo: true
-  template: src=agora-elections/templates/results.req.txt
-            dest=/home/agoraelections/agora-results/results.req.txt
-            owner="agoraelections" mode=0655
-
+  become: true
+  template:
+    src: agora-elections/templates/results.req.txt
+    dest: /home/agoraelections/agora-results/results.req.txt
+    owner: agoraelections
+    mode: '0655'
 
 # this block&rescue is only a workaround so that it works in ansible 2.2.0,
 # 2.2.1 should have a fix for the issue, see
@@ -75,7 +88,9 @@
   become_user: agoraelections
 
 - name: AgoraResults, results.sh
-  sudo: true
-  template: src=agora-elections/templates/results.sh
-            dest=/home/agoraelections/agora-elections/admin/results.sh
-            owner="agoraelections" mode=0755
+  become: true
+  template:
+    src: agora-elections/templates/results.sh
+    dest: /home/agoraelections/agora-elections/admin/results.sh
+    owner: agoraelections
+    mode: '0755'

@@ -16,7 +16,9 @@
 ---
 - name: Packages, add postgresql 9.4 repo
   become: true
-  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4' state=present
+  apt_repository:
+    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4'
+    state: present
 
 - name: Packages, add postgresql repo keys
   become: true
@@ -25,130 +27,108 @@
     state: present
     validate_certs: "{{ not config.has_https_proxy }}"
 
+- name: Packages, add nginx repository
+  become: true
+  apt_repository:
+    repo: 'deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx'
+    state: present
+
+- name: Packages, add nginx keys
+  become: true
+  apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+    state: present
+    validate_certs: "{{ not config.has_https_proxy }}"
+
 - name: Packages, Updating packages
   become: true
-  action: apt update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Packages, Installing packages
   become: true
-  action: apt pkg={{item}} state=installed force=yes
-  with_items:
-    - git
-    - htop
-    - curl
-    - postgresql-9.4
-    - postgresql-9.4-repmgr
-    - mercurial
-    - nginx
-    - supervisor
-    - node
-    - libffi-dev
-    - virtualenvwrapper
-    - libjpeg8-dev
-    - libpq-dev=9.4*
-    - libpq5=9.4*
-    - python-psycopg2
-    - python3-pip
-    - python3
-    - python-setuptools
-    - build-essential
-    - python-dev
-    - vim
-    - libgmp-dev
-    - make
-    - m4
-    - p7zip-full
-
-- name: Packages, check whether old 9.3 postgres is installed
-  shell: "if [ \"$(apt-cache policy postgresql-9.3 | grep 'Installed: (none)' | wc -l)\" -eq 1 ]; then /bin/false; else /bin/true; fi"
-  register: old_postgres_is_installed
-  ignore_errors: true
+  apt:
+    pkg:
+      - git
+      - htop
+      - curl
+      - postgresql-9.4
+      - postgresql-9.4-repmgr
+      - mercurial
+      - supervisor
+      - nodejs
+      - openjdk-8-jdk-headless
+      - libffi-dev
+      - virtualenvwrapper
+      - libjpeg8-dev
+      - libpq-dev=9.4*
+      - libpq5=9.4*
+      - python-psycopg2
+      - python3-psycopg2
+      - python3-pip
+      - python3
+      - python-setuptools
+      - build-essential
+      - python-dev
+      - vim
+      - libgmp-dev
+      - make
+      - m4
+      - p7zip-full
+      - nginx
+      - zip
+      - python-pip
+      - python-pip-whl
+      - python3-virtualenv
+      - virtualenv
+      - python-dev
+      - libxslt1-dev
+      - libxml2-dev
+      - libz-dev
+      - libssl-dev
+      - redis-server
+      - redis-tools
+      - clang
+      - llvm
+      - cmake
+    state: present
+    force: yes
 
 - name: Packages, stop postgresql service
   become: true
-  when: old_postgres_is_installed|succeeded
-  service: name=postgresql state=stopped
-
-- name: Packages, upgrade postgresql db to 9.4
-  become: true
-  become_user: postgres
-  when: old_postgres_is_installed|succeeded
-  shell: cd && /usr/lib/postgresql/9.4/bin/pg_upgrade -b /usr/lib/postgresql/9.3/bin -B /usr/lib/postgresql/9.4/bin -d /etc/postgresql/9.3/main -D /etc/postgresql/9.4/main
-
-- name: Packages, remove postgresql 9.3 if exists
-  become: true
-  when: old_postgres_is_installed|succeeded
-  action: apt pkg={{item}} purge=yes state=absent
-  with_items:
-    - postgresql-9.3
-    - postgresql-client-9.3
+  service:
+    name: postgresql
+    state: stopped
 
 - name: Packages, set postgresql 9.4 service port
   become: true
-  lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf regexp="\s*port\s*=\s*\d+.*" line="port = 5432"
+  lineinfile:
+    dest: /etc/postgresql/9.4/main/postgresql.conf
+    regexp: '\s*port\s*=\s*\d+.*'
+    line: "port = 5432"
 
 - name: Packages, start postgresql service
   become: true
-  service: name=postgresql state=started
+  service:
+    name: postgresql
+    state: started
 
-- name: Packages, Download some python packages from ubuntu vivid release (needed for http_proxy)
-  sudo: true
-  get_url:
-    url={{item.url}}
-    sha256sum={{item.sha256sum}}
-    dest=/tmp/{{item.pkg}}
-    validate_certs={{ not config.has_https_proxy }}
-  with_items:
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-pip/python3-pip_1.5.6-5ubuntu2_all.deb
-      pkg: python3-pip_1.5.6-5ubuntu2_all.deb
-      sha256sum: 126e4ca4bc1bdca44972307df95932071af4e5538f2160112de177e4de028623
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-virtualenv/python3-virtualenv_1.11.6+ds-1_all.deb
-      pkg: python3-virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: 2e940cfa1b89e1ebfb7909e1f0a62d9c59291383c9698262a2eb192f1a317e68
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-pip/python-pip_1.5.6-5ubuntu2_all.deb
-      pkg: python-pip_1.5.6-5ubuntu2_all.deb
-      sha256sum: f879f8ba8b72dd76783c0c314c9e1052007526742ad755768f53966e86177350
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-pip/python-pip-whl_1.5.6-5ubuntu2_all.deb
-      pkg: python-pip-whl_1.5.6-5ubuntu2_all.deb
-      sha256sum: c8bba42b599e5f1ed962b422102d1a7a7eb8b24e38367ceb351b391ead65841f
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-setuptools/python-setuptools-whl_12.2-1_all.deb
-      pkg: python-setuptools-whl_12.2-1_all.deb
-      sha256sum: abd51126da26972e8ae7b59f2315490852129ad3f6db731b580aeb6cc91fbc8e
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-virtualenv/python-virtualenv_1.11.6+ds-1_all.deb
-      pkg: python-virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: a9e4201a7407a39a387d744b34392d4b36d776dd2fc18ef616a49c86f3c83e3c
-
-    - url: http://es.archive.ubuntu.com/ubuntu/pool/universe/p/python-virtualenv/virtualenv_1.11.6+ds-1_all.deb
-      pkg: virtualenv_1.11.6+ds-1_all.deb
-      sha256sum: 1784c739a8f59c70faf2759bb27e96fe7dc231f8f98f9351fb64fc613927a260
-
-- name: Packages, Install downloaded python packages
-  sudo: true
-  shell: dpkg --skip-same-version -i /tmp/{{item}}
-  with_items:
-    - python3-pip_1.5.6-5ubuntu2_all.deb
-    - python3-virtualenv_1.11.6+ds-1_all.deb
-    - python-pip_1.5.6-5ubuntu2_all.deb
-    - python-pip-whl_1.5.6-5ubuntu2_all.deb
-    - python-setuptools-whl_12.2-1_all.deb
-    - python-virtualenv_1.11.6+ds-1_all.deb
-    - virtualenv_1.11.6+ds-1_all.deb
+- name: Packages, ensure postgresql starts on boot
+  become: true
+  systemd:
+    name: postgresql
+    enabled: true
 
 - name: Packages, Generate UTF-8 locales
-  sudo: true
+  become: true
   shell: locale-gen en_US en_US.UTF-8 es_ES es_ES.UTF-8
 
 - name: Packages, Configure locales
-  sudo: true
-  shell: dpkg-reconfigure locales
+  become: true
+  shell: dpkg-reconfigure --frontend noninteractive locales
 
 - name: Packages, Create postgresql cluster
-  sudo: true
+  become: true
   shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.4 main
   register: cmdoutput
   failed_when: "'Error: cluster configuration already exists' not in cmdoutput.stderr and cmdoutput.rc != 0"

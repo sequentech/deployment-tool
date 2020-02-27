@@ -14,8 +14,8 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: packages.yml
-- include: user.yml
-- include: sentry.yml
-- include: sentryconf.yml
-- include: supervisor.yml
+- import_tasks: packages.yml
+- import_tasks: user.yml
+- import_tasks: sentry.yml
+- import_tasks: sentryconf.yml
+- import_tasks: supervisor.yml

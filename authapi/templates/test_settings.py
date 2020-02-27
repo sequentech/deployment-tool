@@ -40,8 +40,17 @@ SECRET_KEY = 'zct2c=hlij$^0xu0i8o6c^phjc!=m)r(%h90th0yyx9r5dm))+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOW_DEREGISTER = True
+
 ALLOWED_HOSTS = []
 
+ADMIN_AUTH_ID = 1
+
+# If this option is true, when an user tries to register and the user is
+# already registered, authapi will return an error with the 'user_exists'
+# codename. Otherwise, on error, authapi will always return the same generic
+# error with 'invalid_credentials' codename.
+SHOW_ALREADY_REGISTERED = False
 
 # Application definition
 
@@ -76,7 +85,6 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'wrap.LoggingMiddleware'
@@ -142,7 +150,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # cors
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-        'localhost:9001',
+        'http://localhost:9001',
 )
 
 ENABLE_CAPTCHA = True
@@ -161,16 +169,20 @@ MAX_AUTH_MSG_SIZE = {
   "email": 10000
 }
 
-SMS_BASE_TEMPLATE = "__MESSAGE__ -- Agora Voting"
+SMS_BASE_TEMPLATE = "__MESSAGE__ -- nVotes"
 
-EMAIL_BASE_TEMPLATE = "__MESSAGE__\n\n -- Agora Voting https://agoravoting.com"
+EMAIL_BASE_TEMPLATE = "__MESSAGE__\n\n -- nVotes https://nvotes.com"
 
+EMAIL_BASE_TITLE_TEMPLATE = "__TITLE__ - nVotes"
+
+HOME_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/home"
 SMS_AUTH_CODE_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 EMAIL_AUTH_CODE_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 
 SIZE_CODE = 8
 MAX_GLOBAL_STR = 512
 MAX_EXTRA_FIELDS = 15
+MAX_ADMIN_FIELDS = 15
 MAX_SIZE_NAME_EXTRA_FIELD = 1024
 
 MAX_IMAGE_SIZE = 5 * 1024 * 1024 # 5 MB

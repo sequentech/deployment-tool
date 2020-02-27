@@ -15,5 +15,15 @@
 
 ---
 - name: AuthApi, Creating default user
-  sudo: true
-  user: name=authapi shell=/bin/bash
+  become: true
+  user:
+    name: authapi
+    shell: /bin/bash
+
+- name: AuthApi, Creating /home/authapi/.ansible/tmp dir
+  become: true
+  become_user: authapi
+  file:
+    path: /home/authapi/.ansible/tmp
+    state: directory
+    mode: '0700'

@@ -14,12 +14,16 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- include: repo.yml
-- include: copy.yml
+- import_tasks: repo.yml
+- import_tasks: copy.yml
 
 - name: AgoraTools, commands
-  sudo: true
-  template: src=agora-tools/templates/{{item.script}} dest={{ item.dest }} owner={{ item.owner }} mode={{ item.mode }}
+  become: true
+  template:
+    src: "agora-tools/templates/{{item.script}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
     - { script: eoconf.json, dest: /etc/eoconf.json, owner: "root", mode: "0600" }
     - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0755" }

@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # This file is part of agora-dev-box.
-# Copyright (C) 2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2016-2020  Agora Voting SL <contact@nvotes.com>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by

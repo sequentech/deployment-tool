@@ -15,45 +15,74 @@
 
 ---
 - name: OneServer, authapi custom_urls.py
-  sudo: true
-  template: src=oneserver/templates/custom_urls.py dest=/home/authapi/authapi/authapi/custom_urls.py owner="authapi" mode=0644
+  become: true
+  template:
+    src: oneserver/templates/custom_urls.py
+    dest: /home/authapi/authapi/authapi/custom_urls.py
+    owner: authapi
+    mode: '0644'
 
 - name: OneServer, authapi url config
-  sudo: true
-  lineinfile: dest=/home/authapi/authapi/authapi/authapi/deploy.py
-              line="ROOT_URLCONF = 'custom_urls'"
-              state=present
+  become: true
+  lineinfile:
+    dest: /home/authapi/authapi/authapi/authapi/deploy.py
+    line: "ROOT_URLCONF = 'custom_urls'"
+    state: present
 
 - name: OneServer, Restarting authapi service
-  sudo: true
-  supervisorctl: name={{ item }} state=restarted
+  become: true
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
   with_items:
     - authapi
     - authapi_celery
 
 - name: OneServer, All in one nginx
-  sudo: true
-  template: src=oneserver/templates/oneserver.conf dest=/etc/nginx/conf.d/oneserver.conf owner="root" mode=0644
+  become: true
+  template:
+    src: oneserver/templates/oneserver.conf
+    dest: /etc/nginx/conf.d/oneserver.conf
+    owner: root
+    mode: '0644'
 
 - name: OneServer, configure nginx
-  sudo: true
-  template: src=oneserver/templates/nginx.conf dest=/etc/nginx/nginx.conf owner="root" mode=0644
+  become: true
+  template:
+    src: oneserver/templates/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    mode: '0644'
 
 - name: OneServer, cloudflare.conf
-  sudo: true
-  template: src=oneserver/templates/cloudflare.conf dest=/etc/nginx/cloudflare.conf owner="root" mode=0644
+  become: true
+  template:
+    src: oneserver/templates/cloudflare.conf
+    dest: /etc/nginx/cloudflare.conf
+    owner: root
+    mode: '0644'
+
+- name: OneServer, configure cors
+  become: true
+  template:
+    src: oneserver/templates/cors.conf
+    dest: /etc/nginx/cors.conf
+    owner: root
+    mode: '0644'
 
 - name: OneServer, remove nginx default
-  sudo: true
-  file: path=/etc/nginx/sites-enabled/default, state=absent
+  become: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
 
 - name: OneServer, secure.conf
-  sudo: true
+  become: true
   template:
-    src: oneserver/templates/{{ item }}
-    dest: /etc/nginx/{{ item }}
+    src: "oneserver/templates/{{ item }}"
+    dest: "/etc/nginx/{{ item }}"
     owner: root
-    mode: 0644
+    mode: '0644'
   with_items:
     - base_secure.conf
     - secure.conf
@@ -61,30 +90,44 @@
 
 # dnie & fnmt certs
 - name: OneServer, DNIE and FNMT ca in nginx
-  sudo: true
+  become: true
   template:
-    src=oneserver/templates/dnie.conf
-    dest=/etc/nginx/conf.d/dnie.conf
-    owner="root" mode=0644
+    src: oneserver/templates/dnie.conf
+    dest: /etc/nginx/conf.d/dnie.conf
+    owner: root
+    mode: '0644'
   when: config.dnie_auth.allow
 
 # remove the dnie conf when allow_dni is false, otherwise when changing
 # from one configuration to the other we would be leaving files around
 - name: OneServer, DNIE and FNMT ca in nginx (remove)
-  sudo: true
-  file: path=/etc/nginx/conf.d/dnie.conf state=absent
+  become: true
+  file:
+    path: /etc/nginx/conf.d/dnie.conf
+    state: absent
   when: not config.dnie_auth.allow
 
 - name: OneServer, DNIE and FNMT ca
-  sudo: true
-  template: src=oneserver/templates/ca.crt dest=/srv/certs/dnie.ca.crt
+  become: true
+  template:
+    src: oneserver/templates/ca.crt
+    dest: /srv/certs/dnie.ca.crt
   when: not config.dnie_auth.allow
 
 - name: OneServer, DNIE and FNMT ca (remove)
-  sudo: true
-  file: path=/srv/certs/dnie.ca.crt state=absent
+  become: true
+  file:
+    path: /srv/certs/dnie.ca.crt
+    state: absent
   when: not config.dnie_auth.allow
 
 - name: OneServer, Restarting nginx
-  sudo: true
-  service: name=nginx state=restarted
+  become: true
+  service:
+    name: nginx
+    state: restarted
+
+- name: OneServer, http authentication
+  become: true
+  shell: echo "{{config.http.http_auth.user}}:$(openssl passwd -crypt {{config.http.http_auth.password}})" > /etc/nginx/.htpasswd
+  when: config.http.http_auth
