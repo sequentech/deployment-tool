@@ -201,7 +201,7 @@
   replace:
     dest: /home/agoraelections/agora-elections/admin/admin.py
     regexp: "authapi_credentials = .*$"
-    replace: "authapi_credentials = dict(email='{{config.authapi.admin_user.email}}',password='{{config.authapi.admin_user.password}}')"
+    replace: "authapi_credentials = dict(username='admin',password='{{config.authapi.admin_user.password}}')"
 
 - import_tasks: app.yml
 
