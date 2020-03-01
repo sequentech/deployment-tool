@@ -170,8 +170,10 @@ config:
 
     # Simple http authentication protection for all services under nginx.
     # http_auth:
-    #   user: admin
-    #   password: eengiefe
+    #   - user: admin
+    #     password: foobar
+    #   - user: admin2
+    #     password: whatever
     http_auth: false
 
     # CORS (HTTP Cross-origin resource sharing) is a measure implemented by

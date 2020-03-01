@@ -127,7 +127,14 @@
     name: nginx
     state: restarted
 
-- name: OneServer, http authentication
+- name: OneServer, http authentication passwords file (remove)
   become: true
-  shell: echo "{{config.http.http_auth.user}}:$(openssl passwd -crypt {{config.http.http_auth.password}})" > /etc/nginx/.htpasswd
+  file:
+    path: /etc/nginx/.htpasswd
+    state: absent
+
+- name: OneServer, http authentication passwords file (create)
+  become: true
+  shell: echo "{{item.user}}:$(openssl passwd -crypt {{item.password}})" >> /etc/nginx/.htpasswd
   when: config.http.http_auth
+  with_items: "{{ config.http.http_auth }}"
