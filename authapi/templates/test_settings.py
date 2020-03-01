@@ -123,7 +123,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'authapi',
         'USER': 'authapi',
-        'PASSWORD': '{{config.eorchestra_password}}'
+        'PASSWORD': '{{config.election_orchestra.eorchestra_password}}'
     }
 }
 

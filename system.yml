@@ -17,13 +17,13 @@
 - name: System, setting hostname
   become: true
   hostname:
-    name: "{{ config.host }}"
+    name: "{{ config.hostname }}"
 
 - name: System, private ip in /etc/hosts
   become: true
   lineinfile:
     dest: /etc/hosts
-    line: "{{ config.private_ipaddress }} {{ config.host }}" 
+    line: "{{ config.private_ipaddress }} {{ config.hostname }}" 
     state: present
 
 - name: System, domain in /etc/hosts

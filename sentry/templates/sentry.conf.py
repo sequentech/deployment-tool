@@ -159,7 +159,7 @@ SENTRY_FILESTORE_OPTIONS = {
 ALLOWED_HOSTS = ['*']
 
 # You MUST configure the absolute URI root for Sentry:
-SENTRY_URL_PREFIX = 'http://{{ config.agora_elections.domain }}:{{ config.sentry.port }}'  # No trailing slash!
+SENTRY_URL_PREFIX = 'http://{{ config.sentry.domain }}:{{ config.sentry.port }}'  # No trailing slash!
 
 # If you're using a reverse proxy, you should enable the X-Forwarded-Proto
 # header and uncomment the following settings

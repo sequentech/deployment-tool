@@ -57,17 +57,42 @@ config:
       minute: 0
       # hour when the job should run ( 0-23, *, */2, etc )
       hour: 4
+      
+  # hostname of the machine
+  hostname: agora-auth5
 
-  host: agora-auth5
-
-  # election-orchestra
-  port: 5000
-  public_ipaddress: 192.168.50.4
+  # private ip address of this machine. Will ensure there is an alias
+  # in /etc/hosts to the hostname in this machine (and in others when they load
+  # this machine's eo package)
   private_ipaddress: 192.168.50.4
-  vfork_server_ports: [4081, 4083]
-  vfork_hint_server_ports: [8081, 8083]
-  eorchestra_password: '<PASSWORD>'
-  auto_mode: true
+
+  # public ip address of this machine. Will ensure there is an alias
+  # in /etc/hosts to the hostname in this machine (and in others when they load
+  # this machine's eo package)
+  public_ipaddress: 192.168.50.4
+
+  # configuration related to the election orchestration service, only active in
+  # election authorities
+  election_orchestra:
+    # port in which the nginx web server will serve the https eorchestra service
+    port: 5000
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # range of ports in which vfork servers will run
+    vfork_server_ports: [4081, 4083]
+
+    # range of ports in which vfork hint servers will run
+    vfork_hint_server_ports: [8081, 8083]
+
+    # database password for election-orchestra
+    eorchestra_password: '<PASSWORD>'
+
+    # enables or disables automatic creation or tallying of election
+    auto_mode: true
 
   # this section is all about giving to some existing users permissions to
   # sudo into ansible-created users. If you already have these kind of
@@ -258,6 +283,12 @@ config:
     expiry: 60000
     domain: agora
     port: 14443
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
     # Port used by agora_elections for path /private. This path is used
     # by election-orchestra to for example retrieve the ciphertexts.
     # Only the election authorities can access this path, usin SSL/HTTPS and
@@ -352,6 +383,11 @@ config:
     admin_port: 10090
     booth_port: 10091
     elections_port: 10092
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
 
     # webpage title
     web_title: 'nVotes'
@@ -830,6 +866,14 @@ config:
     # Note: this is NOT the port in  which the nginx sentry web service is run.
     port: 9090
 
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # domain by which to server sentry
+    domain: nvotes.com
+
     # password of the postgresql database of the sentry backend.
     db_password: '<PASSWORD>'
 
@@ -858,6 +902,11 @@ config:
     # Whether authapi is run in debug mode or not.
     # Allowed values: True|False
     debug: False
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
 
     # If this option is true, then admin users can be deregistered and
     # re-registered. Elections from deregistered users still are stored in the
