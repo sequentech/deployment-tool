@@ -830,11 +830,14 @@ config:
     # Note: this is NOT the port in  which the nginx sentry web service is run.
     port: 9090
 
+    # domain by which to server sentry
+    domain: nvotes.com
+
     # password of the postgresql database of the sentry backend.
     db_password: '<PASSWORD>'
 
     # HTTP Port in which sentry is accessed. Only used for now in
-    # oneserver.conf. Note that this port might be configure to use
+    # oneserver.conf. Note that this port might be configured to use
     # https only if not config.load_balancing.enabled or
     # config.load_balancing.use_https, see oneserver.conf for details.
     web_port: 8443

@@ -825,6 +825,9 @@ config:
     # Note: this is NOT the port in  which the nginx sentry web service is run.
     port: 9090
 
+    # domain by which to server sentry
+    domain: nvotes.com
+
     # password of the postgresql database of the sentry backend.
     db_password: '<PASSWORD>'
 
