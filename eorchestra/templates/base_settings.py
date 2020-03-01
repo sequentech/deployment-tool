@@ -19,19 +19,19 @@ DEBUG = False
 # see https://stackoverflow.com/questions/33738467/how-do-i-know-if-i-can-disable-sqlalchemy-track-modifications/33790196#33790196
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-ROOT_URL = 'https://{{ config.host }}:{{ config.port }}/api/queues'
+ROOT_URL = 'https://{{ config.hostname }}:{{ config.election_orchestra.port }}/api/queues'
 
 # URL to our HTTP server
-VFORK_SERVER_URL = 'http://{{ config.host }}'
+VFORK_SERVER_URL = 'http://{{ config.hostname }}'
 
-VFORK_SERVER_PORT_RANGE = {{ config.vfork_server_ports }}
+VFORK_SERVER_PORT_RANGE = {{ config.election_orchestra.vfork_server_ports }}
 
 # Socket address given as <hostname>:<port> to our hint server.
 # A hint server is a simple UDP server that reduces latency and
 # traffic on the HTTP servers.
-VFORK_HINT_SERVER_SOCKET = '{{ config.host }}'
+VFORK_HINT_SERVER_SOCKET = '{{ config.hostname }}'
 
-VFORK_HINT_SERVER_PORT_RANGE = {{ config.vfork_hint_server_ports }}
+VFORK_HINT_SERVER_PORT_RANGE = {{ config.election_orchestra.vfork_hint_server_ports }}
 
 import os
 ROOT_PATH = os.path.split(os.path.abspath(__file__))[0]
@@ -41,7 +41,7 @@ SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2:///eorchestra'
 
 PRIVATE_DATA_PATH = os.path.join(ROOT_PATH, 'datastore/private')
 PUBLIC_DATA_PATH = '/srv/election-orchestra/server1/public'
-PUBLIC_DATA_BASE_URL = 'https://{{ config.host }}:{{ config.port }}/public_data'
+PUBLIC_DATA_BASE_URL = 'https://{{ config.hostname }}:{{ config.election_orchestra.port }}/public_data'
 
 
 # security configuration
@@ -49,7 +49,7 @@ SSL_CERT_PATH = '{{ config.http.tls_cert_path }}'
 SSL_KEY_PATH = '{{ config.http.tls_cert_key_path }}'
 SSL_CALIST_PATH = '{{ config.http.tls_calist_path }}'
 ALLOW_ONLY_SSL_CONNECTIONS = True
-AUTOACCEPT_REQUESTS = {{ config.auto_mode }}
+AUTOACCEPT_REQUESTS = {{ config.election_orchestra.auto_mode }}
 
 KILL_ALL_VFORK_BEFORE_START_NEW = True
 

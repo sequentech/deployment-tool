@@ -105,7 +105,7 @@ because they will be a replica of each other: the slave will be in hot standby
 configuration. The only difference between the configuration file of **agora1**
 and **agora2** should be the following config keys:
 
-* config.host
+* config.hostname
 * config.public_ipaddress
 * config.private_ipaddress
 * config.load_balancing.repmgr_node_id
@@ -187,7 +187,7 @@ We'll use an authority config file as a base:
 
 Edit the config.yml file following the instructions inside. Specifically, don't forget to edit:
 
-* config.host
+* config.hostname
 * config.public_ipaddress
 * config.private_ipaddress
 

@@ -27,7 +27,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'authapi',
         'USER': 'authapi',
-        'PASSWORD': '{{config.eorchestra_password}}',
+        'PASSWORD': '{{config.election_orchestra.eorchestra_password}}',
         'HOST': '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}',
         'PORT': '5432',
     }

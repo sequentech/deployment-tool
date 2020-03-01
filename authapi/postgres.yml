@@ -20,7 +20,7 @@
   when: config.load_balancing.is_master
   postgresql_user:
     user: authapi
-    password: "{{config.eorchestra_password}}"
+    password: "{{config.election_orchestra.eorchestra_password}}"
     port: 5432
 
 - name: AuthApi, Create Database

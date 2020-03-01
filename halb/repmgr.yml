@@ -180,9 +180,9 @@
       regexp: "cluster=agoraelections"
     - line: "node={{config.load_balancing.repmgr_node_id}}"
       regexp: "node=.*"
-    - line: "node_name={{config.host}}"
+    - line: "node_name={{config.hostname}}"
       regexp: "node_name=.*"
-    - line: "conninfo='host={{config.host}} user=repmgr dbname=repmgr'"
+    - line: "conninfo='host={{config.hostname}} user=repmgr dbname=repmgr'"
       regexp: "conninfo='host=.* user=repmgr dbname=repmgr'"
     - line: "pg_bindir=/usr/lib/postgresql/9.4/bin"
       regexp: "pg_bindir=/usr/lib/postgresql/9.4/bin"
@@ -205,7 +205,7 @@
 - name: High Availability & Load Balancing [master], promote to master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.host}} ') == -1
+  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.hostname}} ') == -1
   shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
@@ -218,7 +218,7 @@
 - name: High Availability & Load Balancing [slave], create the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.host}} user=repmgr dbname=repmgr') == -1
+  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
   shell: "/usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --force --rsync-only -h {{config.load_balancing.slave.master_hostname}} -w 10 -d repmgr -U repmgr --verbose standby clone"
 
 - name: High Availability & Load Balancing [slave], started postgresql
@@ -237,10 +237,10 @@
 
 - name: High Availability & Load Balancing [slave], fail if our node-id is repeated
   fail: msg="config.load_balancing.repmgr_node_id = {{config.load_balancing.repmgr_node_id}} is already being used by another node"
-  when: not config.load_balancing.is_master and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|') != -1 and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|{{config.host}}') == -1
+  when: not config.load_balancing.is_master and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|') != -1 and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|{{config.hostname}}') == -1
 
 - name: High Availability & Load Balancing [slave], register the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.host}} user=repmgr dbname=repmgr') == -1
+  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
   shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
