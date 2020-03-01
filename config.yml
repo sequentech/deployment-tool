@@ -340,11 +340,11 @@ config:
     allow_origins_rx: "^$"
 
     headers:
-      Access-Control-Allow-Origin: $http_origin always
-      Access-Control-Allow-Credentials: 'true' always
-      Access-Control-Allow-Methods: 'GET, POST, OPTIONS' always
-      Access-Control-Allow-Headers: 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always
-      Content-Security-Policy: frame-ancestors 'none'
+      Access-Control-Allow-Origin: "$http_origin always"
+      Access-Control-Allow-Credentials: "'true' always"
+      Access-Control-Allow-Methods: "'GET, POST, OPTIONS' always"
+      Access-Control-Allow-Headers: "'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always"
+      Content-Security-Policy: "frame-ancestors 'none'"
 
   # agora-gui
   agora_gui:
