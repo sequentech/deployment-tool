@@ -92,7 +92,7 @@ config:
     #
     # Allowed values: debug, info, notice, warn, error, crit, alert, or emerg
     # Default: error
-    nginx_error_log_level: error
+    nginx_error_log_level: info
 
     # In big elections memory or disk buffer might need to be increased,
     # specifically to upload the list of valid voterids if any filtering is going
@@ -170,9 +170,27 @@ config:
 
     # Simple http authentication protection for all services under nginx.
     # http_auth:
-    #   user: admin
-    #   password: eengiefe
+    #   - user: admin
+    #     password: foobar
+    #   - user: admin2
+    #     password: whatever
     http_auth: false
+
+    # CORS (HTTP Cross-origin resource sharing) is a measure implemented by
+    # web browsers that prevents an user agent to load an external resource if
+    # it is in another domain and that domain doesn't actively allows it with
+    # some CORS-specific headers
+    cors:
+      # Nginx regular expression to match $http_origin variable. The headers
+      # list will be set only if this regular expression matches
+      allow_origins_rx: "^$"
+
+      headers:
+        Access-Control-Allow-Origin: "$http_origin always"
+        Access-Control-Allow-Credentials: "'true' always"
+        Access-Control-Allow-Methods: "'GET, POST, OPTIONS' always"
+        Access-Control-Allow-Headers: "'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always"
+        Content-Security-Policy: "'frame-ancestors \\'none\\'' always"
 
   # some java related configuration options
   java:
@@ -329,25 +347,6 @@ config:
     # is disabled by default and should only be enabled in dedicated
     # installations.
     virtualElectionsAllowed: false
-
-  # CORS (HTTP Cross-origin resource sharing) is a measure implemented by
-  # web browsers that prevents an user agent to load an external resource if
-  # it is in another domain and that domain doesn't actively allows it with
-  # some CORS-specific headers
-  cors:
-    # Nginx regular expression to match $http_origin variable. If it matches
-    # the $http_origin is allowed with the Access-Control-Allow-Origin header
-    allow_origins_rx: "^$"
-
-    # Sets the Access-Control-Allow-Origin header
-    allow_credentials: "true"
-
-    # Sets the Access-Control-Allow-Methods header
-    allow_methods: GET, POST, OPTIONS
-
-    # Sets the Access-Control-Allow-Headers header
-    allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
 
   # agora-gui
   agora_gui:
