@@ -335,19 +335,16 @@ config:
   # it is in another domain and that domain doesn't actively allows it with
   # some CORS-specific headers
   cors:
-    # Nginx regular expression to match $http_origin variable. If it matches
-    # the $http_origin is allowed with the Access-Control-Allow-Origin header
+    # Nginx regular expression to match $http_origin variable. The headers
+    # list will be set only if this regular expression matches
     allow_origins_rx: "^$"
 
-    # Sets the Access-Control-Allow-Origin header
-    allow_credentials: "true"
-
-    # Sets the Access-Control-Allow-Methods header
-    allow_methods: GET, POST, OPTIONS
-
-    # Sets the Access-Control-Allow-Headers header
-    allow_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
-
+    headers:
+      Access-Control-Allow-Origin: $http_origin always
+      Access-Control-Allow-Credentials: 'true' always
+      Access-Control-Allow-Methods: 'GET, POST, OPTIONS' always
+      Access-Control-Allow-Headers: 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always
+      Content-Security-Policy: frame-ancestors 'none'
 
   # agora-gui
   agora_gui:
