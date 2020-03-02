@@ -695,6 +695,12 @@ config:
       # 200px width.
       logo_path: ''
 
+      # Subtitle of the organization, used in the ballot ticket PDF
+      subtitle: ''
+
+      # Big logo of the organization, used in the ballot ticket PDF
+      big_logo_url: ''
+
       # Name of the organization, appears in the logo mouse hover, in the login
       # page ("Login into __NAME__ admin account"), in the poweredBy, etc
       name: 'nVotes'

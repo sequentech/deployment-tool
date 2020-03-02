@@ -356,6 +356,12 @@ var avConfigData = {
     // page ("Login into __NAME__ admin account"), in the poweredBy, etc
     orgName: '{{ config.agora_gui.organization.name }}',
 
+    // Subtitle of the organization, used in the ballot ticket PDF
+    orgSubtitle: '{{ config.agora_gui.organization.subtitle }}',
+
+    //  Big logo of the organization, used in the ballot ticket PDF
+    orgBigLogo: '{{ config.agora_gui.organization.big_logo_url }}',
+
     // URL that the logo links to
     orgUrl: '{{ config.agora_gui.organization.url }}'
   },
