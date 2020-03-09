@@ -26,7 +26,7 @@ params:
 # global configuration
 config:
   backup_password: '<PASSWORD>'
-  version: 103111.9
+  version: 20.2.0
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
