@@ -15,7 +15,61 @@
 
 from authapi.settings import *
 
+@signals.setup_logging.connect
+def on_celery_setup_logging(**kwargs):
+    pass
+
 DEBUG = {{config.authapi.debug}}
+
+_DEFAULT_LOGGING_LEVEL = 'DEBUG' if DEBUG else 'INFO'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': _DEFAULT_LOGGING_LEVEL,
+        'handlers': ['console'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'authapi': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'propagate': False
+        },
+        'raven': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    }
+}
 
 STATIC_ROOT = '/home/authapi/webstatic'
 MEDIA_ROOT = '/home/authapi/webstatic/media'
@@ -137,3 +191,5 @@ OPENID_CONNECT_PROVIDERS_CONF = [
 {% for extra_option in config.authapi.extra_options %}
 {{extra_option}}
 {% endfor %}
+
+
