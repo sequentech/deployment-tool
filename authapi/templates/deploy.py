@@ -14,6 +14,7 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 from authapi.settings import *
+from celery import signals
 
 @signals.setup_logging.connect
 def on_celery_setup_logging(**kwargs):
