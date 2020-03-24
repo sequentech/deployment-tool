@@ -89,7 +89,7 @@
 - name: High Availability & Load Balancing, Download repmgr
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   get_url:
     url: https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
     sha256sum: 2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
@@ -99,7 +99,7 @@
 - name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   file:
     path: /home/repmgr/repmgr-3.0.2
     state: absent
@@ -107,7 +107,7 @@
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   unarchive:
     copy: no
     src: /home/repmgr/repmgr.tar.gz
@@ -116,7 +116,7 @@
 - name: High Availability & Load Balancing, make install
   become: true
   become_user: root
-  when: repmgr_version.rc != 0 or 'v3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
   shell:
     cmd: make USE_PGXS=1 install
     chdir: /home/repmgr/repmgr-3.0.2/
