@@ -327,6 +327,7 @@ var avConfigData = {
   },
 
   documentation: {
+    show_help:  {% if config.agora_gui.documentation.show_help %}true{% else %}false{% endif %},
     faq: "{{ config.agora_gui.documentation.faq }}",
     overview: "{{ config.agora_gui.documentation.overview }}",
     technical: "{{ config.agora_gui.documentation.technical }}",
