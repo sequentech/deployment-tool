@@ -538,6 +538,7 @@ config:
       theme: 'default',
       share_text: getShareTextDefault(),
       urls: [],
+      allow_tally: true,
       theme_css: ''
       },
       layout: 'simple',
