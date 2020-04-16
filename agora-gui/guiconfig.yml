@@ -19,7 +19,7 @@
   become: true
   copy:
     src: "{{config.agora_gui.organization.logo_path}}"
-    dest: /home/agoragui/agora-gui-admin/img/agora_voting_logo_white_100.png
+    dest: /home/agoragui/agora-gui-admin/img/nVotes_logo_small.png
     owner: agoragui
     group: agoragui
     mode: u=rw,g=r,o=r
