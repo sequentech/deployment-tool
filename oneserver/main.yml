@@ -21,7 +21,7 @@
     src: "{{config.http.maintenance_file}}"
     dest: /usr/share/nginx/html/maintenance.html
     owner: root
-    mode: 744
+    mode: 0644
 
 - name: OneServer, copy default maintenance file
   when: config.http.maintenance_file == ''
@@ -30,7 +30,7 @@
     src: oneserver/templates/maintenance.html
     dest: /usr/share/nginx/html/maintenance.html
     owner: root
-    mode: 744
+    mode: 0644
 
 - name: OneServer, authapi custom_urls.py
   become: true
