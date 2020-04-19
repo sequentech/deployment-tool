@@ -14,31 +14,23 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: OneServer, ensure maintenance directory exists
-  become: true
-  file:
-    path: /home/agoragui/maintenance/
-    state: directory
-    owner: root
-    mode: 0700
-
 - name: OneServer, copy maintenance file if any
   when: config.http.maintenance_file != ''
   become: true
   template:
     src: "{{config.http.maintenance_file}}"
-    dest: /home/agoragui/maintenance/maintenance.html
+    dest: /usr/share/nginx/html/maintenance.html
     owner: root
-    mode: u=rw,g=r,o=r
+    mode: 744
 
 - name: OneServer, copy default maintenance file
   when: config.http.maintenance_file == ''
   become: true
   template:
-    src: oneserver/templates/maintenance.html
+    src: /usr/share/nginx/html/maintenance.html
     dest: /home/agoragui/maintenance/maintenance.html
     owner: root
-    mode: u=rw,g=r,o=r
+    mode: 744
 
 - name: OneServer, authapi custom_urls.py
   become: true
