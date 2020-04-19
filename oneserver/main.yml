@@ -19,8 +19,7 @@
   file:
     path: /home/agoragui/maintenance/
     state: directory
-    owner: agoragui
-    group: agoragui
+    owner: root
     mode: 0700
 
 - name: OneServer, copy maintenance file if any
@@ -29,8 +28,7 @@
   template:
     src: "{{config.http.maintenance_file}}"
     dest: /home/agoragui/maintenance/maintenance.html
-    owner: agoragui
-    group: agoragui
+    owner: root
     mode: u=rw,g=r,o=r
 
 - name: OneServer, copy default maintenance file
@@ -39,8 +37,7 @@
   template:
     src: oneserver/templates/maintenance.html
     dest: /home/agoragui/maintenance/maintenance.html
-    owner: agoragui
-    group: agoragui
+    owner: root
     mode: u=rw,g=r,o=r
 
 - name: OneServer, authapi custom_urls.py
