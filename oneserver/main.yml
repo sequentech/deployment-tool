@@ -26,7 +26,7 @@
 - name: OneServer, copy maintenance file if any
   when: config.http.maintenance_file != ''
   become: true
-  copy:
+  template:
     src: "{{config.http.maintenance_file}}"
     dest: /home/agoragui/maintenance/maintenance.html
     owner: agoragui
@@ -36,11 +36,12 @@
 - name: OneServer, copy default maintenance file
   when: config.http.maintenance_file == ''
   become: true
-  copy:
+  template:
     src: oneserver/templates/maintenance.html
     dest: /home/agoragui/maintenance/maintenance.html
-    owner: root
-    mode: '0644'
+    owner: agoragui
+    group: agoragui
+    mode: u=rw,g=r,o=r
 
 - name: OneServer, authapi custom_urls.py
   become: true
