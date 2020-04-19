@@ -27,8 +27,8 @@
   when: config.http.maintenance_file == ''
   become: true
   template:
-    src: /usr/share/nginx/html/maintenance.html
-    dest: /home/agoragui/maintenance/maintenance.html
+    src: oneserver/templates/maintenance.html
+    dest: /usr/share/nginx/html/maintenance.html
     owner: root
     mode: 744
 
