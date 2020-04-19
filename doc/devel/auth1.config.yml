@@ -198,6 +198,13 @@ config:
     #   password: eengiefe
     http_auth: false
 
+    # Personalize the maintenance page
+    # 
+    # By creating the file /etc/nginx/conf.d/maintenance.on automatically the
+    # server enters into maintenance mode and will only serve a file of the 
+    # file below or the default one.
+    maintenance_file: ''
+
     # CORS (HTTP Cross-origin resource sharing) is a measure implemented by
     # web browsers that prevents an user agent to load an external resource if
     # it is in another domain and that domain doesn't actively allows it with
