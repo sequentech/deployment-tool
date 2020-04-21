@@ -953,6 +953,11 @@ config:
     # default: true
     allow_deregister: true
 
+    # Allow admin users registration
+    # Allowed values: true|false
+    # Default: false
+    allow_admin_registration: false
+
     # callbacks given to agora_elections instances, for now related to sending
     # the result of uploading tally sheets only. It's a list so that it can
     # upload multiple agora_elections instances

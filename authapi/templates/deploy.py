@@ -95,6 +95,11 @@ HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/pu
 
 ADMIN_AUTH_ID = 1
 
+# Allow admin users registration
+# Allowed values: True|False
+# Default: False
+ALLOW_ADMIN_AUTH_REGISTRATION = {% if config.authapi.allow_admin_registration %}True{% else %}False{% endif %}
+
 # If this option is true, then admin users can be deregistered and
 # re-registered. Elections from deregistered users still are stored in the
 # database. When a user re-registers after being de-registered, he will be
