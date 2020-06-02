@@ -885,6 +885,9 @@ config:
 
   # sentry
   sentry:
+    # enables/disabled sentry    
+    enabled: false
+
     # port in which the sentry backend is run.
     # Note: this is NOT the port in  which the nginx sentry web service is run.
     port: 9090
