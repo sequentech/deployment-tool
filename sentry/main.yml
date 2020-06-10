@@ -15,7 +15,16 @@
 
 ---
 - import_tasks: packages.yml
+  when: config.sentry.enabled
+
 - import_tasks: user.yml
+  when: config.sentry.enabled
+
 - import_tasks: sentry.yml
+  when: config.sentry.enabled
+
 - import_tasks: sentryconf.yml
+  when: config.sentry.enabled
+
 - import_tasks: supervisor.yml
+  when: config.sentry.enabled

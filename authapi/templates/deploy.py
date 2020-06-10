@@ -14,8 +14,63 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 from authapi.settings import *
+from celery import signals
+
+@signals.setup_logging.connect
+def on_celery_setup_logging(**kwargs):
+    pass
 
 DEBUG = {{config.authapi.debug}}
+
+_DEFAULT_LOGGING_LEVEL = 'DEBUG' if DEBUG else 'INFO'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': _DEFAULT_LOGGING_LEVEL,
+        'handlers': ['console'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'authapi': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'propagate': False
+        },
+        'raven': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': _DEFAULT_LOGGING_LEVEL,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    }
+}
 
 STATIC_ROOT = '/home/authapi/webstatic'
 MEDIA_ROOT = '/home/authapi/webstatic/media'
@@ -39,6 +94,11 @@ SECRET_KEY = '{{ config.global_secret_key }}'
 HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/home"
 
 ADMIN_AUTH_ID = 1
+
+# Allow admin users registration
+# Allowed values: True|False
+# Default: False
+ALLOW_ADMIN_AUTH_REGISTRATION = {% if config.authapi.allow_admin_registration %}True{% else %}False{% endif %}
 
 # If this option is true, then admin users can be deregistered and
 # re-registered. Elections from deregistered users still are stored in the
@@ -137,3 +197,5 @@ OPENID_CONNECT_PROVIDERS_CONF = [
 {% for extra_option in config.authapi.extra_options %}
 {{extra_option}}
 {% endfor %}
+
+

@@ -199,6 +199,13 @@ config:
     #   password: eengiefe
     http_auth: false
 
+    # Personalize the maintenance page
+    # 
+    # By creating the file /etc/nginx/conf.d/maintenance.on automatically the
+    # server enters into maintenance mode and will only serve a file of the 
+    # file below or the default one.
+    maintenance_file: ''
+
     # CORS (HTTP Cross-origin resource sharing) is a measure implemented by
     # web browsers that prevents an user agent to load an external resource if
     # it is in another domain and that domain doesn't actively allows it with
@@ -824,6 +831,7 @@ config:
       community_website: 'https://agoravoting.org'
 
     documentation:
+      show_help: true
       faq: 'https://nvotes.com/doc/en/'
       overview: 'https://agoravoting.com/overview/'
       technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
@@ -869,6 +877,9 @@ config:
 
   # sentry
   sentry:
+    # enables/disabled sentry    
+    enabled: false
+
     # port in which the sentry backend is run.
     # Note: this is NOT the port in  which the nginx sentry web service is run.
     port: 9090
@@ -930,6 +941,11 @@ config:
     # allowed values: true|false
     # default: true
     allow_deregister: true
+
+    # Allow admin users registration
+    # Allowed values: true|false
+    # Default: false
+    allow_admin_registration: false
 
     # callbacks given to agora_elections instances, for now related to sending
     # the result of uploading tally sheets only. It's a list so that it can

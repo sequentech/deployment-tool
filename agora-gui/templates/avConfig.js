@@ -69,6 +69,10 @@ var avConfigData = {
   // Allowed values: true|false
   allowEditElectionJson: {% if config.agora_gui.allow_edit_election_json %}true{% else %}false{% endif %},
 
+  // Allow admin users registration
+  // Allowed values: true|false
+  allowAdminRegistration: {% if config.authapi.allow_admin_registration %}true{% else %}false{% endif %},
+
   // show the documentation links after successfully casting a vote
   // allowed values: true| false
   showDocOnVoteCast: {% if config.agora_gui.show_doc_on_vote_cast %}true{% else %}false{% endif %},
@@ -327,6 +331,7 @@ var avConfigData = {
   },
 
   documentation: {
+    show_help:  {% if config.agora_gui.documentation.show_help %}true{% else %}false{% endif %},
     faq: "{{ config.agora_gui.documentation.faq }}",
     overview: "{{ config.agora_gui.documentation.overview }}",
     technical: "{{ config.agora_gui.documentation.technical }}",
