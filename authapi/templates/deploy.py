@@ -22,7 +22,7 @@ def on_celery_setup_logging(**kwargs):
 
 DEBUG = {{config.authapi.debug}}
 
-_DEFAULT_LOGGING_LEVEL = 'DEBUG' if DEBUG else 'INFO'
+_DEFAULT_LOGGING_LEVEL = 'DEBUG'
 
 LOGGING = {
     'version': 1,
