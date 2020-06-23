@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "deleting election $1"
+
+if [ ${#1} -lt 1 ]
+then
+    echo "Please provide an election number"
+    exit
+fi
+
+if [ ! -d /home/eorchestra/election-orchestra/datastore/private/$1 ]
+then
+    echo "Election private directory not found: /home/eorchestra/election-orchestra/datastore/private/$1"
+else
+    echo "Removing election private directory: /home/eorchestra/election-orchestra/datastore/private/$1"
+    rm -rf /home/eorchestra/election-orchestra/datastore/private/$1
+fi
+
+if [ ! -d /srv/election-orchestra/server1/public/$1 ]
+then
+    echo "Election public directory not found: /srv/election-orchestra/server1/public/$1"
+else
+    echo "Removing election public directory: /srv/election-orchestra/server1/public/$1"
+    rm -rf /srv/election-orchestra/server1/public/$1
+fi
+
+echo "Removing it from database (in tables election, session and authority)"
+sudo -u postgres psql eorchestra -tAc "delete from ballot where session_id in (select id from session where election_id = $1); delete from session where election_id = $1; delete from authority where election_id = $1; delete from election where id = $1;"
+
+if [ $? -eq 0 ]
+then
+        echo "Done!"
+fi
