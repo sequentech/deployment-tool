@@ -2,7 +2,7 @@
 
 echo "deleting election $1"
 
-if [ ${#1} -lt 1 ]
+if [ {{ '${#1}' }} -lt 1 ]
 then
     echo "Please provide an election number"
     exit
