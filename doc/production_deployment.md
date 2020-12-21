@@ -7,7 +7,7 @@ reduced root priviledges.
 ## Requirements
 
 You need 4 Linux x64 host machines with at least 3GB of RAM each and a clean
-Ubuntu  14.04 LTS installed. We will make a deployment with limited root
+Ubuntu  16.04 LTS installed. We will make a deployment with limited root
 permisssions.
 
 The structure of the four machines is:
