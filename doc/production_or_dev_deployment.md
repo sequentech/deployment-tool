@@ -286,13 +286,19 @@ a generic config file in ops machine. Then from ops, copy it to the provisioned
 machine, for example in prod-s1:
 
 ```bash
-scp config-generic.yaml prod-s1:~/config.yaml
+scp config-generic.yaml prod-s1:/home/ubuntu/config.yaml
 ```
 
+The previous step is not really required, but it is required for the following
+steps to have the `config.yml` inside the `/home/ubuntu`. You can for example 
+use the config file from `doc/production/config.agora.yml` as a base, copying it
+instead.
+
 Then in the provisioned machine as root, we install dependencies and move the
- config file where it needs to be (for example `/root/prod-s1/root.yml`):
+config file where it needs to be (for example `/root/prod-s1/root.yml`):
 
 ```bash
+# change the NAME var to the appropiate name
 export NAME="prod-s1"
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
@@ -307,19 +313,18 @@ git clone https://github.com/agoravoting/agora-dev-box.git $NAME
 cd $NAME
 git checkout master
 
-# create some users file:
-echo "[]" > users.json 
-
 # needed for ansible:
 echo "localhost ansible_connection=local" > inventory 
 cp doc/production/playbook.agora.yml playbook.yml
 
 # copy the config file to /root/$NAME/root.yml
-cp ~/config.yml config.yml
+cp /home/ubuntu/config.yml config.yml
 
 # update and set random passwords. NOTE: Do not do that for the slave machines, 
 # it needs to be using the same passwords as the master.
 DATE=$(date); cp config.yml "config_base_$DATE.yml"; python3 helper-tools/manage_config_pwd.py -c "config_base_$DATE.yml" -l 40 -o config.yml
+
+pip install ansible==2.9.4
 ```
 
 After this, one should edit the config.yml file and edit the appropiate values,
@@ -362,7 +367,6 @@ deploying locally. The next step is to install ansible 2.9.4 (needs to be done
 only once) and then deploy with ansible:
 
 ```bash
-pip install ansible==2.9.4
 date; time ansible-playbook -i inventory playbook.yml; date
 ```
 Once this is done, the initial as-master deployment has been successful.
