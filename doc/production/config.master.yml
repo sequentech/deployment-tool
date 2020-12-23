@@ -59,7 +59,7 @@ config:
       hour: 4
       
   # hostname of the machine
-  hostname: agora-auth5
+  hostname: prod-s1
 
   # private ip address of this machine. Will ensure there is an alias
   # in /etc/hosts to the hostname in this machine (and in others when they load
@@ -858,7 +858,7 @@ config:
 
     # Nginx requires a different FQDN to apply client side authentication,
     # which is something needed for DNIe and FNMT auth.
-    host: cert.agora-auth5
+    host: cert.prod-s1
 
   cert:
     C: EN
@@ -1131,7 +1131,7 @@ config:
   # automatically known by others, for example the name of the master might not
   # be known by the slave machine.
   hosts: []
-  #  - hostname: agora-auth5
+  #  - hostname: prod-s1
   #    ip: 192.168.50.4
 
   #

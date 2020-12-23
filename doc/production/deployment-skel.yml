@@ -1,0 +1,57 @@
+name: deployment-skel
+root: ~/
+
+windows:
+  - l: cd /root/
+  - s1:
+    - ssh BASE-s1
+    - sudo -s
+  - s1-d: cd /root/BASE-s1/
+
+  - s2:
+    - ssh BASE-s2
+    - sudo -s
+  - s2-d: cd /root/BASE-s2
+
+  - a1:
+    - ssh BASE-a1
+    - sudo -s
+  - a1-l: ssh BASE-a1 sudo eolog
+  - a1-d: cd /root/BASE-a1
+
+  - a2:
+    - ssh BASE-a2
+    - sudo -s
+  - a2-l: ssh BASE-a2 sudo eolog
+  - a2-d: cd /root/BASE-a2 
+
+  - ae:
+    - ssh BASE-s1
+    - sudo -s
+    - su - agoraelections
+
+  - at:
+    - ssh BASE-s1
+    - sudo -s
+    - su - agoraelections
+    - source ~/tenv/bin/activate
+    - cd ~/agora-tools
+
+  - adm:
+    - ssh BASE-s1
+    - sudo -s
+    - su - agoraelections
+    - source ~/env/bin/activate
+    - cd ~/agora-elections/admin
+
+  - nx-l:
+    - ssh BASE-s1 sudo tail -F /var/log/nginx/access.log
+
+  - ae-l:
+    - ssh BASE-s1 sudo supervisorctl tail -f agora-elections
+
+  - ath-l:
+    - ssh BASE-s1 sudo supervisorctl tail -f authapi
+
+  - cel-l:
+    - ssh BASE-s1 sudo supervisorctl tail -f authapi_celery

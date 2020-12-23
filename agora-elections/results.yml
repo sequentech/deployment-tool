@@ -94,3 +94,11 @@
     dest: /home/agoraelections/agora-elections/admin/results.sh
     owner: agoraelections
     mode: '0755'
+
+- name: AgoraResults, agora-tools config.json
+  become: true
+  template:
+    src: agora-elections/templates/agora-tools-config.json
+    dest: /home/agoraelections/agora-tools/config/config.json
+    owner: agoraelections
+    mode: '0600'
