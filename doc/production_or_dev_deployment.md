@@ -286,7 +286,7 @@ a generic config file in ops machine. Then from ops, copy it to the provisioned
 machine, for example in prod-s1:
 
 ```bash
-scp config-generic.json prod-s1:~/config.json
+scp config-generic.yaml prod-s1:~/config.yaml
 ```
 
 Then in the provisioned machine as root, we install dependencies and move the
