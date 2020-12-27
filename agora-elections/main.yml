@@ -203,6 +203,14 @@
     regexp: "authapi_credentials = .*$"
     replace: "authapi_credentials = dict(username='admin',password='{{config.authapi.admin_user.password}}')"
 
+- name: AgoraElections, Admin setup (11)
+  become: true
+  become_user: agoraelections
+  replace:
+    dest: /home/agoraelections/agora-elections/admin/admin.py
+    regexp: "authapi_db_password = .*$"
+    replace: "authapi_db_password = '{{config.election_orchestra.eorchestra_password}}'"
+
 - import_tasks: app.yml
 
 # Run script
