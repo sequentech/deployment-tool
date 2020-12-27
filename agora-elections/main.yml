@@ -203,7 +203,7 @@
     regexp: "authapi_credentials = .*$"
     replace: "authapi_credentials = dict(username='admin',password='{{config.authapi.admin_user.password}}')"
 
-- name: AgoraElections, Admin setup (11)
+- name: AgoraElections, Admin setup (10)
   become: true
   become_user: agoraelections
   replace:
