@@ -40,7 +40,7 @@ oauth2==1.9.0.post1
 olefile==0.46
 percy==2.0.2
 petname==2.0
-Pillow==4.2.1
+Pillow==7.1.0
 pkg-resources==0.0.0
 progressbar2==3.10.1
 psycopg2==2.6.2
