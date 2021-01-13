@@ -42,6 +42,14 @@
     state: present
     requirements: /home/eorchestra/frestq/requirements.txt
 
+- name: EOrchestra, frestq repository in eo requirements.txt setup
+  become: true
+  become_user: eorchestra
+  replace:
+    dest: /home/eorchestra/election-orchestra/requirements.txt
+    regexp: ".*frestq.*"
+    replace: "git+{{ repos.frestq.repo }}.git@{{ repos.frestq.version }}"
+
 - name: EOrchestra, eorchestra python packages
   become: true
   become_user: eorchestra
