@@ -98,6 +98,14 @@
   become_user: authapi
   shell: /home/authapi/changepassword.sh admin "{{config.authapi.admin_user.password}}"
 
+# pgcrypto extension is used for being able to set user passwords directly with 
+# SQL statements
+- name: Authapi, load pgcrypto postgresql extension
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  shell: psql authapi -tAc "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
 - name: Authapi, set authapi election start id
   become: true
   become_user: postgres
