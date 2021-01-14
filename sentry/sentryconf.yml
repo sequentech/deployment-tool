@@ -32,7 +32,7 @@
     chdir: /home/sentry/
   register: dsn_contents
 
-- name: Sentry-AuthApi install raven
+- name: Sentry-AuthApi install raven==6.10.0
   become: true
   become_user: authapi
   shell: /home/authapi/env/bin/pip install raven

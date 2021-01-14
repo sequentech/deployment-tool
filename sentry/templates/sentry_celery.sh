@@ -21,4 +21,4 @@ function finish {
 }
 trap finish EXIT SIGINT
 
-/home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py celery worker -B
+/home/sentry/venv/bin/sentry --config=/home/sentry/sentry.conf.py run worker
