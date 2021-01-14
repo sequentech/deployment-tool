@@ -35,7 +35,10 @@
 - name: Sentry-AuthApi install raven==6.10.0
   become: true
   become_user: authapi
-  shell: /home/authapi/env/bin/pip install raven
+  pip:
+    name:
+      - raven==6.10.0
+    virtualenv: /home/authapi/env
 
 - name: Sentry, creating deploy_sentry.py
   become: true
