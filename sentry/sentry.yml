@@ -19,27 +19,21 @@
   become_user: sentry
   pip:
     name:
-      - pip==20.0.2
+      - setuptools<45.0.0
     virtualenv: /home/sentry/venv
     virtualenv_python: python2
     state: latest
-
-- name: Sentry, Creating sentry requirements.txt
-  become: true
-  template:
-    src: sentry/templates/sentry_requirements.txt
-    dest: /home/sentry/sentry_requirements.txt
-    owner: sentry
-    mode: '0644'
 
 - name: Sentry, Sentry installation
   become: true
   become_user: sentry
   pip:
+    name:
+      - sentry==8.22.0
+      - uWSGI==2.0.18
     virtualenv: /home/sentry/venv
     virtualenv_python: python2
     state: latest
-    requirements: /home/sentry/sentry_requirements.txt
 
 - name: Sentry, Creating conf
   become: true
