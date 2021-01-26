@@ -17,15 +17,15 @@
 
 # NOTE:
 # in order to recover, use this information:
-# https://www.postgresql.org/docs/9.4/static/continuous-archiving.html#BACKUP-BASE-BACKUP point 24.3.4
+# https://www.postgresql.org/docs/12/static/continuous-archiving.html#BACKUP-BASE-BACKUP point 24.3.4
 # 
 # basic steps:
 # 0: stop postgresql service
-# 1: make a copy of /var/lib/postgresql/9.4/main
-# 2: remove /var/lib/postgresql/9.4/main
-# 3: unzip base backup from /home/eorchestra/postgres_backups/base/whatever and copy it to /var/lib/postgresql/9.4/main
+# 1: make a copy of /var/lib/postgresql/12/main
+# 2: remove /var/lib/postgresql/12/main
+# 3: unzip base backup from /home/eorchestra/postgres_backups/base/whatever and copy it to /var/lib/postgresql/12/main
 # 4: unzip wal files from  /home/eorchestra/postgres_backups/wal to a folder F_WAL
-# 5: copy /etc/postgresql/9.4/main/recovery.conf.copy to the data folder: /var/lib/postgresql/9.4/main/recovery.conf
+# 5: copy /etc/postgresql/12/main/recovery.conf.copy to the data folder: /var/lib/postgresql/12/main/recovery.conf
 # 6: edit restore_command variable from recovery.conf to copy files from F_WAL, edit recovery_target_time if you want recover up to a specific date
 # 7: start postgres
 
@@ -34,8 +34,8 @@ set -e
 
 BACKUP_DIR={{ config.postgres_backups.folder }}
 DATE=`date '+%d_%m_%y_%H_%M_%S'`
-POSTGRES_DATA_DIR=/var/lib/postgresql/9.4/main
-POSTGRES_CONFIG_DIR=/etc/postgresql/9.4/main
+POSTGRES_DATA_DIR=/var/lib/postgresql/12/main
+POSTGRES_CONFIG_DIR=/etc/postgresql/12/main
 
 function print_help {
   echo -e """usage: restore_backups_postgres.sh [base-backup] [date]
@@ -78,7 +78,7 @@ if [ "$DUMP_TEST" == "dump" ]; then
   fi
   # stop postgresql
   echo "Stopping postgresql service..."
-  service postgresql stop 9.4
+  service postgresql stop 12
   echo "Stopped"
 
   # check whether postgres data_directory exists and make backup
@@ -115,13 +115,13 @@ if [ "$DUMP_TEST" == "dump" ]; then
 
   echo "Recreating cluster"
   # Remove whole cluster
-  pg_dropcluster 9.4 main
-  pg_createcluster 9.4 main
-  pg_ctlcluster 9.4 main start
+  pg_dropcluster 12 main
+  pg_createcluster 12 main
+  pg_ctlcluster 12 main start
   # Recover cluster config
-  service postgresql stop 9.4
+  service postgresql stop 12
   tar -C $POSTGRES_CONFIG_DIR -zxvf $BACKUP_DIR/dump/$BASE_BACKUP_NAME.cfg.tar.gz .
-  service postgresql start 9.4
+  service postgresql start 12
   sudo -u postgres psql -f $BACKUP_DIR/dump/$BASE_BACKUP_NAME.sql > /dev/null
   echo "Cluster successfully recreated"
 
@@ -142,7 +142,7 @@ else
 
   # stop postgresql
   echo "Stopping postgresql service..."
-  service postgresql stop 9.4
+  service postgresql stop 12
   echo "Stopped"
 
   # check whether postgres data_directory exists and make backup
@@ -173,7 +173,7 @@ else
   chmod 0700 -R $POSTGRES_DATA_DIR
 
   # start postgresql to restore the backup
-  service postgresql start 9.4
+  service postgresql start 12
 fi
 
 echo "Backup restored"

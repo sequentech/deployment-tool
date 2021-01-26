@@ -19,7 +19,7 @@
 set -e
 
 BACKUP_DIR={{ config.postgres_backups.folder }}
-POSTGRES_DATA_DIR=/var/lib/postgresql/9.4/main
+POSTGRES_DATA_DIR=/var/lib/postgresql/12/main
 
 # check number of arguments
 if [[ $# -ne 2 ]]; then

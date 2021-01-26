@@ -73,10 +73,10 @@
     name: postgresql
     state: stopped
 
-- name: Packages, set postgresql 9.4 service port
+- name: Packages, set postgresql 12 service port
   become: true
   lineinfile:
-    dest: /etc/postgresql/9.4/main/postgresql.conf
+    dest: /etc/postgresql/12/main/postgresql.conf
     regexp: '\s*port\s*=\s*\d+.*'
     line: "port = 5432"
 
@@ -102,7 +102,7 @@
 
 - name: Packages, Create postgresql cluster
   become: true
-  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.4 main
+  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 12 main
   register: cmdoutput
   failed_when: "'Error: cluster configuration already exists' not in cmdoutput.stderr and cmdoutput.rc != 0"
 
