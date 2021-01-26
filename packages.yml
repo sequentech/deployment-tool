@@ -14,32 +14,6 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Packages, add postgresql 9.4 repo
-  become: true
-  apt_repository:
-    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4'
-    state: present
-
-- name: Packages, add postgresql repo keys
-  become: true
-  apt_key:
-    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-    state: present
-    validate_certs: "{{ not config.has_https_proxy }}"
-
-- name: Packages, add nginx repository
-  become: true
-  apt_repository:
-    repo: 'deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx'
-    state: present
-
-- name: Packages, add nginx keys
-  become: true
-  apt_key:
-    url: http://nginx.org/keys/nginx_signing.key
-    state: present
-    validate_certs: "{{ not config.has_https_proxy }}"
-
 - name: Packages, Updating packages
   become: true
   apt:
@@ -52,8 +26,8 @@
       - git
       - htop
       - curl
-      - postgresql-9.4
-      - postgresql-9.4-repmgr
+      - postgresql-12
+      - postgresql-12-repmgr
       - mercurial
       - supervisor
       - nodejs

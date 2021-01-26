@@ -19,7 +19,7 @@
   become_user: postgres
   when: config.load_balancing.is_master
   lineinfile:
-    dest: /etc/postgresql/9.4/main/pg_hba.conf
+    dest: /etc/postgresql/12/main/pg_hba.conf
     line: "{{item}}"
     state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
   with_items:
@@ -34,7 +34,7 @@
   become_user: postgres
   when: config.load_balancing.is_master
   lineinfile:
-    dest: /etc/postgresql/9.4/main/postgresql.conf
+    dest: /etc/postgresql/12/main/postgresql.conf
     line: "{{item.line}}"
     regexp: "{{item.rx}}"
     state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
@@ -82,16 +82,16 @@
     mode: '0700'
 
 - name: High Availability & Load Balancing, Check if repmgr is installed
-  shell: /usr/lib/postgresql/9.4/bin/repmgr --version
+  shell: /usr/lib/postgresql/12/bin/repmgr --version
   register: repmgr_version
   ignore_errors: true
 
 - name: High Availability & Load Balancing, Download repmgr
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   get_url:
-    url: https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
+    url: https://github.com/2ndQuadrant/repmgr/archive/v5.0.0.tar.gz
     sha256sum: 2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
     dest: /home/repmgr/repmgr.tar.gz
     validate_certs: "{{ not config.has_https_proxy }}"
@@ -99,15 +99,15 @@
 - name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   file:
-    path: /home/repmgr/repmgr-3.0.2
+    path: /home/repmgr/repmgr-5.0.0
     state: absent
 
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   unarchive:
     copy: no
     src: /home/repmgr/repmgr.tar.gz
@@ -116,10 +116,10 @@
 - name: High Availability & Load Balancing, make install
   become: true
   become_user: root
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   shell:
     cmd: make USE_PGXS=1 install
-    chdir: /home/repmgr/repmgr-3.0.2/
+    chdir: /home/repmgr/repmgr-5.0.0/
 
 - name: High Availability & Load Balancing [master], check if repmgr postgres user exists
   become: true
@@ -184,21 +184,21 @@
       regexp: "node_name=.*"
     - line: "conninfo='host={{config.hostname}} user=repmgr dbname=repmgr'"
       regexp: "conninfo='host=.* user=repmgr dbname=repmgr'"
-    - line: "pg_bindir=/usr/lib/postgresql/9.4/bin"
-      regexp: "pg_bindir=/usr/lib/postgresql/9.4/bin"
+    - line: "pg_bindir=/usr/lib/postgresql/12/bin"
+      regexp: "pg_bindir=/usr/lib/postgresql/12/bin"
 
 - name: High Availability & Load Balancing, checking repmgr cluster state
   become: true
   become_user: postgres
   ignore_errors: true
   register: repmgr_cluster_show
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
 
 - name: High Availability & Load Balancing [master], register the master
   become: true
   become_user: postgres
   when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('* master  | host=') == -1
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf master register
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf master register
   register: register_master_cmd
   failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
 
@@ -206,7 +206,7 @@
   become: true
   become_user: postgres
   when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.hostname}} ') == -1
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
   become: true
@@ -219,7 +219,7 @@
   become: true
   become_user: postgres
   when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
-  shell: "/usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --force --rsync-only -h {{config.load_balancing.slave.master_hostname}} -w 10 -d repmgr -U repmgr --verbose standby clone"
+  shell: "/usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force --rsync-only -h {{config.load_balancing.slave.master_hostname}} -w 10 -d repmgr -U repmgr --verbose standby clone"
 
 - name: High Availability & Load Balancing [slave], started postgresql
   become: true
@@ -243,4 +243,4 @@
   become: true
   become_user: postgres
   when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
