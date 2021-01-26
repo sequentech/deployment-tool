@@ -52,7 +52,7 @@
       - p7zip-full
       - nginx
       - zip
-      - python-pip
+      - python3-pip
       - python-pip-whl
       - python3-virtualenv
       - virtualenv
