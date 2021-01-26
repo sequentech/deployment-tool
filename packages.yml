@@ -35,9 +35,8 @@
       - libffi-dev
       - virtualenvwrapper
       - libjpeg8-dev
-      - libpq-dev=9.4*
-      - libpq5=9.4*
-      - python-psycopg2
+      - libpq-dev=12*
+      - libpq5=12*
       - python3-psycopg2
       - python3-pip
       - python3
