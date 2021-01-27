@@ -110,15 +110,21 @@
 # Key store set up
 - name: AgoraElections, Key store setup (1)
   become: true
-  become_user: agoraelections
   shell:
     cmd: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.agora_elections.keystore_pass }}"
     chdir: /home/agoraelections/
 
+- name: AgoraElections, Key store setup (3)
+  become: true
+  file:
+    path: /home/agoraelections/certs.p12
+    owner: agoraelections
+    group: agoraelections
+
 - name: AgoraElections, Key store setup (2)
   become: true
   become_user: agoraelections
-  shell: 
+  shell:
     cmd: yes | keytool -importkeystore -deststorepass "{{ config.agora_elections.keystore_pass }}" -destkeypass "{{ config.agora_elections.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.agora_elections.keystore_pass }}" -alias client
     chdir: /home/agoraelections/
 
