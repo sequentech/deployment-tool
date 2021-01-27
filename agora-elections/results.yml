@@ -40,25 +40,23 @@
     regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
     replace: '\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
-
-# this block&rescue is only a workaround so that it works in ansible 2.2.0,
-# 2.2.1 should have a fix for the issue, see
-# https://github.com/ansible/ansible-modules-core/issues/5347
-- block:
-    - name: AgoraElections, agora-tools virtualenv
-      pip:
-        requirements: /home/agoraelections/agora-tools/requirements.txt
-        virtualenv: /home/agoraelections/tenv
-        virtualenv_python: python3
-
-  rescue:
-    - name: AgoraElections, agora-tools virtualenv
-      pip:
-        requirements: /home/agoraelections/agora-tools/requirements.txt
-        virtualenv_python: python3
-        executable: /home/agoraelections/tenv/bin/pip
+- name: AgoraElections, agora-tools ensure working pip version (21.0)
   become: true
   become_user: agoraelections
+  pip:
+    virtualenv: /home/agoraelections/tenv
+    virtualenv_python: python3
+    state: present
+    name: pip==21.0
+
+- name: AgoraElections, agora-tools virtualenv
+  become: true
+  become_user: agoraelections
+  pip:
+    virtualenv: /home/agoraelections/tenv
+    virtualenv_python: python3
+    state: present
+    requirements: /home/agoraelections/agora-tools/requirements.txt
 
 - name: AgoraElections, req.txt
   become: true
@@ -68,24 +66,14 @@
     owner: agoraelections
     mode: '0655'
 
-# this block&rescue is only a workaround so that it works in ansible 2.2.0,
-# 2.2.1 should have a fix for the issue, see
-# https://github.com/ansible/ansible-modules-core/issues/5347
-- block:
-    - name: AgoraResults, virtualenv
-      pip:
-        requirements: /home/agoraelections/agora-results/results.req.txt
-        virtualenv: /home/agoraelections/renv
-        virtualenv_python: python3
-
-  rescue:
-    - name: AgoraResults, virtualenv
-      pip:
-        requirements: /home/agoraelections/agora-results/results.req.txt
-        virtualenv_python: python3
-        executable: /home/agoraelections/renv/bin/pip
+- name: AgoraResults, virtualenv
   become: true
   become_user: agoraelections
+  pip:
+    virtualenv: /home/agoraelections/renv
+    virtualenv_python: python3
+    state: present
+    requirements: /home/agoraelections/agora-results/results.req.txt
 
 - name: AgoraResults, results.sh
   become: true
