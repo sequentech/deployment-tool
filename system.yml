@@ -83,6 +83,13 @@
   become: true
   shell: /root/cert.sh
 
+- name: System, self-signed certificate permissions
+  become: true
+  file:
+    path: /srv/certs/selfsigned/key-nopass.pem
+    state: file
+    mode: '0644'
+
 - name: System, populating /etc/hosts
   become: true
   lineinfile:
