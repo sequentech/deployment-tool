@@ -29,7 +29,7 @@ fi
 BACKUP_DIR={{ config.postgres_backups.folder }}
 DATE=`date '+%d_%m_%y_%H_%M_%S'`
 
-pg_basebackup -U postgres -X fetch --format=tar --gzip --compress=9 -D $BACKUP_DIR/base/$DATE
+sudo -u postgres pg_basebackup -X fetch --format=tar --gzip --compress=9 -D $BACKUP_DIR/base/$DATE
 echo "base backup created on $BACKUP_DIR/base/$DATE"
 echo "base backup created on $BACKUP_DIR/base/$DATE" | logger -t backup_cron_postgres
 
