@@ -42,6 +42,16 @@
     virtualenv: /home/authapi/env
     settings: "authapi.deploy"
 
+- name: AuthApi, Migrate results
+  become: true
+  become_user: authapi
+  django_manage:
+    command: "migrate django_celery_results"
+  args:
+    app_path: /home/authapi/authapi/authapi
+    virtualenv: /home/authapi/env
+    settings: "authapi.deploy"
+
 - name: AuthApi, Collect static
   become: true
   become_user: authapi
