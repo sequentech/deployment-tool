@@ -31,6 +31,7 @@
     name:
       - sentry==8.22.0
       - uWSGI==2.0.18
+      - psycopg2==2.8.6
     virtualenv: /home/sentry/venv
     virtualenv_python: python2
     state: latest
