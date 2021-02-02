@@ -25,4 +25,12 @@
     pkg:
       - nodejs
       - npm
+      - yarnpkg
     state: present
+
+- name: AgoraGui, yarn link
+  become: true
+  file:
+    src: /usr/bin/yarnpkg
+    dest: /usr/bin/yarn
+    state: link
