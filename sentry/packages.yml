@@ -24,7 +24,6 @@
   apt:
     pkg:
       - python-setuptools
-      - python-pip
       - python2-dev
       - libxslt1-dev
       - libxml2-dev
