@@ -14,10 +14,6 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Sentry, Adding redis-server ppa
-  become: true
-  shell: apt-add-repository ppa:chris-lea/redis-server -y
-
 - name: Sentry, apt-cache update
   become: true
   apt:
@@ -29,7 +25,7 @@
     pkg:
       - python-setuptools
       - python-pip
-      - python-dev
+      - python2-dev
       - libxslt1-dev
       - libxml2-dev
       - libz-dev
@@ -41,31 +37,3 @@
       - llvm
       - cmake
     state: latest
-
-- name: Sentry, Check CMake version
-  become: true
-  shell: if [ "cmake version 3.6.2" = "$(cmake --version | grep version)" ]; then /bin/true; else /bin/false; fi
-  register: cmake_is_installed
-  ignore_errors: true
-
-- name: Sentry, download CMake
-  become: true
-  when: cmake_is_installed is failed
-  get_url: 
-    url: https://cmake.org/files/v3.6/cmake-3.6.2.tar.gz
-    dest: /tmp/cmake.tar.gz
-    validate_certs: false
-
-- name: Sentry, extract CMake
-  become: true
-  when: cmake_is_installed is failed
-  shell: tar xvf /tmp/cmake.tar.gz
-  args:
-    chdir: /tmp
-
-- name: Sentry, compile and install CMake
-  become: true
-  when: cmake_is_installed is failed
-  shell: cmake . && make && make install
-  args:
-    chdir: /tmp/cmake-3.6.2

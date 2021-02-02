@@ -67,7 +67,7 @@
     lc_ctype: 'en_US.UTF-8'
     template: 'template0'
     state: present
- 
+
 # sentry upgrade bug #5908 workaround
 # https://github.com/getsentry/sentry/issues/5908
 - name: Sentry, sentry upgrade bug workaround
