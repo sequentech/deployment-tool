@@ -23,8 +23,6 @@
   become: true
   apt:
     pkg:
-      - wget
-      - gcc
-      - g++
-      - binutils    
+      - nodejs
+      - npm
     state: present
