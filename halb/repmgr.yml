@@ -92,7 +92,7 @@
   when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   get_url:
     url: https://github.com/2ndQuadrant/repmgr/archive/v5.0.0.tar.gz
-    sha256sum: 2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
+    sha256sum: cf7a6654abe72a639f7222c3082cc8a15a7f7a6ec95e1b7b381fc93a14d7fcc6
     dest: /home/repmgr/repmgr.tar.gz
     validate_certs: "{{ not config.has_https_proxy }}"
 
