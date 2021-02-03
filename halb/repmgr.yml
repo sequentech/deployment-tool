@@ -176,16 +176,14 @@
     state: present
     regexp: "{{item.regexp}}"
   with_items:
-    - line: "cluster=agoraelections"
-      regexp: "cluster=agoraelections"
-    - line: "node={{config.load_balancing.repmgr_node_id}}"
-      regexp: "node=.*"
+    - line: "node_id={{config.load_balancing.repmgr_node_id}}"
+      regexp: "node_id=.*"
     - line: "node_name={{config.hostname}}"
       regexp: "node_name=.*"
     - line: "conninfo='host={{config.hostname}} user=repmgr dbname=repmgr'"
       regexp: "conninfo='host=.* user=repmgr dbname=repmgr'"
-    - line: "pg_bindir=/usr/lib/postgresql/12/bin"
-      regexp: "pg_bindir=/usr/lib/postgresql/12/bin"
+    - line: "data_directory='/var/lib/postgresql/12/main'"
+      regexp: "data_directory='/var/lib/postgresql/12/main'"
 
 - name: High Availability & Load Balancing, checking repmgr cluster state
   become: true
