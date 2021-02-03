@@ -89,25 +89,25 @@
 - name: High Availability & Load Balancing, Download repmgr
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   get_url:
-    url: https://github.com/2ndQuadrant/repmgr/archive/v5.0.0.tar.gz
-    sha256sum: cf7a6654abe72a639f7222c3082cc8a15a7f7a6ec95e1b7b381fc93a14d7fcc6
+    url: https://github.com/2ndQuadrant/repmgr/archive/v5.2.1.tar.gz
+    sha256sum: 8e6d104352ab4c12b8d923df51f581720b2303c44e2be98d56d4cf6aa9862772
     dest: /home/repmgr/repmgr.tar.gz
     validate_certs: "{{ not config.has_https_proxy }}"
 
 - name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   file:
-    path: /home/repmgr/repmgr-5.0.0
+    path: /home/repmgr/repmgr-5.2.1
     state: absent
 
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   unarchive:
     copy: no
     src: /home/repmgr/repmgr.tar.gz
@@ -116,10 +116,10 @@
 - name: High Availability & Load Balancing, make install
   become: true
   become_user: root
-  when: repmgr_version.rc != 0 or '5.0.0' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
   shell:
-    cmd: make USE_PGXS=1 install
-    chdir: /home/repmgr/repmgr-5.0.0/
+    cmd: ./configure && make USE_PGXS=1 install
+    chdir: /home/repmgr/repmgr-5.2.1/
 
 - name: High Availability & Load Balancing [master], check if repmgr postgres user exists
   become: true

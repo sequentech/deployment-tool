@@ -30,6 +30,7 @@
       - libselinux-dev
       - postgresql-server-dev-12
       - libkrb5-dev
+      - flex
     state: present
 
 - name: High Availability & Load Balancing, non-local memcached.conf
