@@ -226,17 +226,6 @@
     name: postgresql
     state: started
 
-- name: High Availability & Load Balancing [slave], check node id
-  become: true
-  become_user: postgres
-  register: repl_nodes
-  when: not config.load_balancing.is_master
-  shell: "psql repmgr -tAc 'select id,name from repmgr_agoraelections.repl_nodes;'"
-
-- name: High Availability & Load Balancing [slave], fail if our node-id is repeated
-  fail: msg="config.load_balancing.repmgr_node_id = {{config.load_balancing.repmgr_node_id}} is already being used by another node"
-  when: not config.load_balancing.is_master and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|') != -1 and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|{{config.hostname}}') == -1
-
 - name: High Availability & Load Balancing [slave], register the standby
   become: true
   become_user: postgres
