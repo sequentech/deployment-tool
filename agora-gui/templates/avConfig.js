@@ -65,6 +65,12 @@ var avConfigData = {
   director: "{{ config.director }}",
 
   // For admins:
+  // Allow editing the election.presentation.theme_css so that any election
+  // Admin can highly customize the election directly with CSS.
+  // Allowed values: true|false
+  allowCustomElectionThemeCss: {% if config.agora_gui.allow_custom_election_theme_css %}true{% else %}false{% endif %},
+
+  // For admins:
   // Allow editing the json description of the election before creating it
   // Allowed values: true|false
   allowEditElectionJson: {% if config.agora_gui.allow_edit_election_json %}true{% else %}false{% endif %},
