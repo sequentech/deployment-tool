@@ -436,6 +436,12 @@ config:
     # Allowed values: true|false
     allow_edit_election_json: true
 
+    # For admins:
+    # Allow editing the election.presentation.theme_css so that any election
+    # admin can highly customize the election directly with CSS.
+    # Allowed values: true|false
+    allow_custom_election_theme_css: false
+
     # interface theme
     # allowed values (string): default|podemos|ccoo|bcnencomu
     theme: 'default'
