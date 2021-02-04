@@ -217,7 +217,7 @@
   become: true
   become_user: postgres
   when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
-  shell: "/usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force --rsync-only -h {{config.load_balancing.slave.master_hostname}} -w 10 -d repmgr -U repmgr --verbose standby clone"
+  shell: "/usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force -h {{config.load_balancing.slave.master_hostname}} -d repmgr -U repmgr --verbose standby clone"
 
 - name: High Availability & Load Balancing [slave], started postgresql
   become: true
