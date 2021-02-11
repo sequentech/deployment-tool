@@ -195,7 +195,7 @@
 - name: High Availability & Load Balancing [master], register the master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('* master  | host=') == -1
+  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('primary | * running ') == -1
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf master register
   register: register_master_cmd
   failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
@@ -203,7 +203,7 @@
 - name: High Availability & Load Balancing [master], promote to master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.hostname}} ') == -1
+  when: config.load_balancing.is_master and (not (repmgr_cluster_show.stdout | regex_search('primary | * running')) or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1)) and not (repmgr_cluster_show.stdout | regex_search('standby | .* | host={{config.hostname}} user=repmgr dbname=repmgr'))
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
@@ -216,7 +216,7 @@
 - name: High Availability & Load Balancing [slave], create the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search('standby | .* | host={{config.hostname}} user=repmgr dbname=repmgr'))
   shell: "/usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force -h {{config.load_balancing.slave.master_hostname}} -d repmgr -U repmgr --verbose standby clone"
 
 - name: High Availability & Load Balancing [slave], started postgresql
@@ -229,5 +229,5 @@
 - name: High Availability & Load Balancing [slave], register the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search('standby | .* | host={{config.hostname}} user=repmgr dbname=repmgr'))
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
