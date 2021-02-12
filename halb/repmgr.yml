@@ -89,7 +89,7 @@
 - name: High Availability & Load Balancing, Download repmgr
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   get_url:
     url: https://github.com/2ndQuadrant/repmgr/archive/v5.2.1.tar.gz
     sha256sum: 8e6d104352ab4c12b8d923df51f581720b2303c44e2be98d56d4cf6aa9862772
@@ -99,7 +99,7 @@
 - name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   file:
     path: /home/repmgr/repmgr-5.2.1
     state: absent
@@ -107,7 +107,7 @@
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   unarchive:
     copy: no
     src: /home/repmgr/repmgr.tar.gz
@@ -116,7 +116,7 @@
 - name: High Availability & Load Balancing, make install
   become: true
   become_user: root
-  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout or 'PostgreSQL 12' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   shell:
     cmd: ./configure && make USE_PGXS=1 install
     chdir: /home/repmgr/repmgr-5.2.1/
@@ -195,7 +195,7 @@
 - name: High Availability & Load Balancing [master], register the master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('primary | * running ') == -1
+  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find(' primary | * running ') == -1
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf master register
   register: register_master_cmd
   failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
@@ -203,7 +203,7 @@
 - name: High Availability & Load Balancing [master], promote to master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and (not (repmgr_cluster_show.stdout | regex_search('primary | * running')) or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1)) and not (repmgr_cluster_show.stdout | regex_search('standby | .* | host={{config.hostname}} user=repmgr dbname=repmgr'))
+  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find(' primary | * running ') == -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and not (repmgr_cluster_show.stdout | regex_search(' primary \| .* \| host=' + config.hostname  + ' user=repmgr dbname=repmgr'))
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
@@ -216,7 +216,7 @@
 - name: High Availability & Load Balancing [slave], create the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search('standby | .* | host={{config.hostname}} user=repmgr dbname=repmgr'))
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search(' standby \| .* \| host=' + config.hostname + ' user=repmgr dbname=repmgr'))
   shell: "/usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force -h {{config.load_balancing.slave.master_hostname}} -d repmgr -U repmgr --verbose standby clone"
 
 - name: High Availability & Load Balancing [slave], started postgresql
@@ -229,5 +229,5 @@
 - name: High Availability & Load Balancing [slave], register the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search('standby | .* | host={{config.hostname}} user=repmgr dbname=repmgr'))
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search(' standby \| .* \| host={{config.hostname}} user=repmgr dbname=repmgr'))
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
