@@ -19,35 +19,6 @@
   register: node_version
   ignore_errors: True
 
-- name: AgoraGui, Install Nodejs 1/5
-  become: true
-  become_user: agoragui
-  when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell: wget https://nodejs.org/dist/v10.15.0/node-v10.15.0.tar.gz -O /home/agoragui/node-v10.15.0.tar.gz
-
-- name: AgoraGui, Install Nodejs 2/5
-  become: true
-  become_user: agoragui
-  when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell:
-    cmd: tar -xzvf /home/agoragui/node-v10.15.0.tar.gz
-    chdir: /home/agoragui/
-
-- name: AgoraGui, Install Nodejs 3/5
-  become: true
-  become_user: agoragui
-  when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell: 
-    cmd: ./configure && make
-    chdir: /home/agoragui/node-v10.15.0
-
-- name: AgoraGui, Install Nodejs 4/5
-  become: true
-  when: node_version.rc != 0 or 'v10.15.0' not in node_version.stdout
-  shell: 
-    cmd: make && make install
-    chdir: /home/agoragui/node-v10.15.0
-
 - name: AgoraGui, configure npm proxy settings
   become: true
   when: config.has_https_proxy
@@ -72,5 +43,3 @@
   with_items:
     - grunt-cli
     - grunt
-    - yarn
-

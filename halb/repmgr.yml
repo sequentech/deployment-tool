@@ -19,7 +19,7 @@
   become_user: postgres
   when: config.load_balancing.is_master
   lineinfile:
-    dest: /etc/postgresql/9.4/main/pg_hba.conf
+    dest: /etc/postgresql/12/main/pg_hba.conf
     line: "{{item}}"
     state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
   with_items:
@@ -34,7 +34,7 @@
   become_user: postgres
   when: config.load_balancing.is_master
   lineinfile:
-    dest: /etc/postgresql/9.4/main/postgresql.conf
+    dest: /etc/postgresql/12/main/postgresql.conf
     line: "{{item.line}}"
     regexp: "{{item.rx}}"
     state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
@@ -82,32 +82,32 @@
     mode: '0700'
 
 - name: High Availability & Load Balancing, Check if repmgr is installed
-  shell: /usr/lib/postgresql/9.4/bin/repmgr --version
+  shell: /usr/lib/postgresql/12/bin/repmgr --version
   register: repmgr_version
   ignore_errors: true
 
 - name: High Availability & Load Balancing, Download repmgr
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   get_url:
-    url: https://github.com/2ndQuadrant/repmgr/archive/v3.0.2.tar.gz
-    sha256sum: 2feacd0edae0a4d1020952e2b59256fddb6b63b056186d71535785afff2f81a1
+    url: https://github.com/2ndQuadrant/repmgr/archive/v5.2.1.tar.gz
+    sha256sum: 8e6d104352ab4c12b8d923df51f581720b2303c44e2be98d56d4cf6aa9862772
     dest: /home/repmgr/repmgr.tar.gz
     validate_certs: "{{ not config.has_https_proxy }}"
 
 - name: High Availability & Load Balancing, ensure repmgr extract directory empty to start clean build
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   file:
-    path: /home/repmgr/repmgr-3.0.2
+    path: /home/repmgr/repmgr-5.2.1
     state: absent
 
 - name: High Availability & Load Balancing, unarchive repmgr.tar.gz
   become: true
   become_user: repmgr
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   unarchive:
     copy: no
     src: /home/repmgr/repmgr.tar.gz
@@ -116,10 +116,10 @@
 - name: High Availability & Load Balancing, make install
   become: true
   become_user: root
-  when: repmgr_version.rc != 0 or '3.0.2' not in repmgr_version.stdout or 'PostgreSQL 9.4' not in repmgr_version.stdout
+  when: repmgr_version.rc != 0 or '5.2.1' not in repmgr_version.stdout
   shell:
-    cmd: make USE_PGXS=1 install
-    chdir: /home/repmgr/repmgr-3.0.2/
+    cmd: ./configure && make USE_PGXS=1 install
+    chdir: /home/repmgr/repmgr-5.2.1/
 
 - name: High Availability & Load Balancing [master], check if repmgr postgres user exists
   become: true
@@ -176,37 +176,35 @@
     state: present
     regexp: "{{item.regexp}}"
   with_items:
-    - line: "cluster=agoraelections"
-      regexp: "cluster=agoraelections"
-    - line: "node={{config.load_balancing.repmgr_node_id}}"
-      regexp: "node=.*"
+    - line: "node_id={{config.load_balancing.repmgr_node_id}}"
+      regexp: "node_id=.*"
     - line: "node_name={{config.hostname}}"
       regexp: "node_name=.*"
     - line: "conninfo='host={{config.hostname}} user=repmgr dbname=repmgr'"
       regexp: "conninfo='host=.* user=repmgr dbname=repmgr'"
-    - line: "pg_bindir=/usr/lib/postgresql/9.4/bin"
-      regexp: "pg_bindir=/usr/lib/postgresql/9.4/bin"
+    - line: "data_directory='/var/lib/postgresql/12/main'"
+      regexp: "data_directory='/var/lib/postgresql/12/main'"
 
 - name: High Availability & Load Balancing, checking repmgr cluster state
   become: true
   become_user: postgres
   ignore_errors: true
   register: repmgr_cluster_show
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
 
 - name: High Availability & Load Balancing [master], register the master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find('* master  | host=') == -1
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf master register
+  when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find(' primary | * running ') == -1
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf master register
   register: register_master_cmd
   failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
 
 - name: High Availability & Load Balancing [master], promote to master
   become: true
   become_user: postgres
-  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find('* master  | host=') != -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and repmgr_cluster_show.stdout.find('* master  | host={{config.hostname}} ') == -1
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
+  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find(' primary | * running ') == -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and not (repmgr_cluster_show.stdout | regex_search(' primary \| .* \| host=' + config.hostname  + ' user=repmgr dbname=repmgr'))
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
   become: true
@@ -218,8 +216,8 @@
 - name: High Availability & Load Balancing [slave], create the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
-  shell: "/usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --force --rsync-only -h {{config.load_balancing.slave.master_hostname}} -w 10 -d repmgr -U repmgr --verbose standby clone"
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search(' standby \| .* \| host=' + config.hostname + ' user=repmgr dbname=repmgr'))
+  shell: "/usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force -h {{config.load_balancing.slave.master_hostname}} -d repmgr -U repmgr --verbose standby clone"
 
 - name: High Availability & Load Balancing [slave], started postgresql
   become: true
@@ -228,19 +226,8 @@
     name: postgresql
     state: started
 
-- name: High Availability & Load Balancing [slave], check node id
-  become: true
-  become_user: postgres
-  register: repl_nodes
-  when: not config.load_balancing.is_master
-  shell: "psql repmgr -tAc 'select id,name from repmgr_agoraelections.repl_nodes;'"
-
-- name: High Availability & Load Balancing [slave], fail if our node-id is repeated
-  fail: msg="config.load_balancing.repmgr_node_id = {{config.load_balancing.repmgr_node_id}} is already being used by another node"
-  when: not config.load_balancing.is_master and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|') != -1 and repl_nodes.stdout.find('{{config.load_balancing.repmgr_node_id}}|{{config.hostname}}') == -1
-
 - name: High Availability & Load Balancing [slave], register the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and repmgr_cluster_show.stdout.find('  standby | host={{config.hostname}} user=repmgr dbname=repmgr') == -1
-  shell: /usr/lib/postgresql/9.4/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search(' standby \| .* \| host={{config.hostname}} user=repmgr dbname=repmgr'))
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register

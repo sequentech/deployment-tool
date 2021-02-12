@@ -14,32 +14,6 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Packages, add postgresql 9.4 repo
-  become: true
-  apt_repository:
-    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.4'
-    state: present
-
-- name: Packages, add postgresql repo keys
-  become: true
-  apt_key:
-    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-    state: present
-    validate_certs: "{{ not config.has_https_proxy }}"
-
-- name: Packages, add nginx repository
-  become: true
-  apt_repository:
-    repo: 'deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx'
-    state: present
-
-- name: Packages, add nginx keys
-  become: true
-  apt_key:
-    url: http://nginx.org/keys/nginx_signing.key
-    state: present
-    validate_certs: "{{ not config.has_https_proxy }}"
-
 - name: Packages, Updating packages
   become: true
   apt:
@@ -52,8 +26,8 @@
       - git
       - htop
       - curl
-      - postgresql-9.4
-      - postgresql-9.4-repmgr
+      - postgresql-12
+      - postgresql-12-repmgr
       - mercurial
       - supervisor
       - nodejs
@@ -61,15 +35,16 @@
       - libffi-dev
       - virtualenvwrapper
       - libjpeg8-dev
-      - libpq-dev=9.4*
-      - libpq5=9.4*
-      - python-psycopg2
+      - libpq-dev=12*
+      - libpq5=12*
       - python3-psycopg2
       - python3-pip
       - python3
+      - python2
       - python-setuptools
       - build-essential
-      - python-dev
+      - python2-dev
+      - python3-dev
       - vim
       - libgmp-dev
       - make
@@ -77,7 +52,7 @@
       - p7zip-full
       - nginx
       - zip
-      - python-pip
+      - python3-pip
       - python-pip-whl
       - python3-virtualenv
       - virtualenv
@@ -100,10 +75,10 @@
     name: postgresql
     state: stopped
 
-- name: Packages, set postgresql 9.4 service port
+- name: Packages, set postgresql 12 service port
   become: true
   lineinfile:
-    dest: /etc/postgresql/9.4/main/postgresql.conf
+    dest: /etc/postgresql/12/main/postgresql.conf
     regexp: '\s*port\s*=\s*\d+.*'
     line: "port = 5432"
 
@@ -129,7 +104,7 @@
 
 - name: Packages, Create postgresql cluster
   become: true
-  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 9.4 main
+  shell: pg_createcluster --start -e UTF-8 --locale=UTF-8 --lc-collate=UTF-8 --lc-ctype=UTF-8 12 main
   register: cmdoutput
   failed_when: "'Error: cluster configuration already exists' not in cmdoutput.stderr and cmdoutput.rc != 0"
 

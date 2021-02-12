@@ -28,7 +28,8 @@
   become: true
   become_user: authapi
   pip:
-    executable: /home/authapi/env/bin/pip
+    virtualenv: /home/authapi/env
+    virtualenv_python: python3
     requirements: /home/authapi/authapi/requirements.txt
     state: present
 
@@ -36,6 +37,16 @@
   become: true
   become_user: authapi
   django_manage: command=migrate
+  args:
+    app_path: /home/authapi/authapi/authapi
+    virtualenv: /home/authapi/env
+    settings: "authapi.deploy"
+
+- name: AuthApi, Migrate results
+  become: true
+  become_user: authapi
+  django_manage:
+    command: "migrate django_celery_results"
   args:
     app_path: /home/authapi/authapi/authapi
     virtualenv: /home/authapi/env

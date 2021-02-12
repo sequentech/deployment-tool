@@ -14,23 +14,11 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, Updating packages
-  become: true
-  apt:
-    update_cache: yes
+- hosts: all
 
-- name: AgoraGui, Installing packages
-  become: true
-  apt:
-    pkg:
-      - nodejs
-      - npm
-      - yarnpkg
-    state: present
+  tasks:
+    - include_vars: config.yml
+    - include_vars: repos.yml
 
-- name: AgoraGui, yarn link
-  become: true
-  file:
-    src: /usr/bin/yarnpkg
-    dest: /usr/bin/yarn
-    state: link
+    - import_tasks: halb/main.yml
+    - import_tasks: postgres_backups.yml

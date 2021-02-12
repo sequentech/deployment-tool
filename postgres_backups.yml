@@ -88,17 +88,17 @@
       mode: '0755'
 
     - src: recovery.conf
-      dest: /etc/postgresql/9.4/main/recovery.conf.copy
+      dest: /etc/postgresql/12/main/recovery.conf.copy
       owner: postgres
       group: postgres
       mode: '0644'
 
-- name: PostgreSQL Backups, set postgresql 9.4 conf for archiving
+- name: PostgreSQL Backups, set postgresql 12 conf for archiving
   become: true
   become_user: postgres
   when: config.postgres_backups.enabled
   lineinfile:
-    dest: /etc/postgresql/9.4/main/postgresql.conf
+    dest: /etc/postgresql/12/main/postgresql.conf
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
@@ -114,23 +114,23 @@
     - { regexp: '\s*#?\s*max_wal_senders\s*=\s*\d+.*', line: 'max_wal_senders = 5' }
     - { regexp: '\s*#?\s*wal_keep_segments\s*=\s*\d+.*', line: 'wal_keep_segments = 10' }
 
-- name: PostgreSQL Backups, disable archiving on postgresql 9.4 conf
+- name: PostgreSQL Backups, disable archiving on postgresql 12 conf
   become: true
   become_user: postgres
   when: not config.postgres_backups.enabled
   lineinfile:
-    dest: /etc/postgresql/9.4/main/postgresql.conf
+    dest: /etc/postgresql/12/main/postgresql.conf
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
     - { regexp: '\s*#?\s*archive_mode\s*=\s*(on|off).*', line: 'archive_mode = off' }
 
-- name: PostgreSQL Backups, set postgresql 9.4  pg_hba local replication config
+- name: PostgreSQL Backups, set postgresql 12 pg_hba local replication config
   become: true
   become_user: postgres
   when: config.postgres_backups.enabled
   lineinfile:
-    dest: /etc/postgresql/9.4/main/pg_hba.conf
+    dest: /etc/postgresql/12/main/pg_hba.conf
     regexp: '\s*#?\s*local\s+replication\s+postgres\s+(trust|reject|md5|password|gss|sspi|ident|peer|ldap|radius|cert|pam).*'
     line: "local   replication     postgres                                trust"
 
@@ -154,11 +154,11 @@
     name: "postgres_backups"
     state: absent
 
-- name: PostgreSQL Backups, ensure recovery.conf is absent on /etc/postgresql/9.4/main
+- name: PostgreSQL Backups, ensure recovery.conf is absent on /etc/postgresql/12/main
   become: true
   when: config.postgres_backups.enabled
   file:
-    path: /etc/postgresql/9.4/main/recovery.conf
+    path: /etc/postgresql/12/main/recovery.conf
     state: absent
     owner: postgres
     group: postgres

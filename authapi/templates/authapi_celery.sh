@@ -21,4 +21,4 @@ function finish {
 }
 trap finish EXIT SIGINT
 
-/home/authapi/env/bin/python manage.py celeryd -B --settings=authapi.deploy
+DJANGO_SETTINGS_MODULE='authapi.deploy' /home/authapi/env/bin/celery -A authapi worker

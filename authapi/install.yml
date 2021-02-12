@@ -65,11 +65,6 @@
     path: /home/authapi/webstatic
     state: directory
 
-- name: AuthApi, Creating the virtualenv
-  become: true
-  become_user: authapi
-  shell: '[ -d "/home/authapi/env" ] || virtualenv -p /usr/bin/python3 /home/authapi/env'
-
 - name: AuthApi, Installing python uwsgi, psycopg2
   become: true
   become_user: authapi
@@ -77,7 +72,9 @@
     name:
       - uwsgi
       - psycopg2
-    executable: /home/authapi/env/bin/pip
+      - pip==21.0
+    virtualenv: /home/authapi/env
+    virtualenv_python: python3
     state: present
 
 - import_tasks: djangoapp.yml
