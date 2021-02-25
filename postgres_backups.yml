@@ -177,3 +177,17 @@
   shell: /usr/bin/create_backup_postgres.sh > /dev/null 2>&1
   args:
     executable: /bin/bash
+
+- name: Check that the EOrchestra is there
+  stat:
+    path: /home/eorchestra
+  register: stat_result
+
+- name: EOrchestra, Restarting eorchestra service
+  become: true
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - eorchestra
+  when: stat_result.stat.exists
