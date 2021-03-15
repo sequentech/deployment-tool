@@ -524,18 +524,21 @@ config:
 
     # default configuration for calculate results on agora-gui-admin
     calculate_results_default: >-
-      [
-          [
-            "agora_results.pipes.results.do_tallies",
-            {"ignore_invalid_votes": true}
-          ],
-          [
-            "agora_results.pipes.sort.sort_non_iterative",
-            {
+      {
+        "version": "1.0",
+        "pipes": [
+          {
+            "type": "agora_results.pipes.results.do_tallies",
+            "params": {"ignore_invalid_votes": true}
+          },
+          {
+            "type": "agora_results.pipes.sort.sort_non_iterative",
+            "params": {
               "question_indexes": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
             }
-          ]
-      ]
+          }
+        ]
+      }
 
     # default template election for gui-admin
     election_template: >-
