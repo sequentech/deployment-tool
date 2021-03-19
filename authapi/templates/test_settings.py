@@ -25,9 +25,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-import djcelery
-djcelery.setup_loader()
-
 # Celery config
 BROKER_URL = "amqp://guest:guest@localhost:5672//"
 
@@ -69,7 +66,6 @@ INSTALLED_APPS = (
 
     #3rd party
     'corsheaders',
-    'djcelery',
     'django_nose',
 )
 
@@ -92,7 +88,6 @@ MIDDLEWARE_CLASSES = (
 
 # change the test runner to the one provided by celery so that the tests that
 # make use of celery work when ./manage.py test is executed
-TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 ROOT_URLCONF = 'authapi.urls'
