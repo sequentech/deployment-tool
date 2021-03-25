@@ -90,7 +90,7 @@ var avConfigData = {
   calculateResultsDefault: {{ config.agora_gui.calculate_results_default }},
 
   // default template election for gui-admin
-  electionTemplate: "{{ config.agora_gui.election_template }}",
+  electionTemplate: "{{ config.agora_gui.election_template | regex_replace('\n', '') }}",
 
   // help links list
   // html code for flexibility
