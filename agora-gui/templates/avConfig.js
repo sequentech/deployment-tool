@@ -389,7 +389,13 @@ var avConfigData = {
   tos: {
     text:"{{ config.agora_gui.texts.tos_text }}",
     title: "{{ config.agora_gui.texts.tos_title }}"
-  }
+  },
+
+  {% if config.agora_gui.cookies_expires %}
+    cookies: {
+      expires: {{ config.agora_gui.cookies_expires }},
+    },
+  {% endif %}
 };
 
 angular.module('avConfig', [])
