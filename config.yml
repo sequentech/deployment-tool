@@ -395,6 +395,10 @@ config:
     # Login cookies expiration in minutes, if it's not set it'll be session cookies
     # cookies_expires: 10
 
+    # Shows a dialog if the browser is too old to notify the user. Set this to
+    # false to disable
+    check_browser_version: true
+
     # allow and deny nginx ips specific for this service
     ips:
       allow: []

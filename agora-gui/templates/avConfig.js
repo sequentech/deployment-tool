@@ -396,6 +396,12 @@ var avConfigData = {
       expires: {{ config.agora_gui.cookies_expires }},
     },
   {% endif %}
+
+  {% if config.agora_gui.check_browser_version %}
+    // Browser update configuration. See https://browser-update.org
+    browserUpdate: { required: {e:15,f:36,o:65,s:7,c:50}, insecure:true, api: "2021.04" }
+  {% endif %}
+
 };
 
 angular.module('avConfig', [])
