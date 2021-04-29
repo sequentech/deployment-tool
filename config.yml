@@ -528,7 +528,7 @@ config:
         "version": "1.0",
         "pipes": [
           {
-            type": "agora_results.pipes.pdf.configure_pdf",
+            "type": "agora_results.pipes.pdf.configure_pdf",
             "params": {
               "languages": ["en"]
             }
