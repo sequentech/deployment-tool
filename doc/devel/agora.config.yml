@@ -279,7 +279,7 @@ config:
       #- agora_results.pipes.results.apply_removals
       - agora_results.pipes.sort.sort_non_iterative
       #- agora_results.pipes.stv_tiebreak.stv_first_round_tiebreak
-      #- agora_results.pipes.pdf.configure_pdf
+      - agora_results.pipes.pdf.configure_pdf
       - agora_results.pipes.withdraw_candidates.withdraw_candidates
       # - agora_results.pipes.ballot_boxes.count_tally_sheets
 
@@ -526,6 +526,12 @@ config:
       {
         "version": "1.0",
         "pipes": [
+          {
+            "type": "agora_results.pipes.pdf.configure_pdf",
+            "params": {
+              "languages": ["en"]
+            }
+          },
           {
             "type": "agora_results.pipes.results.do_tallies",
             "params": {}
