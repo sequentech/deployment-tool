@@ -392,8 +392,9 @@ config:
     booth_port: 10091
     elections_port: 10092
 
-    # Login cookies expiration in minutes, if it's not set it'll be session cookies
-    # cookies_expires: 10
+    # Login session cookies expiration in minutes. set to 'false' to be 
+    # unlimited
+    cookies_expires: 10
 
     # Shows a dialog if the browser is too old to notify the user. Set this to
     # false to disable
