@@ -389,7 +389,19 @@ var avConfigData = {
   tos: {
     text:"{{ config.agora_gui.texts.tos_text }}",
     title: "{{ config.agora_gui.texts.tos_title }}"
-  }
+  },
+
+  {% if config.agora_gui.cookies_expires %}
+    cookies: {
+      expires: {{ config.agora_gui.cookies_expires }},
+    },
+  {% endif %}
+
+  {% if config.agora_gui.browser_update_config %}
+    // Browser update configuration. See https://browser-update.org
+    browserUpdate: {{ config.agora_gui.browser_update_config }}
+  {% endif %}
+
 };
 
 angular.module('avConfig', [])
