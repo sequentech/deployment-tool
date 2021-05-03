@@ -397,8 +397,14 @@ config:
     cookies_expires: 10
 
     # Shows a dialog if the browser is too old to notify the user. Set this to
-    # false to disable
-    check_browser_version: true
+    # false to disable. See how to customize in
+    #  http://browser-update.org/customize.html
+    check_browser_version: >
+      {
+        required: {e:15,f:36,o:65,s:7,c:50},
+        insecure:true,
+        api: "2021.04"
+      }
 
     # allow and deny nginx ips specific for this service
     ips:
