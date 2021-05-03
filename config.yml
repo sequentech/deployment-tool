@@ -399,7 +399,7 @@ config:
     # Shows a dialog if the browser is too old to notify the user. Set this to
     # false to disable. See how to customize in
     #  http://browser-update.org/customize.html
-    check_browser_version: >
+    browser_update_config: >
       {
         required: {e:15,f:36,o:65,s:7,c:50},
         insecure:true,

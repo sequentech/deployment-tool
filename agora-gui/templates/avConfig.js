@@ -397,9 +397,9 @@ var avConfigData = {
     },
   {% endif %}
 
-  {% if config.agora_gui.check_browser_version %}
+  {% if config.agora_gui.browser_update_config %}
     // Browser update configuration. See https://browser-update.org
-    browserUpdate: {{ config.agora_gui.check_browser_version }}
+    browserUpdate: {{ config.agora_gui.browser_update_config }}
   {% endif %}
 
 };
