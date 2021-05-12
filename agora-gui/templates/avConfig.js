@@ -271,7 +271,7 @@ var avConfigData = {
   // Default: '/admin/login'
   defaultRoute: '{{ config.agora_gui.defaultRoute }}',
 
-  timeoutSeconds: 3600,
+  timeoutSeconds: {{ config.agora_gui.cookies_expires * 60 }},
 
   {% if config.agora_gui.custom_public_download_url %}
   publicURL: "{{ config.agora_gui.custom_public_download_url }}",
