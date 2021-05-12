@@ -526,6 +526,17 @@ config:
       #- simultaneous-questions
       #- conditional-accordion
       #- pcandidates-election
+    
+    # List of auth methods shown in the administrative user interface
+    shown_auth_methods:
+      - email
+      - email-otp
+      - email-and-password
+      - sms
+      - sms-otp
+      - smart-link
+      - user-and-password
+      #- dnie  # disabled because it's not supported in this version
 
     # This is the list of admin question voting systems shown in the
     # administrative user interface. If the list is empty, question layouts
