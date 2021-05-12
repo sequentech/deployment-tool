@@ -271,7 +271,7 @@ var avConfigData = {
   // Default: '/admin/login'
   defaultRoute: '{{ config.agora_gui.defaultRoute }}',
 
-  timeoutSeconds: 3600,
+  timeoutSeconds: {% if config.agora_gui.cookies_expires %}{{ config.agora_gui.cookies_expires * 60 }}{% else %}3600{% endif %},
 
   {% if config.agora_gui.custom_public_download_url %}
   publicURL: "{{ config.agora_gui.custom_public_download_url }}",
@@ -316,7 +316,11 @@ var avConfigData = {
       github: "{{ config.agora_gui.social.github }}"
   },
 
-  auth_methods: ['email', 'email-otp', 'sms', 'sms-otp'],
+  auth_methods: [
+    {% for auth_method in config.agora_gui.shown_auth_methods %}
+    "{{ auth_method }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
 
   // technology footer links
   technology: {
