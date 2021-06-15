@@ -148,6 +148,9 @@ SMS_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVEN
 {% endif %}
 
 {% if config.authapi.email.enabled %}
+from django.core.mail.utils import DNS_NAME
+DNS_NAME._fqdn = "{{ config.agora_elections.domain }}"
+
 DEFAULT_FROM_EMAIL = "{{config.authapi.email.default_from_email}}"
 
 EMAIL_HOST = "{{config.authapi.email.email_host}}"
