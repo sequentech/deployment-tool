@@ -39,13 +39,20 @@
     name: nginx
     state: present
 
+- name: Creating tlscert group
+  become: true
+  group:
+    name: tlscert
+    state: present
+
 - name: System, Creating nginx user
   become: true
   user:
     name: nginx
     shell: /bin/false
     home: /nonexistent
-    group: nginx
+    groups: nginx,tlscert
+    append: true
 
 - name: System, nginx log directory permissions
   become: true
@@ -69,7 +76,7 @@
     src: templates/cert.sh
     dest: /root/cert.sh
     owner: root
-    mode: '0755'
+    mode: '0700'
 
 - name: System, self-signed certificate creation
   become: true
@@ -77,18 +84,35 @@
     src: templates/cert.py
     dest: /root/cert.py
     owner: root
-    mode: '0755'
+    mode: '0700'
 
 - name: System, self-signed certificate creation
   become: true
   shell: /root/cert.sh
 
-- name: System, self-signed certificate permissions
+- name: System, self-signed certificate permissions (1)
+  become: true
+  file:
+    path: /srv/certs/selfsigned/cert.pem
+    state: file
+    mode: '0640'
+    group: tlscert
+
+- name: System, self-signed certificate permissions (2)
   become: true
   file:
     path: /srv/certs/selfsigned/key-nopass.pem
     state: file
-    mode: '0644'
+    mode: '0640'
+    group: tlscert
+
+- name: System, self-signed certificate permissions (3)
+  become: true
+  file:
+    path: /srv/certs/selfsigned/calist
+    state: file
+    mode: '0640'
+    group: tlscert
 
 - name: System, populating /etc/hosts
   become: true
@@ -105,4 +129,4 @@
     src: templates/screenrc
     dest: /etc/screenrc
     owner: root
-    mode: '0644'
+    mode: '0600'

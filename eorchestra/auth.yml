@@ -64,7 +64,7 @@
     src: eorchestra/templates/config_example.json
     dest: /home/eorchestra/agora-tools/config/config_example.json
     owner: eorchestra
-    mode: 0655
+    mode: 0600
 
 - name: EOrchestra, agora-results req.txt
   become: true
@@ -72,7 +72,7 @@
     src: agora-elections/templates/results.req.txt
     dest: /home/eorchestra/agora-results/results.req.txt
     owner: eorchestra
-    mode: 0655
+    mode: 0600
 
 # this block&rescue is only a workaround so that it works in ansible 2.2.0,
 # 2.2.1 should have a fix for the issue, see
@@ -99,4 +99,4 @@
     src: eorchestra/templates/results.sh
     dest: /home/eorchestra/agora-tools/results.sh
     owner: eorchestra
-    mode: 0755
+    mode: 0700

@@ -26,6 +26,6 @@
     mode: "{{ item.mode }}"
   with_items:
     - { script: eoconf.json, dest: /etc/eoconf.json, owner: "root", mode: "0600" }
-    - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0755" }
-    - { script: eotasks, dest: /usr/bin/eotasks, owner: "root", mode: "0755" }
-    - { script: eopeers, dest: /usr/bin/eopeers, owner: "root", mode: "0755" }
+    - { script: eotest, dest: /usr/bin/eotest, owner: "root", mode: "0700" }
+    - { script: eotasks, dest: /usr/bin/eotasks, owner: "root", mode: "0700" }
+    - { script: eopeers, dest: /usr/bin/eopeers, owner: "root", mode: "0700" }

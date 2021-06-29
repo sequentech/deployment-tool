@@ -43,7 +43,7 @@
     src: eorchestra/templates/base_settings.py
     dest: /home/eorchestra/election-orchestra/base_settings.py
     owner: eorchestra
-    mode: '0755'
+    mode: '0700'
 
 - import_tasks: app.yml
 
@@ -65,22 +65,22 @@
     - f: auth.ini
       dest: /home/eorchestra/election-orchestra/auth.ini
       owner: eorchestra
-      mode: '0644'
+      mode: '0640'
 
     - f: launch.sh
       dest: /home/eorchestra/launch.sh
       owner: eorchestra
-      mode: '0755'
+      mode: '0750'
 
     - f: nginx.conf
       dest: /etc/nginx/nginx.conf
       owner: root
-      mode: '0644'
+      mode: '0640'
 
     - f: election-orchestra.conf
       dest: /etc/supervisor/conf.d/election-orchestra.conf
       owner: root
-      mode: '0644'
+      mode: '0640'
 
 - name: EOrchestra, directories creation
   become: true

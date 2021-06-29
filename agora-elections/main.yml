@@ -21,6 +21,8 @@
   user:
     name: agoraelections
     shell: /bin/bash
+    groups: tlscert
+    append: true
 
 - name: AgoraElections, Creating /etc/eopeers
   become: true
@@ -247,7 +249,7 @@
     src: agora-elections/templates/run.sh
     dest: /home/agoraelections/run.sh
     owner: agoraelections
-    mode: '0744'
+    mode: '0700'
 
 - import_tasks: nginx.yml
 
@@ -262,7 +264,7 @@
     - f: agora-elections.conf
       dest: /etc/supervisor/conf.d/agora-elections.conf
       owner: root
-      mode: '0644'
+      mode: '0600'
 
 - name: AgoraElections, restarting supervisor
   become: true

@@ -19,6 +19,8 @@
   user:
     name: sentry
     shell: /bin/bash
+    groups: tlscert
+    append: true
 
 - name: Sentry, Creating /home/sentry/.ansible/tmp dir
   become: true
