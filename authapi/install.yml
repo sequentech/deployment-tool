@@ -22,7 +22,7 @@
     src: authapi/templates/deploy.py
     dest: /home/authapi/authapi/authapi/authapi/
     owner: authapi
-    mode: '0644'
+    mode: '0600'
   
 - name: AuthApi, Creating test settings
   become: true
@@ -30,7 +30,7 @@
     src: authapi/templates/test_settings.py
     dest: /home/authapi/authapi/authapi/authapi/
     owner: authapi
-    mode: '0644'
+    mode: '0600'
     force: yes
 
 - name: AuthApi, Creating uwsgi settings
@@ -50,13 +50,13 @@
     mode: "{{item.perm}}"
   with_items:
     - name: launchshell.sh
-      perm: "0744"
+      perm: "0700"
     - name: changepassword.sh
-      perm: "0744"
+      perm: "0700"
     - name: launchcommand.sh
-      perm: "0744"
+      perm: "0700"
     - name: fixture.json
-      perm: "0644"
+      perm: "0600"
 
 - name: AuthApi, Creates webstatic directory
   become: true

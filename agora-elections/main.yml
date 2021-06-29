@@ -50,7 +50,7 @@
     src: agora-elections/templates/application.local.conf
     dest: /home/agoraelections/agora-elections/conf/application.local.conf
     owner: agoraelections
-    mode: '0644'
+    mode: '0600'
 
 - name: AgoraElections, Pipes whitelist
   become: true
@@ -59,7 +59,7 @@
     src: agora-elections/templates/pipes_whitelist
     dest: /home/agoraelections/agora-elections/conf/pipes_whitelist
     owner: agoraelections
-    mode: '0644'
+    mode: '0600'
 
 - name: AgoraElections, postgres connection password setup
   become: true
@@ -77,7 +77,7 @@
     src: agora-elections/templates/test.local.conf
     dest: /home/agoraelections/agora-elections/conf/test.local.conf
     owner: agoraelections
-    mode: '0644'
+    mode: '0600'
 
 - name: AgoraElections, datastore dir
   become: true
