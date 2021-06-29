@@ -52,6 +52,20 @@
     owner: agoraelections
     mode: '0600'
 
+- name: AgoraElections, Base configuration chmod
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/agora-elections/conf/application.conf
+    mode: '0600'
+
+- name: AgoraElections, Test configuration chmod
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/agora-elections/conf/application.test.conf
+    mode: '0600'
+
 - name: AgoraElections, Pipes whitelist
   become: true
   become_user: agoraelections
