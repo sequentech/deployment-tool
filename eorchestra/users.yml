@@ -20,6 +20,8 @@
     name: eorchestra
     shell: /bin/bash
     home: /home/eorchestra
+    groups: tlscert
+    append: true
 
 - name: EOrchestra, Creating /home/eorchestra/.ansible/tmp dir
   become: true

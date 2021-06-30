@@ -20,7 +20,7 @@
     src: agora-gui/templates/nginx.conf
     dest: /etc/nginx/conf.d/agoragui.conf
     owner: root
-    mode: '0644'
+    mode: '0640'
 
 - name: AgoraGui, Restarting nginx
   become: true

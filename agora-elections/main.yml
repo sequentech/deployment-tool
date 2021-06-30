@@ -21,6 +21,8 @@
   user:
     name: agoraelections
     shell: /bin/bash
+    groups: tlscert
+    append: true
 
 - name: AgoraElections, Creating /etc/eopeers
   become: true
@@ -50,7 +52,21 @@
     src: agora-elections/templates/application.local.conf
     dest: /home/agoraelections/agora-elections/conf/application.local.conf
     owner: agoraelections
-    mode: '0644'
+    mode: '0600'
+
+- name: AgoraElections, Base configuration chmod
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/agora-elections/conf/application.conf
+    mode: '0600'
+
+- name: AgoraElections, Test configuration chmod
+  become: true
+  become_user: agoraelections
+  file:
+    path: /home/agoraelections/agora-elections/conf/application.test.conf
+    mode: '0600'
 
 - name: AgoraElections, Pipes whitelist
   become: true
@@ -59,7 +75,7 @@
     src: agora-elections/templates/pipes_whitelist
     dest: /home/agoraelections/agora-elections/conf/pipes_whitelist
     owner: agoraelections
-    mode: '0644'
+    mode: '0600'
 
 - name: AgoraElections, postgres connection password setup
   become: true
@@ -77,7 +93,7 @@
     src: agora-elections/templates/test.local.conf
     dest: /home/agoraelections/agora-elections/conf/test.local.conf
     owner: agoraelections
-    mode: '0644'
+    mode: '0600'
 
 - name: AgoraElections, datastore dir
   become: true
@@ -233,7 +249,7 @@
     src: agora-elections/templates/run.sh
     dest: /home/agoraelections/run.sh
     owner: agoraelections
-    mode: '0744'
+    mode: '0700'
 
 - import_tasks: nginx.yml
 
@@ -248,7 +264,7 @@
     - f: agora-elections.conf
       dest: /etc/supervisor/conf.d/agora-elections.conf
       owner: root
-      mode: '0644'
+      mode: '0600'
 
 - name: AgoraElections, restarting supervisor
   become: true

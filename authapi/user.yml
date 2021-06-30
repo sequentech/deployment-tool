@@ -19,6 +19,8 @@
   user:
     name: authapi
     shell: /bin/bash
+    groups: tlscert
+    append: true
 
 - name: AuthApi, Creating /home/authapi/.ansible/tmp dir
   become: true

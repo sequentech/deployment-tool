@@ -38,7 +38,7 @@
     src: oneserver/templates/custom_urls.py
     dest: /home/authapi/authapi/authapi/custom_urls.py
     owner: authapi
-    mode: '0644'
+    mode: '0640'
 
 - name: OneServer, authapi url config
   become: true
@@ -62,7 +62,7 @@
     src: oneserver/templates/oneserver.conf
     dest: /etc/nginx/conf.d/oneserver.conf
     owner: root
-    mode: '0644'
+    mode: '0640'
 
 - name: OneServer, configure nginx
   become: true
@@ -70,7 +70,7 @@
     src: oneserver/templates/nginx.conf
     dest: /etc/nginx/nginx.conf
     owner: root
-    mode: '0644'
+    mode: '0640'
 
 - name: OneServer, cloudflare.conf
   become: true
@@ -78,7 +78,7 @@
     src: oneserver/templates/cloudflare.conf
     dest: /etc/nginx/cloudflare.conf
     owner: root
-    mode: '0644'
+    mode: '0640'
 
 - name: OneServer, configure cors
   become: true
@@ -86,7 +86,7 @@
     src: oneserver/templates/cors.conf
     dest: /etc/nginx/cors.conf
     owner: root
-    mode: '0644'
+    mode: '0640'
 
 - name: OneServer, remove nginx default
   become: true
@@ -100,7 +100,7 @@
     src: "oneserver/templates/{{ item }}"
     dest: "/etc/nginx/{{ item }}"
     owner: root
-    mode: '0644'
+    mode: '0640'
   with_items:
     - base_secure.conf
     - secure.conf
@@ -113,7 +113,7 @@
     src: oneserver/templates/dnie.conf
     dest: /etc/nginx/conf.d/dnie.conf
     owner: root
-    mode: '0644'
+    mode: '0640'
   when: config.dnie_auth.allow
 
 # remove the dnie conf when allow_dni is false, otherwise when changing

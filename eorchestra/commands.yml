@@ -23,13 +23,13 @@
     mode: "{{ item.mode }}"
   with_items:
     - { script: backup_password, dest: /root/.backup_password, owner: "root", mode: "0600" }
-    - { script: create_backup.sh, dest: /usr/bin/create_backup.sh, owner: "root", mode: "0755" }
-    - { script: restore_backup.sh, dest: /usr/bin/restore_backup.sh, owner: "root", mode: "0755" }
-    - { script: reset-tally, dest: /usr/bin/reset-tally, owner: "root", mode: "0755" }
-    - { script: delete-election, dest: /usr/bin/delete-election, owner: "root", mode: "0755" }
-    - { script: eolog, dest: /usr/bin/eolog, owner: "root", mode: "0755" }
-    - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0755" }
-    - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0755" }
+    - { script: create_backup.sh, dest: /usr/bin/create_backup.sh, owner: "root", mode: "0700" }
+    - { script: restore_backup.sh, dest: /usr/bin/restore_backup.sh, owner: "root", mode: "0700" }
+    - { script: reset-tally, dest: /usr/bin/reset-tally, owner: "root", mode: "0700" }
+    - { script: delete-election, dest: /usr/bin/delete-election, owner: "root", mode: "0700" }
+    - { script: eolog, dest: /usr/bin/eolog, owner: "root", mode: "0700" }
+    - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0700" }
+    - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0700" }
 
 - name: EOrchestra, creating /srv/eotests
   become: true
