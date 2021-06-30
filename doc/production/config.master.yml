@@ -202,7 +202,7 @@ config:
     # Allows to restrict access to any administrative APIs and web app with a
     # custom set of nginx rules
     admin_zone:
-      enabled: True
+      enabled: false
       rules: []
 
     # Personalize the maintenance page
