@@ -199,6 +199,12 @@ config:
     #   password: eengiefe
     http_auth: false
 
+    # Allows to restrict access to any administrative APIs and web app with a
+    # custom set of nginx rules
+    admin_zone:
+      enabled: True
+      rules: []
+
     # Personalize the maintenance page
     # 
     # By creating the file /etc/nginx/conf.d/maintenance.on automatically the
