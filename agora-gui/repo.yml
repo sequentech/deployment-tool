@@ -68,7 +68,7 @@
   become: true
   become_user: agoragui
   replace:
-    dest: /home/agoragui/agoora-gui-admin/avConfig.js
+    dest: /home/agoragui/agora-gui-admin/avConfig.js
     regexp: '{{ item.regexp }}'
     replace: '{{ item.replace }}'
   with_items:
