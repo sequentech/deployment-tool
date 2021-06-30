@@ -69,8 +69,8 @@
   become_user: agoragui
   replace:
     dest: /home/agoragui/agoora-gui-admin/avConfig.js
-    regexp: '{{regexp}}'
-    replace: '{{replace}}'
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
   with_items:
     - regexp: 'authAPI:(.)$'
       replace: 'authAPI: "https://{{config.agora_elections.domain}}/admin-api/authapi/api/",'
