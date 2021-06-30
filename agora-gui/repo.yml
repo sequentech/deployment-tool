@@ -72,11 +72,11 @@
     regexp: '{{ item.regexp }}'
     replace: '{{ item.replace }}'
   with_items:
-    - regexp: 'authAPI:(.)$'
+    - regexp: 'authAPI:.*$'
       replace: 'authAPI: "https://{{config.agora_elections.domain}}/admin-api/authapi/api/",'
-    - regexp: 'dnieUrl:(.)$'
+    - regexp: 'dnieUrl:.*$'
       replace: 'dnieUrl: "https://{{config.agora_elections.domain}}/admin-api/authapi/api/authmethod/dnie/auth/",'
-    - regexp: 'electionsAPI:(.)$'
+    - regexp: 'electionsAPI:.*$'
       replace: 'electionsAPI: "https://{{config.agora_elections.domain}}/admin-api/elections/api/",'
 
 # this is not slow because yarn caches dependencies
