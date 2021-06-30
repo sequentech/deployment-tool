@@ -50,37 +50,34 @@
     dest: /home/agoragui/agora-gui-booth
     force: "{{ repos.guibooth.force }}"
 
-- name: AgoraGui, config setup
+- name: AgoraGui, copying avConfig.js in user agora-gui-elections and agora-gui-booth
   become: true
+  become_user: agoragui
   template:
     src: agora-gui/templates/avConfig.js
-    dest: /home/agoragui/avConfig.js
+    dest: /home/agoragui/{{ item }}/avConfig.js
     owner: agoragui
     group: agoragui
     mode: '0600'
-
-- name: AgoraGui, removing previous avConfig.js in all agora-gui-*
-  become: true
-  become_user: agoragui
-  file:
-    path: "/home/agoragui/{{ item }}/avConfig.js"
-    state: absent
   with_items:
     - agora-gui-admin
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, linking avConfig.js in all agora-gui-*
+- name: AgoraGui, modifying agora-gui-admin avConfig.js for securing the api calls
   become: true
   become_user: agoragui
-  file:
-    src: /home/agoragui/avConfig.js
-    dest: "/home/agoragui/{{ item }}/avConfig.js"
-    state: link
+  replace:
+    dest: /home/agoragui/agoora-gui-admin/avConfig.js
+    regexp: '{{regexp}}'
+    replace: '{{replace}}'
   with_items:
-    - agora-gui-admin
-    - agora-gui-elections
-    - agora-gui-booth
+    - regexp: 'authAPI:(.)$'
+      replace: 'authAPI: "https://{{config.agora_elections.domain}}/admin-api/authapi/api/",'
+    - regexp: 'dnieUrl:(.)$'
+      replace: 'dnieUrl: "https://{{config.agora_elections.domain}}/admin-api/authapi/api/authmethod/dnie/auth/",'
+    - regexp: 'electionsAPI:(.)$'
+      replace: 'electionsAPI: "https://{{config.agora_elections.domain}}/admin-api/elections/api/",'
 
 # this is not slow because yarn caches dependencies
 - name: AgoraGui, removing node_modules directory to start fresh
