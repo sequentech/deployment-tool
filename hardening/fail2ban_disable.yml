@@ -14,8 +14,10 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- import_tasks: fail2ban.yml
-  when: config.hardening.fail2ban.enabled
+- name: System, disabling fail2ban service
+  become: true
+  service:
+    name: fail2ban
+    state: stopped
+    enabled: false
 
-- import_tasks: fail2ban_disable.yml
-  when: not config.hardening.fail2ban.enabled
