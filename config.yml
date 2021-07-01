@@ -284,13 +284,13 @@ config:
       user_api_config: 'burst=30 delay=15'
 
       # rate of requestes per second for the request on static file requests
-      static_api_rate: 5
+      static_files_rate: 5
 
       # This is the nginx limit_req configuration. Default means that there's
       # burst with no delay for the first 15 requests, then burst with delay
       # for request 15 to 30, then requests are rejected starting with request
       # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
-      static_api_config: 'burst=30 delay=15'
+      static_files_config: 'burst=30 delay=15'
 
   # generic election related constraints that apply to multiple parts of the
   # deployment, for example the same limit might apply to authapi, agora-gui
