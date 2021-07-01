@@ -70,6 +70,6 @@
   become: true
   service:
     name: fail2ban
-    state: {{% if config.hardening.fail2ban.enabled %}restarted{% else %}stopped{% endif %}
+    state: {% if config.hardening.fail2ban.enabled %}restarted{% else %}stopped{% endif %}
     enabled: {{ config.hardening.fail2ban.enabled | bool | lower }}
 
