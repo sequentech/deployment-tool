@@ -36,7 +36,7 @@
     replace: '{{ item.replace }}'
   with_items:
     - regexp: '\s*#?\s*ignoreip .*$'
-      replace: 'ignoreip = 127.0.0.1/8 ::1 {{ config.private_ipaddress }} {{ config.public_ipaddress }} {{config.load_balancing.loadbalancers_cidr}} {{config.load_balancer.master.slave_cidr_address}}'
+      replace: 'ignoreip = 127.0.0.1/8 ::1 {{ config.private_ipaddress }} {{ config.public_ipaddress }} {{config.load_balancing.loadbalancers_cidr}} {{config.load_balancing.master.slave_cidr_address}}'
 
 - name: System, Disabling fail2ban defaults-debian.conf
   become: true

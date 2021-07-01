@@ -292,7 +292,6 @@ config:
       # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
       static_api_config: 'burst=30 delay=15'
 
-
   # generic election related constraints that apply to multiple parts of the
   # deployment, for example the same limit might apply to authapi, agora-gui
   # and agora-elections
