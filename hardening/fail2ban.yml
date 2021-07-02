@@ -1,0 +1,75 @@
+# This file is part of agora-dev-box.
+# Copyright (C) 2021  Agora Voting SL <agora@agoravoting.com>
+
+# agora-dev-box is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# agora-dev-box  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: Hardening, Installing packages
+  become: true
+  apt:
+    pkg:
+      - fail2ban
+
+- name: Hardening, creating fail2ban jail.local base file
+  copy:
+    src: /etc/fail2ban/jail.conf
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Hardening, setting up jail.local config
+  become: true
+  replace:
+    dest: /etc/fail2ban/jail.local
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - regexp: '\s*#?\s*ignoreip .*$'
+      replace: 'ignoreip = 127.0.0.1/8 ::1 {{ config.private_ipaddress }} {{ config.public_ipaddress }} {{config.load_balancing.loadbalancers_cidr}} {{config.load_balancing.master.slave_cidr_address}}'
+
+- name: System, Disabling fail2ban defaults-debian.conf
+  become: true
+  file: 
+    path: /etc/fail2ban/jails.d/defaults-debian.conf
+    state: absent
+
+- name: System, Configuring fail2ban jail.d filters
+  become: true
+  template:
+    src: hardening/templates/{{item}}-filter.conf
+    dest: /etc/fail2ban/filters.d/{{item}}.conf
+    owner: root
+    group: root
+    mode: '0644'
+  with_items: []
+
+- name: System, Configuring fail2ban jail.d jails
+  become: true
+  template:
+    src: hardening/templates/{{item}}-jail.conf
+    dest: /etc/fail2ban/jail.d/{{item}}.conf
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - sshd
+    - nginx
+
+- name: System, configuring fail2ban service status
+  become: true
+  service:
+    name: fail2ban
+    state: restarted
+    enabled: true
+

@@ -22,4 +22,5 @@
 
     - import_tasks: packages.yml
     - import_tasks: system.yml
+    - import_tasks: hardening/main.yml
     - import_tasks: sudoers/main.yml

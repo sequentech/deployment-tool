@@ -54,7 +54,7 @@ var avConfigData = {
 
   // AuthApi base url
   authAPI: "https://{{config.agora_elections.domain}}/authapi/api/",
-  dnieUrl: "https://agora.dev/authapi/api/authmethod/dnie/auth/",
+  dnieUrl: "https://{{config.agora_elections.domain}}/authapi/api/authmethod/dnie/auth/",
   // Agora Elections base url
   electionsAPI: "https://{{config.agora_elections.domain}}/elections/api/",
 

@@ -1,5 +1,5 @@
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2021  Agora Voting SL <agora@agoravoting.com>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -14,16 +14,10 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- hosts: all
+- name: System, disabling fail2ban service
+  become: true
+  service:
+    name: fail2ban
+    state: stopped
+    enabled: false
 
-  tasks:
-    - include_vars: config.yml
-    - include_vars: repos.yml
-
-    - import_tasks: packages.yml
-    - import_tasks: system.yml
-    - import_tasks: hardening/main.yml
-    - import_tasks: sudoers/main.yml
-    - import_tasks: agora-tools/main.yml
-    - import_tasks: eorchestra/main.yml
-    - import_tasks: postgres_backups.yml

@@ -201,6 +201,12 @@ config:
     #     password: whatever
     http_auth: false
 
+    # Allows to restrict access to any administrative APIs and web app with a
+    # custom set of nginx rules
+    admin_zone:
+      enabled: false
+      rules: []
+
     # Personalize the maintenance page
     # 
     # By creating the file /etc/nginx/conf.d/maintenance.on automatically the
@@ -231,6 +237,60 @@ config:
     # big tallies (hundred of thousands of votes or millions), you will need to
     # change this to something bigger.
     max_heap_memory_usage: 4000
+
+  # multiple server hardening settings
+  hardening:
+    # if setup, the X-XSS-Protection header will be set to configure the
+    # web browser to block XSS attacks
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+    # allowed value: '0', '1, mode=block', ..any valid X-XSS-Protection setting
+    x_xss_protection_header: '1; mode=block'
+
+    # Fail2ban is a service used for temporarely banning ips when multiple 
+    # failed actions are detected in server logs
+    fail2ban:
+      # generally enable or disable the service running in the server
+      # allows values: true, false
+      enabled: true
+
+      # enable or disable fail2ban applied to the following jails
+      # allows values: true, false
+      sshd: true
+      nginx_limit_req: true
+      nginx_http_auth: true
+    
+    # configure multiple rate limits zones in nginx for different parts of the
+    # web service
+    nginx_rate_limit:
+      # allows values: true, false
+      enabled: true
+
+      # rate of requestes per second for the request on admin api requests
+      admin_api_rate: 3
+
+      # This is the nginx limit_req configuration. Default means that there's
+      # burst with no delay for the first 15 requests, then burst with delay
+      # for request 15 to 30, then requests are rejected starting with request
+      # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
+      admin_api_config: 'burst=30 delay=15'
+
+      # rate of requestes per second for the request on user api requests
+      user_api_rate: 2
+
+      # This is the nginx limit_req configuration. Default means that there's
+      # burst with no delay for the first 15 requests, then burst with delay
+      # for request 15 to 30, then requests are rejected starting with request
+      # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
+      user_api_config: 'burst=30 delay=15'
+
+      # rate of requestes per second for the request on static file requests
+      static_files_rate: 5
+
+      # This is the nginx limit_req configuration. Default means that there's
+      # burst with no delay for the first 15 requests, then burst with delay
+      # for request 15 to 30, then requests are rejected starting with request
+      # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
+      static_files_config: 'burst=30 delay=15'
 
   # generic election related constraints that apply to multiple parts of the
   # deployment, for example the same limit might apply to authapi, agora-gui
