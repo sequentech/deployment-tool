@@ -72,6 +72,10 @@
     regexp: '{{ item.regexp }}'
     replace: '{{ item.replace }}'
   with_items:
+    - regexp: 'baseUrl:.*$'
+      replace: 'baseUrl: "https://{{config.agora_elections.domain}}/admin-api/elections/api/",'
+    - regexp: 'publicURL:.*$'
+      replace: 'publicURL: "https://{{config.agora_elections.domain}}/admin-api/elections/public/",'
     - regexp: 'authAPI:.*$'
       replace: 'authAPI: "https://{{config.agora_elections.domain}}/admin-api/authapi/api/",'
     - regexp: 'dnieUrl:.*$'
