@@ -349,7 +349,6 @@ config:
   agora_elections:
     db_password: '<PASSWORD>'
     shared_secret: '<PASSWORD>'
-    expiry: 60000
     domain: nvotes.com
     port: 14443
     # Port used by agora_elections for path /private. This path is used
