@@ -35,18 +35,18 @@
   failed_when: sbt_check_deb.rc > 1
   changed_when: sbt_check_deb.rc == 1
 
-- name: AgoraElections, Download sbt-0.13.18.deb
+- name: AgoraElections, Download sbt-0.13.8.deb
   get_url:
-    url: https://dl.bintray.com/sbt/debian/sbt-0.13.18.deb
+    url: "https://scala.jfrog.io/artifactory/debian/sbt-0.13.18.deb"
     sha256sum: 9cfd2cedc12d7cf9ec7dcdae041ad6faaf0d52931c886b615b3075dc7f013d70
-    dest: /tmp/sbt-0.13.18.deb
+    dest: "/tmp/sbt-0.13.8.deb"
     validate_certs: "{{ not config.has_https_proxy }}"
   when: sbt_check_deb.rc == 1
 
-- name: AgoraElections, Install sbt-0.13.18.deb
+- name: AgoraElections, Install sbt-0.13.8.deb
   become: true
   apt:
-    deb: /tmp/sbt-0.13.18.deb
+    deb: "/tmp/sbt-0.13.8.deb"
     state: present
   when: sbt_check_deb.rc == 1
 
