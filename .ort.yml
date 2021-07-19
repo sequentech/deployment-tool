@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2014-2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+---
+resolutions:
+  rule_violations:
+  - message: "The package PIP::agora-dev-box:.* has the declared ScanCode copyleft catalogized license AGPL-3.0-only."
+    reason: "LICENSE_ACQUIRED_EXCEPTION"
+    comment: "The project is open source so it's normal that it's set as such."
