@@ -43,10 +43,10 @@
     validate_certs: "{{ not config.has_https_proxy }}"
   when: sbt_check_deb.rc == 1
 
-- name: AgoraElections, Install sbt-0.13.8.deb
+- name: AgoraElections, Install sbt-0.13.18.deb
   become: true
   apt:
-    deb: "/tmp/sbt-0.13.8.deb"
+    deb: "/tmp/sbt-0.13.18.deb"
     state: present
   when: sbt_check_deb.rc == 1
 
