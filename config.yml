@@ -349,7 +349,6 @@ config:
   agora_elections:
     db_password: '<PASSWORD>'
     shared_secret: '<PASSWORD>'
-    expiry: 60000
     domain: nvotes.com
     port: 14443
     # Port used by agora_elections for path /private. This path is used
@@ -1055,7 +1054,11 @@ config:
     allow_deregister: true
 
     # Number of seconds after which an authentication token expires.
-    auth_token_expiration_seconds: 3600
+    auth_token_expiration_seconds: 600
+
+    # Number of seconds after which an authentication token expires for admin
+    # users
+    admin_auth_token_expiration_seconds: 3600
 
     # Allow admin users registration
     # Allowed values: true|false

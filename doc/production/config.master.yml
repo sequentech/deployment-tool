@@ -347,7 +347,6 @@ config:
   agora_elections:
     db_password: '<PASSWORD>'
     shared_secret: '<PASSWORD>'
-    expiry: 60000
     domain: agora
     port: 14443
 
@@ -1053,7 +1052,11 @@ config:
     allow_deregister: true
 
     # Number of seconds after which an authentication token expires.
-    auth_token_expiration_seconds: 3600
+    auth_token_expiration_seconds: 600
+
+    # Number of seconds after which an authentication token expires for admin
+    # users
+    admin_auth_token_expiration_seconds: 3600
 
     # Allow admin users registration
     # Allowed values: true|false

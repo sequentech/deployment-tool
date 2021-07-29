@@ -92,6 +92,8 @@ SHARED_SECRET = b'{{config.agora_elections.shared_secret}}'
 
 TIMEOUT = {{config.authapi.auth_token_expiration_seconds}}
 
+ADMIN_TIMEOUT = {{config.authapi.admin_auth_token_expiration_seconds}}
+
 SECRET_KEY = '{{ config.global_secret_key }}'
 HOME_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/home"
 
