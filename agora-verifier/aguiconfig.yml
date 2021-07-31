@@ -40,6 +40,20 @@
     - regexp: "hash:.*"
       replace: 'hash: "{{sha256sum.stdout}}",'
 
+- name: AgoraVerifier, copying generated avConfig.js in user agora-gui-*
+  become: true
+  become_user: agoragui
+  copy:
+    src: /home/agoragui/avConfig.js
+    dest: /home/agoragui/{{ item }}/avConfig.js
+    owner: agoragui
+    group: agoragui
+    mode: '0600'
+  with_items:
+    - agora-gui-admin
+    - agora-gui-elections
+    - agora-gui-booth
+
 - name: AgoraVerifier, building AgoraGui
   become: true
   become_user: agoragui
