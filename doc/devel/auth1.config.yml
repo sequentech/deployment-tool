@@ -230,8 +230,8 @@ config:
         Access-Control-Allow-Methods: "'GET, POST, OPTIONS' always"
         Access-Control-Allow-Headers: "'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always"
         Content-Security-Policy: "'frame-ancestors \\'none\\'' always"
-        X-Frame-Options: "DENY"
-        Strict-Transport-Security: "max-age=63072000; includeSubDomains; preload"
+        X-Frame-Options: "'DENY' always"
+        Strict-Transport-Security: "'max-age=63072000; includeSubDomains; preload' always"
 
   # some java related configuration options
   java:
@@ -896,34 +896,34 @@ config:
 
     # social networks footer links
     social:
-      facebook: 'https://www.facebook.com/nvotes'
-      twitter: 'https://twitter.com/nvotescom'
+      facebook: ''
+      twitter: 'https://twitter.com/nvotes_com'
       twitterHandle: 'nvotescom'
-      googleplus: 'https://plus.google.com/101939665794445172389/posts'
+      googleplus: ''
       youtube: 'https://www.youtube.com/results?search_query=nvotes'
       github: 'https://github.com/agoravoting/'
 
     # technology footer links
     technology:
       aboutus: 'https://nvotes.com/'
-      pricing: 'https://nvotes.com/pricing'
+      pricing: 'https://nvotes.com/'
       overview: 'https://nvotes.com/'
       solutions: 'https://nvotes.com/'
-      admin_manual: 'https://nvotes.com/doc/en/'
+      admin_manual: 'https://agoravoting.github.io/admin-manual/'
 
     # legality footer links
     legal:
       terms_of_service: 'https://nvotes.com/tos/'
-      cookies: 'https://agoravoting.com/cookies/'
-      privacy: 'https://agoravoting.com/privacy/'
+      cookies: 'https://nvotes.com/cookies/'
+      privacy: 'https://nvotes.com/privacy/'
       security_contact: 'https://nvotes.com/security-contact/'
-      community_website: 'https://agoravoting.org'
+      community_website: 'https://github.com/agoravoting/'
 
     documentation:
-      show_help: true
-      faq: 'https://nvotes.com/doc/en/'
-      overview: 'https://agoravoting.com/overview/'
-      technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
+      show_help: false
+      faq: 'https://agoravoting.github.io/admin-manual/'
+      overview: 'https://agoravoting.github.io/admin-manual/'
+      technical: 'https://agoravoting.github.io/admin-manual/'
 
     # social networks buttons configuration
     share_social:
@@ -931,8 +931,8 @@ config:
       default:
         - network: 'Twitter'
           button_text: ''
-          social_message: 'I have just voted in election https://go.nvotes.com, you can too! #nvotes'
-
+          social_message: 'I have just voted in election __URL__, you can too! #nvotes'
+  
   # configuration related to the nginx web server
   webserver:
     # configures the "worker_processes" setting in nginx. Typically you would
