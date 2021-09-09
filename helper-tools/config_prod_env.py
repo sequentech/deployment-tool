@@ -21,7 +21,7 @@ import sys
 import argparse
 import re
 
-INPUT_PROD_VERSION="103111.8"
+INPUT_PROD_VERSION="4.0.0-beta.1"
 INPUT_PRE_VERSION="4.0.0-beta.1"
 OUTPUT_PROD_VERSION="4.0.0-beta.1"
 def store_keyvalue(prod_config, generated_config, keystore, pipe):
