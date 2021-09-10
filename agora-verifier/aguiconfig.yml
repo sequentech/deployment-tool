@@ -14,13 +14,20 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
+- name: AgoraVerifier, check if avConfig.js exists
+  stat:
+    path: /home/agoragui/agora-gui-admin/avConfig.js
+  register: avConfig
+
 - name: AgoraVerifier, get hash of verifier
+  when: avConfig.stat.exists == True
   shell: sha256sum /home/agoraverifier/agora-verifier/agora-verifier | cut -d' ' -f 1
   become: true
   become_user: agoraverifier
   register: sha256sum
 
 - name: AgoraVerifier, replacing hash in avConfig.js files
+  when: avConfig.stat.exists == True
   become: true
   become_user: agoragui
   replace:
@@ -33,6 +40,7 @@
     - agora-gui-booth
 
 - name: AgoraVerifier, replacing link in avConfig.js files
+  when: avConfig.stat.exists == True
   become: true
   become_user: agoragui
   replace:
@@ -45,6 +53,7 @@
     - agora-gui-booth
 
 - name: AgoraVerifier, building AgoraGui
+  when: avConfig.stat.exists == True
   become: true
   become_user: agoragui
   shell:
