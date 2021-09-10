@@ -200,6 +200,14 @@
   register: register_master_cmd
   failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
 
+- name: High Availability & Load Balancing, checking repmgr cluster state after potentially registering the master
+  become: true
+  become_user: postgres
+  ignore_errors: true
+  when: config.load_balancing.is_master
+  register: repmgr_cluster_show
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
+
 - name: High Availability & Load Balancing [master], promote to master
   become: true
   become_user: postgres
