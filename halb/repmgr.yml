@@ -237,5 +237,5 @@
 - name: High Availability & Load Balancing [slave], register the standby
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search(' standby \| .* \| host={{config.hostname}} user=repmgr dbname=repmgr'))
+  when: not config.load_balancing.is_master and not (repmgr_cluster_show.stdout | regex_search(' standby \| .* \| host=' + config.hostname + ' user=repmgr dbname=repmgr'))
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --force standby register
