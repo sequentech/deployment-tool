@@ -25,11 +25,14 @@ params:
 
 # global configuration
 config:
-  version: 20.2.0
+  version: '4.0.0'
   backup_password: '<PASSWORD>'
 
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
+
+  # Activate if cloudflare is used, so that the client ip address is taken from
+  # cloudflare HTTP headers and only cloudflare ips can access the http server
   cloudflare: false
 
   # create daily and live backups
@@ -227,6 +230,8 @@ config:
         Access-Control-Allow-Methods: "'GET, POST, OPTIONS' always"
         Access-Control-Allow-Headers: "'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always"
         Content-Security-Policy: "'frame-ancestors \\'none\\'' always"
+        X-Frame-Options: "'DENY' always"
+        Strict-Transport-Security: "'max-age=63072000; includeSubDomains; preload' always"
 
   # some java related configuration options
   java:
@@ -323,7 +328,7 @@ config:
       #- agora_results.pipes.multipart.multipart_tally_plaintexts_joiner
       #- agora_results.pipes.multipart.append_ballots
       #- agora_results.pipes.parity.proportion_rounded
-      - agora_results.pipes.parity.parity_zip_non_iterative
+      #- agora_results.pipes.parity.parity_zip_non_iterative
       #- agora_results.pipes.parity.reorder_winners
       #- agora_results.pipes.parity.podemos_parity_loreg_zip_non_iterative
       #- agora_results.pipes.parity.podemos_parity2_loreg_zip_non_iterative
@@ -529,20 +534,6 @@ config:
         <i class=\"fa fa-book\" aria-hidden=\"true\"></i>
         Documentation
         </a>
-      - >-
-        <a
-        href=\"mailto:support@nvotes.com\"
-        target=\"_blank\">
-        <i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>
-        Contact Support
-        </a>
-      - >-
-        <a
-        href=\"mailto:support@nvotes.com\"
-        target=\"_blank\">
-        <i class=\"fa fa-comment\" aria-hidden=\"true\"></i>
-        Request free 1-on-1 session
-        </a>
 
     # when debug mode is false, javascript and in general source code is
     # uglified and minified, otherwise it is not to allow better debugging.
@@ -581,8 +572,8 @@ config:
     # as a configurable option
     shown_admin_question_layouts:
       - accordion
+      - simultaneous-questions
       #- circles
-      #- simultaneous-questions
       #- conditional-accordion
       #- pcandidates-election
     
@@ -644,7 +635,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         resultsConfig: {
-          version: '1.0',
+          version: '4.0.0'
           pipes: [
             {
               type: 'agora_results.pipes.results.do_tallies',
@@ -905,34 +896,34 @@ config:
 
     # social networks footer links
     social:
-      facebook: 'https://www.facebook.com/nvotes'
-      twitter: 'https://twitter.com/nvotescom'
+      facebook: ''
+      twitter: 'https://twitter.com/nvotes_com'
       twitterHandle: 'nvotescom'
-      googleplus: 'https://plus.google.com/101939665794445172389/posts'
+      googleplus: ''
       youtube: 'https://www.youtube.com/results?search_query=nvotes'
       github: 'https://github.com/agoravoting/'
 
     # technology footer links
     technology:
       aboutus: 'https://nvotes.com/'
-      pricing: 'https://nvotes.com/pricing'
+      pricing: 'https://nvotes.com/'
       overview: 'https://nvotes.com/'
       solutions: 'https://nvotes.com/'
-      admin_manual: 'https://nvotes.com/doc/en/'
+      admin_manual: 'https://agoravoting.github.io/admin-manual/'
 
     # legality footer links
     legal:
       terms_of_service: 'https://nvotes.com/tos/'
-      cookies: 'https://agoravoting.com/cookies/'
-      privacy: 'https://agoravoting.com/privacy/'
+      cookies: 'https://nvotes.com/cookies/'
+      privacy: 'https://nvotes.com/privacy/'
       security_contact: 'https://nvotes.com/security-contact/'
-      community_website: 'https://agoravoting.org'
+      community_website: 'https://github.com/agoravoting/'
 
     documentation:
-      show_help: true
-      faq: 'https://nvotes.com/doc/en/'
-      overview: 'https://agoravoting.com/overview/'
-      technical: 'https://agoravoting.com/static/generic_tech_overview_20_08_15.pdf'
+      show_help: false
+      faq: 'https://agoravoting.github.io/admin-manual/'
+      overview: 'https://agoravoting.github.io/admin-manual/'
+      technical: 'https://agoravoting.github.io/admin-manual/'
 
     # social networks buttons configuration
     share_social:
@@ -940,8 +931,8 @@ config:
       default:
         - network: 'Twitter'
           button_text: ''
-          social_message: 'I have just voted in election https://go.nvotes.com, you can too! #nvotes'
-
+          social_message: 'I have just voted in election __URL__, you can too! #nvotes'
+  
   # configuration related to the nginx web server
   webserver:
     # configures the "worker_processes" setting in nginx. Typically you would

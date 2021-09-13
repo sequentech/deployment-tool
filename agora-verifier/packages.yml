@@ -31,7 +31,7 @@
 - name: AgoraVerifier, Install sbt-0.13.18.deb
   become: true
   apt:
-    deb: "/tmp/sbt-0.13.8.deb"
+    deb: "/tmp/sbt-0.13.18.deb"
     state: present
   when: sbt_check_deb.rc == 1
 
