@@ -126,6 +126,10 @@
   become: true
   become_user: agoragui
   file: 
-    path: /home/agoragui/agora-gui-admin/avPluginsConfig.js
+    path: "/home/agoragui/{{ item }}/avPluginsConfig.js"
     state: absent
+  with_items:
+    - agora-gui-admin
+    - agora-gui-booth
+    - agora-gui-elections
   when: avpluginsconfig_file.stat.exists and config_version.stdout != plugins_version.stdout
