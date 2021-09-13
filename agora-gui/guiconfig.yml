@@ -105,20 +105,20 @@
   become: true
   become_user: agoragui
   stat:
-    path: /home/agoragui/avPluginsConfig.js
+    path: /home/agoragui/agora-gui-admin/avPluginsConfig.js
   register: avpluginsconfig_file
 
 - name: AgoraGui, check avConfig version
   become: true
   become_user: agoragui
-  shell: cat /home/agoragui/avConfig.js | grep AV_CONFIG_VERSION | sed 's/\s*var\s*AV_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9\.]*\)["|\x27]\s*;\s*/\1/'
+  shell: cat /home/agoragui/agora-gui-admin/avConfig.js | grep AV_CONFIG_VERSION | sed 's/\s*var\s*AV_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9\.\-]*\)["|\x27]\s*;\s*/\1/'
   register: config_version
   when: avpluginsconfig_file.stat.exists
 
 - name: AgoraGui, check avPluginsConfig version
   become: true
   become_user: agoragui
-  shell: cat /home/agoragui/avPluginsConfig.js | grep AV_PLUGINS_CONFIG_VERSION | sed 's/\s*var\s*AV_PLUGINS_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9\.]*\)["|\x27]\s*;\s*/\1/'
+  shell: cat /home/agoragui/agora-gui-admin/avPluginsConfig.js | grep AV_PLUGINS_CONFIG_VERSION | sed 's/\s*var\s*AV_PLUGINS_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9\.\-]*\)["|\x27]\s*;\s*/\1/'
   register: plugins_version
   when: avpluginsconfig_file.stat.exists
 
@@ -126,6 +126,6 @@
   become: true
   become_user: agoragui
   file: 
-    path: /home/agoragui/avPluginsConfig.js
+    path: /home/agoragui/agora-gui-admin/avPluginsConfig.js
     state: absent
   when: avpluginsconfig_file.stat.exists and config_version.stdout != plugins_version.stdout
