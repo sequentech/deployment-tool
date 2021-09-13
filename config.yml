@@ -26,7 +26,7 @@ params:
 # global configuration
 config:
   backup_password: '<PASSWORD>'
-  version: '4.0.0'
+  version: 'master'
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
 
@@ -636,7 +636,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         resultsConfig: {
-          version: '4.0.0'
+          version: 'master'
           pipes: [
             {
               type: 'agora_results.pipes.results.do_tallies',
