@@ -600,7 +600,7 @@ config:
     # default configuration for calculate results on agora-gui-admin
     calculate_results_default: >-
       {
-        "version": "1.0",
+        "version": "4.0.0",
         "pipes": [
           {
             "type": "agora_results.pipes.pdf.configure_pdf",
@@ -636,7 +636,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         resultsConfig: {
-          version: '4.0.0'
+          version: '4.0.0',
           pipes: [
             {
               type: 'agora_results.pipes.results.do_tallies',
