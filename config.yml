@@ -1131,6 +1131,12 @@ config:
     # error with 'invalid_credentials' codename.
     show_already_registered: false
 
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be used within authapi, for example by the
+    # participation reports. Files will be copied inside
+    # /home/authapi/static_extra/ directory.
+    static_extra_path: ''
+
     # Configuration for automatically schedule sending emails with PDF
     # participation reports.
     participation_reports: []

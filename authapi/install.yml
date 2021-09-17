@@ -142,6 +142,14 @@
     content: "{{ item.config | to_nice_json }}"
   with_items: "{{ config.authapi.participation_reports }}"
 
+- name: Authapi, copy static_extra_path
+  when: config.authapi.static_extra_path != ''
+  become: true
+  copy:
+    src: "{{config.authapi.static_extra_path}}"
+    dest: /home/authapi/static_extra/
+    owner: authapi
+    group: authapi
 
 - name: Authapi, configure report crontab configuration
   become: true
