@@ -82,17 +82,16 @@ config:
   #    job: 'bash -c "source /home/agoraelections/env/bin/activate; /home/agoraelections/agora-elections/admin/admin.py start 4"'
   #    # The specific user whose crontab should be modified.
   #    user: 'authapi'
-  #    schedule:
-  #      # minute when the job should run ( 0-59, *, */2, etc )
-  #      minute: 0
-  #      # hour when the job should run ( 0-23, *, */2, etc )
-  #      hour: 15
-  #      # Day of the month the job should run ( 1-31, *, */2, etc )
-  #      day: '17'
-  #      # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
-  #      weekday: '*'
-  #      # Month of the year the job should run ( 1-12, *, */2, etc )
-  #      month: '9'
+  #    # minute when the job should run ( 0-59, *, */2, etc )
+  #    minute: 0
+  #    # hour when the job should run ( 0-23, *, */2, etc )
+  #    hour: 15
+  #    # Day of the month the job should run ( 1-31, *, */2, etc )
+  #    day: '17'
+  #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+  #    weekday: '*'
+  #    # Month of the year the job should run ( 1-12, *, */2, etc )
+  #    month: '9'
 
   # configuration related to the election orchestration service, only active in
   # election authorities
@@ -1167,6 +1166,12 @@ config:
     #      title: Association elections 2022
     #      subtitle: Number of votes accumulated up to day __DATETIME__
     #      logo_path: /tmp/logo.png
+    #
+    #      # this is optional, by default it will be 488 x 130
+    #      logo_size:
+    #         width: 488
+    #         height: 130
+    #
     #      table_headers: ["Election", "Votes", "% census", "# Total Census"]
     #      groups:
     #        - auth_event_ids: [24, 25, 26]
@@ -1175,6 +1180,14 @@ config:
     #          title: Advisory Board candidates for Sector 1
     #        - auth_event_ids: [30, 31, 32]
     #          title: Advisory Board candidates for Sector 2
+    #        - auth_event_ids: [30, 31, 32]
+    #          title: Advisory Board candidates for Sector 2 - young
+    #          extra_filters:
+    #            user__metadata__age__lt: 18
+    #        - auth_event_ids: [30, 31, 32]
+    #          title: Advisory Board candidates for Sector 2 - adult
+    #          extra_filters:
+    #            user__metadata__age__gte: 18
 
     # sms otp authentication configuration
     sms_otp:
