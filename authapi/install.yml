@@ -138,7 +138,7 @@
   become: true
   become_user: authapi
   copy:
-    dest: "/home/authapi/{{ item.name }}"
+    dest: "/home/authapi/{{ item.name }}.json"
     content: "{{ item.config | to_nice_json }}"
   with_items: "{{ config.authapi.participation_reports }}"
 
@@ -156,7 +156,7 @@
   cron:
     state: present
     name: "{{ item.name }}"
-    job: '/home/authapi/launchcommand.sh "./manage.py send_report --settings=authapi.deploy /home/authapi/{{ item.name }} /home/authapi/report_{{ item.name }}.pdf"'
+    job: '/usr/bin/sudo -u authapi /home/authapi/launchcommand.sh "./manage.py send_report --settings=authapi.deploy /home/authapi/{{ item.name }}.json /home/authapi/report_{{ item.name }}.pdf"'
     minute: "{{ item.minute }}"
     hour: "{{ item.hour }}"
     day: "{{ item.day }}"

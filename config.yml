@@ -1141,17 +1141,16 @@ config:
     # participation reports.
     participation_reports: []
     #  - name: electoral-process-10
-    #    cron_schedule:
-    #      # minute when the job should run ( 0-59, *, */2, etc )
-    #      minute: 0
-    #      # hour when the job should run ( 0-23, *, */2, etc )
-    #      hour: 7
-    #      # Day of the month the job should run ( 1-31, *, */2, etc )
-    #      day: '17-20'
-    #      # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
-    #      weekday: '*'
-    #      # Month of the year the job should run ( 1-12, *, */2, etc )
-    #      month: '9'
+    #    # minute when the job should run ( 0-59, *, */2, etc )
+    #    minute: 0
+    #    # hour when the job should run ( 0-23, *, */2, etc )
+    #    hour: 7
+    #    # Day of the month the job should run ( 1-31, *, */2, etc )
+    #    day: '17-20'
+    #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+    #    weekday: '*'
+    #    # Month of the year the job should run ( 1-12, *, */2, etc )
+    #    month: '9'
     #    config:
     #      email:
     #        subject: Daily participation report - __DATE__
