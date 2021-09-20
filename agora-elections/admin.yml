@@ -29,6 +29,6 @@
   become_user: agoraelections
   pip:
     virtualenv: /home/agoraelections/env
-    virtualenv_python: python2
+    virtualenv_python: python3
     state: present
     requirements: /home/agoraelections/agora-elections/admin/requirements.txt

@@ -133,3 +133,33 @@
   become: true
   become_user: postgres
   shell: psql authapi -tAc "ALTER USER authapi CREATEDB;"
+
+- name: Authapi, create reports config files
+  become: true
+  become_user: authapi
+  copy:
+    dest: "/home/authapi/{{ item.name }}.json"
+    content: "{{ item.config | to_nice_json }}"
+  with_items: "{{ config.authapi.participation_reports }}"
+
+- name: Authapi, copy static_extra_path
+  when: config.authapi.static_extra_path != ''
+  become: true
+  copy:
+    src: "{{config.authapi.static_extra_path}}"
+    dest: /home/authapi/static_extra/
+    owner: authapi
+    group: authapi
+
+- name: Authapi, configure report crontab configuration
+  become: true
+  cron:
+    state: present
+    name: "{{ item.name }}"
+    job: '/usr/bin/sudo -u authapi /home/authapi/launchcommand.sh "./manage.py send_report --settings=authapi.deploy /home/authapi/{{ item.name }}.json /home/authapi/report_{{ item.name }}.pdf"'
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    day: "{{ item.day }}"
+    weekday: "{{ item.weekday }}"
+    month: "{{ item.month }}"
+  with_items: "{{ config.authapi.participation_reports }}"

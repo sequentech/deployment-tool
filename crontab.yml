@@ -1,0 +1,12 @@
+- name: Crontab, configure scheduled crontab tasks
+  become: true
+  cron:
+    state: present
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    day: "{{ item.day }}"
+    weekday: "{{ item.weekday }}"
+    month: "{{ item.month }}"
+  with_items: "{{ config.crontab_tasks }}"
