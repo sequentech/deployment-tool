@@ -1,5 +1,5 @@
 # This file is part of authapi.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2014-2020  Agora Voting SL <contact@nvotes.com>
 
 # authapi is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -21,12 +21,35 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from datetime import timedelta
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Celery config
-BROKER_URL = "amqp://guest:guest@localhost:5672//"
+class CeleryConfig:
+    broker_url = "amqp://guest:guest@localhost:5672//"
+    timezone = 'Europe/Madrid'
+    beat_schedule = {
+        'review_tallies': {
+            'task': 'tasks.process_tallies',
+            'schedule': timedelta(seconds=5),
+            'args': []
+        },
+    }
+    result_backend = 'cache'
+    cache_backend = 'memory'
+    task_always_eager = True
+    task_eager_propagates = True
+
+CELERY_CONFIG = CeleryConfig
+
+USE_TZ = True
+
+TIME_ZONE = 'Europe/Madrid'
+
+ALLOW_DEREGISTER = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -37,17 +60,22 @@ SECRET_KEY = 'zct2c=hlij$^0xu0i8o6c^phjc!=m)r(%h90th0yyx9r5dm))+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOW_DEREGISTER = True
-
 ALLOWED_HOSTS = []
 
+TIMEOUT = 300
+
+ADMIN_TIMEOUT = 3000
+
 ADMIN_AUTH_ID = 1
+
+ALLOW_ADMIN_AUTH_REGISTRATION = False
 
 # If this option is true, when an user tries to register and the user is
 # already registered, authapi will return an error with the 'user_exists'
 # codename. Otherwise, on error, authapi will always return the same generic
 # error with 'invalid_credentials' codename.
 SHOW_ALREADY_REGISTERED = False
+
 
 # Application definition
 
@@ -76,14 +104,13 @@ PLUGINS = (
 if PLUGINS:
     INSTALLED_APPS += PLUGINS
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'wrap.LoggingMiddleware'
 )
 
 # change the test runner to the one provided by celery so that the tests that
@@ -115,10 +142,12 @@ WSGI_APPLICATION = 'authapi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'authapi',
-        'USER': 'authapi',
-        'PASSWORD': '{{config.election_orchestra.eorchestra_password}}'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_NAME', 'authapi_test'),
+        'USER': os.environ.get('POSTGRES_USER', 'authapi_test'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '{{config.election_orchestra.eorchestra_password}}'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 
@@ -135,7 +164,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
@@ -148,6 +176,8 @@ CORS_ORIGIN_WHITELIST = (
         'http://localhost:9001',
 )
 
+OPENID_CONNECT_PROVIDERS_CONF = []
+
 ENABLE_CAPTCHA = True
 PREGENERATION_CAPTCHA = 100
 
@@ -157,12 +187,17 @@ SMS_LOGIN = ""
 SMS_PASSWORD = ""
 SMS_URL = ""
 SMS_SENDER_ID = ""
+SMS_SENDER_NUMBER = ""
 SMS_VOICE_LANG_CODE = ""
+
+SMS_OTP_EXPIRE_SECONDS = 300
 
 MAX_AUTH_MSG_SIZE = {
   "sms": 120,
   "email": 10000
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SMS_BASE_TEMPLATE = "__MESSAGE__ -- nVotes"
 
@@ -173,6 +208,8 @@ EMAIL_BASE_TITLE_TEMPLATE = "__TITLE__ - nVotes"
 HOME_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/home"
 SMS_AUTH_CODE_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 EMAIL_AUTH_CODE_URL = "https://agoravoting.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
+
+AGORA_ELECTIONS_BASE = []
 
 SIZE_CODE = 8
 MAX_GLOBAL_STR = 512
