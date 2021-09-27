@@ -1118,18 +1118,19 @@ config:
         {
           "name": "username",
           "type": "text",
-          "required": True,
+          "required": true,
+          "unique": true,
           "min": 3, 
           "max": 200,
-          "required_on_authentication": True
+          "required_on_authentication": true
         },
         {
           "name": "password",
           "type": "password",
-          "required": True,
+          "required": true,
           "min": 3,
           "max": 200,
-          "required_on_authentication": True
+          "required_on_authentication": true
         }
       ]
 
