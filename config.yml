@@ -675,13 +675,13 @@ config:
           census:'close',
           extra_fields: [
             {
-              "name": "email",
-              "type": "email",
-              "required": true,
-              "unique": true,
-              "min": 4,
-              "max": 255,
-              "required_on_authentication": true
+              name: 'email',
+              type: 'email',
+              required: true,
+              unique: true,
+              min: 4,
+              max: 255,
+              required_on_authentication: true
             }
           ],
           admin_fields: ConfigService.adminFields,
