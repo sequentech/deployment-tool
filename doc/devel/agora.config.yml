@@ -686,7 +686,17 @@ config:
           voters: [],
           auth_method: 'email',
           census:'close',
-          extra_fields: [ ],
+          extra_fields: [
+            {
+              name: 'email',
+              type: 'email',
+              required: true,
+              unique: true,
+              min: 4,
+              max: 255,
+              required_on_authentication: true
+            }
+          ],
           admin_fields: ConfigService.adminFields,
           config: {
             allow_user_resend: false,
@@ -1117,8 +1127,26 @@ config:
     # Defines the extra fields used in authentication and registration. Empty by
     # default
     extra_fields: >
-      []
-
+      [
+        {
+          "name": "username",
+          "type": "text",
+          "required": true,
+          "unique": true,
+          "min": 3, 
+          "max": 200,
+          "required_on_authentication": true
+        },
+        {
+          "name": "password",
+          "type": "password",
+          "required": true,
+          "min": 3,
+          "max": 200,
+          "required_on_authentication": true
+        }
+      ]
+ 
     # Admin user data and credentials. Note that some of them might get unused,
     # for example admin_password won't be of use if auth_method is 'sms'.
     admin_user:
