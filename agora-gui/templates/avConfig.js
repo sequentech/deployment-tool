@@ -38,7 +38,7 @@ var avConfigData = {
   webTitle: "{{ config.agora_gui.web_title }}",
   
   // html to be inserted in the gui-admin profile view
-  profileHtml: "{{ config.agora_gui.profile_html }}",
+  profileHtml: "{{ config.agora_gui.profile_html | regex_replace("\n", "") }}",
   
   // base url used for help on gui-admin
   settingsHelpBaseUrl: "{{ config.agora_gui.settings_help_base_url }}",
@@ -47,7 +47,7 @@ var avConfigData = {
   settingsHelpDefaultUrl: "{{ config.agora_gui.settings_help_default_url }}",
 
   // html/text to show when the help url for a setting fails to load
-  settingsHelpUrlError: "{{ config.agora_gui.texts.settings_help_url_error }}",
+  settingsHelpUrlError: "{{ config.agora_gui.texts.settings_help_url_error | regex_replace("\n", "") }}",
   
   // Show 'Success Action' tab in admin agora_gui
   showSuccessAction: {% if config.agora_gui.show_success_action %}true{% else %}false{% endif %},
@@ -96,7 +96,7 @@ var avConfigData = {
   // html code for flexibility
   helpList: [
     {% for help_item in config.agora_gui.help_list %}
-    "{{ help_item  }}"{% if not loop.last %},{% endif %}
+    "{{ help_item | regex_replace('\n', '') }}"{% if not loop.last %},{% endif %}
     {% endfor %}
   ],
 
@@ -361,9 +361,9 @@ var avConfigData = {
     ]
   },
 
-  documentation_html_include: "{{ config.agora_gui.texts.documentation_html_include }}",
+  documentation_html_include: "{{ config.agora_gui.texts.documentation_html_include | regex_replace("\n", "") }}",
 
-  legal_html_include: "{{ config.agora_gui.texts.legal_html_include }}",
+  legal_html_include: "{{ config.agora_gui.texts.legal_html_include | regex_replace("\n", "") }}",
 
   // Details pertaining to the organization that runs the software
   organization: {
@@ -387,7 +387,7 @@ var avConfigData = {
   },
 
   success: {
-    text: "{{ config.agora_gui.texts.booth_success_extra }}"
+    text: "{{ config.agora_gui.texts.booth_success_extra | regex_replace("\n", "") }}"
   },
 
   tos: {
