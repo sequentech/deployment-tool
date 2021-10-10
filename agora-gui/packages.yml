@@ -23,8 +23,6 @@
   become: true
   apt:
     pkg:
-      - nodejs
-      - npm
       - yarnpkg
     state: present
 
