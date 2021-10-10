@@ -19,18 +19,16 @@
   apt:
     update_cache: yes
 
+# yarn will now be installed through npm so we remove it and also the link
 - name: AgoraGui, Installing packages
   become: true
   apt:
     pkg:
-      - nodejs
-      - npm
       - yarnpkg
-    state: present
+    state: absent
 
-- name: AgoraGui, yarn link
+- name: AgoraGui, yarn link remove
   become: true
   file:
-    src: /usr/bin/yarnpkg
-    dest: /usr/bin/yarn
-    state: link
+    path: /usr/bin/yarn
+    state: absent
