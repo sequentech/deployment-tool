@@ -19,6 +19,20 @@
   apt:
     update_cache: yes
 
+# we use curl directly because it's the recommended method
+- name: Packages, Adding nodejs dependency
+  become: true
+  shell: curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+  args:
+    warn: false
+
+# we use apt-get directly because otherwise it does not work
+- name: Packages, Ensuring the upgrade of nodejs
+  become: true
+  shell: apt-get install -y nodejs
+  args:
+    warn: false
+
 - name: Packages, Installing packages
   become: true
   apt:
@@ -30,7 +44,6 @@
       - postgresql-12-repmgr
       - mercurial
       - supervisor
-      - nodejs
       - openjdk-8-jdk-headless
       - libffi-dev
       - virtualenvwrapper
