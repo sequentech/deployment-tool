@@ -21,7 +21,7 @@
 - name: Crontab, services restart
   become:
   service:
-    name: {{ item }}
+    name: "{{ item }}"
     state: restarted
   with_items:
   - rsyslog
