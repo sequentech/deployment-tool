@@ -1,3 +1,10 @@
+- name: Crontab, configure logging
+  become: true
+  replace:
+    dest: "/etc/rsyslog.d/50-default.conf"
+    regexp: '^#cron\.\*'
+    replace: "cron.*"
+ 
 - name: Crontab, configure scheduled crontab tasks
   become: true
   cron:
@@ -10,3 +17,12 @@
     weekday: "{{ item.weekday }}"
     month: "{{ item.month }}"
   with_items: "{{ config.crontab_tasks }}"
+
+- name: Crontab, services restart
+  become:
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+  - rsyslog
+  - cron

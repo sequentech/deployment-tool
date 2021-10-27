@@ -77,18 +77,34 @@ config:
   # you can use this section to schedule crontab tasks. For example, it can be
   # used to schedule election start for example, as shown below.
   crontab_tasks: []
-  #  - name: start-election-10
+  #  - name: start-election
   #    # job is the command to be run. The command should not contain line
   #    # breaks.
-  #    job: 'bash -c "source /home/agoraelections/env/bin/activate; /home/agoraelections/agora-elections/admin/admin.py start 4"'
+  #    job: 'bash -c "source /home/agoraelections/tenv/bin/activate; /home/agoraelections/agora-elections/admin/admin.py auth_start 4 >> /home/agoraelections/crontab.log 2>&1"'
   #    # The specific user whose crontab should be modified.
-  #    user: 'authapi'
+  #    user: 'agoraelections'
   #    # minute when the job should run ( 0-59, *, */2, etc )
   #    minute: 0
   #    # hour when the job should run ( 0-23, *, */2, etc )
   #    hour: 15
   #    # Day of the month the job should run ( 1-31, *, */2, etc )
   #    day: '17'
+  #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+  #    weekday: '*'
+  #    # Month of the year the job should run ( 1-12, *, */2, etc )
+  #    month: '9'
+  #  - name: stop-election
+  #    # job is the command to be run. The command should not contain line
+  #    # breaks.
+  #    job: 'bash -c "source /home/agoraelections/tenv/bin/activate; /home/agoraelections/agora-elections/admin/admin.py auth_stop 4 >> /home/agoraelections/crontab.log 2>&1"'
+  #    # The specific user whose crontab should be modified.
+  #    user: 'agoraelections'
+  #    # minute when the job should run ( 0-59, *, */2, etc )
+  #    minute: 0
+  #    # hour when the job should run ( 0-23, *, */2, etc )
+  #    hour: 15
+  #    # Day of the month the job should run ( 1-31, *, */2, etc )
+  #    day: '18'
   #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
   #    weekday: '*'
   #    # Month of the year the job should run ( 1-12, *, */2, etc )
