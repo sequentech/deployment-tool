@@ -493,7 +493,9 @@ config:
     elections_port: 10092
 
     # Login session cookies expiration in minutes. set to 'false' to be 
-    # unlimited
+    # unlimited. Does not apply to agora-gui-admin cookies, except if this
+    # setting is set to 'false' then the expiration of cookies will be set
+    # the same value as for other agora-gui modules (unlimited).
     cookies_expires: 10
 
     # Shows a dialog if the browser is too old to notify the user. Set this to

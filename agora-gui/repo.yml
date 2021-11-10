@@ -64,17 +64,15 @@
     - agora-gui-elections
     - agora-gui-booth
 
-- name: AgoraGui, setting admin timeout correctly in agora-gui-admin (1)
-  when: avConfig.stat.exists == True
+- name: AgoraGui, setting admin timeout correctly in agora-gui-admin
   become: true
   become_user: agoragui
   replace:
     dest: /home/agoragui/agora-gui-admin/avConfig.js
     regexp: " timeoutSeconds:.*"
-    replace: ' timeoutSeconds: : {{config.authapi.admin_auth_token_expiration_seconds}},'
+    replace: ' timeoutSeconds: {{config.authapi.admin_auth_token_expiration_seconds}},'
 
-- name: AgoraGui, setting admin timeout correctly in agora-gui-admin (2)
-  when: avConfig.stat.exists == True
+- name: AgoraGui, setting admin timeout correctly in agora-gui-admin, 2
   become: true
   become_user: agoragui
   replace:
