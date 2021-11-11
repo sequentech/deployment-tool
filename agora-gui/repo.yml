@@ -64,6 +64,22 @@
     - agora-gui-elections
     - agora-gui-booth
 
+- name: AgoraGui, setting admin timeout correctly in agora-gui-admin
+  become: true
+  become_user: agoragui
+  replace:
+    dest: /home/agoragui/agora-gui-admin/avConfig.js
+    regexp: " timeoutSeconds:.*"
+    replace: ' timeoutSeconds: {{config.authapi.admin_auth_token_expiration_seconds}},'
+
+- name: AgoraGui, setting admin timeout correctly in agora-gui-admin, 2
+  become: true
+  become_user: agoragui
+  replace:
+    dest: /home/agoragui/agora-gui-admin/avConfig.js
+    regexp:  "expires:.*"
+    replace: ' expires: {{ (config.authapi.admin_auth_token_expiration_seconds / 60) | int }},'
+
 - name: AgoraGui, modifying agora-gui-admin avConfig.js for securing the api calls
   become: true
   become_user: agoragui
