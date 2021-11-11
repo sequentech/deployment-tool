@@ -492,7 +492,8 @@ config:
     elections_port: 10092
 
     # Login session cookies expiration in minutes. set to 'false' to be 
-    # unlimited. Does not apply to agora-gui-admin cookies, except if this
+    # unlimited. Does not apply to agora-gui-admin cookies (which use the value
+    # from `config.authapi.admin_auth_token_expiration_seconds`), except if this
     # setting is set to 'false' then the expiration of cookies will be set
     # the same value as for other agora-gui modules (unlimited).
     cookies_expires: 10
