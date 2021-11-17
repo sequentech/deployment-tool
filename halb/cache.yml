@@ -14,13 +14,21 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: High Availability & Load Balancing [master], Configure memcached to listen to accept connections from all interfaces
+- name: High Availability & Load Balancing [master], Configure memcached listening ips
   become: true
   when: config.load_balancing.is_master
   replace:
     dest: /etc/memcached.conf
     regexp: '-l.*'
-    replace: '-l 0.0.0.0'
+    replace: '-l 127.0.0.1,{{ config.private_ipaddress }}'
+
+- name: High Availability & Load Balancing [slave], Configure memcached listening ips
+  become: true
+  when: not config.load_balancing.is_master
+  replace:
+    dest: /etc/memcached.conf
+    regexp: '-l.*'
+    replace: '-l 127.0.0.1'
 
 - name: High Availability & Load Balancing [master], ensure memcached service is restarted
   when: config.load_balancing.is_master
