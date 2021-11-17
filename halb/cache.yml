@@ -28,7 +28,7 @@
   replace:
     dest: /etc/memcached.conf
     regexp: '-l.*'
-    replace: '-l 127.0.0.1
+    replace: '-l 127.0.0.1'
 
 - name: High Availability & Load Balancing [master], ensure memcached service is restarted
   when: config.load_balancing.is_master
