@@ -23,6 +23,32 @@
     dest: /home/agoraverifier/agora-verifier
     force: "{{ repos.averifier.force }}"
 
+- name: AgoraVerifier, setting up agora-verifier repo
+  block:
+    - name: AgoraVerifier, Downloading agora-verifier repo
+      become: true
+      become_user: agoraverifier
+      git:
+        repo: "{{ repos.averifier.repo }}"
+        version: "{{ repos.averifier.version }}"
+        dest: /home/agoraverifier/agora-verifier
+        force: "{{ repos.averifier.force }}"
+  rescue:
+    - name: AgoraVerifier, Downloading agora-verifier repo (force fetch)
+      become: true
+      become_user: agoraverifier
+      command:
+        chdir: /home/agoraverifier/agora-verifier
+        cmd: git fetch --tags --force
+    - name: AgoraVerifier, Downloading agora-verifier repo
+      become: true
+      become_user: agoraverifier
+      git:
+        repo: "{{ repos.averifier.repo }}"
+        version: "{{ repos.averifier.version }}"
+        dest: /home/agoraverifier/agora-verifier
+        force: "{{ repos.averifier.force }}"
+
 - name: AgoraVerifier, Downloading agora-tally repo
   become: true
   become_user: agoraverifier
