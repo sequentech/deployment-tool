@@ -29,11 +29,11 @@
       become: true
       become_user: agoraverifier
       git:
-        repo: "{{ repos.tally.repo }}"
-        version: "{{ repos.tally.version }}"
+        repo: "{{ repos.averifier.repo }}"
+        version: "{{ repos.averifier.version }}"
         dest: /home/agoraverifier/agora-verifier
-        force: "{{ repos.tally.force }}"
-  recover:
+        force: "{{ repos.averifier.force }}"
+  rescue:
     - name: AgoraVerifier, Downloading agora-verifier repo (force fetch)
       become: true
       become_user: agoraverifier
@@ -44,10 +44,10 @@
       become: true
       become_user: agoraverifier
       git:
-        repo: "{{ repos.tally.repo }}"
-        version: "{{ repos.tally.version }}"
+        repo: "{{ repos.averifier.repo }}"
+        version: "{{ repos.averifier.version }}"
         dest: /home/agoraverifier/agora-verifier
-        force: "{{ repos.tally.force }}"
+        force: "{{ repos.averifier.force }}"
 
 - name: AgoraVerifier, Downloading agora-results repo
   become: true
