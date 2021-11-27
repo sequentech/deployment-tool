@@ -1,0 +1,231 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+---
+- id: "PyPI::babel"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::ipdb"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::enum34"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::flask"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::flask-sqlalchemy"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::itsdangerous"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::jinja2"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::prettytable"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::werkzeug"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::amqp"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::anyjson"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::backcall"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::beaker"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::billiard"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::celery"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::click"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::click-didyoumean"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::click-plugins"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::cryptography"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::decorator"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::django"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::django-celery-results"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::django-nose"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::idna"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::ipython"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::ipython-genutils"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::kombu"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::markupsafe"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::nodeenv"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::prompt-toolkit"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::pycparser"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::pygments"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::python-dateutil"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::reportlab"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::sqlparse"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::traitlets"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "PyPI::vine"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"
+
+- id: "Maven:org.webbitserver:webbit"
+  curations:
+    comment: "Invalid license with a space."
+    declared_license_mapping:
+      "BSD License": "BSD-3-Clause"

@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2014-2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+name: ORT licensing
+
+on:
+  push:
+    branches:
+    - master
+    - '[0-9]+.[0-9]+.x'
+    tags:
+    - '**'
+  pull_request:
+    branches:
+    - master
+    - '[0-9]+.[0-9]+.x'
+
+jobs:
+  ort:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11.0.1'
+
+      - name: Analyze licensing
+        id: ort-action
+        uses: edulix/ort-action@develop
+        with:
+          package-curations-dir: .ort-data/curations-dir/
+          rules-file: .ort-data/rules.kts
+          license-classifications-file: .ort-data/license-classifications.yml
+          reporters: AdocTemplate,PdfTemplate,Excel,StaticHtml,WebApp
+          ort-extra-args: -P ort.severeRuleViolationThreshold=HINT --debug
+          report-extra-args: >
+            --report-option
+            PdfTemplate=template.path=/project/.ort-data/disclosure_document.ftl
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: licenses
+          path: ${{ steps.ort-action.outputs.results-dir }}

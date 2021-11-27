@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "NPM::rng-js"
+  curations:
+    comment: "Declared license is misspelled with a 'c' - UK vs. US English."
+    declared_license_mapping:
+      Unlicence: "Unlicense"

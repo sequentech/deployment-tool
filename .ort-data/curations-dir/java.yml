@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "Maven:javax.cache:cache-api"
+  curations:
+    comment: "Incorrectly matched license, see https://search.maven.org/artifact/javax.cache/cache-api"
+    declared_license_mapping:
+      "JSR-000107 JCACHE 2.9 Public Review - Updated Specification\n                License": "Apache-2.0"
+
+- id: "Maven:org.json:json"
+  curations:
+    comment: "It's basically MIT with a do not do evil clause."
+    declared_license_mapping:
+      "provided without support or warranty": "MIT"
+
+- id: "Maven:com.h2database:h2"
+  curations:
+    comment: "H2 is dual licensed and available under the MPL 2.0 (Mozilla Public License Version 2.0) or under the EPL 1.0 (Eclipse Public License). http://h2database.com/html/license.html"
+    declared_license_mapping:
+      "The H2 License, Version 1.0": "EPL-1.0"
