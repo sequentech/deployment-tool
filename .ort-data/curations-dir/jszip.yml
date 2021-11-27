@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "NPM::jszip"
+  curations:
+    comment: "The package is detected as GPL-3.0-only because it's double licensed with GPL-3.0-only and MIT, so we use the MIT"
+    concluded_license: "MIT"

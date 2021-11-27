@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "Yarn::agora-gui-booth"
+  curations:
+    comment: "This package needs to be downloaded from git"
+    vcs:
+      type: "git"
+      url: "https://github.com/agoravoting/agora-gui-common.git"
+      revision: "4.0.1"

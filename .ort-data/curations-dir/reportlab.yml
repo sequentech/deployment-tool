@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "PyPI::reportlab"
+  curations:
+    comment: "Incorrectly matched license."
+    declared_license_mapping:
+      "BSD license (see license.txt for details), Copyright (c) 2000-2018, ReportLab Inc.": "BSD-3-Clause"
+      "BSD license (see license.txt for details), Copyright (c) 2000-2015, ReportLab Inc.": "BSD-3-Clause"

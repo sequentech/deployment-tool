@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "PyPI::psycopg2-binary"
+  curations:
+    comment: "Incorrectly matched license."
+    declared_license_mapping:
+      "LGPL with exceptions": "LGPL-2.0-only"

@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+- id: "PyPI::pycryptodomex"
+  curations:
+    comment: "Incorrectly matched license."
+    declared_license_mapping:
+      "BSD, Public Domain": "BSD-3-Clause"
+      "BSD License": "BSD-3-Clause"
