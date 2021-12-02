@@ -204,7 +204,6 @@
   become: true
   become_user: postgres
   ignore_errors: true
-  when: config.load_balancing.is_master
   register: repmgr_cluster_show
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
 
