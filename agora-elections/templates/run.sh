@@ -35,4 +35,7 @@ export LANGUAGE=en_US.UTF-8
 # here just in case.
 trap "kill -9 -- -$$" EXIT
 
-/home/agoraelections/agora-elections/target/universal/stage/bin/agora-elections -v -Dconfig.file=/home/agoraelections/agora-elections/conf/application.conf
+/home/agoraelections/agora-elections/target/universal/stage/bin/agora-elections \
+    -v \
+    -Dconfig.file=/home/agoraelections/agora-elections/conf/application.conf \
+    -Dlogger.file=/home/agoraelections/agora-elections/conf/logger.xml

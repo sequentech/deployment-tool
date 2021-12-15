@@ -130,3 +130,11 @@
     dest: /etc/screenrc
     owner: root
     mode: '0600'
+
+- name: System, configuring timezone
+  become: true
+  ansible.builtin.shell:
+    cmd: |
+      ln -sf /usr/share/zoneinfo/{{ config.params.timezone | default('Europe/Madrid') }} /etc/localtime
+      dpkg-reconfigure -f noninteractive tzdata
+    executable: /bin/bash

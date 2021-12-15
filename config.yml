@@ -23,6 +23,12 @@ params:
     fast: 2
     slow: 15
 
+  # Configures the timezone for the whole machine
+  # Please configure it to one of the timezones found in /usr/share/zoneinfo
+  # There's a list in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  # From the table appearing in that link, use the "TZ database name".
+  timezone: 'Europe/Madrid'
+
 # global configuration
 config:
   backup_password: '<PASSWORD>'
