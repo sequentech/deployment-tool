@@ -15,14 +15,23 @@
 
 from authapi.settings import *
 from celery import signals
+import logging
+import time
 
 @signals.setup_logging.connect
 def on_celery_setup_logging(**kwargs):
     pass
 
+USE_TZ = True
+
+TIMEZONE = '{{ config.params.timezone | default('Europe/Madrid') }}'
+
 DEBUG = {{config.authapi.debug}}
 
 _DEFAULT_LOGGING_LEVEL = 'DEBUG'
+
+class UtcFormatter(logging.Formatter):
+    converter = time.gmtime
 
 LOGGING = {
     'version': 1,
@@ -33,11 +42,14 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            '()': 'authapi.deploy.UtcFormatter',
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%Y-%m-%dT%H:%M:%S%z'
         },
     },
     'handlers': {
         'console': {
+            '()': 'authapi.deploy.DatetimeTimezoneFormatter',
             'level': _DEFAULT_LOGGING_LEVEL,
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
