@@ -130,3 +130,12 @@
     dest: /etc/screenrc
     owner: root
     mode: '0600'
+
+- name: System, configuring timezone to UTC
+  become: true
+  ansible.builtin.shell:
+    warn: false
+    cmd: |
+      ln -sf /usr/share/zoneinfo/UTC /etc/localtime
+      dpkg-reconfigure -f noninteractive tzdata
+    executable: /bin/bash
