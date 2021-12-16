@@ -43,7 +43,6 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            '()': 'authapi.deploy.DatetimeTimezoneFormatter',
             'level': _DEFAULT_LOGGING_LEVEL,
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
