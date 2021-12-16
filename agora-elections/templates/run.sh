@@ -38,4 +38,4 @@ trap "kill -9 -- -$$" EXIT
 /home/agoraelections/agora-elections/target/universal/stage/bin/agora-elections \
     -v \
     -Dconfig.file=/home/agoraelections/agora-elections/conf/application.conf \
-    -Dlogger.file=/home/agoraelections/agora-elections/conf/logger.xml
+    -Dlogger.file=/home/agoraelections/agora-elections/conf/logback.xml
