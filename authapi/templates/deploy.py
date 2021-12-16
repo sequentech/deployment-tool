@@ -20,6 +20,10 @@ from celery import signals
 def on_celery_setup_logging(**kwargs):
     pass
 
+USE_TZ = True
+
+TIMEZONE = '{{ config.params.timezone | default('UTC') }}'
+
 DEBUG = {{config.authapi.debug}}
 
 _DEFAULT_LOGGING_LEVEL = 'DEBUG'
@@ -33,7 +37,8 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%Y-%m-%dT%H:%M:%S%z'
         },
     },
     'handlers': {
