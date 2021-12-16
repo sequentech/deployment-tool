@@ -133,8 +133,8 @@
 
 - name: System, configuring timezone to UTC
   become: true
-  warn: false
   ansible.builtin.shell:
+    warn: false
     cmd: |
       ln -sf /usr/share/zoneinfo/UTC /etc/localtime
       dpkg-reconfigure -f noninteractive tzdata
