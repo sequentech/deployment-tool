@@ -395,6 +395,16 @@ var avConfigData = {
     title: "{{ config.agora_gui.texts.tos_title }}"
   },
 
+  mainVersion: "master",
+  repoVersions: [
+    {% for key, value in repos.items() %}
+    {
+      repoName: "{{ key }}",
+      repoVersion: "{{ value.version }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+
   {% if config.agora_gui.cookies_expires %}
     cookies: {
       expires: {{ config.agora_gui.cookies_expires }},
