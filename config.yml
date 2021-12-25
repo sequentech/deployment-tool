@@ -492,6 +492,10 @@ config:
     booth_port: 10091
     elections_port: 10092
 
+    # Main version shown in the user interface. set to 'false' if you don't
+    # want it to be shown.
+    mainVersion: 'master'
+
     # Login session cookies expiration in minutes. set to 'false' to be 
     # unlimited. Does not apply to agora-gui-admin cookies (which use the value
     # from `config.authapi.admin_auth_token_expiration_seconds`), except if this
