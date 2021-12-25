@@ -395,7 +395,7 @@ var avConfigData = {
     title: "{{ config.agora_gui.texts.tos_title }}"
   },
 
-  mainVersion: "master",
+  mainVersion: {{ config.agora_gui.mainVersion }},
   repoVersions: [
     {% for key, value in repos.items() %}
     {
