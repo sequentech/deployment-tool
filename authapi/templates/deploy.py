@@ -170,6 +170,13 @@ EMAIL_BASE_TITLE_TEMPLATE = """{{config.authapi.email.base_title_template}}"""
 
 EMAIL_AUTH_CODE_URL = "https://{{ config.agora_elections.domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
 
+{% if config.agora_elections.enforce_state_controls %}
+ENFORCE_STATE_CONTROLS = True
+{% else %}
+ENFORCE_STATE_CONTROLS = False
+{% endif %}
+
+
 {% if 'email' == config.authapi.email.backend %}
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 {% else %}
