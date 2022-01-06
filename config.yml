@@ -26,7 +26,7 @@ params:
 # global configuration
 config:
   backup_password: '<PASSWORD>'
-  version: '5.0.4'
+  version: '5.0.5'
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
 
@@ -639,7 +639,7 @@ config:
     # default configuration for calculate results on agora-gui-admin
     calculate_results_default: >-
       {
-        "version": "5.0.4",
+        "version": "5.0.5",
         "pipes": [
           {
             "type": "agora_results.pipes.pdf.configure_pdf",
@@ -675,7 +675,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         resultsConfig: {
-          version: '5.0.4',
+          version: '5.0.5',
           pipes: [
             {
               type: 'agora_results.pipes.results.do_tallies',
