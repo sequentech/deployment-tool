@@ -415,6 +415,11 @@ config:
     # should set this to false; else, set it to true (default).
     private_path_verify_ssl_client_certificate: true
 
+    # Defines if there's a tight control of the allowed state transitions
+    # within an election. For example, an stopped election wouldn't be allowed
+    # to be re-started if this is enable. Defaults to true.
+    enforce_state_controls: true
+
     # In an election, a voter can change his vote as a way to mitigate coercion.
     # Here you can set the maximum number of vote changes. Set to 1 to disable
     # vote changing.
