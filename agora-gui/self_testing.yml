@@ -40,7 +40,7 @@
   become: true
   ansible.builtin.template:
     src: agora-gui/templates/selenium.sh
-    dest: /home/selenium/build.sh
+    dest: /home/agoragui/selenium.sh
     owner: agoragui
     group: agoragui
     mode: '0744'
