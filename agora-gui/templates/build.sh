@@ -27,7 +27,7 @@ export https_proxy=$http_proxy
 
 # compile all the modules, one by one. stop if they don't build, because
 # otherwise we would put in production a non-working version of the software
-if -z $TASK ] || test "$TASK" = "admin"
+if [ -z $TASK ] || test "$TASK" = "admin"
 then
   echo "Building agora-gui-admin.."
   cd $guib/agora-gui-admin/
@@ -37,7 +37,7 @@ then
     echo "build error in agora-gui-admin"
     exit 1
   fi
-elif -z $TASK ] || test "$TASK" = "booth"
+elif [ -z $TASK ] || test "$TASK" = "booth"
 then
   echo "Building agora-gui-booth.."
   cd $guib/agora-gui-booth/
@@ -47,7 +47,7 @@ then
     echo "build error in agora-gui-booth"
     exit 1
   fi
-elif -z $TASK ] || test "$TASK" = "elections"
+elif [ -z $TASK ] || test "$TASK" = "elections"
 then
   echo "Building agora-gui-elections.."
   cd $guib/agora-gui-elections/
@@ -63,21 +63,21 @@ else
 fi
 
 # only switch to the new build if everything was built correctly
-if -z $TASK ] || test "$TASK" = "admin"
+if [ -z $TASK ] || test "$TASK" = "admin"
 then
   echo "Deploying agora-gui-admin.."
   [ -d $base/dist-admin ] && rm -rf $base/dist-admin
   cp -r $guib/agora-gui-admin/dist $base/dist-admin
 fi
 
-if -z $TASK ] || test "$TASK" = "booth"
+if [ -z $TASK ] || test "$TASK" = "booth"
 then
   echo "Deploying agora-gui-booth.."
   [ -d $base/dist-booth ] && rm -rf $base/dist-booth
   cp -r $guib/agora-gui-booth/dist $base/dist-booth
 fi
 
-if -z $TASK ] || test "$TASK" = "elections"
+if [ -z $TASK ] || test "$TASK" = "elections"
 then
   echo "Deploying agora-gui-elections.."
   [ -d $base/dist-elections ] && rm -rf $base/dist-elections
