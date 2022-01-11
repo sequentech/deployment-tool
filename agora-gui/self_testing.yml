@@ -45,6 +45,14 @@
     group: agoragui
     mode: '0744'
 
+- name: AgoraGui, set e2e tests baseUrl setting
+  become: true
+  become_user: agoragui
+  replace:
+    dest: /home/agoragui/agora-gui-admin/test/e2e.conf.js
+    regexp: 'baseUrl:.*'
+    replace: 'baseUrl: "https://{{config.agora_gui.domain}}"'
+
 - name: AgoraGui, Creating selenium service
   become: true
   ansible.builtin.template:
