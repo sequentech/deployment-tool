@@ -38,7 +38,7 @@
 
 - name: AgoraGui, Creating selenium service runner
   become: true
-  template:
+  ansible.builtin.template:
     src: agora-gui/templates/selenium.sh
     dest: /home/selenium/build.sh
     owner: agoragui
@@ -47,14 +47,21 @@
 
 - name: AgoraGui, Creating selenium service
   become: true
-  template:
+  ansible.builtin.template:
     src: agora-gui/templates/selenium.conf
     dest: /etc/supervisor/conf.d/selenium.conf
     owner: root
     mode: '0600'
 
+- name: AgoraGui, updating web-driver
+  become: true
+  become_user: agoragui
+  ansible.builtin.shell:
+    cmd: ./node_modules/webdriver-manager/bin/webdriver-manager update
+    chdir: /home/agoragui/agora-gui-admin/
+
 - name: AgoraGui, restarting supervisor
   become: true
-  service:
+  ansible.builtin.service:
     name: supervisor
     state: restarted
