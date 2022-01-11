@@ -497,6 +497,13 @@ config:
     booth_port: 10091
     elections_port: 10092
 
+    # Boolean (default: true) that, if set to true, allows admins to launch 
+    # a suite of automated end-to-end tests that follow the whole process of
+    # an election, including registering, creating the election keys, starting
+    # the election, voting, stopping, tallying, calculating and publishing the 
+    # election results.
+    enable_self_testing: true
+
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
     mainVersion: 'master'
