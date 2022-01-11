@@ -18,6 +18,8 @@
 base=/home/agoragui
 guib=/home/agoragui
 
+TASK=$1
+
 {% if config.has_https_proxy %}
 # otherwise bower won't use the proxy appropiately
 export https_proxy=$http_proxy
@@ -25,38 +27,55 @@ export https_proxy=$http_proxy
 
 # compile all the modules, one by one. stop if they don't build, because
 # otherwise we would put in production a non-working version of the software
-cd $guib/agora-gui-admin/
-yarn --non-interactive && grunt build
-if [ $? -ne 0 ]
+if {[ -z $TASK ] || test "$TASK" = "admin" }
 then
-  echo "build error in agora-gui-admin"
-  exit 1
+  cd $guib/agora-gui-admin/
+  yarn --non-interactive && grunt build
+  if [ $? -ne 0 ]
+  then
+    echo "build error in agora-gui-admin"
+    exit 1
+  fi
 fi
 
-cd $guib/agora-gui-booth/
-yarn --non-interactive && grunt build
-if [ $? -ne 0 ]
+if {[ -z $TASK ] || test "$TASK" = "booth" }
 then
-  echo "build error in agora-gui-booth"
-  exit 1
+  cd $guib/agora-gui-booth/
+  yarn --non-interactive && grunt build
+  if [ $? -ne 0 ]
+  then
+    echo "build error in agora-gui-booth"
+    exit 1
+  fi
 fi
 
-cd $guib/agora-gui-elections/
-yarn --non-interactive && grunt build
-if [ $? -ne 0 ]
+if {[ -z $TASK ] || test "$TASK" = "elections" }
 then
-  echo "build error in agora-gui-elections"
-  exit 1
+  cd $guib/agora-gui-elections/
+  yarn --non-interactive && grunt build
+  if [ $? -ne 0 ]
+  then
+    echo "build error in agora-gui-elections"
+    exit 1
+  fi
 fi
 
 # only switch to the new build if everything was built correctly
-[ -d $base/dist-admin ] && rm -rf $base/dist-admin
-cp -r $guib/agora-gui-admin/dist $base/dist-admin
+if {[ -z $TASK ] || test "$TASK" = "admin" }
+then
+  [ -d $base/dist-admin ] && rm -rf $base/dist-admin
+  cp -r $guib/agora-gui-admin/dist $base/dist-admin
+fi
 
-[ -d $base/dist-booth ] && rm -rf $base/dist-booth
-cp -r $guib/agora-gui-booth/dist $base/dist-booth
+if {[ -z $TASK ] || test "$TASK" = "booth" }
+then
+  [ -d $base/dist-booth ] && rm -rf $base/dist-booth
+  cp -r $guib/agora-gui-booth/dist $base/dist-booth
+fi
 
-[ -d $base/dist-elections ] && rm -rf $base/dist-elections
-cp -r $guib/agora-gui-elections/dist $base/dist-elections
+if {[ -z $TASK ] || test "$TASK" = "elections" }
+  [ -d $base/dist-elections ] && rm -rf $base/dist-elections
+  cp -r $guib/agora-gui-elections/dist $base/dist-elections
+then
 
 [ -d $base/static_extra ] && cp -r $guib/static_extra $base/dist-elections/static_extra || true

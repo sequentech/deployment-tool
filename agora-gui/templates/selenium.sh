@@ -1,5 +1,6 @@
+#!/bin/bash
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2022 Sequent Tech Inc <legal@sequentech.io>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -13,12 +14,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
----
-- import_tasks: packages.yml
-- import_tasks: user.yml
-- import_tasks: nodejs.yml
-- import_tasks: repo.yml
-- import_tasks: guiconfig.yml
-- import_tasks: app.yml
-- import_tasks: self_testing.yml
-- import_tasks: nginx.yml
+export DRIVER_PATH=/home/agoragui/agora-gui-admin/node_modules/webdriver-manager
+
+${DRIVER_PATH}/bin/webdriver-manager \
+    start \
+    --standalone \
+    --headless
