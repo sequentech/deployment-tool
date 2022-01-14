@@ -65,7 +65,7 @@
   become: true
   become_user: agoragui
   ansible.builtin.shell:
-    cmd: ./node_modules/webdriver-manager/bin/webdriver-manager update
+    cmd: ./node_modules/webdriver-manager/bin/webdriver-manager update --ignore_ssl
     chdir: /home/agoragui/agora-gui-admin/
 
 - name: AgoraGui, restarting supervisor
