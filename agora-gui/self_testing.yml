@@ -61,6 +61,14 @@
     owner: root
     mode: '0600'
 
+- name: AgoraGui, Creating launch_selftest.sh executable
+  become: true
+  ansible.builtin.template:
+    src: agora-gui/templates/launch_selftest.sh
+    dest: /home/agoragui/launch_selftest.sh
+    owner: agoragui
+    mode: '0700'
+
 - name: AgoraGui, updating web-driver
   become: true
   become_user: agoragui

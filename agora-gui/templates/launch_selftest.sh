@@ -1,5 +1,7 @@
+#!/bin/bash
+
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2022 Sequent Tech Inc <legal@sequentech.io>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -13,29 +15,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
----
-- name: AuthApi, Creating default user
-  become: true
-  user:
-    name: authapi
-    shell: /bin/bash
-    groups: tlscert
-    append: true
 
-- name: AuthApi, Creating /home/authapi/.ansible/tmp dir
-  become: true
-  become_user: authapi
-  file:
-    path: /home/authapi/.ansible/tmp
-    state: directory
-    mode: '0700'
+function finish {
+  echo "finishing"
+  cat /home/agoragui/self_test_*.pid | xargs -I pid kill -9 pid
+}
+trap finish EXIT SIGINT
 
-- name: AuthApi, add sudoers file to be able to launch self-tests
-  become: true
-  when: config.sudoers.is_enabled
-  template:
-    src: authapi/templates/sudo-run-selftests
-    dest: /etc/sudoers.d/sudo-run-selftests
-    owner: root
-    group: root
-    mode: '440'
+cd /home/agoragui/agora-gui-admin
+grunt protractor
