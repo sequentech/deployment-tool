@@ -15,12 +15,5 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
-
-function finish {
-  echo "finishing"
-  cat /home/agoragui/self_test_*.pid | xargs -I pid kill -9 pid
-}
-trap finish EXIT SIGINT
-
 cd /home/agoragui/agora-gui-admin
 grunt protractor
