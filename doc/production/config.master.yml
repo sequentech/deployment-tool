@@ -1091,6 +1091,9 @@ config:
     # Set any additional settings to the celery worker here
     celery_worker_extra_opts: '--concurrency 300 --pool eventlet'
 
+    # Set any additional settings to the celery beat daemon here
+    celery_beat_extra_opts: ''
+
     # If this option is true, then admin users can be deregistered and
     # re-registered. Elections from deregistered users still are stored in the
     # database. When a user re-registers after being de-registered, he will be
