@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2022 Sequent Tech Inc <legal@sequentech.io>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -17,12 +17,12 @@
 
 function finish {
   echo "finishing"
-  cat /home/authapi/celery_*.pid | xargs -I pid kill -9 pid
+  cat /home/authapi/celery_beat_*.pid | xargs -I pid kill -9 pid
 }
 trap finish EXIT SIGINT
 
 DJANGO_SETTINGS_MODULE='authapi.deploy' /home/authapi/env/bin/celery \
   -A authapi \
-  worker \
-  --pidfile '/home/authapi/celery_%n.pid' \
-  {{ config.authapi.celery_worker_extra_opts }}
+  beat \
+  --pidfile '/home/authapi/celery_beat_%n.pid' \
+  {{ config.authapi.celery_beat_extra_opts }}

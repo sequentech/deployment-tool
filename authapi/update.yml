@@ -25,3 +25,4 @@
   with_items:
     - authapi
     - authapi_celery
+    - authapi_celery_beat
