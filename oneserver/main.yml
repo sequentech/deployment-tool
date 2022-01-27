@@ -55,6 +55,7 @@
   with_items:
     - authapi
     - authapi_celery
+    - authapi_celery_beat
 
 - name: OneServer, All in one nginx
   become: true

@@ -1,5 +1,7 @@
+#!/bin/bash
+
 # This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# Copyright (C) 2022 Sequent Tech Inc <legal@sequentech.io>
 
 # agora-dev-box is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -13,12 +15,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
----
-- import_tasks: packages.yml
-- import_tasks: user.yml
-- import_tasks: nodejs.yml
-- import_tasks: repo.yml
-- import_tasks: guiconfig.yml
-- import_tasks: app.yml
-- import_tasks: self_testing.yml
-- import_tasks: nginx.yml
+function finish {
+  echo "finishing"
+  cat /home/authapi/celery_beat_*.pid | xargs -I pid kill -9 pid
+}
+trap finish EXIT SIGINT
+
+DJANGO_SETTINGS_MODULE='authapi.deploy' /home/authapi/env/bin/celery \
+  -A authapi \
+  beat \
+  --pidfile '/home/authapi/celery_beat_%n.pid' \
+  {{ config.authapi.celery_beat_extra_opts }}

@@ -1,0 +1,2 @@
+authapi ALL = (agoragui) NOPASSWD: /home/agoragui/launch_selftest.sh
+authapi ALL = (root) NOPASSWD: /home/agoragui/kill_selftest.sh

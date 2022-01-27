@@ -213,6 +213,11 @@ OPENID_CONNECT_PROVIDERS_CONF = [
 
 ]
 
+# This is the command to be executed to launch a self-test
+TASK_SELF_TEST_COMMAND = [
+    "sudo", "-u", "agoragui", "/home/agoragui/launch_selftest.sh"
+]
+
 {% for extra_option in config.authapi.extra_options %}
 {{extra_option}}
 {% endfor %}
