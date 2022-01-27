@@ -69,6 +69,14 @@
     owner: agoragui
     mode: '0700'
 
+- name: AgoraGui, Creating kill_selftest.sh executable
+  become: true
+  ansible.builtin.template:
+    src: agora-gui/templates/kill_selftest.sh
+    dest: /home/agoragui/kill_selftest.sh
+    owner: agoragui
+    mode: '0700'
+
 - name: AgoraGui, updating web-driver
   become: true
   become_user: agoragui
