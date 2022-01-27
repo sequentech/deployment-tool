@@ -1,1 +1,2 @@
 authapi ALL = (agoragui) NOPASSWD: /home/agoragui/launch_selftest.sh
+authapi ALL = (root) NOPASSWD: pkill -f 'sudo -u agoragui /home/agoragui/launch_selftest.sh'
