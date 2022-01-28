@@ -16,7 +16,7 @@
 
 export DRIVER_PATH=/home/agoragui/agora-gui-admin/node_modules/webdriver-manager
 
-${DRIVER_PATH}/bin/webdriver-manager update
+${DRIVER_PATH}/bin/webdriver-manager update --ignore_ssl
 
 ${DRIVER_PATH}/bin/webdriver-manager \
     start \

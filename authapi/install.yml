@@ -129,6 +129,25 @@
     virtualenv: /home/authapi/env
     settings: authapi.deploy
 
+- name: Authapi, create e2e_test_user file
+  become: true
+  template:
+    src: authapi/templates/e2e_test_user.json
+    dest: /home/authapi/e2e_test_user.json
+    owner: authapi
+    group: authapi
+    mode: '0600'
+
+- name: AuthApi, upsert e2e_test_user
+  become: true
+  become_user: authapi
+  django_manage:
+    command: upsert_users /home/authapi/e2e_test_user.json
+  args:
+    app_path: /home/authapi/authapi/authapi
+    virtualenv: /home/authapi/env
+    settings: authapi.deploy
+
 - name: Authapi, allow authapi user to create databases (for example the test db)
   become: true
   become_user: postgres

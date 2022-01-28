@@ -15,14 +15,14 @@
 
 ---
 - name: AgoraGui, Add Apt signing key for google-chrome
-  when: config.agora_gui.enable_self_testing
+  when: config.agora_gui.self_testing.enable
   become: true
   ansible.builtin.apt_key:
     url: "https://dl.google.com/linux/linux_signing_key.pub"
     state: present
 
 - name: AgoraGui, Add google-chrome repository into sources list
-  when: config.agora_gui.enable_self_testing
+  when: config.agora_gui.self_testing.enable
   become: true
   ansible.builtin.apt_repository:
     repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
@@ -30,6 +30,7 @@
     filename: google-chrome
 
 - name: AgoraGui, Install google-chrome
+  when: config.agora_gui.self_testing.enable
   become: true
   ansible.builtin.apt:
     name: google-chrome-stable
@@ -45,13 +46,20 @@
     group: agoragui
     mode: '0744'
 
-- name: AgoraGui, set e2e tests baseUrl setting
+- name: AgoraGui, set e2e tests settings
   become: true
   become_user: agoragui
   replace:
     dest: /home/agoragui/agora-gui-admin/test/e2e.conf.js
-    regexp: 'baseUrl:.*'
-    replace: 'baseUrl: "https://{{config.agora_gui.domain}}"'
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - regexp: 'defaultTimeoutInterval:.*'
+      replace: 'defaultTimeoutInterval: {{authapi.self_testing.defaultTimeoutInterval}},'
+    - regexp: 'getPageTimeout:.*'
+      replace: 'getPageTimeout: {{authapi.self_testing.getPageTimeout}},'
+    - regexp: 'allScriptsTimeout:.*'
+      replace: 'allScriptsTimeout: {{authapi.self_testing.allScriptsTimeout}},'
 
 - name: AgoraGui, Creating selenium service
   become: true
@@ -78,6 +86,7 @@
     mode: '0700'
 
 - name: AgoraGui, updating web-driver
+  when: config.agora_gui.self_testing.enable
   become: true
   become_user: agoragui
   ansible.builtin.shell:

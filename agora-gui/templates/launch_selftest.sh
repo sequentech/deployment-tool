@@ -16,4 +16,13 @@
 # along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
 
 cd /home/agoragui/agora-gui-admin
+export PROTRACTOR_ARGS=$(cat <<-JSON_END
+   {
+      "baseUrl": "https://{{config.agora_gui.domain}}",
+      "params": {
+         "login": {{authapi.self_testing.admin_user_credentials}}
+      }
+   }
+JSON_END
+)
 grunt protractor
