@@ -55,11 +55,11 @@
     replace: '{{ item.replace }}'
   with_items:
     - regexp: 'defaultTimeoutInterval:.*'
-      replace: 'defaultTimeoutInterval: {{authapi.self_testing.defaultTimeoutInterval}},'
+      replace: 'defaultTimeoutInterval: {{config.agora_gui.self_testing.defaultTimeoutInterval}},'
     - regexp: 'getPageTimeout:.*'
-      replace: 'getPageTimeout: {{authapi.self_testing.getPageTimeout}},'
+      replace: 'getPageTimeout: {{config.agora_gui.self_testing.getPageTimeout}},'
     - regexp: 'allScriptsTimeout:.*'
-      replace: 'allScriptsTimeout: {{authapi.self_testing.allScriptsTimeout}},'
+      replace: 'allScriptsTimeout: {{config.agora_gui.self_testing.allScriptsTimeout}},'
 
 - name: AgoraGui, Creating selenium service
   become: true

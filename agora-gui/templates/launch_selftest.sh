@@ -20,7 +20,7 @@ export PROTRACTOR_ARGS=$(cat <<-JSON_END
    {
       "baseUrl": "https://{{config.agora_gui.domain}}",
       "params": {
-         "login": {{authapi.self_testing.admin_user_credentials}}
+         "login": {{config.agora_gui.self_testing.admin_user_credentials}}
       }
    }
 JSON_END
