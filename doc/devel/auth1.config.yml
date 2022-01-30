@@ -532,9 +532,13 @@ config:
       # Number (Miliseconds, default: 10000) The timeout in milliseconds for
       # each script run on the browser. This should be longer than the maximum
       # time your application needs to stabilize between tasks.
-      # More Info: https://github.com/angular/protractor/blob/master/lib/config.ts#L441
+      #
+      # Also used as the default timeout in protractor browser.wait calls.
+      #
+      # More Info: 
+      # 1. https://github.com/angular/protractor/blob/master/lib/config.ts#L441
+      # 2. http://www.protractortest.org/#/api?view=webdriver.WebDriver.prototype.wait
       allScriptsTimeout: 10000
-
 
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
