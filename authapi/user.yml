@@ -32,7 +32,6 @@
 
 - name: AuthApi, add sudoers file to be able to launch self-tests
   become: true
-  when: config.agora_gui.enable_self_testing
   template:
     src: authapi/templates/sudo-run-selftests
     dest: /etc/sudoers.d/sudo-run-selftests

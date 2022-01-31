@@ -497,12 +497,55 @@ config:
     booth_port: 10091
     elections_port: 10092
 
-    # Boolean (default: true) that, if set to true, allows admins to launch 
-    # a suite of automated end-to-end tests that follow the whole process of
-    # an election, including registering, creating the election keys, starting
-    # the election, voting, stopping, tallying, calculating and publishing the 
-    # election results.
-    enable_self_testing: true
+    self_testing:
+      # Boolean (default: true) that, if set to true, allows admins to launch 
+      # a suite of automated end-to-end tests that follow the whole process of
+      # an election, including registering, creating the election keys, starting
+      # the election, voting, stopping, tallying, calculating and publishing the 
+      # election results.
+      enable: true
+
+      # credentials used for the admin user in the self tests. This user will be
+      # automatically created and managed by the ansible script. The format of
+      # this data is the same as the elements accepted by authapi's admin 
+      # command `upsert_users`.
+      # More Info: https://github.com/agoravoting/authapi/blob/master/authapi/api/management/commands/upsert_users.py#L21
+      admin_user_credentials: |
+        {
+          "username": "e2e_test_admin",
+          "email": "e2e_test_admin@example.com",
+          "password": "<PASSWORD>",
+          "is_active": true,
+          "is_admin": true,
+          "election_permissions": []
+        }
+
+      # Number (Miliseconds, default: 120,000) Default time to wait before a test
+      # fails.
+      # More Info: https://github.com/angular/protractor/blob/master/lib/config.ts#L629
+      defaultTimeoutInterval: 120000
+
+      # Number (Miliseconds, default: 15,000) How long to wait for a page to
+      # load.
+      # More Info: https://github.com/angular/protractor/blob/master/lib/config.ts#L446
+      getPageTimeout: 15000
+
+      # Number (Miliseconds, default: 10,000) The timeout in milliseconds for
+      # each script run on the browser. This should be longer than the maximum
+      # time your application needs to stabilize between tasks.
+      #
+      # Also used as the default timeout in protractor browser.wait calls.
+      #
+      # More Info: 
+      # 1. https://github.com/angular/protractor/blob/master/lib/config.ts#L441
+      # 2. http://www.protractortest.org/#/api?view=webdriver.WebDriver.prototype.wait
+      allScriptsTimeout: 10000
+
+      # Timeout (Miliseconds, default: 120,000) for creating elections during
+      # the tests. Each election takes ~30 seconds/question to create with 2
+      # authorities. Sometimes test might include the creation of multiple
+      # elections with multiple questions, so change this accordingly.
+      createElectionsTimeout: 120000
 
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
