@@ -22,7 +22,8 @@ export PROTRACTOR_ARGS=$(cat <<-JSON_END
       "params": {
          "login": {{config.agora_gui.self_testing.admin_user_credentials}},
          "timeout": {
-            "ECstandards": {{config.agora_gui.self_testing.allScriptsTimeout}}
+            "ECstandards": {{config.agora_gui.self_testing.allScriptsTimeout}},
+            "CreateElections": {{config.agora_gui.self_testing.createElectionsTimeout}}
          }
       }
    }

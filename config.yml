@@ -520,17 +520,17 @@ config:
           "election_permissions": []
         }
 
-      # Number (Miliseconds, default: 120000) Default time to wait before a test
+      # Number (Miliseconds, default: 120,000) Default time to wait before a test
       # fails.
       # More Info: https://github.com/angular/protractor/blob/master/lib/config.ts#L629
       defaultTimeoutInterval: 120000
 
-      # Number (Miliseconds, default: 15000) How long to wait for a page to
+      # Number (Miliseconds, default: 15,000) How long to wait for a page to
       # load.
       # More Info: https://github.com/angular/protractor/blob/master/lib/config.ts#L446
       getPageTimeout: 15000
 
-      # Number (Miliseconds, default: 10000) The timeout in milliseconds for
+      # Number (Miliseconds, default: 10,000) The timeout in milliseconds for
       # each script run on the browser. This should be longer than the maximum
       # time your application needs to stabilize between tasks.
       #
@@ -540,6 +540,12 @@ config:
       # 1. https://github.com/angular/protractor/blob/master/lib/config.ts#L441
       # 2. http://www.protractortest.org/#/api?view=webdriver.WebDriver.prototype.wait
       allScriptsTimeout: 10000
+
+      # Timeout (Miliseconds, default: 120,000) for creating elections during
+      # the tests. Each election takes ~30 seconds/question to create with 2
+      # authorities. Sometimes test might include the creation of multiple
+      # elections with multiple questions, so change this accordingly.
+      createElectionsTimeout: 120000
 
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
