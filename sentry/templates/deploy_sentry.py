@@ -1,17 +1,17 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 # sentry
 
@@ -26,7 +26,7 @@ def update(globs):
 
 {% if config.sentry.msg_log %}
     globs['ADMINS'] = ( ('msg log', '{{ config.sentry.msg_log_email }}'), )
-    globs['SERVER_EMAIL'] = '{{ config.authapi.server_email }}'
+    globs['SERVER_EMAIL'] = '{{ config.iam.server_email }}'
 {% endif %}
 
     globs['LOGGING'] = {
@@ -64,13 +64,13 @@ def update(globs):
             'handlers': ['sentry', 'console'],
             'propagate': False,
         },
-        'authapi': {
+        'iam': {
             'level': 'DEBUG',
             'handlers': ['sentry', 'console'],
             'propagate': False,
         },
 {% if config.sentry.msg_log %}
-        'authapi.notify': {
+        'iam.notify': {
             'level': 'INFO',
             'handlers': ['sentry', 'mail_admins', 'console'],
             'propagate': False,

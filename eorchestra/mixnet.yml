@@ -1,0 +1,97 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: EOrchestra, Vfork check Makefile
+  stat:
+    path: /home/eorchestra/mixnet/Makefile
+  register: Makefile
+
+- name: EOrchestra, mixnet clean
+  become: true
+  become_user: eorchestra
+  shell:
+    cmd: make clean
+    chdir: /home/eorchestra/mixnet
+  when: Makefile.stat.exists == True
+
+# TODO: we need a real fix for this, in the future when we have more time...
+- name: EOrchestra, mixnet fix
+  become: true
+  become_user: eorchestra
+  file:
+    path: "/home/eorchestra/mixnet/{{ item }}"
+    state: absent
+  with_items:
+    - mixnet/classes/mixnet/protocol/Protocol.class
+    - mixnet/classes/mixnet/protocol/mixnet/MixNetElGamalInterfaceJSON.class
+
+- name: EOrchestra, mixnet configure
+  become: true
+  become_user: eorchestra
+  shell:
+    cmd: ./configure --enable-jgmpmee --enable-jecn
+    chdir: /home/eorchestra/mixnet
+
+- name: EOrchestra, mixnet make
+  become: true
+  become_user: eorchestra
+  shell:
+    cmd: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make
+    chdir: /home/eorchestra/mixnet
+
+# fix wikstrom special o screwing things up
+# http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding/623036#623036
+# alternatively modify the makefile.am and makefile.in files
+- name: EOrchestra, mixnet make install
+  become: true
+  shell:
+    cmd: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make install
+    chdir: /home/eorchestra/mixnet
+
+- name: EOrchestra, mixnet max heap size configuration
+  become: true
+  lineinfile:
+    dest: "{{item}}"
+    backrefs: yes
+    line: '-Xmx{{config.java.max_heap_memory_usage}}m\2'
+    regexp: '^-Xmx([0-9]+)m(.*)$'
+    state: present
+  with_items:
+    - /usr/local/bin/vmn
+    - /usr/local/bin/vmnc
+    - /usr/local/bin/vmnd
+    - /usr/local/bin/vmnv
+
+- name: EOrchestra, mixnet copy .mixnet_env
+  become: true
+  become_user: eorchestra
+  shell: 
+    cmd: cp .mixnet_env /home/eorchestra
+    chdir: /home/eorchestra/mixnet
+
+- name: EOrchestra, mixnet bashrc line
+  become: true
+  lineinfile:
+    dest: /home/eorchestra/.bashrc
+    line: "source /home/eorchestra/.mixnet_env"
+    state: present
+
+- name: EOrchestra, mixnet init random device
+  become: true
+  become_user: eorchestra
+  shell:
+    cmd: bash -l -c "source /home/eorchestra/.mixnet_env && vog -rndinit RandomDevice /dev/urandom"
+    chdir: /home/eorchestra/mixnet

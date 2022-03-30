@@ -1,0 +1,2 @@
+{% for pipe in config.tally_pipes.pipes_whitelist %}{{pipe}}
+{% endfor %}

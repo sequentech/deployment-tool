@@ -1,6 +1,0 @@
-User_Alias AGORAADMINS = {{ config.sudoers.agora_users }}
-
-Runas_Alias AGORAUSERS = agoraelections, agoragui, agoraverifier, eorchestra, authapi, repmgr, sentry, www-data, nginx
-
-AGORAADMINS ALL = (AGORAUSERS) NOPASSWD: ALL
-

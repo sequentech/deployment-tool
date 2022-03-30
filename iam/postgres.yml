@@ -1,0 +1,59 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AuthApi, Create Database User
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  postgresql_user:
+    user: iam
+    password: "{{config.election_orchestra.eorchestra_password}}"
+    port: 5432
+
+- name: AuthApi, Create Database Test User
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  postgresql_user:
+    user: iam_test
+    password: "{{config.election_orchestra.eorchestra_password}}"
+    port: 5432
+
+- name: AuthApi, Create Database
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  postgresql_db: 
+    name: iam
+    owner: iam
+    encoding: "utf-8"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    template: 'template0'
+    state: present
+
+- name: AuthApi, Create Test Database
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  postgresql_db: 
+    name: iam_test
+    owner: iam_test
+    encoding: "utf-8"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    template: 'template0'
+    state: present

@@ -1,0 +1,92 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2017  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AgoraElections, Downloading misc-tools, tally-pipes
+  become: true
+  become_user: ballotbox
+  git:
+    repo: "{{ item.repo }}"
+    version: "{{ item.version }}"
+    dest: "/home/ballotbox/{{ item.dest }}"
+    force: "{{ item.force }}"
+  with_items:
+    - repo: "{{ repos.atools.repo }}"
+      version: "{{ repos.atools.version }}"
+      force: "{{ repos.atools.force }}"
+      dest: misc-tools
+    - repo: "{{ repos.results.repo }}"
+      version: "{{ repos.results.version }}"
+      force: "{{ repos.results.force }}"
+      dest: tally-pipes
+
+- name: AgoraElections, update tally-pipes pipes whitelist
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/tally-pipes/tally-pipes
+    regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
+    replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+
+- name: AgoraElections, misc-tools ensure working pip version (21.0)
+  become: true
+  become_user: ballotbox
+  pip:
+    virtualenv: /home/ballotbox/tenv
+    virtualenv_python: python3
+    state: present
+    name: pip==21.0
+
+- name: AgoraElections, misc-tools virtualenv
+  become: true
+  become_user: ballotbox
+  pip:
+    virtualenv: /home/ballotbox/tenv
+    virtualenv_python: python3
+    state: present
+    requirements: /home/ballotbox/misc-tools/requirements.txt
+
+- name: AgoraElections, req.txt
+  become: true
+  template:
+    src: ballot-box/templates/results.req.txt
+    dest: /home/ballotbox/tally-pipes/results.req.txt
+    owner: ballotbox
+    mode: '0655'
+
+- name: AgoraResults, virtualenv
+  become: true
+  become_user: ballotbox
+  pip:
+    virtualenv: /home/ballotbox/renv
+    virtualenv_python: python3
+    state: present
+    requirements: /home/ballotbox/tally-pipes/results.req.txt
+
+- name: AgoraResults, results.sh
+  become: true
+  template:
+    src: ballot-box/templates/results.sh
+    dest: /home/ballotbox/ballot-box/admin/results.sh
+    owner: ballotbox
+    mode: '0755'
+
+- name: AgoraResults, misc-tools config.json
+  become: true
+  template:
+    src: ballot-box/templates/misc-tools-config.json
+    dest: /home/ballotbox/misc-tools/config/config.json
+    owner: ballotbox
+    mode: '0600'

@@ -1,7 +1,7 @@
 [#--
 SPDX-FileCopyrightText: 2020 HERE Europe B.V.
 SPDX-FileCopyrightText: 2020-2021 Bosch.IO GmbH
-SPDX-FileCopyrightText: 2021 Agora Voting SL
+SPDX-FileCopyrightText: 2021 Sequent Tech Inc
 
 SPDX-License-Identifier: AGPL-3.0-only
 --]

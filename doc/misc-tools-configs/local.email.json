@@ -1,0 +1,37 @@
+{
+  "director": "local-auth1",
+  "authorities": ["local-auth2"],
+  "tally_pipes_config": [
+    [
+      "tally_pipes.pipes.results.do_tallies",
+      {"ignore_invalid_votes": true}
+    ]
+  ],
+  "tally_pipes_config_sorting": [
+    [
+      "tally_pipes.pipes.sort_plurality_at_large.sort_plurality_at_large",
+      {"withdrawals": []}
+    ]
+  ],
+  "ballot_box_base_url": "http://sequent/elections/api/",
+  "tally_pipes_bin_path": "/srv/misc-tools/tally_pipes.sh",
+  "ballot_box_private_datastore_path": "/home/ballotbox/ballot-box/datastore/private/",
+  "global_prechanges": [],
+  "iam": {
+    "credentials": {
+      "username": "admin",
+      "password": "123"
+    },
+    "event-id": 0,
+    "url": "http://sequent/iam/api/",
+    "auth_code_message": "Hello:\n\nUse the following link to vote: \n%(url)s\n",
+    "event_config": {
+      "auth_method": "email",
+      "auth_method_config": {
+            "subject": "Vote in %(title)s",
+            "msg": ""
+      },
+      "extra_fields": []
+    }
+  }
+}

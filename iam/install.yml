@@ -1,0 +1,165 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- import_tasks: repo.yml
+
+- name: AuthApi, Creating deploy settings
+  become: true
+  template:
+    src: iam/templates/deploy.py
+    dest: /home/iam/iam/iam/iam/
+    owner: iam
+    mode: '0600'
+  
+- name: AuthApi, Creating test settings
+  become: true
+  template:
+    src: iam/templates/test_settings.py
+    dest: /home/iam/iam/iam/iam/
+    owner: iam
+    mode: '0600'
+    force: yes
+
+- name: AuthApi, Creating uwsgi settings
+  become: true
+  template:
+    src: iam/templates/uwsgi.ini
+    dest: /home/iam/uwsgi.ini
+    owner: iam
+    mode: '0644'
+
+- name: AuthApi, creating some shell commands
+  become: true
+  template:
+    src: "iam/templates/{{item.name}}"
+    dest: "/home/iam/{{item.name}}"
+    owner: iam
+    mode: "{{item.perm}}"
+  with_items:
+    - name: launchshell.sh
+      perm: "0700"
+    - name: changepassword.sh
+      perm: "0700"
+    - name: launchcommand.sh
+      perm: "0700"
+    - name: fixture.json
+      perm: "0600"
+
+- name: AuthApi, Creates webstatic directory
+  become: true
+  become_user: iam
+  file:
+    path: /home/iam/webstatic
+    state: directory
+
+- name: AuthApi, Installing python uwsgi, psycopg2
+  become: true
+  become_user: iam
+  pip:
+    name:
+      - uwsgi
+      - psycopg2
+      - pip==21.0
+    virtualenv: /home/iam/env
+    virtualenv_python: python3
+    state: present
+
+- import_tasks: djangoapp.yml
+
+- name: AuthApi, Load fixture (admin user)
+  become: true
+  become_user: iam
+  django_manage:
+    command: loaddata
+    fixtures: /home/iam/fixture.json
+  args:
+    app_path: /home/iam/iam/iam
+    virtualenv: /home/iam/env
+    settings: "iam.deploy"
+
+- name: AuthApi, set password
+  become: true
+  become_user: iam
+  shell: /home/iam/changepassword.sh admin "{{config.iam.admin_user.password}}"
+
+# pgcrypto extension is used for being able to set user passwords directly with 
+# SQL statements
+- name: Authapi, load pgcrypto postgresql extension
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  shell: psql iam -tAc "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
+- name: Authapi, set iam election start id
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master
+  shell: psql iam -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.iam.election_start_id}}));"
+
+- name: Authapi, copy usersdata file
+  when: config.iam.upsert_file != ''
+  become: true
+  copy:
+    src: "{{config.iam.upsert_file}}"
+    dest: /home/iam/upsert_users.json
+    owner: iam
+    group: iam
+
+- name: AuthApi, upsert users
+  become: true
+  become_user: iam
+  when: config.iam.upsert_file != ''
+  django_manage:
+    command: upsert_users /home/iam/upsert_users.json
+  args:
+    app_path: /home/iam/iam/iam
+    virtualenv: /home/iam/env
+    settings: iam.deploy
+
+- name: Authapi, allow iam user to create databases (for example the test db)
+  become: true
+  become_user: postgres
+  shell: psql iam -tAc "ALTER USER iam CREATEDB;"
+
+- name: Authapi, create reports config files
+  become: true
+  become_user: iam
+  copy:
+    dest: "/home/iam/{{ item.name }}.json"
+    content: "{{ item.config | to_nice_json }}"
+  with_items: "{{ config.iam.participation_reports }}"
+
+- name: Authapi, copy static_extra_path
+  when: config.iam.static_extra_path != ''
+  become: true
+  copy:
+    src: "{{config.iam.static_extra_path}}"
+    dest: /home/iam/static_extra/
+    owner: iam
+    group: iam
+
+- name: Authapi, configure report crontab configuration
+  become: true
+  cron:
+    state: present
+    name: "{{ item.name }}"
+    job: '/usr/bin/sudo -u iam /home/iam/launchcommand.sh "./manage.py send_report --settings=iam.deploy /home/iam/{{ item.name }}.json /home/iam/report_{{ item.name }}.pdf"'
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    day: "{{ item.day }}"
+    weekday: "{{ item.weekday }}"
+    month: "{{ item.month }}"
+  with_items: "{{ config.iam.participation_reports }}"

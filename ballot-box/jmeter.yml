@@ -1,0 +1,40 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2017  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+- name: AgoraElections, download jmeter for testing
+  become: true
+  become_user: ballotbox
+  get_url:
+    url: https://archive.apache.org/dist/jmeter/binaries/jakarta-jmeter-2.5.1.tgz
+    dest: /home/ballotbox/jakarta-jmeter-5.2.1.tgz
+    checksum: sha256:45f786d4b04f61614ec670c9c0a2372f9f3b63b1435f9c747d1399a6c8d62200
+
+- name: AgoraElections, create jmeter folder
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/jmeter
+    state: directory
+    owner: ballotbox
+    group: ballotbox
+    mode: '0755'
+
+- name: AgoraElections, untar jmeter
+  become: true
+  become_user: ballotbox
+  unarchive:
+    copy: no
+    src: /home/ballotbox/jakarta-jmeter-5.2.1.tgz
+    dest: /home/ballotbox/jmeter

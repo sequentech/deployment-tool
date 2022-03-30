@@ -1,6 +1,6 @@
-# Complete nVotes deployment system
+# Complete Sequent deployment system
 
-This document describes the complete deployment of a nVotes system
+This document describes the complete deployment of a Sequent system
 with two Authorities for development purpuoses in your own physical machine
 through the usage of virtual machines. We call it a development environment.
 
@@ -42,24 +42,24 @@ Ansible 2.1. To install the latest ansible on an Ubuntu machine, execute:
     $ sudo apt-get install ansible=2.1* -y
     $ sudo apt-mark hold ansible
 
-## agora-dev-box
+## deployment-tool
 
 First of all we need to download the ansible deployment project:
 
-    $ git clone https://github.com/agoravoting/agora-dev-box.git
+    $ git clone https://github.com/sequentech/deployment-tool.git
 
 Note: sometimes the 'next' branch has important updates. In case you want
 to use the 'next' branch, do:
 
-    $ cd agora-dev-box/
+    $ cd deployment-tool/
     $ git checkout next
     $ cd .. 
 
 ## Servers
 
 We need at least 3 servers to deploy a secure environment. We'll have two
-authorities and then another server with the authentication (authapi), the 
-web interface (agora-gui) and the ballot box (aogra\_elections).
+authorities and then another server with the authentication (iam), the 
+web interface (sequent-ui) and the ballot box (aogra\_elections).
 
 The deployment is tested with ubuntu/trusty64, it should work with other
 ubuntu distributions, but maybe the deployment needs some tweaks.
@@ -70,11 +70,11 @@ If you have real machines you can skip this step, but be sure to modify
 each config file to use your real IPs.
 
 First of all we'll create the three servers we need with vagrant. Now copy the
-agora-dev-box folder three times with different names, one for each server:
+deployment-tool folder three times with different names, one for each server:
 
-    $ cp -r agora-dev-box auth1
-    $ cp -r agora-dev-box auth2
-    $ cp -r agora-dev-box agora
+    $ cp -r deployment-tool auth1
+    $ cp -r deployment-tool auth2
+    $ cp -r deployment-tool sequent
 
 Then we can create each Vagrant machine. Note: if we want to assign more
 memory or a change in the number of CPUs to the vagrant machines for a faster
@@ -89,19 +89,19 @@ and v.cpus (number of CPUs):
     auth2 $ cp doc/devel/Vagrantfile.auth2 Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
     auth2 $ cd .. 
 
-    $ cd agora
-    agora $ cp doc/devel/Vagrantfile.agora Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
-    agora $ cd .. 
+    $ cd sequent
+    sequent $ cp doc/devel/Vagrantfile.sequent Vagrantfile && vagrant up --no-provision && vagrant ssh-config > ./vagrant.ssh.config && vagrant snapshot take zero
+    sequent $ cd .. 
 
 Now we've three basic Ubuntu 14.04.3 LTS (Trusty Tahr) machines connected with the following IPs:
 
  * auth1: 192.168.50.2
  * auth2: 192.168.50.3
- * agora: 192.168.50.4
+ * sequent: 192.168.50.4
 
 So you should add this to your local machine /etc/hosts to be able to access them by domain name:
 
-    echo -e "192.168.50.2 local-auth1\n192.168.50.3 local-auth2\n192.168.50.4 agora"  | sudo tee -a /etc/hosts
+    echo -e "192.168.50.2 local-auth1\n192.168.50.3 local-auth2\n192.168.50.4 sequent"  | sudo tee -a /etc/hosts
 
 ## Base provisioning
 
@@ -121,11 +121,11 @@ so that provisioning can be done in a quicker manner.
     auth2 $ vagrant provision
     auth2 $ vagrant snapshot take base
 
-    $ cd agora
-    agora $ cp doc/devel/agora.config.yml config.yml
-    agora $ cp doc/devel/base.playbook.yml playbook.yml
-    agora $ vagrant provision
-    agora $ vagrant snapshot take base
+    $ cd sequent
+    sequent $ cp doc/devel/sequent.config.yml config.yml
+    sequent $ cp doc/devel/base.playbook.yml playbook.yml
+    sequent $ vagrant provision
+    sequent $ vagrant snapshot take base
  
 ## Authorities server
 
@@ -204,46 +204,46 @@ working condition, it's recommended to save a snapshot from both:
 
 ## Agora server (part 1)
 
-Let's provision the agora server in a similar fashion as we did with the
+Let's provision the sequent server in a similar fashion as we did with the
 authorities:
 
-    $ cd agora
-    agora $ cp doc/devel/agora.playbook.yml playbook.yml
-    agora $ vagrant provision
-    agora $ vagrant ssh -c "sudo eopeers --show-mine --private-ip | tee /home/vagrant/agora.pkg >/dev/null"
-    agora $ scp -F vagrant.ssh.config default:/home/vagrant/agora.pkg agora.pkg
-    agora $ cd .. 
+    $ cd sequent
+    sequent $ cp doc/devel/sequent.playbook.yml playbook.yml
+    sequent $ vagrant provision
+    sequent $ vagrant ssh -c "sudo eopeers --show-mine --private-ip | tee /home/vagrant/sequent.pkg >/dev/null"
+    sequent $ scp -F vagrant.ssh.config default:/home/vagrant/sequent.pkg sequent.pkg
+    sequent $ cd .. 
 
-### Connecting agora server with authorities
+### Connecting sequent server with authorities
 
 The ballotbox should be able to communicate with the authorities. We'll
 use local-auth1 as the director authority, but we need to add all 
 authorities to our eopeers.
 
     $ cd auth1
-    auth1 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg && vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
+    auth1 $ scp -F vagrant.ssh.config ../sequent/sequent.pkg default:/home/vagrant/sequent.pkg && vagrant ssh -c "sudo eopeers --install /home/vagrant/sequent.pkg; sudo service nginx restart"
     auth1 $ cd .. 
 
     $ cd auth2
-    auth2 $ scp -F vagrant.ssh.config ../agora/agora.pkg default:/home/vagrant/agora.pkg && vagrant ssh -c "sudo eopeers --install /home/vagrant/agora.pkg; sudo service nginx restart"
+    auth2 $ scp -F vagrant.ssh.config ../sequent/sequent.pkg default:/home/vagrant/sequent.pkg && vagrant ssh -c "sudo eopeers --install /home/vagrant/sequent.pkg; sudo service nginx restart"
     auth2 $ cd .. 
 
-    $ cd agora
-    agora $ scp -F vagrant.ssh.config ../auth1/auth1.pkg ../auth2/auth2.pkg default:/home/vagrant/
-    agora $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/agoraelections/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart; sudo supervisorctl restart agora-elections"
-    agora $ cd .. 
+    $ cd sequent
+    sequent $ scp -F vagrant.ssh.config ../auth1/auth1.pkg ../auth2/auth2.pkg default:/home/vagrant/
+    sequent $ vagrant ssh -c "sudo eopeers --install /home/vagrant/auth1.pkg --keystore /home/ballotbox/keystore.jks; sudo eopeers --install /home/vagrant/auth2.pkg; sudo service nginx restart; sudo supervisorctl restart ballot-box"
+    sequent $ cd .. 
 
-After completing all these steps, we now have a complete Agora Voting installation.
+After completing all these steps, we now have a complete Sequent Tech installation.
 
 ### Complete election test
 
 You can open your broswer and make the rest of the election using the admin:
 
-    https://agora/admin/login
+    https://sequent/admin/login
 
 Use the default credentials:
 
-    Email : admin@nvotes.com
+    Email : admin@sequentech.io
     Authentication Code : QWERTY33
 
 Then you should view the list of elections you have. You can go to the
@@ -267,9 +267,9 @@ three machines, as a base working condition:
     auth2 $ vagrant snapshot take working-base
     auth2 $ cd  ..
 
-    $ cd agora
-    agora $ vagrant snapshot take working-base
-    agora $ cd  ..
+    $ cd sequent
+    sequent $ vagrant snapshot take working-base
+    sequent $ cd  ..
 
 ### Troubleshooting
 

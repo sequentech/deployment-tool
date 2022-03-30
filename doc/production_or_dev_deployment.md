@@ -1,6 +1,6 @@
-# nVotes production/dev deployment system
+# Sequent production/dev deployment system
 
-This document describes the complete deployment of an nVotes system
+This document describes the complete deployment of an Sequent system
 with two Authorities for a production environment in virtual machines with
 reduced root priviledges.
 
@@ -188,8 +188,8 @@ Firewall rules should be created to allow the following kind of connections:
 -  [prod-s1, prod-s2] <<tcp:9090>> Internet         # sentry api
 -  [prod-s1, prod-s2] <<tcp:8443>> Internet         # sentry web
 -  prod-a1 <<tcp:5000>> prod-a2                     # eotest
--  prod-a1 <<tcp:4081>> prod-a2                     # vfork
--  prod-a1 <<udp:8081>> prod-a2                     # vfork
+-  prod-a1 <<tcp:4081>> prod-a2                     # mixnet
+-  prod-a1 <<udp:8081>> prod-a2                     # mixnet
 -  [prod-s1, prod-s2] <<tcp:14443>> [prod-a1, auh2]
 -  [prod-s1, prod-s2] <<tcp:14453>> [prod-a1, auh2] # download ciphertexts
 
@@ -240,19 +240,19 @@ typically done within the Ubuntu machine as the root user. You can skip this
 step.
 
 To configure non-root permissions in the VM, first create the deployment user  
-if it hasn't been created yet. We'll use **agora** for that:
+if it hasn't been created yet. We'll use **sequent** for that:
 
 ```
-root@prod-s1 # adduser agora agora --gecos "FullName,RoomNumber,WorkPhone,HomePhone" --disabled-password
+root@prod-s1 # adduser sequent sequent --gecos "FullName,RoomNumber,WorkPhone,HomePhone" --disabled-password
 ```
 
-Afterwards, you should add the permissions that the agora user requires for
+Afterwards, you should add the permissions that the sequent user requires for
 administration and deployment.
 
 This is how you do it in the two servers that will be used as authorities:
 
 ```
-root@prod-s1 # wget https://raw.githubusercontent.com/agoravoting/agora-dev-box/next/doc/production/auth.sudoers
+root@prod-s1 # wget https://raw.githubusercontent.com/sequentech/deployment-tool/next/doc/production/auth.sudoers
 root@prod-s1 # cat auth.sudoers >> /etc/sudoers
 ```
 
@@ -260,8 +260,8 @@ And this is how you do it for the two other servers that will be used as master
 and slave machines:
 
 ```
-root@prod-s1 # wget https://raw.githubusercontent.com/agoravoting/agora-dev-box/next/doc/production/agora.sudoers
-root@prod-s1 # cat agora.sudoers >> /etc/sudoers
+root@prod-s1 # wget https://raw.githubusercontent.com/sequentech/deployment-tool/next/doc/production/sequent.sudoers
+root@prod-s1 # cat sequent.sudoers >> /etc/sudoers
 ```
 
 ## Install and configure deployment dependencies
@@ -291,7 +291,7 @@ scp config-generic.yaml prod-s1:/home/ubuntu/config.yaml
 
 The previous step is not really required, but it is required for the following
 steps to have the `config.yml` inside the `/home/ubuntu`. You can for example 
-use the config file from `doc/production/config.agora.yml` as a base, copying it
+use the config file from `doc/production/config.sequent.yml` as a base, copying it
 instead.
 
 Then in the provisioned machine as root, we install dependencies and move the
@@ -309,13 +309,13 @@ workon ansible
 # should return Python 3.5.2:
 python --version 
 cd /root
-git clone https://github.com/agoravoting/agora-dev-box.git $NAME
+git clone https://github.com/sequentech/deployment-tool.git $NAME
 cd $NAME
 git checkout master
 
 # needed for ansible:
 echo "localhost ansible_connection=local" > inventory 
-cp doc/production/playbook.agora.yml playbook.yml
+cp doc/production/playbook.sequent.yml playbook.yml
 
 # copy the config file to /root/$NAME/root.yml
 cp /home/ubuntu/config.yml config.yml
@@ -336,7 +336,7 @@ script.
 
 Even for the election authorities' machines, it's easiest to just copy the
 `config.yml` file from `prod-s1` and use it as a base. However, we provide 
-sample production config files for both agora and auth machines in the 
+sample production config files for both sequent and auth machines in the 
 `doc/production` directory.
 
 # Web servers master deployment [prod-s1, prod-s2]
@@ -355,7 +355,7 @@ Please read the comments and instructions inside the configuration file
 and accordingly. Both machines for deploy purposes should have the
 **config.load_balancing.is_master** set to **true** and The
 **config.load_balancing.master.slave_postgres_ssh_keys** and
-**config.load_balancing.master.slave_agoraelections_ssh_keys** set to **[]**
+**config.load_balancing.master.slave_ballotbox_ssh_keys** set to **[]**
 (which means empty list) at this stage of deployment.
 
 If your machine is behind a proxy, you need to specify that in the
@@ -371,10 +371,10 @@ date; time ansible-playbook -i inventory playbook.yml; date
 ```
 Once this is done, the initial as-master deployment has been successful.
 
-If you have assigned a FQDN to for example 'agora.example.com' to the machine
+If you have assigned a FQDN to for example 'sequent.example.com' to the machine
 and the name resolution is set up correctly in your personal machine via DNS or
-by adding 'agora.example.com ipaddr' to your '/etc/hosts', you should be able to login
-as an administrator entering in 'https://agora.example.com/admin/login' using
+by adding 'sequent.example.com ipaddr' to your '/etc/hosts', you should be able to login
+as an administrator entering in 'https://sequent.example.com/admin/login' using
 the credentials you specified in the config.yml file.
 
 We recommend to use the /etc/hosts file to change the ip address of the
@@ -383,17 +383,17 @@ webserver from prod-s1 to prod-s2 ip easily for testing purposes.
 # Configure prod-s2 as a slave
 
 To configure prod-s2 as a slave, we need to import the ssh keys from the
-agoraelections and postgres users in ***prod-s1*** to add them in ***prod-s2**.
+ballotbox and postgres users in ***prod-s1*** to add them in ***prod-s2**.
 
 To get the keys execute these commands in ***prod-s2***:
 
 ```bash
-sudo -u agoraelections cat /home/agoraelections/.ssh/id_rsa.pub
+sudo -u ballotbox cat /home/ballotbox/.ssh/id_rsa.pub
 sudo -u postgres cat /var/lib/postgresql/.ssh/id_rsa.pub
 ```
 
 Copy those keys and set them in the **prod-s1** **config.yml** file in
-the variables **config.load_balancing.master.slave_agoraelections_ssh_keys**
+the variables **config.load_balancing.master.slave_ballotbox_ssh_keys**
 and **config.load_balancing.master.slave_postgres_ssh_keys**.
 
 Then, execute again ansible in ***prod-s1*** to apply the changes:
@@ -412,7 +412,7 @@ If your machine is behind a proxy, you need to specify that in the
 
 Then you can run again ansible in **prod-s2** to apply the changes, using the
 slave specific playbook, which can only work after having executed
-**playbook.agora.yml**:
+**playbook.sequent.yml**:
 
 ```bash
 root@prod-s2:/root/prod-s2/ $ cp doc/production/playbook.slave.yml playbook.yml
@@ -452,36 +452,36 @@ certificate sharing with the eopeers tool.
 
 Execute the following in **prod-a1**:
 
-    agora@prod-a1:~ $ sudo eopeers --show-mine
+    sequent@prod-a1:~ $ sudo eopeers --show-mine
 
 Copy the output to a file in **prod-a2**, then install it:
 
-    agora@prod-a2:~ $ sudo sudo eopeers --install prod-a1.pkg
-    agora@prod-a2:~ $ sudo service nginx restart
+    sequent@prod-a2:~ $ sudo sudo eopeers --install prod-a1.pkg
+    sequent@prod-a2:~ $ sudo service nginx restart
 
 Then do the same the other way around:
 
-    agora@prod-a2:~ $ sudo eopeers --show-mine
+    sequent@prod-a2:~ $ sudo eopeers --show-mine
 
-    agora@prod-a1:~ $ sudo sudo eopeers --install prod-a2.pkg
-    agora@prod-a1:~ $ sudo service nginx restart
+    sequent@prod-a1:~ $ sudo sudo eopeers --install prod-a2.pkg
+    sequent@prod-a1:~ $ sudo service nginx restart
 
 ### Test the connection between the authorities
 
 A tool is installed to test the real connection between the authorities.
 Open two terminal windows.  Open eolog in one of the terminal windows:
 
-    agora@prod-a2 $ sudo eolog
+    sequent@prod-a2 $ sudo eolog
 
 Run eotest in the other terminal window from the other auth server:
 
-    agora@prod-a1 $ sudo eotest full --vmnd --vcount 100
+    sequent@prod-a1 $ sudo eotest full --vmnd --vcount 100
 
 You should see the software working as eolog output will appear in the
 first terminal window. Once it the eotest command finishes, you can also close
 prod-a2 connection to eolog.
 
-### Connecting agora servers with authorities
+### Connecting sequent servers with authorities
 
 The following commands should be executed in both **prod-s1** and **prod-s2**
 machines:
@@ -489,18 +489,18 @@ machines:
 Create **prod-a1.pkg** and **prod-a2.pkg** files with the configuration of both
 authorities. Then install them:
 
-    agora@agora:~ $ sudo eopeers --install prod-a1.pkg --keystore /home/agoraelections/keystore.jks
-    agora@agora:~ $ sudo eopeers --install prod-a2.pkg
-    agora@agora:~ $ sudo service nginx restart
+    sequent@sequent:~ $ sudo eopeers --install prod-a1.pkg --keystore /home/ballotbox/keystore.jks
+    sequent@sequent:~ $ sudo eopeers --install prod-a2.pkg
+    sequent@sequent:~ $ sudo service nginx restart
 
 Before completion, the installation of the certificate of the **prod-s1** and
 **prod-s2** servers needs to be installed in the election authorities, because
 even though i'ts the same TLS cert, they have different hostnames. So copy
 them (get it with "eopeers --show-mine") to the authorities and install them:
 
-    agora@agora:~ $ sudo eopeers --install prod-s1.pkg
-    agora@agora:~ $ sudo eopeers --install prod-s2.pkg
-    agora@agora:~ $ sudo service nginx restart
+    sequent@sequent:~ $ sudo eopeers --install prod-s1.pkg
+    sequent@sequent:~ $ sudo eopeers --install prod-s2.pkg
+    sequent@sequent:~ $ sudo service nginx restart
 
 ### Create a test election
 
@@ -508,22 +508,22 @@ Go to https://prod-s1/admin/login and create a test election. Then execute
 the following to create some votes. Change '2' in the following commands with
 your election number:
 
-    agora@prod-s1:~ $ su - agoraelections
-    agoraelections@prod-s1:~ $ source ~/env/bin/activate
-    agoraelections@prod-s1:~ $ cd ~/agora-elections/admin
-    agoraelections@prod-s1:~ $ export ELECTION_ID=2
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py dump_pks $ELECTION_ID
-    agoraelections@prod-s1:~/agora-elections/admin/ $ echo '[1,0]' > votes.json
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py encrypt $ELECTION_ID
+    sequent@prod-s1:~ $ su - ballotbox
+    ballotbox@prod-s1:~ $ source ~/env/bin/activate
+    ballotbox@prod-s1:~ $ cd ~/ballot-box/admin
+    ballotbox@prod-s1:~ $ export ELECTION_ID=2
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py dump_pks $ELECTION_ID
+    ballotbox@prod-s1:~/ballot-box/admin/ $ echo '[1,0]' > votes.json
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py encrypt $ELECTION_ID
 
 start the election, cast the votes, stop it and tally it:
 
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py start $ELECTION_ID
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py cast_votes $ELECTION_ID
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py count_votes $ELECTION_ID
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py start $ELECTION_ID
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py cast_votes $ELECTION_ID
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py count_votes $ELECTION_ID
     2 (2)
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py stop $ELECTION_ID
-    agoraelections@prod-s1:~/agora-elections/admin/ $ ./admin.py tally $ELECTION_ID
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py stop $ELECTION_ID
+    ballotbox@prod-s1:~/ballot-box/admin/ $ ./admin.py tally $ELECTION_ID
 
 ### Check high availability and load balancing
 
@@ -535,16 +535,16 @@ change the server from slave to master at any time.
 To test that **prod-s2** is correctly deployed as a slave, you can directly
 connect to https://prod-s2/admin/login and it should allow you to access and work
 normally, because **prod-s2** is a slave that also works as a web server
-(authapi, agora-elections) connected directly to the **prod-s1** master database
+(iam, ballot-box) connected directly to the **prod-s1** master database
 server.
 
 If you list the files inside the datastore and the server certificate in
 both **prod-s1** and **prod-s2**, it should list the same files:
 
-    agora@agora:~ $ sudo -u agoraelections find /home/agoraelections/datastore/ -type f | xargs md5sum
-    05b76ec89dd7a32b76427d389a5778c1  /home/agoraelections/datastore/public/2/pks
+    sequent@sequent:~ $ sudo -u ballotbox find /home/ballotbox/datastore/ -type f | xargs md5sum
+    05b76ec89dd7a32b76427d389a5778c1  /home/ballotbox/datastore/public/2/pks
 
-    agora@agora:~ $ find /srv/certs/selfsigned/ -type f | xargs md5sum
+    sequent@sequent:~ $ find /srv/certs/selfsigned/ -type f | xargs md5sum
     d811c3e92162ade25f21f1d782f32c6e  /srv/certs/selfsigned/calist
     54a67dfe2a9fde364a833135d9bfdd3b  /srv/certs/selfsigned/key-nopass.pem
     a9bf327511b67100c096aebed5b46c94  /srv/certs/selfsigned/cert.pem
@@ -557,14 +557,14 @@ launch the tally successfully from within the authorities.
 To promote **prod-s2** to be a master, change set to **true** the config.yml
 config variable **config.load_balancing.is_master**, then execute again ansible:
 
-    agora@prod-s2:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+    sequent@prod-s2:~/deployment-tool/ $ time sudo ansible-playbook -i inventory playbook.yml
 
 To be able to receive successfully the tally, prod-s2 needs to "impersonate"
 prod-s1 in the director election authority. This can be done by:
 
 1. removing the prod-s1 eopeer package:
 
-    agora@prod-a1:~ $ sudo eopeers --remove prod-s1
+    sequent@prod-a1:~ $ sudo eopeers --remove prod-s1
 
 2. adding an alias to /etc/hosts in **prod-a1** config.yml variable **config.hosts**,
    setting it to something like:
@@ -575,7 +575,7 @@ prod-s1 in the director election authority. This can be done by:
 
 3. re-executing ansible in **prod-a1**:
 
-    agora@prod-a1:~/agora-dev-box/ $ time sudo ansible-playbook -i inventory playbook.yml
+    sequent@prod-a1:~/deployment-tool/ $ time sudo ansible-playbook -i inventory playbook.yml
 
 ### Troubleshooting
 

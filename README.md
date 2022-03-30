@@ -21,11 +21,11 @@ the installation of `python3-psycopg2` (via `apt install`).
 
  * Agora authority:
    * election-orchestra
-   * vfork
+   * mixnet
  * Agora ballotbox
    * auth-api
-   * agora-gui
-   * agora-elections
+   * sequent-ui
+   * ballot-box
 
 ## How to deploy an Auth:
 
@@ -59,12 +59,12 @@ the installation of `python3-psycopg2` (via `apt install`).
 
  * If all is ok you should get an output like this:
 ```
-root@agoravoting-eovm3:/home/vagrant# eotest full --vmnd --vcount 100
+root@sequent-eovm3:/home/vagrant# eotest full --vmnd --vcount 100
 > Starting server on port 8000
 
 using the following authorities:
- 1. agoravoting-eovm3 (this is us, acting as orchestra director)
- 2. agoravoting-eovm2
+ 1. sequent-eovm3 (this is us, acting as orchestra director)
+ 2. sequent-eovm2
 
 > Creating election 1880
 > <Response [202]>
@@ -84,28 +84,28 @@ using the following authorities:
 > HTTP received /receive_tally (255)
 192.168.0.3 - - [13/Jan/2015 18:22:12] "POST /receive_tally HTTP/1.1" 200 -
 > Received tally data 18.6216800213 sec
-> Downloading tally from https://agoravoting-eovm3:5000/public_data/1880/tally.tar.gz
+> Downloading tally from https://sequent-eovm3:5000/public_data/1880/tally.tar.gz
 > Downloading to /srv/eotest/data/1880.tar.gz
 ```
 
 
 # License
 
-Copyright (C) 2020 Agora Voting SL and/or its subsidiary(-ies).
-Contact: legal@nvotes.com
+Copyright (C) 2020 Sequent Tech Inc and/or its subsidiary(-ies).
+Contact: legal@sequentech.io
 
-This file is part of the agora-dev-box module of the Agora Voting project.
+This file is part of the deployment-tool module of the Sequent Tech project.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 Commercial License Usage
-Licensees holding valid commercial Agora Voting project licenses may use this
+Licensees holding valid commercial Sequent Tech project licenses may use this
 file in accordance with the commercial license agreement provided with the
 Software or, alternatively, in accordance with the terms contained in
-a written agreement between you and Agora Voting SL. For licensing terms and
-conditions and further information contact us at legal@nvotes.com .
+a written agreement between you and Sequent Tech Inc. For licensing terms and
+conditions and further information contact us at legal@sequentech.io .
 
 GNU Affero General Public License Usage
 Alternatively, this file may be used under the terms of the GNU Affero General

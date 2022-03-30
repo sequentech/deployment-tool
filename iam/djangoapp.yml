@@ -1,0 +1,62 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: AuthApi, Ensure using https in git clone
+  become: true
+  become_user: iam
+  shell: 'git config --global url."https://".insteadOf git://'
+  # this is neede because otherwise when installing packages with pip
+  # requirements from a git repository, it won't use the http_proxy if
+  # configured, see:
+  # http://stackoverflow.com/questions/128035/how-do-i-pull-from-a-git-repository-through-an-http-proxy/32744849#32744849
+  # http://jgoodall.me/posts/2013/05/29/git-use-https/
+
+- name: AuthApi, Installing python pacakges
+  become: true
+  become_user: iam
+  pip:
+    virtualenv: /home/iam/env
+    virtualenv_python: python3
+    requirements: /home/iam/iam/requirements.txt
+    state: present
+
+- name: AuthApi, Migrate
+  become: true
+  become_user: iam
+  django_manage: command=migrate
+  args:
+    app_path: /home/iam/iam/iam
+    virtualenv: /home/iam/env
+    settings: "iam.deploy"
+
+- name: AuthApi, Migrate results
+  become: true
+  become_user: iam
+  django_manage:
+    command: "migrate django_celery_results"
+  args:
+    app_path: /home/iam/iam/iam
+    virtualenv: /home/iam/env
+    settings: "iam.deploy"
+
+- name: AuthApi, Collect static
+  become: true
+  become_user: iam
+  django_manage: command=collectstatic
+  args:
+    app_path: /home/iam/iam/iam
+    virtualenv: /home/iam/env
+    settings: "iam.deploy"

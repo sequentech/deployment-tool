@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2021 Agora Voting SL <contact@nvotes.com>
+ * SPDX-FileCopyrightText: 2021 Sequent Tech Inc <legal@sequentech.io>
  * SPDX-FileCopyrightText: 2019 HERE Europe B.V.
  *
  * SPDX-License-Identifier: AGPL-3.0-only

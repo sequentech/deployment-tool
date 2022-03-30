@@ -1,17 +1,17 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
 - hosts: all
@@ -24,14 +24,14 @@
     - import_tasks: system.yml
     - import_tasks: hardening/main.yml
     - import_tasks: sudoers/main.yml
-    - import_tasks: agora-tools/main.yml
+    - import_tasks: misc-tools/main.yml
     - import_tasks: eorchestra/main.yml
-    #- import_tasks: agora-elections/main.yml
-    #- import_tasks: authapi/main.yml
+    #- import_tasks: ballot-box/main.yml
+    #- import_tasks: iam/main.yml
     #- import_tasks: sentry/main.yml
-    #- import_tasks: agora-gui/main.yml
+    #- import_tasks: sequent-ui/main.yml
     #- import_tasks: oneserver/main.yml
-    - import_tasks: agora-verifier/main.yml
+    - import_tasks: election-verifier/main.yml
     #- import_tasks: halb/main.yml
     - import_tasks: postgres_backups.yml
     #- import_tasks: crontab.yml

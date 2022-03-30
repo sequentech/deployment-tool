@@ -14,7 +14,7 @@ The ansible deployment configuration enables automatically making backups of the
 
 Backups are stored on /var/postgres_backups or where the config.yml variable config.postgres_backups.folder points to. SQL dump files are on /var/postgres_backups/dump, base backups are on /var/postgres_backups/base and WAL files are on /var/postgres_backups/wal
 
-In the backup system that agora-dev-box installs, a SQL dump and a base backup are done daily (or with the frequency that you configure with config.postgres_backups.base_backups). For that, a cron task is configured to call /usr/bin/create_backup_postgres.sh. That script calls pg_dumpall to create the SQL dump file and pg_basebackup to create the continuous archiving base backup, so two different types of backup are created. It also calls /usr/bin/clean_old_postgres_backups.sh script, which will clean base and dump backups (not wal files) that are older than the parameter configured in config.postgres_backups.base_backups.keep_days. Also, at least every ten minutes (configured in config.postgres_backups.archive_timeout) a new WAL file is created. All backups are compressed in order to minimize the space used.
+In the backup system that deployment-tool installs, a SQL dump and a base backup are done daily (or with the frequency that you configure with config.postgres_backups.base_backups). For that, a cron task is configured to call /usr/bin/create_backup_postgres.sh. That script calls pg_dumpall to create the SQL dump file and pg_basebackup to create the continuous archiving base backup, so two different types of backup are created. It also calls /usr/bin/clean_old_postgres_backups.sh script, which will clean base and dump backups (not wal files) that are older than the parameter configured in config.postgres_backups.base_backups.keep_days. Also, at least every ten minutes (configured in config.postgres_backups.archive_timeout) a new WAL file is created. All backups are compressed in order to minimize the space used.
 
 The name of the base and dump backups is the date up to the second when the backup was created. For example, base backup files use this format: /var/postgres_backups/day_month_year_hour_min_sec/base.tar.gz and dump backups use this format: /var/postgres_backups/dump_day_month_year_hour_min_sec.gz
 
@@ -46,7 +46,7 @@ NOTE: As of now, restoring a SQL dump backup implies dropping and recreating the
 
 # Logs
 
-The Postgresql backup archiving system that agora-dev-box installs generates a series of log entries on /var/log/syslog. An easy way to review them is to use the command:
+The Postgresql backup archiving system that deployment-tool installs generates a series of log entries on /var/log/syslog. An easy way to review them is to use the command:
 
     # cat /var/log/syslog | grep _postgres
 

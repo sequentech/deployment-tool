@@ -8,14 +8,14 @@ superadmins, although it's also true that most of these issues are solved when
 doing the deployment.
 
 To debug and analyze the situation, you can use the following commands in the
-election authorities or the agora server:
+election authorities or the sequent server:
 
 1. See if the requests are reaching to nginx reading its log:
 
     $ sudo tail -f /var/log/nginx/access.log
 
 nginx is in charge of filtering and accepting only https requests from http
-clients (i.e. other "eopeers" or "agora" servers) whose client tls certificate
+clients (i.e. other "eopeers" or "sequent" servers) whose client tls certificate
 is installed in the peer.
 
 If requests are being received but rejected with status 401 Unauthorized, it's
@@ -44,45 +44,45 @@ restart election-orchestra:
 
 election-orchestra is the software that organizes the creation of the keys
 and the tallying of the election inside election authority servers,
-communicating with other authorities and the agora servers.
+communicating with other authorities and the sequent servers.
 
 You might find this kind of error in the eorchestra log:
 
-    ConnectionError: HTTPConnectionPool(host='agora', port=14443): Max retries exceeded with url: /api/election/103/keydone (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)
+    ConnectionError: HTTPConnectionPool(host='sequent', port=14443): Max retries exceeded with url: /api/election/103/keydone (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)
 
 This happens when election keys have been created, but the last step, which is
-to send the public keys to the requester agora server, has failed. This might
-have happened because the agora TLS certificate is correctly installed (with
+to send the public keys to the requester sequent server, has failed. This might
+have happened because the sequent TLS certificate is correctly installed (with
 the peer package), but the ip address in the peer package was invalid, for
-example because the communication with the agora server should be through its
+example because the communication with the sequent server should be through its
 private ip-address and it's been configured to be done through its public ip, or
 viceversa. If it's the former, what you'd do is:
 
-    # generate the correct agora peer package, with the private ip address
-    agoraServer $ sudo eopeers --show-mine --private > agora.pkg
+    # generate the correct sequent peer package, with the private ip address
+    sequentServer $ sudo eopeers --show-mine --private > sequent.pkg
 
-    # copy the agora peer package to the election authorities
+    # copy the sequent peer package to the election authorities
     scp blah blah
 
-    # uninstall the old agora peer package, install the new one and reinstall
+    # uninstall the old sequent peer package, install the new one and reinstall
     # nginx
-    authX $ sudo eopeers --uninstall agora
-    authX $ sudo eopeers --install agora.pkg && sudo service nginx restart
+    authX $ sudo eopeers --uninstall sequent
+    authX $ sudo eopeers --install sequent.pkg && sudo service nginx restart
 
 An alternative way of correcting the ip-address issue is to just add another
 alias directly in /etc/hosts. This can be done in the deployment config.yml file
 in the "config.hosts" variable.
 
-3. Take a look at agora-elections log:
+3. Take a look at ballot-box log:
 
-    $ sudo supervisorctl tail -f agora-elections
+    $ sudo supervisorctl tail -f ballot-box
 
-agora-elections is the application run in agora web servers that is in charge of
+ballot-box is the application run in sequent web servers that is in charge of
 collecting cast ballots (the electronic ballot box) and also connecting with
 election authorities to trigger the creation of election keys and launching
 the tally.
 
-When you launch an election, it might inmmediatly fail if the agora web server
+When you launch an election, it might inmmediatly fail if the sequent web server
 doesn't have the election eopeer packages correctly installed. Please check
 that:
 
@@ -99,57 +99,57 @@ package installed ip-address with:
 
 c) check that the director authority peer package, which is the authority that
 orchestrates the communication with other authorities, has been installed with
-the eopeers "--keystore /home/agoraelections/keystore.jks" parameter. This is
+the eopeers "--keystore /home/ballotbox/keystore.jks" parameter. This is
 needed because the TLS certificate of this authority needs to be accessible not
-only to nginx but also directly to agora-elections.
+only to nginx but also directly to ballot-box.
 
 Also, if you ever need to uninstall the peer package of this election authority,
 remember to do --uninstall with the
-"--keystore /home/agoraelections/keystore.jks" parameter.
+"--keystore /home/ballotbox/keystore.jks" parameter.
 
-d) Check that you have restarted both nginx and agora-elections if you have
+d) Check that you have restarted both nginx and ballot-box if you have
 changed any peer package:
 
-    $ sudo supevisorctl restart agora-elections && sudo service nginx restart
+    $ sudo supevisorctl restart ballot-box && sudo service nginx restart
 
 e) Check that the list of election authorities are correctly configured in
-agora-elections in the file
-/home/agoraelections/agora-elections/conf/application.local.conf. This is
+ballot-box in the file
+/home/ballotbox/ballot-box/conf/application.local.conf. This is
 /configured during deployment in the "config.authorities", "config.director" and
 "config.auths" variables in "config.yml".
 
 4. Bear in mind that if you are using a production environment deployment, you
-will have two or more front-end web servers with agora-elections. This means
+will have two or more front-end web servers with ballot-box. This means
 that any of these servers might connect with the election authorities. The
 configuration of the election authorities in that case is that one of them is
-deemed to be the master agora server, and even though any of those agora servers
+deemed to be the master sequent server, and even though any of those sequent servers
 (with different private ip addresses) might be the initiator of a request to
 the director election authority, the callback url will always point to the
-same master agora server ip address. Also, note that the TLS certificate of
-all the agora servers will be the same.
+same master sequent server ip address. Also, note that the TLS certificate of
+all the sequent servers will be the same.
 
 ## 2. The election tally never succeeds
 
 a) If the election public keys are correctly created, this means that the
-connection between election authorities and the agora servers are usually all
+connection between election authorities and the sequent servers are usually all
 ok; except for a couple things:
 
 This usually happens when an election authority that is not the director
 election authority hasn't got correctly configured the ip address or TLS
-certificate of the agora server, and thus it has failed to download the list of
+certificate of the sequent server, and thus it has failed to download the list of
 ballots from that server. This can be checked looking at the "eorchestra" log
 in that election authority:
 
     authX $ sudo supervisorctl tail -f eorchestra
 
-Or taking a look at nginx log in the agora server, in which the request would
+Or taking a look at nginx log in the sequent server, in which the request would
 not reach because it's going to another ip address:
 
     $ sudo tail -f /var/log/nginx/access.log
 
-Note that this issue can also happen if in the agora server's nginx log the
+Note that this issue can also happen if in the sequent server's nginx log the
 request is logged (and thus the server is being reached) but with status
-401 Unauthorized because the agora web server hasn't got properly configured
+401 Unauthorized because the sequent web server hasn't got properly configured
 the TLS certificate of that election authority. The TLS certificate is included
 in the peer package of the election authority.
 
@@ -158,42 +158,42 @@ To solve peer packages problems, see section 1.
 b) If there is an error during the tally of plaintexts of the ballots (i.e.
 after the anonymization and decryption step done by the election authorities).
 
-In some rare cases, if there's an issue in agora-results configuration or a bug
-in agora-results or agora-tally, this might happen. To detect this issue, take
-a look at the log in agora-elections when receiving the plaintexts of the
+In some rare cases, if there's an issue in tally-pipes configuration or a bug
+in tally-pipes or tally-methods, this might happen. To detect this issue, take
+a look at the log in ballot-box when receiving the plaintexts of the
 ballots when calculating the tally:
 
-    agora $ sudo supervisorctl tail -f agora-elections
+    sequent $ sudo supervisorctl tail -f ballot-box
 
 ## 3. Supervisor is not running
 
 If the login page (/admin/login) loads but the form doesn't show up, and when
-you analyze traffic some queries (for example  https://agora/authapi/api/auth-event/1/) return
+you analyze traffic some queries (for example  https://sequent/iam/api/auth-event/1/) return
 "502 Bad Gateway", this might be because supervisor is dead. This is a bug
 that we don't know how to fix yet but has a simple solution: restart supervisor:
 
 You can check that supervisor is down when this happens:
 
 
-    $ cd agora
-    agora $ vagrant ssh -c "sudo supervisorctl status"
+    $ cd sequent
+    sequent $ vagrant ssh -c "sudo supervisorctl status"
 
         unix:///var/run/supervisor.sock no such file
         Connection to 127.0.0.1 closed.
 
 If that's the case, restart it:
 
-    $ cd agora
-    agora $ vagrant ssh -c "sudo /etc/init.d/supervisor* restart"
+    $ cd sequent
+    sequent $ vagrant ssh -c "sudo /etc/init.d/supervisor* restart"
 
 Afterwards, supervisor status should return something like this, which is ok:
 
-    $ cd agora
-    agora $ vagrant ssh -c "sudo supervisorctl status"
+    $ cd sequent
+    sequent $ vagrant ssh -c "sudo supervisorctl status"
 
-        agora-elections                  RUNNING    pid 7665, uptime 0:00:04
-        authapi                          RUNNING    pid 7663, uptime 0:00:04
-        authapi_celery                   RUNNING    pid 7667, uptime 0:00:04
+        ballot-box                  RUNNING    pid 7665, uptime 0:00:04
+        iam                          RUNNING    pid 7663, uptime 0:00:04
+        iam_celery                   RUNNING    pid 7667, uptime 0:00:04
         sentry                           RUNNING    pid 7664, uptime 0:00:04
         sentry_celery                    RUNNING    pid 7666, uptime 0:00:04
         Connection to 127.0.0.1 closed.

@@ -1,0 +1,1458 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2021  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+# global non-sequent related configuration variables
+params:
+  # Sometimes services like supervisor take quite a while to restart and some
+  # others don't. Configure here exactly how many seconds it should wait for
+  # processes that restart slowly or and those that are fast.
+  sleep:
+    fast: 2
+    slow: 15
+
+# global configuration
+config:
+  version: 'master'
+  backup_password: '<PASSWORD>'
+
+  # global config. Note: currently some other keys are used as global conf
+  global_secret_key: '<PASSWORD>'
+
+  # Activate if cloudflare is used, so that the client ip address is taken from
+  # cloudflare HTTP headers and only cloudflare ips can access the http server
+  cloudflare: false
+
+  # create daily and live backups
+  postgres_backups:
+    # enables or disables backups
+    # set to false to stop making backups (it won't delete already archived backups)
+    # allowed values: true | false
+    enabled: true
+    # folder where the postgres backups will be stored
+    folder: /var/postgres_backups
+    # create a base backup every time postgres_backups.yml is deployed
+    # allowed values: true | false
+    backup_on_deploy: true
+    # enforces that a new WAL file is created after archive_timeout seconds max
+    archive_timeout: 600
+    # cron tab configuration for base backups
+    base_backups:
+      # number of days base backups are kept/stored (0 means forever)
+      keep_days: 30
+      # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+      weekday: '*'
+      # Day of the month the job should run ( 1-31, *, */2, etc )
+      day: '*'
+      # minute when the job should run ( 0-59, *, */2, etc )
+      minute: 0
+      # hour when the job should run ( 0-23, *, */2, etc )
+      hour: 4
+      
+  # hostname of the machine
+  hostname: sequent
+
+  # private ip address of this machine. Will ensure there is an alias
+  # in /etc/hosts to the hostname in this machine (and in others when they load
+  # this machine's eo package)
+  private_ipaddress: 192.168.50.4
+
+  # public ip address of this machine. Will ensure there is an alias
+  # in /etc/hosts to the hostname in this machine (and in others when they load
+  # this machine's eo package)
+  public_ipaddress: 192.168.50.4
+
+  # you can use this section to schedule crontab tasks. For example, it can be
+  # used to schedule election start for example, as shown below.
+  crontab_tasks: []
+  #  - name: start-election
+  #    # job is the command to be run. The command should not contain line
+  #    # breaks.
+  #    job: 'bash -c "source /home/ballotbox/tenv/bin/activate; /home/ballotbox/ballot-box/admin/admin.py auth_start 4 >> /home/ballotbox/crontab.log 2>&1"'
+  #    # The specific user whose crontab should be modified.
+  #    user: 'ballotbox'
+  #    # minute when the job should run ( 0-59, *, */2, etc )
+  #    minute: 0
+  #    # hour when the job should run ( 0-23, *, */2, etc )
+  #    hour: 15
+  #    # Day of the month the job should run ( 1-31, *, */2, etc )
+  #    day: '17'
+  #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+  #    weekday: '*'
+  #    # Month of the year the job should run ( 1-12, *, */2, etc )
+  #    month: '9'
+  #  - name: stop-election
+  #    # job is the command to be run. The command should not contain line
+  #    # breaks.
+  #    job: 'bash -c "source /home/ballotbox/tenv/bin/activate; /home/ballotbox/ballot-box/admin/admin.py auth_stop 4 >> /home/ballotbox/crontab.log 2>&1"'
+  #    # The specific user whose crontab should be modified.
+  #    user: 'ballotbox'
+  #    # minute when the job should run ( 0-59, *, */2, etc )
+  #    minute: 0
+  #    # hour when the job should run ( 0-23, *, */2, etc )
+  #    hour: 15
+  #    # Day of the month the job should run ( 1-31, *, */2, etc )
+  #    day: '18'
+  #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+  #    weekday: '*'
+  #    # Month of the year the job should run ( 1-12, *, */2, etc )
+  #    month: '9'
+
+  # configuration related to the election orchestration service, only active in
+  # election authorities
+  election_orchestra:
+    # port in which the nginx web server will serve the https eorchestra service
+    port: 5000
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # range of ports in which mixnet servers will run
+    mixnet_server_ports: [4081, 4083]
+
+    # range of ports in which mixnet hint servers will run
+    mixnet_hint_server_ports: [8081, 8083]
+
+    # database password for election-orchestra
+    eorchestra_password: '<PASSWORD>'
+
+    # enables or disables automatic creation or tallying of election
+    auto_mode: true
+
+  # this section is all about giving to some existing users permissions to
+  # sudo into ansible-created users. If you already have these kind of
+  # permissions, its not needed. Disabled by default.
+  sudoers:
+    # enables or disables the adding of the sudo permissions
+    is_enabled: false
+
+    # list of users, separated by commas and spaces, that can sudo into
+    # ansible-created users
+    sequent_users: sequent
+
+  http:
+    # Log level for error log in nginx.
+    #
+    # This log level stablishes the error_log directive level of error for
+    # nginx web server in /etc/nginx/nginx.conf at the http directive. The
+    # error log will appear in /var/log/nginx/error.log
+    #
+    # For more details, see
+    # http://nginx.org/en/docs/ngx_core_module.html#error_log
+    #
+    # Allowed values: debug, info, notice, warn, error, crit, alert, or emerg
+    # Default: error
+    nginx_error_log_level: error
+
+    # In big elections memory or disk buffer might need to be increased,
+    # specifically to upload the list of valid voterids if any filtering is going
+    # to be made, or when uploading the list of electors. This setting is
+    # applied at once to:
+    # play.http.parser.maxDiskBuffer (in ballot-box config)
+    # play.http.parser.maxMemoryBuffer (in ballot-box config)
+    # parsers.text.maxLength (in ballot-box config)
+    # client_max_body_size (in nginx)
+    max_body_size: 2m
+
+    # Path of the TLS PEM public certificate.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   ballotbox:users.
+    # - Must be a PEM certificate encrypted with the key in the path specified
+    #   in config.http.tls_cert_key_path.
+    #
+    # By default it is '/srv/certs/selfsigned/cert.pem', but you can change it
+    # to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_cert_path: /srv/certs/selfsigned/cert.pem
+
+    # Just like tls_cert_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_path: /srv/certs/selfsigned/cert.pem
+
+    # Path of the TLS PEM certificate private key.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   ballotbox:users.
+    # - Must be the private key of the public certificate of
+    #   config.http.tls_cert_path.
+    #
+    # By default it is '/srv/certs/selfsigned/key-nopass.pem', but you can
+    # change it to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Just like tls_cert_key_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_cert_key_path: /srv/certs/selfsigned/key-nopass.pem
+
+    # Path of the chained list of the public certificates of the Certificate
+    # Authorities that validate the config.http.tls_cert_path certificate
+    # signature.
+    #
+    # Requirements:
+    # - It must be a file with -rw-r--r-- (644) file permissions owned by
+    #   ballotbox:users.
+    # - Must be a list of PEM certificate public keys.
+    #
+    # By default it is '/srv/certs/selfsigned/calist', but you can
+    # change it to any other file you want
+    #
+    # NOTE: This file will not be signed between master and slaves in a load
+    # balancer configuration so you will have to replicate it if needed at your
+    # own, and it's ignored by create_backup.sh and restore_backup.sh scripts.
+    tls_calist_path: /srv/certs/selfsigned/calist
+
+    # Just like tls_calist_path, but used only for the communication with the
+    # election authorities. This way, you can use one certificate publicly
+    # and another internaly.
+    internal_tls_calist_path: /srv/certs/selfsigned/calist
+
+    # Simple http authentication protection for all services under nginx.
+    # http_auth:
+    #   user: admin
+    #   password: eengiefe
+    http_auth: false
+
+    # Allows to restrict access to any administrative APIs and web app with a
+    # custom set of nginx rules
+    admin_zone:
+      enabled: True
+      rules: []
+
+    # Personalize the maintenance page
+    # 
+    # By creating the file /etc/nginx/conf.d/maintenance.on automatically the
+    # server enters into maintenance mode and will only serve a file of the 
+    # file below or the default one.
+    maintenance_file: ''
+
+    # CORS (HTTP Cross-origin resource sharing) is a measure implemented by
+    # web browsers that prevents an user agent to load an external resource if
+    # it is in another domain and that domain doesn't actively allows it with
+    # some CORS-specific headers
+    cors:
+      # Nginx regular expression to match $http_origin variable. The headers
+      # list will be set only if this regular expression matches
+      allow_origins_rx: "^$"
+
+      headers:
+        Access-Control-Allow-Origin: "$http_origin always"
+        Access-Control-Allow-Credentials: "'true' always"
+        Access-Control-Allow-Methods: "'GET, POST, OPTIONS' always"
+        Access-Control-Allow-Headers: "'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always"
+        Content-Security-Policy: "'frame-ancestors \\'none\\'' always"
+        X-Frame-Options: "DENY"
+        Strict-Transport-Security: "max-age=63072000; includeSubDomains; preload"
+
+  # some java related configuration options
+  java:
+    # maximum size of heap memory in Megabytes (int). Default: 4000. Your total
+    # RAM + SWAP needs to be bigger than this. If you are going to do very
+    # big tallies (hundred of thousands of votes or millions), you will need to
+    # change this to something bigger.
+    max_heap_memory_usage: 4000
+
+  # multiple server hardening settings
+  hardening:
+    # if setup, the X-XSS-Protection header will be set to configure the
+    # web browser to block XSS attacks
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+    # allowed value: '0', '1, mode=block', ..any valid X-XSS-Protection setting
+    x_xss_protection_header: '1; mode=block'
+
+    # Fail2ban is a service used for temporarely banning ips when multiple 
+    # failed actions are detected in server logs
+    fail2ban:
+      # generally enable or disable the service running in the server
+      # allows values: true, false
+      enabled: true
+
+      # enable or disable fail2ban applied to the following jails
+      # allows values: true, false
+      sshd: true
+      nginx_limit_req: true
+      nginx_http_auth: true
+    
+    # configure multiple rate limits zones in nginx for different parts of the
+    # web service
+    nginx_rate_limit:
+      # allows values: true, false
+      enabled: true
+
+      # rate of requestes per second for the request on admin api requests
+      admin_api_rate: 3
+
+      # This is the nginx limit_req configuration. Default means that there's
+      # burst with no delay for the first 15 requests, then burst with delay
+      # for request 15 to 30, then requests are rejected starting with request
+      # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
+      admin_api_config: 'burst=30 delay=15'
+
+      # rate of requestes per second for the request on user api requests
+      user_api_rate: 2
+
+      # This is the nginx limit_req configuration. Default means that there's
+      # burst with no delay for the first 15 requests, then burst with delay
+      # for request 15 to 30, then requests are rejected starting with request
+      # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
+      user_api_config: 'burst=30 delay=15'
+
+      # rate of requestes per second for the request on static file requests
+      static_files_rate: 5
+
+      # This is the nginx limit_req configuration. Default means that there's
+      # burst with no delay for the first 15 requests, then burst with delay
+      # for request 15 to 30, then requests are rejected starting with request
+      # 30. More information: https://www.nginx.com/blog/rate-limiting-nginx/
+      static_files_config: 'burst=30 delay=15'
+
+  # generic election related constraints that apply to multiple parts of the
+  # deployment, for example the same limit might apply to iam, sequent-ui
+  # and ballot-box
+  election_limits:
+    # maximum number of questions allowed in an election
+    max_num_questions: 20
+
+    # maximum number of allowed possible answers in a question
+    max_num_answers: 10000
+
+    # maximum size in characters of long strings like url titles
+    max_short_string_length: 300
+
+    # maximum size in characters of long strings like question description
+    max_long_string_length: 3000
+
+  # configuration related to election results calculations
+  tally_pipes:
+    # this is the list of allowed pipes that can be used when calculating an
+    # election result. The idea of limiting them is for safety. This is used
+    # by ballot-box and also election-verifier
+    pipes_whitelist:
+      #- tally_pipes.pipes.duplicate_questions.duplicate_questions
+      #- tally_pipes.pipes.modifications.apply_modifications
+      #- tally_pipes.pipes.multipart.make_multipart
+      #- tally_pipes.pipes.multipart.election_max_size_corrections
+      #- tally_pipes.pipes.multipart.question_totals_with_corrections
+      #- tally_pipes.pipes.multipart.reduce_answers_with_corrections
+      #- tally_pipes.pipes.multipart.multipart_tally_plaintexts_append_joiner
+      #- tally_pipes.pipes.multipart.data_list_reverse
+      #- tally_pipes.pipes.multipart.multipart_tally_plaintexts_joiner
+      #- tally_pipes.pipes.multipart.append_ballots
+      #- tally_pipes.pipes.parity.proportion_rounded
+      - tally_pipes.pipes.parity.parity_zip_non_iterative
+      #- tally_pipes.pipes.parity.reorder_winners
+      #- tally_pipes.pipes.parity.podemos_parity_loreg_zip_non_iterative
+      #- tally_pipes.pipes.parity.podemos_parity2_loreg_zip_non_iterative
+      #- tally_pipes.pipes.podemos.podemos_proportion_rounded_and_duplicates
+      #- tally_pipes.pipes.desborda4.podemos_desborda4
+      #- tally_pipes.pipes.desborda3.podemos_desborda3
+      #- tally_pipes.pipes.desborda2.podemos_desborda2
+      #- tally_pipes.pipes.desborda.podemos_desborda
+      #- tally_pipes.pipes.pretty_print.pretty_print_stv_winners
+      - tally_pipes.pipes.pretty_print.pretty_print_not_iterative
+      - tally_pipes.pipes.results.do_tallies
+      #- tally_pipes.pipes.results.to_files
+      #- tally_pipes.pipes.results.apply_removals
+      - tally_pipes.pipes.sort.sort_non_iterative
+      #- tally_pipes.pipes.stv_tiebreak.stv_first_round_tiebreak
+      - tally_pipes.pipes.pdf.configure_pdf
+      - tally_pipes.pipes.withdraw_candidates.withdraw_candidates
+      # - tally_pipes.pipes.ballot_boxes.count_tally_sheets
+
+  # ballot-box
+  ballot_box:
+    db_password: '<PASSWORD>'
+    shared_secret: '<PASSWORD>'
+    domain: sequent
+    port: 14443
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # Port used by ballot_box for path /private. This path is used
+    # by election-orchestra to for example retrieve the ciphertexts.
+    # Only the election authorities can access this path, usin SSL/HTTPS and
+    # using their certificates as client certificates.
+    ssl_port: 14453
+
+    # Password used to encrypt the authorities' public keys for usage in
+    # ballot-box.
+    keystore_pass: '<PASSWORD>'
+
+    # The callbacks from election authorities go to the private directory, for
+    # example to download encrypted ballots and to push tally results. In
+    # release 3.3.0+, this is done with SSL client certificate verification but
+    # in previous versions this didn't happen. To let an sequent server
+    # installation work with election authorities version 3.2.0 or less, you
+    # should set this to false; else, set it to true (default).
+    private_path_verify_ssl_client_certificate: true
+
+    # Defines if there's a tight control of the allowed state transitions
+    # within an election. For example, an stopped election wouldn't be allowed
+    # to be re-started if this is enable. Defaults to true.
+    enforce_state_controls: true
+
+    # In an election, a voter can change his vote as a way to mitigate coercion.
+    # Here you can set the maximum number of vote changes. Set to 1 to disable
+    # vote changing.
+    max_revotes: 5
+
+    # election-orchestra makes a callback to ballot_box using url path
+    # /api/election/:id/tallydone
+    # On this callback, ballot_box needs to download the tally from
+    # election-orchestra. As this download can fail, and in order to minimize
+    # the brittleness of the service, we can configure the timeout period and
+    # number of retries of this download
+
+    # Download tally timeout in milliseconds, default is one hour
+    download_tally_timeout: 3600000
+
+    # Download tally retries
+    download_tally_retries: 5
+
+    # if true, the calculated results are always automatically published
+    # valid values: true, false
+    always_publish: false
+
+    # list of callbacks from ballot-box to iam
+    # these callbacks are sometimes required for complex behaviour because
+    # ballot-box knows about election states that iam doesn't know about
+    # and these callbacks allow the ballot-box to call the iam to
+    # execute actions at certain states
+    # each callback is defined by a name, mode and url
+    # supported callback names: vote, started, published
+    # mode can be one of three values:
+    #
+    # - default: vote callback is enabled but the url is the default one, for
+    #            the iam deployed in this same server.
+    #
+    # - custom: vote callback is enabled to the url specified in the
+    #           custom_url field.
+    #
+    # - disabled: vote callback is disabled.
+    callbacks:
+      # vote callback allows ballot-box to notify the authentication module
+      # (which can be external) that a vote has been cast.
+      # Custom url is only used with 'custom' mode. Note that the url can be
+      # dynamic. To substitute the election id in the url, use ${eid}, and to
+      # substitute the userid, use ${uid}
+      - name: vote
+        mode: default
+        url: ''
+      # started callback is triggered by ballot-box when an election
+      # changes to stage 'started'
+      - name: started
+        mode: disabled
+        url: ''
+      # published callback is triggered by ballot-box when an election
+      # changes to stage 'published'
+      - name: published
+        mode: disabled
+        url: ''
+
+    # When this setting is true, an election can be virtual and have
+    # subelections. A virtual election can have no votes itself and can move
+    # directly from created to calculated results state and the results
+    # calculation include the tallies of the subelections, so it can be used
+    # to consolide election results.
+    #
+    # Virtual elections have currently one limitation: ownership of the
+    # subelections is not checked, and that is why support for virtual elections
+    # is disabled by default and should only be enabled in dedicated
+    # installations.
+    virtualElectionsAllowed: false
+
+  # sequent-ui
+  sequent_ui:
+    domain: sequent
+    admin_port: 10090
+    booth_port: 10091
+    elections_port: 10092
+
+    # Main version shown in the user interface. set to 'false' if you don't
+    # want it to be shown.
+    mainVersion: 'master'
+
+    # Login session cookies expiration in minutes. set to 'false' to be 
+    # unlimited. Does not apply to admin-console cookies (which use the value
+    # from `config.iam.admin_auth_token_expiration_seconds`), except if this
+    # setting is set to 'false' then the expiration of cookies will be set
+    # the same value as for other sequent-ui modules (unlimited).
+    cookies_expires: 10
+
+    # Shows a dialog if the browser is too old to notify the user. Set this to
+    # false to disable. See how to customize in
+    #  http://browser-update.org/customize.html
+    browser_update_config: >
+      {
+        required: {e:15,f:36,o:65,s:7,c:50},
+        insecure:true,
+        api: "2021.04"
+      }
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # webpage title
+    web_title: 'Sequent'
+
+    # html to be inserted in the gui-admin profile view
+    profile_html: >-
+      <div
+      av-admin-field
+      ng-repeat=\"field in fields_def\"
+      editable=\"{% raw %}{{ field.user_editable }}{% endraw %}\">
+      </div>
+
+    # Show 'Success Action' tab in admin sequent_ui
+    show_success_action: false
+
+    # Default language of the application
+    language: en
+
+    # Forces the default language
+    forceLanguage: false
+
+    # Specifies the set language query string, so that the
+    detectLanguageQueryString: lang
+
+    # Specifies what translations will be available
+    languagesWhitelist:
+      - en
+      - es
+      - gl
+      - ca
+
+    defaultRoute: /admin/login
+
+    # Minimum loading time (milliseconds)
+    min_loading_time: 12000
+
+    # For admins:
+    # Allow editing the json description of the election before creating it
+    # Allowed values: true|false
+    allow_edit_election_json: true
+
+    # For admins:
+    # Allow editing the election.presentation.theme_css so that any election
+    # admin can highly customize the election directly with CSS.
+    # Allowed values: true|false
+    allow_custom_election_theme_css: false
+
+    # interface theme
+    # allowed values (string): default|podemos|ccoo|bcnencomu
+    theme: 'default'
+
+    # help links list
+    # html code for flexibility
+    help_list:
+      - >-
+        <a
+        {% raw %}href=\"{{ helpurl }}\"{% endraw %}
+        target=\"_blank\">
+        <i class=\"fa fa-book\" aria-hidden=\"true\"></i>
+        Documentation
+        </a>
+      - >-
+        <a
+        href=\"mailto:support@sequentech.io\"
+        target=\"_blank\">
+        <i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>
+        Contact Support
+        </a>
+      - >-
+        <a
+        href=\"mailto:support@sequentech.io\"
+        target=\"_blank\">
+        <i class=\"fa fa-comment\" aria-hidden=\"true\"></i>
+        Request free 1-on-1 session
+        </a>
+
+    # when debug mode is false, javascript and in general source code is
+    # uglified and minified, otherwise it is not to allow better debugging.
+    #
+    # allowed values (string): true|false
+    debug: 'false'
+
+    # gui-admin allows to import users from a csv, importing users in batches
+    # this parameter sets the batch size
+    # 0 means doing the import in only one batch always
+    # allowed values: integer number >= 0
+    census_import_batch: 500
+
+    # If you want tallies to be linked and downloaded from a different URL,
+    # change this variable from false to a string. This could be an example:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/sequent/test-tallies/'
+    #
+    # and with this example, the download for the tally 1331 would be:
+    #
+    # 'https://s3-eu-west-2.amazonaws.com/sequent/test-tallies/1331/1331.tar'
+    custom_public_download_url: false
+
+    # base url used for help on gui-admin
+    settings_help_base_url: https://sequent/admin/
+
+    # default url used for help on gui-admin
+    settings_help_default_url: https://sequent/admin/help_error.html
+
+    # show the documentation links after successfully casting a vote
+    # allowed values: true| false
+    show_doc_on_vote_cast: false
+
+    # This is the list of admin question layouts shown in the administrative
+    # user interface. If the list is empty, question layouts will not be shown
+    # as a configurable option
+    shown_admin_question_layouts:
+      - accordion
+      #- circles
+      #- simultaneous-questions
+      #- conditional-accordion
+      #- pcandidates-election
+    
+    # List of auth methods shown in the administrative user interface
+    shown_auth_methods:
+      - email
+      - email-otp
+      - email-and-password
+      - sms
+      - sms-otp
+      - smart-link
+      - user-and-password
+      #- dnie  # disabled because it's not supported in this version
+
+    # This is the list of admin question voting systems shown in the
+    # administrative user interface. If the list is empty, question layouts
+    # will not be shown as a configurable option
+    shown_admin_question_voting_systems:
+     - plurality-at-large
+     - borda-nauru
+     - borda
+
+    # default configuration for calculate results on admin-console
+    calculate_results_default: >-
+      {
+        "version": "master",
+        "pipes": [
+          {
+            "type": "tally_pipes.pipes.pdf.configure_pdf",
+            "params": {
+              "languages": ["en"]
+            }
+          },
+          {
+            "type": "tally_pipes.pipes.results.do_tallies",
+            "params": {}
+          },
+          {
+            "type": "tally_pipes.pipes.sort.sort_non_iterative",
+            "params": {}
+          }
+        ]
+      }
+
+    # default template election for gui-admin
+    election_template: >-
+      {
+        title: $i18next('avAdmin.sidebar.newel'),
+        description: 'This is the description of the election. You can add simple html like <strong>bold</strong> or <a href=\"https://sequentech.io\">links to websites</a>.\\n\\n<br><br>You need to use two br element for new paragraphs.',
+        authorities: ConfigService.authorities,
+        director: ConfigService.director,
+        presentation: {
+          theme: 'default',
+          share_text: getShareTextDefault(),
+          urls: [],
+          allow_tally: true,
+          theme_css: ''
+        },
+        layout: 'simple',
+        num_successful_logins_allowed: 0,
+        tallyPipesConfig: {
+          version: 'master',
+          pipes: [
+            {
+              type: 'tally_pipes.pipes.results.do_tallies',
+              params: {}
+            },
+            {
+              type: 'tally_pipes.pipes.sort.sort_non_iterative',
+              params: {}
+            }
+          ]
+        },
+        census: {
+          has_ballot_boxes: false,
+          voters: [],
+          auth_method: 'email',
+          census:'close',
+          extra_fields: [
+            {
+              name: 'email',
+              type: 'email',
+              required: true,
+              unique: true,
+              min: 4,
+              max: 255,
+              required_on_authentication: true
+            }
+          ],
+          admin_fields: ConfigService.adminFields,
+          config: {
+            allow_user_resend: false,
+            msg: $i18next(ConfigService.auth_msg.msg),
+            subject: $i18next(
+              ConfigService.auth_msg.subject,
+              {
+                name: ConfigService.organization.orgName
+              }
+            ),
+            'authentication-action': {
+              mode: 'vote',
+              'mode-config': {
+                url: ''
+              }
+            },
+            'registration-action': {
+              mode: 'vote',
+              'mode-config': null
+            }
+          }
+        },
+        questions: [
+          {
+            answer_total_votes_percentage: 'over-total-valid-votes',
+            answers: [
+              {
+                category: '',
+                details: 'This is an option with an simple example description.',
+                id: 0,
+                sort_order: 0,
+                text: 'Example option 1',
+                urls: [
+                  {
+                    title: 'URL',
+                    url: ''
+                  },
+                  {
+                    title: 'Image URL',
+                    url: ''
+                  }
+                ]
+              },
+              {
+                category: '',
+                details: 'An option can contain a description. You can add simple html like <strong>bold</strong> or <a href=\"https://sequentech.io\">links to websites</a>. You can also set an image url below, but be sure it\\\'s HTTPS or else it won\\\'t load.\\n\\n<br><br>You need to use two br element for new paragraphs.',
+                id: 1,
+                sort_order: 1,
+                text: 'Example option 2',
+                urls: [
+                  {
+                    title: 'URL',
+                    url: 'https://sequentech.io'
+                  },
+                  {
+                    title: 'Image URL',
+                    url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/The_Fabs.JPG/220px-The_Fabs.JPG'
+                  }
+                ]
+              },
+              {
+                category: '',
+                details: '',
+                id: 2,
+                sort_order: 2,
+                text: 'Example option 3',
+                urls: [
+                  {
+                    title: 'URL',
+                    url: ''
+                  },
+                  {
+                    title: 'Image URL',
+                    url: ''
+                  }
+                ]
+              }
+            ],
+            description: 'This is the description of this question. You can have multiple questions. You can add simple html like <strong>bold</strong> or <a href=\"https://sequentech.io\">links to websites</a>.\\n\\n<br><br>You need to use two br element for new paragraphs.',
+            layout: 'accordion',
+            max: 1,
+            min: 1,
+            num_winners: 1,
+            tally_type: 'plurality-at-large',
+            title: 'Test question title',
+            extra_options: {
+              shuffle_categories: true,
+              shuffle_all_options: true,
+              shuffle_category_list: [],
+              show_points: false
+            },
+            active: true
+          }
+        ],
+        extra_data: {}
+      }
+
+    # admin fields
+    admin_fields: []
+    ## free plugin
+      #- name: "expected_census"
+        #label: "Expected Census"
+        #description: "Expected Census"
+        #type: "int"
+        #min: 0
+        #step: 1
+        #value: 1000 # default expected census
+        #required: true
+        #private: true
+    ## legal plugin
+      #- name: "legal_name"
+        #label: "Name"
+        #placeholder: "Sequent SL"
+        #min: 1
+        #type: "text"
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_org"
+        #label: "Organization"
+        #placeholder: "Sequent SL"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private: false
+
+      #- name: "legal_id"
+        #label: "VAT"
+        #placeholder: "X1234567"
+        #type: "text"
+        #min: 1
+        #value: ""
+        #required: true
+        #private": false
+
+      #- name: "legal_contact"
+        #label: "Contact"
+        #placeholder: "legal@sequentech.io"
+        #type: "email"
+        #value: ""
+        #required: true
+        #private: false
+
+    # Details pertaining to the organization that runs the software
+    organization:
+      # changes the organization logo. The path should be a path accessible to
+      # ansible. Use an empty string ('') if you don't want to change the logo.
+      # Note: we recommend to use a png image with 18px height and less than
+      # 200px width.
+      logo_path: ''
+
+      # Subtitle of the organization, used in the ballot ticket PDF
+      subtitle: ''
+
+      # Big logo of the organization, used in the ballot ticket PDF
+      big_logo_url: ''
+
+      # Name of the organization, appears in the logo mouse hover, in the login
+      # page ("Login into __NAME__ admin account"), in the poweredBy, etc
+      name: 'Sequent'
+
+      # URL that the logo links to
+      url: 'https://sequentech.io'
+
+      # Configurable signup link. This link is shown only in /admin/login
+      # and can be set to any valid URL
+      admin_signup_link: '/admin/signup'
+
+    contact:
+      # Support contact email displayed in the footer links
+      email: contact@example.com
+      # Sales contact email displayed in the footer links
+      sales: sales@example.com
+      tlf: ''
+
+    # default authentication message to be sent to users of an election
+    auth_msg:
+      # authentication message (both for email and SMS authentication methods)
+      # the default is the i18next string path, which works for multiple languages
+      # you can use these and other variables:
+      # URL, URL2, CODE, HOME_URL, EVENT_ID... and slugs
+      # example: 'Vote in __URL__ with code __CODE__'
+      # default: 'avAdmin.auth.emaildef'
+      msg: 'avAdmin.auth.emaildef'
+      # authentication message subject (for emails)
+      # example: "Vote now with Sequent"
+      # default: 'avAdmin.auth.emailsubdef'
+      subject: 'avAdmin.auth.emailsubdef'
+
+    texts:
+
+      # html extra info to show in the voting booth success screen
+      booth_success_extra: ''
+
+      # terms of service text, shown in the documentation and in the booth
+      # start page
+      tos_text: ''
+
+     # terms of service title, shown in the documentation and in the booth
+      # start page
+      tos_title: ''
+
+      # you can include any html text in admin-console html to customize it
+      admin_html_body_include: ''
+ 
+      # you can include any html text in election-portal html to customize it
+      elections_html_body_include: ''
+
+      # you can include any html text in voting-booth html to customize it
+      booth_html_body_include: ''
+
+      # you can include any html text, which will be shown on the documentation
+      # page on election-portal and on help in voting booth (voting-booth)
+      documentation_html_include: >-
+          <ul>
+          <li>
+          <a
+          href=\"/election/{% raw %}{{election_id}}{% endraw %}/public/extra-legal\"
+          target=\"_blank\"
+          ng-i18next=\"avDocumentation.legal.title\">
+          </a>
+          </li>
+          </ul>
+
+      # you can include any html text, which will be shown on the legal page
+      # on election-portal
+      legal_html_include: ''
+
+      # html/text to show when the help url for a setting fails to load
+      settings_help_url_error: >-
+          <p style=\"color: red;\">An error has occurred, but don't worry, we're on it!</p>
+
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be available publicly. Usually these files are
+    # referenced in  sequent_ui.texts.help_info for example. The URL for a file
+    # "foo.png" inside static_extra_path would be:
+    # https://<DOMAIN>/election/static/static_extra/foo.png"
+    static_extra_path: ''
+
+    # social networks footer links
+    social:
+      facebook: 'https://www.facebook.com/sequent'
+      twitter: 'https://twitter.com/sequentcom'
+      twitterHandle: 'sequentcom'
+      googleplus: 'https://plus.google.com/101939665794445172389/posts'
+      youtube: 'https://www.youtube.com/results?search_query=sequent'
+      github: 'https://github.com/sequent/'
+
+    # technology footer links
+    technology:
+      aboutus: 'https://sequentech.io/'
+      pricing: 'https://sequentech.io/pricing'
+      overview: 'https://sequentech.io/'
+      solutions: 'https://sequentech.io/'
+      admin_manual: 'https://sequentech.io/doc/en/'
+
+    # legality footer links
+    legal:
+      terms_of_service: 'https://sequentech.io/tos/'
+      cookies: 'https://sequentech.io/cookies/'
+      privacy: 'https://sequentech.io/privacy/'
+      security_contact: 'https://sequentech.io/security-contact/'
+      community_website: 'https://sequent.org'
+
+    documentation:
+      show_help: true
+      faq: 'https://sequentech.io/doc/en/'
+      overview: 'https://sequentech.io/overview/'
+      technical: 'https://sequentech.io/static/generic_tech_overview_20_08_15.pdf'
+
+    # social networks buttons configuration
+    share_social:
+      allow_edit: true
+      default:
+        - network: 'Twitter'
+          button_text: ''
+          social_message: 'I have just voted in election https://go.sequentech.io, you can too! #sequent'
+
+  # configuration related to the nginx web server
+  webserver:
+    # configures the "worker_processes" setting in nginx. Typically you would
+    # use the number of cores of the machine or less.
+    worker_processes: 2
+
+    # enable/disable nginx reverse proxy cache for everything related to sequent
+    # web server
+    reverse_proxy_cache: true
+
+  # DNI-e and FNMT authentication support related configuration
+  dnie_auth:
+    # boolean (true|false) that enables or disables the DNIe and FNMT
+    # authentication.
+    #
+    # Note: load_balancing is not currently supported when dni_auth is enabled
+    # because nginx for some reason always will request the client TLS
+    # certificate if the requester hostname doesn't match the nginx hostname.
+    allow: false
+
+    # Nginx requires a different FQDN to apply client side authentication,
+    # which is something needed for DNIe and FNMT auth.
+    host: cert.sequent-auth5
+
+  cert:
+    C: EN
+    ST: Ney York
+    L: Ney York
+    O: Example
+    OU: Example
+    EMAIL: info@example.com
+
+    # within how many days will the certificate will expire?
+    lifetime: 3650
+
+    # force creation of a new certificate
+    # allowed values: 'true'|'false'
+    force_create: 'false'
+
+  # sentry
+  sentry:
+    # enables/disabled sentry    
+    enabled: false
+
+    # port in which the sentry backend is run.
+    # Note: this is NOT the port in  which the nginx sentry web service is run.
+    port: 9090
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # domain by which to server sentry
+    domain: sequentech.io
+
+    # password of the postgresql database of the sentry backend.
+    db_password: '<PASSWORD>'
+
+    # HTTP Port in which sentry is accessed. Only used for now in
+    # oneserver.conf. Note that this port might be configure to use
+    # https only if not config.load_balancing.enabled or
+    # config.load_balancing.use_https, see oneserver.conf for details.
+    web_port: 8443
+
+    # Sentry Administrative web user email. Used to login into the sentry web
+    # interface.
+    admin_user: 'admin@example.com'
+
+    # Sentry Administrative web user password. Used to login into the sentry web
+    # interface.
+    admin_password: '<PASSWORD>'
+
+    # Sending the code sms and email log to an email
+    msg_log: False
+
+    # the log receiver
+    msg_log_email: log@example.com
+
+  # the log sender
+  iam:
+    # Whether iam is run in debug mode or not.
+    # Allowed values: True|False
+    debug: True
+
+    # allow and deny nginx ips specific for this service
+    ips:
+      allow: []
+      deny: []
+
+    # Set any additional settings to the celery worker here
+    celery_worker_extra_opts: '--concurrency 300 --pool eventlet'
+
+    # Set any additional settings to the celery beat daemon here
+    celery_beat_extra_opts: ''
+
+    # If this option is true, then admin users can be deregistered and
+    # re-registered. Elections from deregistered users still are stored in the
+    # database. When a user re-registers after being de-registered, he will be
+    # able to modify fields that are not the email (in the case of email
+    # authentication) or phone number (in the case of phone-based auth) and once
+    # he is re-registered he will be able to see and manage elections created
+    # before he de-registered.
+    #
+    # Users can only be deregistered while being logged in, using a call to
+    # iam's url 'api/user/deregister/'. admin.py script in ballot_box
+    # can be used to ease executing this procedure.
+    #
+    # allowed values: true|false
+    # default: true
+    allow_deregister: true
+
+    # Allow admin users registration
+    # Allowed values: true|false
+    # Default: false
+    allow_admin_registration: false
+
+    # Number of seconds after which an authentication token expires.
+    auth_token_expiration_seconds: 600
+
+    # Number of seconds after which an authentication token expires for admin
+    # users
+    admin_auth_token_expiration_seconds: 3600
+
+    # callbacks given to ballot_box instances, for now related to sending
+    # the result of uploading tally sheets only. It's a list so that it can
+    # upload multiple ballot_box instances
+    ballot_box_base:
+    - http://127.0.0.1:14443
+
+    server_email: log@example.com
+
+    # Election ids are autoinc integer numbers set when created from the
+    # administrative web interface. This settings allows to specify the start
+    # number of the election ids. This might be useful to set if you want to
+    # them to start at a specific rate for any reason, for example if the
+    # authorities are shared with other iam servers.
+    election_start_id: 1
+
+    # stablishes if admins can register or not
+    # default value: 'close'
+    # allowed values: 'close', 'open'
+    admin_census_mode: close
+
+    # Every time iam is deployed, Authapi's upsert_users command is run with
+    # this variable as argument, if the file exists.
+    upsert_file: ''
+
+    # Stablishes the authentication method used for election administrators
+    #
+    # Allowed values: (user-and-password|email|email-otp|sms|sms-otp|openid-connect)
+    auth_method: 'user-and-password'
+
+    # Defines the extra fields used in authentication and registration. Empty by
+    # default
+    extra_fields: >
+      [
+        {
+          "name": "username",
+          "type": "text",
+          "required": true,
+          "unique": true,
+          "min": 3, 
+          "max": 200,
+          "required_on_authentication": true
+        },
+        {
+          "name": "password",
+          "type": "password",
+          "required": true,
+          "min": 3,
+          "max": 200,
+          "required_on_authentication": true
+        }
+      ]
+ 
+    # Admin user data and credentials. Note that some of them might get unused,
+    # for example admin_password won't be of use if auth_method is 'sms'.
+    admin_user:
+      email: 'admin@sequentech.io'
+      password: 'QWERTY33'
+
+      # Note that admin telephone number should contain no spaces. International
+      # prefixes are entered like "+34" for Spain, for example
+      tlf: ''
+
+    # authentication message for election admins
+    admin_auth:
+      # auth message for admins when the auth method is sms-otp
+      sms_otp_msg: 'Your code with Sequent is __CODE__'
+      # auth message for admins when the auth method is not sms-otp
+      other_msg: 'Authenticate with Sequent at  __URL__ with __CODE__'
+
+    # If this option is true, when an user tries to register and the user is
+    # already registered, iam will return an error with the 'user_exists'
+    # codename. Otherwise, on error, iam will always return the same generic
+    # error with 'invalid_credentials' codename.
+    show_already_registered: false
+
+    # path to a directory to be copied recursively because it containing static
+    # files that need to be used within iam, for example by the
+    # participation reports. Files will be copied inside
+    # /home/iam/static_extra/ directory.
+    static_extra_path: ''
+
+    # Configuration for automatically schedule sending emails with PDF
+    # participation reports.
+    participation_reports: []
+    #  - name: electoral-process-10
+    #    # minute when the job should run ( 0-59, *, */2, etc )
+    #    minute: 0
+    #    # hour when the job should run ( 0-23, *, */2, etc )
+    #    hour: 7
+    #    # Day of the month the job should run ( 1-31, *, */2, etc )
+    #    day: '17-20'
+    #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+    #    weekday: '*'
+    #    # Month of the year the job should run ( 1-12, *, */2, etc )
+    #    month: '9'
+    #    config:
+    #      email:
+    #        subject: Daily participation report - __DATE__
+    #        body: |
+    #          Hello,
+    #          
+    #          Please find attach the Daily participation report.
+    #          Generated at __DATETIME__.
+    #
+    #          Best regards,
+    #          Sequent Team
+    #        to:
+    #          - whatever@example.com
+    #      title: Association elections 2022
+    #      subtitle: Number of votes accumulated up to day __DATETIME__
+    #      logo_path: /tmp/logo.png
+    #
+    #      # this is optional, by default it will be 488 x 130
+    #      logo_size:
+    #         width: 488
+    #         height: 130
+    #
+    #      table_headers: ["Election", "Votes", "% census", "# Total Census"]
+    #      groups:
+    #        - auth_event_ids: [24, 25, 26]
+    #          title: Board of Directors
+    #        - auth_event_ids: [27, 28, 29]
+    #          title: Advisory Board candidates for Sector 1
+    #        - auth_event_ids: [30, 31, 32]
+    #          title: Advisory Board candidates for Sector 2
+    #        - auth_event_ids: [30, 31, 32]
+    #          title: Advisory Board candidates for Sector 2 - young
+    #          extra_filters:
+    #            user__metadata__age__lt: 18
+    #        - auth_event_ids: [30, 31, 32]
+    #          title: Advisory Board candidates for Sector 2 - adult
+    #          extra_filters:
+    #            user__metadata__age__gte: 18
+
+    # sms otp authentication configuration
+    sms_otp:
+      # how many seconds does a one time toke has until it needs to be renewed.
+      # 5 minutes by default (300 seconds)
+      expire_seconds: 300
+
+    # sms configuration
+    sms:
+      # enable sms configuration. if set to false, the sms configuration doesn't
+      # get inserted in the deploy.py config file.
+      # allowed values: true|false
+      enabled: false
+
+      # sms provider
+      # allowed values: esendex|twilio
+      provider: esendex
+
+      # Each user might have different domain ids. This settings depends on
+      # the provider.
+      domain_id: '<DOMAIND>'
+
+      # Provider's user name.
+      login: '<LOGIN>'
+
+      # Provider's password.
+      sms_password: '<PASSWORD>'
+
+      # Base URL of the API of the provider. Depends on the provider, the
+      # default works for esendex.
+      url: 'https://api.esendex.com/v1.0/messagedispatcher'
+
+      # Depends on the provider. Allows you to change the sender id.
+      sender_id: 'sequent'
+      
+      # Depends on the provider. Sender telephone number, to be used by Twilio
+      # for countries that don't support alphanumeric sender ids.
+      sender_number: ''
+
+      # Voice lang code. Only for esendex. Default: None.
+      voice_lang_code: 'None'
+
+      # Base template for sms messages. The __MESSAGE__ will be replaced by
+      # the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__ -- Sequent"
+
+    # email configuration
+    email:
+      # enable email configuration. if set to false, the emailconfiguration
+      # doesn't get inserted in the deploy.py config file.
+      # allowed values: true|false
+      enabled: false
+
+      # The sender email address
+      default_from_email: 'sequent@example.com'
+
+      # Email server host
+      email_host: 'example.com'
+
+      # Email server port
+      email_port: 24
+
+      # Base template for plain text email messages. The __MESSAGE__ will be
+      # replaced by the message, so you can add prefix and suffixes.
+      base_template: "__MESSAGE__\n\n -- Sequent https://sequentech.io"
+
+      # Base template for plain text email titles. The __TITLE__ will be
+      # replaced by the title, so you can add prefix and suffixes.
+      base_title_template: "__TITLE__ - Sequent"
+
+      # Possible backends: email|console
+      backend: 'console'
+
+    # list of extra options, added at the end as configuration lines in the
+    # configuration file
+    extra_options: []
+      # - WHATEVER = 'VALUE'
+
+    # List of OpenID Connect providers information. Each provider contains
+    # public info that is used by sequent-ui to show information about the
+    # providers, and private info that is used by iam for authentication.
+    #
+    # The logout_redirect_uri is used in case the election is configured to
+    # show a way to logout or even redirect after voting, and this URI can
+    # contain a __EVENT_ID__ that will be changed to the appropiate event_id
+    # before sending the user to it.
+    #
+    # openid_connect_providers:
+    #  - public_info:
+    #      id: example
+    #      title: Authenticate to vote with Example
+    #      description: Authenticate to vote with Example
+    #      icon: https://www.example.com/favicon.ico
+    #      authorization_endpoint: https://accounts.example.com/o/oauth2/v2/auth
+    #      client_id: my_example_client_id.apps.example.com
+    #      issuer: https://accounts.example.com
+    #      token_endpoint: https://oauth2.example.com/token
+    #      jwks_uri: https://www.example.com/oauth2/v3/certs
+    #      logout_uri: https://accounts.example.com/o/oauth2/v2/auth_logout
+    #    private_config:
+    #      client_secret: example_secret
+    openid_connect_providers: []
+
+  # Authorities
+
+  authorities:
+    - id: "auth1"
+      name: "Sequent 1"
+      description: "Sequent es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://sequentech.io"
+      image: "/docs/logo_sequent.png"
+    - id: "auth2"
+      name: "Sequent 2"
+      description: "Sequent es un software libre de votaciones que permite a cualquier organización realizar procesos electorales de forma segura, flexible, transparente y a un precio competitivo."
+      url: "https://sequentech.io"
+      image: "/docs/logo_sequent.png"
+  director: 'auth1'
+  auths: "['auth2']"
+
+  # set to true if the environment where you are going to deploy the machine,
+  # it uses an https_proxy, which is not transparently supported in ansible.
+  has_https_proxy: false
+
+  # populates the /etc/hosts file. Sometimes this is needed, for example when
+  # deploying with vagrant, the name of other machines might not be
+  # automatically known by others, for example the name of the master might not
+  # be known by the slave machine.
+  hosts: []
+  #  - hostname: sequent-auth5
+  #    ip: 192.168.50.4
+
+  #
+  # Load Balancing & High Availability configuration details
+  #
+  load_balancing:
+    # set to true if you want to enable load_balancing. Basically this affects
+    # to oneserver.conf configuration
+    enabled: false
+
+    # set is_master to "true" if the machine will be the master server,
+    # set to "false" if it's going to act as a slave (with a hot standby
+    # postgresql database configuration)
+    is_master: true
+
+    # Id of the node. Both master and slaves require to have a unique id.
+    # This is used by repmgr.
+    repmgr_node_id: 1
+
+    # The CIDR address of the load balancer. This is used in the nginx
+    # configuration of oneserver.conf
+    loadbalancers_cidr: '192.168.50.4/0'
+
+    # The header used by the load balancer to communicate the real ip of the
+    # user.
+    load_balancer_real_ip_header: 'X-Real-IP'
+
+    # set to 'true' if the load balancer will access to this machines using
+    # TLS (which is more secure but slower).
+    use_https: false
+
+    # Configuration needed when the machine is configured to be a slave i.e.
+    # 'is_master' is set to 'false'
+    slave:
+      # hostname of the master. Used to:
+      # - connect via rsync
+      # - connect via postgresql
+      master_hostname: 'localhost'
+
+      # specifies the update frequency of the rsync of dirs from master.
+      # rsync is done of /etc/eopeers/ and /home/ballotbox/datastore
+      rsync_update_secs: 600
+
+    # Configuration needed when the machine is configured to be a master i.e.
+    # 'is_master' is set to 'true'
+    master:
+      # The list of keys in here will be accepted  to login as ballotbox.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /home/ballotbox/.ssh/id_rsa.pub in the slave machines.
+      slave_ballotbox_ssh_keys: []
+      #  - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQChqdkxOwcZasOpW8b6FPULMLYozOG4GKioFVmH+zT8l7fO/+SSeqEePJT5DDdvhuFuatStRvkrlRns4PoB3AeOsjnk+PIe+nIRXx1o7Wyjtn8AzWq55X8XWNHuh6QsVbVWFD6AzbFb2kiAx8sRe2+suLbW2DuSoCBWoildWe0ipMW1//qv477jfOZKdYlVAvRu/vbhoBwvmnlI/7N06oDkhyBJ+WUlY8T72FCTWhA3U6Q3CHRryNOG8sRIvVcq9m30dY3x8BvmRDbEQRjOnLTvW+Ua1KLnq9azVBjYvvbkTWVkiLMLhKEqgjXrNvL1sPVjmyqJ9PPNxaztW3JAVmJkTQk40K32z4G+pq1Hfy5vuOhnCubyRf5b4KWFxGUbZX9vM1+U8o5w7HOspGM+60e4NASVXIUYJmdwXL3w2ERwn3qvMhhEvqgtan9+3Lu5lpKMcaax0/GhxYREzdN4njRpXAkUIf2TjRTohx6s+6QCTrXpaQm/sLUITH8fRJqG6JVkp7f6Dldo9PesxnwWdmYcamTyhPpnuk+vA6sXPQmSpxhUTObXir0o/VZmacUbU193884MS72/hmk7m7J1u0EU95fW80WjdordrjI3Zj9TvWRo1tSbKbzc6Gan8mVXeMa22yRlvL4ZcxkKgAcDuz1zdCrlV8pZcsRdBobQwdf2mw== ballotbox@sequent-slave/ansible-generated'
+
+      # The list of keys in here will be accepted  to login as ballotbox.
+      # This is used for rsync synchronization.
+      #
+      # The ssh key you need to put here can be found in the file
+      # /var/lib/postgresql/.ssh/id_rsa.pub in the slave machines.
+      slave_postgres_ssh_keys: []
+      #  - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3dzOI4ZV6h0lv5KtUSRgGNBcCLv0+CSwsO7JDcUeTIcmzpAecsBR9d2SikKpoB4tKxDUFOCvmBak1mjaROdqRCIHJZTlEVy22hCeVD0Twdq2H+teGnXdoJ5yI1VgZllLMgOIXuDqKJMsIxn7gtPrqdJQS0/iMTR4nsrB95Ybh/hdJBzo8dgg/KAu1uDsy9R2TWY1mPIF10VlHjcVrbtLcTAR9Vg/Yg21mh3MqG0m/ymnRE4DXfpbauW2d8B6YPoMxrnnquUDVh5NMn7GYDaPjXk42zpMOmTAxvzQ94qRGWxr5SgaeBHdENmOTX0Yg0jkkiODPl3a9hHgjU/ueo7TjKB38vmm178I8pEDqLMo+DTtY2VYBhhvmAbfDyFbPgjDq4urMNJFY3T2RSF6os+Q6B/W2kygaEAFjJQeaXh+TAb56vJOwdRJgGiAvlyWwjF5WIojDCFYVV5M2KJuKzNGTJwfWmNnkK1EP0TxwUG1af7TGmJoNEMSgv6usk2m34MFsGE5MYhR4bvT/6jYwcrSeYu993wYpCl+k+L4PgQ39NU0SixdNoXLzMkiZFrVmqVsve6mgnvTQ4B6jE2YgzBwLqEt9zh1LlxV7/f/0y1pnq8x4M5mJgBudWMnMO5nvIK+L8ziD3LN/1r9Yyv8jJy3PNzNUjlQzlys9Wjyjf7Z/LQ== postgres@sequent-slave/ansible-generated'
+
+      # CIDR block address slaves' used to specify:
+      #  - which machines can access to postgresql
+      slave_cidr_address: '192.168.50.4/24'
