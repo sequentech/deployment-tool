@@ -18,7 +18,7 @@
   become: true
   become_user: ballotbox
   git:
-    repo: "{{ repos.aelections.repo }}"
-    version: "{{ repos.aelections.version }}"
+    repo: "{{ repos.ballot_box.repo }}"
+    version: "{{ repos.ballot_box.version }}"
     dest: /home/ballotbox/ballot-box
-    force: "{{ repos.aelections.force }}"
+    force: "{{ repos.ballot_box.force }}"

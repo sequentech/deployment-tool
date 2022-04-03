@@ -967,7 +967,7 @@ config:
       pricing: 'https://sequentech.io/'
       overview: 'https://sequentech.io/'
       solutions: 'https://sequentech.io/'
-      admin_manual: 'https://sequent.github.io/documentation/'
+      documentation: 'https://sequentech.github.io/documentation/'
 
     # legality footer links
     legal:
@@ -979,9 +979,9 @@ config:
 
     documentation:
       show_help: false
-      faq: 'https://sequent.github.io/documentation/'
-      overview: 'https://sequent.github.io/documentation/'
-      technical: 'https://sequent.github.io/documentation/'
+      faq: 'https://sequentech.github.io/documentation/'
+      overview: 'https://sequentech.github.io/documentation/'
+      technical: 'https://sequentech.github.io/documentation/'
 
     # social networks buttons configuration
     share_social:

@@ -981,7 +981,7 @@ config:
       pricing: 'https://sequentech.io/pricing'
       overview: 'https://sequentech.io/'
       solutions: 'https://sequentech.io/'
-      admin_manual: 'https://sequentech.io/doc/en/'
+      documentation: 'https://sequentech.io/doc/en/'
 
     # legality footer links
     legal:

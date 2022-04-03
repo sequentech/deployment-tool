@@ -18,10 +18,10 @@
   become: true
   become_user: verifier_user
   git:
-    repo: "{{ repos.averifier.repo }}"
-    version: "{{ repos.averifier.version }}"
+    repo: "{{ repos.election_verifier.repo }}"
+    version: "{{ repos.election_verifier.version }}"
     dest: /home/verifier_user/election-verifier
-    force: "{{ repos.averifier.force }}"
+    force: "{{ repos.election_verifier.force }}"
 
 - name: AgoraVerifier, setting up election-verifier repo
   block:
@@ -29,10 +29,10 @@
       become: true
       become_user: verifier_user
       git:
-        repo: "{{ repos.averifier.repo }}"
-        version: "{{ repos.averifier.version }}"
+        repo: "{{ repos.election_verifier.repo }}"
+        version: "{{ repos.election_verifier.version }}"
         dest: /home/verifier_user/election-verifier
-        force: "{{ repos.averifier.force }}"
+        force: "{{ repos.election_verifier.force }}"
   rescue:
     - name: AgoraVerifier, Downloading election-verifier repo (force fetch)
       become: true
@@ -44,10 +44,10 @@
       become: true
       become_user: verifier_user
       git:
-        repo: "{{ repos.averifier.repo }}"
-        version: "{{ repos.averifier.version }}"
+        repo: "{{ repos.election_verifier.repo }}"
+        version: "{{ repos.election_verifier.version }}"
         dest: /home/verifier_user/election-verifier
-        force: "{{ repos.averifier.force }}"
+        force: "{{ repos.election_verifier.force }}"
 
 - name: AgoraVerifier, Downloading tally-methods repo
   become: true

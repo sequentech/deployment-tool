@@ -59,7 +59,7 @@ var SequentConfigData = {
   electionsAPI: "https://{{config.ballot_box.domain}}/elections/api/",
 
   // Agora Admin help url
-  helpUrl: "{{ config.sequent_ui.technology.admin_manual }}",
+  helpUrl: "{{ config.sequent_ui.technology.documentation }}",
 
   authorities: {{ config.auths }},
   director: "{{ config.director }}",
@@ -328,7 +328,7 @@ var SequentConfigData = {
     pricing: "{{ config.sequent_ui.technology.pricing }}",
     overview: "{{ config.sequent_ui.technology.overview }}",
     solutions: "{{ config.sequent_ui.technology.solutions }}",
-    admin_manual: "{{ config.sequent_ui.technology.admin_manual }}"
+    documentation: "{{ config.sequent_ui.technology.documentation }}"
   },
 
   // legality footer links

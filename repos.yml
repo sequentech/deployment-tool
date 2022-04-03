@@ -15,7 +15,7 @@
 
 ---
 repos:
-    aelections:
+    ballot_box:
         repo: https://github.com/sequentech/ballot-box.git
         version: 'master'
         force: yes
@@ -31,7 +31,7 @@ repos:
         repo: https://github.com/sequentech/iam.git
         version: 'master'
         force: yes
-    atools:
+    misc_tools:
         repo: https://github.com/sequentech/misc-tools.git
         version: 'master'
         force: yes
@@ -47,23 +47,23 @@ repos:
         repo: https://github.com/sequentech/mixnet
         version: 'master'
         force: yes
-    averifier:
+    election_verifier:
         repo: https://github.com/sequentech/election-verifier.git
         version: 'master'
         force: yes
-    guicommon:
+    common_ui:
         repo: https://github.com/sequentech/common-ui.git
         version: 'master'
         force: yes
-    guiadmin:
+    admin_console:
         repo: https://github.com/sequentech/admin-console.git
         version: 'master'
         force: yes
-    guibooth:
+    voting_booth:
         repo: https://github.com/sequentech/voting-booth.git
         version: 'master'
         force: yes
-    guielections:
+    election_portal:
         repo: https://github.com/sequentech/election-portal.git
         version: 'master'
         force: yes

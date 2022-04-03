@@ -54,15 +54,15 @@
     dest: /srv/eotests/encrypt-deps/
     validate_certs: "{{ not config.has_https_proxy }}"
   with_items:
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/jsbn.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/jsbn2.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/bigint.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/class.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/elgamal.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/random.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/sha1.js
-    - https://github.com/sequentech/voting-booth/raw/{{ repos.guibooth.version }}/vendor/crypto/sha2.js
-    - https://github.com/sequentech/common-ui/raw/{{ repos.guicommon.version }}/vendor/crypto/sjcl.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/jsbn.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/jsbn2.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/bigint.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/class.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/elgamal.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/random.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/sha1.js
+    - https://github.com/sequentech/voting-booth/raw/{{ repos.voting_booth.version }}/vendor/crypto/sha2.js
+    - https://github.com/sequentech/common-ui/raw/{{ repos.common_ui.version }}/vendor/crypto/sjcl.js
     - http://momentjs.com/downloads/moment.js
 
 - name: EOrchestra, encrypt.js

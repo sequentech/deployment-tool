@@ -23,9 +23,9 @@
     dest: "/home/ballotbox/{{ item.dest }}"
     force: "{{ item.force }}"
   with_items:
-    - repo: "{{ repos.atools.repo }}"
-      version: "{{ repos.atools.version }}"
-      force: "{{ repos.atools.force }}"
+    - repo: "{{ repos.misc_tools.repo }}"
+      version: "{{ repos.misc_tools.version }}"
+      force: "{{ repos.misc_tools.force }}"
       dest: misc-tools
     - repo: "{{ repos.results.repo }}"
       version: "{{ repos.results.version }}"

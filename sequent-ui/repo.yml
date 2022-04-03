@@ -18,37 +18,37 @@
   become: true
   become_user: ui_user
   git:
-    repo: "{{ repos.guicommon.repo }}"
-    version: "{{ repos.guicommon.version }}"
+    repo: "{{ repos.common_ui.repo }}"
+    version: "{{ repos.common_ui.version }}"
     dest: /home/ui_user/common-ui
-    force: "{{ repos.guicommon.force }}"
+    force: "{{ repos.common_ui.force }}"
 
 - name: AgoraGui, Git clone admin-console
   become: true
   become_user: ui_user
   git:
-    repo: "{{ repos.guiadmin.repo }}"
-    version: "{{ repos.guiadmin.version }}"
+    repo: "{{ repos.admin_console.repo }}"
+    version: "{{ repos.admin_console.version }}"
     dest: /home/ui_user/admin-console
-    force: "{{ repos.guiadmin.force }}"
+    force: "{{ repos.admin_console.force }}"
 
 - name: AgoraGui, Git clone election-portal
   become: true
   become_user: ui_user
   git:
-    repo: "{{ repos.guielections.repo }}"
-    version: "{{ repos.guielections.version }}"
+    repo: "{{ repos.election_portal.repo }}"
+    version: "{{ repos.election_portal.version }}"
     dest: /home/ui_user/election-portal
-    force: "{{ repos.guielections.force }}"
+    force: "{{ repos.election_portal.force }}"
 
 - name: AgoraGui, Git clone voting-booth
   become: true
   become_user: ui_user
   git:
-    repo: "{{ repos.guibooth.repo }}"
-    version: "{{ repos.guibooth.version }}"
+    repo: "{{ repos.voting_booth.repo }}"
+    version: "{{ repos.voting_booth.version }}"
     dest: /home/ui_user/voting-booth
-    force: "{{ repos.guibooth.force }}"
+    force: "{{ repos.voting_booth.force }}"
 
 - name: AgoraGui, copying SequentConfig.js in user election-portal and voting-booth
   become: true
@@ -117,7 +117,7 @@
   replace:
     dest: /home/ui_user/{{item}}/package.json
     regexp: '"common-ui"(.) "[^"]+(".*)$'
-    replace: '"common-ui"\1 "{{repos.guicommon.repo}}#{{repos.guicommon.version}}\2'
+    replace: '"common-ui"\1 "{{repos.common_ui.repo}}#{{repos.common_ui.version}}\2'
   with_items:
     - admin-console
     - election-portal
