@@ -959,7 +959,7 @@ config:
       twitterHandle: 'sequentcom'
       googleplus: ''
       youtube: 'https://www.youtube.com/results?search_query=sequent'
-      github: 'https://github.com/sequent/'
+      github: 'https://github.com/sequentech/'
 
     # technology footer links
     technology:
@@ -975,7 +975,7 @@ config:
       cookies: 'https://sequentech.io/cookies/'
       privacy: 'https://sequentech.io/privacy/'
       security_contact: 'https://sequentech.io/security-contact/'
-      community_website: 'https://github.com/sequent/'
+      community_website: 'https://github.com/sequentech/'
 
     documentation:
       show_help: false

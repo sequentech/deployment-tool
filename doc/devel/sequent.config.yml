@@ -973,7 +973,7 @@ config:
       twitterHandle: 'sequentcom'
       googleplus: 'https://plus.google.com/101939665794445172389/posts'
       youtube: 'https://www.youtube.com/results?search_query=sequent'
-      github: 'https://github.com/sequent/'
+      github: 'https://github.com/sequentech/'
 
     # technology footer links
     technology:
