@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Creating eorchestra user
+- name: election-orchestra, Creating eorchestra user
   become: true
   user:
     name: eorchestra
@@ -23,7 +23,7 @@
     groups: tlscert
     append: true
 
-- name: EOrchestra, Creating /home/eorchestra/.ansible/tmp dir
+- name: election-orchestra, Creating /home/eorchestra/.ansible/tmp dir
   become: true
   become_user: eorchestra
   file:

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: OneServer, copy maintenance file if any
+- name: one-server, copy maintenance file if any
   when: config.http.maintenance_file != ''
   become: true
   template:
@@ -23,7 +23,7 @@
     owner: root
     mode: 0644
 
-- name: OneServer, copy default maintenance file
+- name: one-server, copy default maintenance file
   when: config.http.maintenance_file == ''
   become: true
   template:
@@ -32,7 +32,7 @@
     owner: root
     mode: 0644
 
-- name: OneServer, iam custom_urls.py
+- name: one-server, iam custom_urls.py
   become: true
   template:
     src: oneserver/templates/custom_urls.py
@@ -40,14 +40,14 @@
     owner: iam
     mode: '0640'
 
-- name: OneServer, iam url config
+- name: one-server, iam url config
   become: true
   lineinfile:
     dest: /home/iam/iam/iam/iam/deploy.py
     line: "ROOT_URLCONF = 'custom_urls'"
     state: present
 
-- name: OneServer, Restarting iam service
+- name: one-server, Restarting iam service
   become: true
   supervisorctl:
     name: "{{ item }}"
@@ -57,7 +57,7 @@
     - iam_celery
     - iam_celery_beat
 
-- name: OneServer, All in one nginx
+- name: one-server, All in one nginx
   become: true
   template:
     src: oneserver/templates/oneserver.conf
@@ -65,7 +65,7 @@
     owner: root
     mode: '0640'
 
-- name: OneServer, configure nginx
+- name: one-server, configure nginx
   become: true
   template:
     src: oneserver/templates/nginx.conf
@@ -73,7 +73,7 @@
     owner: root
     mode: '0640'
 
-- name: OneServer, cloudflare.conf
+- name: one-server, cloudflare.conf
   become: true
   template:
     src: oneserver/templates/cloudflare.conf
@@ -81,7 +81,7 @@
     owner: root
     mode: '0640'
 
-- name: OneServer, configure cors
+- name: one-server, configure cors
   become: true
   template:
     src: oneserver/templates/cors.conf
@@ -89,13 +89,13 @@
     owner: root
     mode: '0640'
 
-- name: OneServer, remove nginx default
+- name: one-server, remove nginx default
   become: true
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
 
-- name: OneServer, secure.conf
+- name: one-server, secure.conf
   become: true
   template:
     src: "oneserver/templates/{{ item }}"
@@ -108,7 +108,7 @@
     - internal_secure.conf
 
 # dnie & fnmt certs
-- name: OneServer, DNIE and FNMT ca in nginx
+- name: one-server, DNIE and FNMT ca in nginx
   become: true
   template:
     src: oneserver/templates/dnie.conf
@@ -119,40 +119,40 @@
 
 # remove the dnie conf when allow_dni is false, otherwise when changing
 # from one configuration to the other we would be leaving files around
-- name: OneServer, DNIE and FNMT ca in nginx (remove)
+- name: one-server, DNIE and FNMT ca in nginx (remove)
   become: true
   file:
     path: /etc/nginx/conf.d/dnie.conf
     state: absent
   when: not config.dnie_auth.allow
 
-- name: OneServer, DNIE and FNMT ca
+- name: one-server, DNIE and FNMT ca
   become: true
   template:
     src: oneserver/templates/ca.crt
     dest: /srv/certs/dnie.ca.crt
   when: not config.dnie_auth.allow
 
-- name: OneServer, DNIE and FNMT ca (remove)
+- name: one-server, DNIE and FNMT ca (remove)
   become: true
   file:
     path: /srv/certs/dnie.ca.crt
     state: absent
   when: not config.dnie_auth.allow
 
-- name: OneServer, Restarting nginx
+- name: one-server, Restarting nginx
   become: true
   service:
     name: nginx
     state: restarted
 
-- name: OneServer, http authentication passwords file (remove)
+- name: one-server, http authentication passwords file (remove)
   become: true
   file:
     path: /etc/nginx/.htpasswd
     state: absent
 
-- name: OneServer, http authentication passwords file (create)
+- name: one-server, http authentication passwords file (create)
   become: true
   shell: echo "{{item.user}}:$(openssl passwd -crypt {{item.password}})" >> /etc/nginx/.htpasswd
   when: config.http.http_auth

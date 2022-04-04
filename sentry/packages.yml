@@ -14,12 +14,12 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Sentry, apt-cache update
+- name: sentry, apt-cache update
   become: true
   apt:
     update_cache: yes
 
-- name: Sentry, Installing packages
+- name: sentry, Installing packages
   become: true
   apt:
     pkg:

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AuthApi, Creating sentry_celery.sh
+- name: iam, Creating sentry_celery.sh
   become: true
   template:
     src: sentry/templates/sentry_celery.sh
@@ -22,7 +22,7 @@
     owner: sentry
     mode: '0740'
 
-- name: AuthApi, Creating sentry.sh
+- name: iam, Creating sentry.sh
   become: true
   template:
     src: sentry/templates/sentry.sh
@@ -30,7 +30,7 @@
     owner: sentry
     mode: '0740'
 
-- name: Sentry, Creating supervisord conf
+- name: sentry, Creating supervisord conf
   become: true
   template:
     src: sentry/templates/supervisor.conf
@@ -38,7 +38,7 @@
     owner: root
     mode: '0640'
 
-- name: Sentry, Creating celery supervisord conf
+- name: sentry, Creating celery supervisord conf
   become: true
   template:
     src: sentry/templates/supervisor_celery.conf
@@ -46,7 +46,7 @@
     owner: root
     mode: '0640'
 
-- name: Sentry, Restarting supervisord
+- name: sentry, Restarting supervisord
   become: true
   service:
     name: supervisor

@@ -25,7 +25,7 @@ CONF_ROOT = os.path.dirname(__file__)
 # unless you have altered all schemas first
 SENTRY_USE_BIG_INTS = True
 
-# If you're expecting any kind of real traffic on Sentry, we highly recommend
+# If you're expecting any kind of real traffic on sentry, we highly recommend
 # configuring the CACHES and Redis settings
 
 ###########
@@ -118,7 +118,7 @@ SENTRY_RATELIMITER = 'sentry.ratelimits.redis.RedisRateLimiter'
 # Buffers (combined with queueing) act as an intermediate layer between the
 # database and the storage API. They will greatly improve efficiency on large
 # numbers of the same events being sent to the API in a short amount of time.
-# (read: if you send any kind of real data to Sentry, you should enable buffers)
+# (read: if you send any kind of real data to sentry, you should enable buffers)
 
 SENTRY_BUFFER = 'sentry.buffer.redis.RedisBuffer'
 

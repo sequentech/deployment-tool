@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, Git clone common-ui
+- name: sequent-ui, Git clone common-ui
   become: true
   become_user: ui_user
   git:
@@ -23,7 +23,7 @@
     dest: /home/ui_user/common-ui
     force: "{{ repos.common_ui.force }}"
 
-- name: AgoraGui, Git clone admin-console
+- name: sequent-ui, Git clone admin-console
   become: true
   become_user: ui_user
   git:
@@ -32,7 +32,7 @@
     dest: /home/ui_user/admin-console
     force: "{{ repos.admin_console.force }}"
 
-- name: AgoraGui, Git clone election-portal
+- name: sequent-ui, Git clone election-portal
   become: true
   become_user: ui_user
   git:
@@ -41,7 +41,7 @@
     dest: /home/ui_user/election-portal
     force: "{{ repos.election_portal.force }}"
 
-- name: AgoraGui, Git clone voting-booth
+- name: sequent-ui, Git clone voting-booth
   become: true
   become_user: ui_user
   git:
@@ -50,7 +50,7 @@
     dest: /home/ui_user/voting-booth
     force: "{{ repos.voting_booth.force }}"
 
-- name: AgoraGui, copying SequentConfig.js in user election-portal and voting-booth
+- name: sequent-ui, copying SequentConfig.js in user election-portal and voting-booth
   become: true
   become_user: ui_user
   template:
@@ -64,7 +64,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, setting admin timeout correctly in admin-console
+- name: sequent-ui, setting admin timeout correctly in admin-console
   become: true
   become_user: ui_user
   replace:
@@ -72,7 +72,7 @@
     regexp: " timeoutSeconds:.*"
     replace: ' timeoutSeconds: {{config.iam.admin_auth_token_expiration_seconds}},'
 
-- name: AgoraGui, setting admin timeout correctly in admin-console, 2
+- name: sequent-ui, setting admin timeout correctly in admin-console, 2
   become: true
   become_user: ui_user
   replace:
@@ -80,7 +80,7 @@
     regexp:  "expires:.*"
     replace: ' expires: {{ (config.iam.admin_auth_token_expiration_seconds / 60) | int }},'
 
-- name: AgoraGui, modifying admin-console SequentConfig.js for securing the api calls
+- name: sequent-ui, modifying admin-console SequentConfig.js for securing the api calls
   become: true
   become_user: ui_user
   replace:
@@ -100,7 +100,7 @@
       replace: 'electionsAPI: "https://{{config.ballot_box.domain}}/admin-api/elections/api/",'
 
 # this is not slow because yarn caches dependencies
-- name: AgoraGui, removing node_modules directory to start fresh
+- name: sequent-ui, removing node_modules directory to start fresh
   become: true
   become_user: ui_user
   file:
@@ -111,7 +111,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, configuring common-ui version in sequent-ui-*
+- name: sequent-ui, configuring common-ui version in sequent-ui-*
   become: true
   become_user: ui_user
   replace:
@@ -123,7 +123,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, make sure to upgrade common-ui dependency repo
+- name: sequent-ui, make sure to upgrade common-ui dependency repo
   become: true
   become_user: ui_user
   shell:

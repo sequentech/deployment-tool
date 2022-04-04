@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, yarn (proxy)
+- name: sequent-ui, yarn (proxy)
   become: true
   become_user: ui_user
   when: config.has_https_proxy
@@ -26,7 +26,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, yarn
+- name: sequent-ui, yarn
   become: true
   become_user: ui_user
   when: not config.has_https_proxy
@@ -38,7 +38,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, Creating build.sh
+- name: sequent-ui, Creating build.sh
   become: true
   template:
     src: sequent-ui/templates/build.sh
@@ -47,7 +47,7 @@
     group: ui_user
     mode: '0744'
 
-- name: AgoraGui, building
+- name: sequent-ui, building
   become: true
   become_user: ui_user
   shell:

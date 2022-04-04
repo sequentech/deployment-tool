@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Sudoers, add sudoers files
+- name: sudoers, add sudoers files
   become: true
   when: config.sudoers.is_enabled
   template:

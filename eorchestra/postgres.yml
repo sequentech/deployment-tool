@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Create Database User
+- name: election-orchestra, Create Database User
   become: true
   become_user: postgres
   postgresql_user:
@@ -22,7 +22,7 @@
     password: eorchestra
     port: 5432
 
-- name: EOrchestra, Create Database
+- name: election-orchestra, Create Database
   become: true
   become_user: postgres
   postgresql_db: 

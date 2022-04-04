@@ -14,12 +14,12 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraElections, Updating packages
+- name: ballot-box, Updating packages
   become: true
   apt:
     update_cache: yes
 
-- name: AgoraElections, Installing packages
+- name: ballot-box, Installing packages
   become: true
   apt:
     pkg:
@@ -29,13 +29,13 @@
       - libz-dev
     state: present
 
-- name: AgoraElections, Check if sbt is installed
+- name: ballot-box, Check if sbt is installed
   command: dpkg-query -W sbt
   register: sbt_check_deb
   failed_when: sbt_check_deb.rc > 1
   changed_when: sbt_check_deb.rc == 1
 
-- name: AgoraElections, Download sbt-0.13.18.deb
+- name: ballot-box, Download sbt-0.13.18.deb
   get_url:
     url: "https://scala.jfrog.io/artifactory/debian/sbt-0.13.18.deb"
     sha256sum: 9cfd2cedc12d7cf9ec7dcdae041ad6faaf0d52931c886b615b3075dc7f013d70
@@ -43,7 +43,7 @@
     validate_certs: "{{ not config.has_https_proxy }}"
   when: sbt_check_deb.rc == 1
 
-- name: AgoraElections, Install sbt-0.13.18.deb
+- name: ballot-box, Install sbt-0.13.18.deb
   become: true
   apt:
     deb: "/tmp/sbt-0.13.18.deb"

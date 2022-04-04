@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraElections, Git clone
+- name: ballot-box, Git clone
   become: true
   become_user: ballotbox
   git:

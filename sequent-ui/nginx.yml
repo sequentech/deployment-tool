@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, Creating nginx conf
+- name: sequent-ui, Creating nginx conf
   become: true
   template:
     src: sequent-ui/templates/nginx.conf
@@ -22,7 +22,7 @@
     owner: root
     mode: '0640'
 
-- name: AgoraGui, Restarting nginx
+- name: sequent-ui, Restarting nginx
   become: true
   service:
     name: nginx

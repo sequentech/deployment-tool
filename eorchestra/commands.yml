@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, creating commands
+- name: election-orchestra, creating commands
   become: true
   template:
     src: "eorchestra/templates/commands/{{item.script}}"
@@ -31,7 +31,7 @@
     - { script: eoauto, dest: /usr/bin/eoauto, owner: "root", mode: "0700" }
     - { script: vmnd.sh, dest: /usr/bin/vmnd.sh, owner: "root", mode: "0700" }
 
-- name: EOrchestra, creating /srv/eotests
+- name: election-orchestra, creating /srv/eotests
   become: true
   file:
     path: /srv/eotests
@@ -39,7 +39,7 @@
     group: users
     state: directory
 
-- name: EOrchestra, creating /srv/eotests/encrypt-deps
+- name: election-orchestra, creating /srv/eotests/encrypt-deps
   become: true
   file:
     path: /srv/eotests/encrypt-deps
@@ -47,7 +47,7 @@
     group: users
     state: directory
 
-- name: EOrchestra, encrypt.js deps
+- name: election-orchestra, encrypt.js deps
   become: true
   get_url:
     url: "{{ item }}"
@@ -65,7 +65,7 @@
     - https://github.com/sequentech/common-ui/raw/{{ repos.common_ui.version }}/vendor/crypto/sjcl.js
     - http://momentjs.com/downloads/moment.js
 
-- name: EOrchestra, encrypt.js
+- name: election-orchestra, encrypt.js
   become: true
   template:
     src: eorchestra/templates/commands/encrypt.js

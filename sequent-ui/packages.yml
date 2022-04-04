@@ -14,20 +14,20 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, Updating packages
+- name: sequent-ui, Updating packages
   become: true
   apt:
     update_cache: yes
 
 # yarn will now be installed through npm so we remove it and also the link
-- name: AgoraGui, Installing packages
+- name: sequent-ui, Installing packages
   become: true
   apt:
     pkg:
       - yarnpkg
     state: absent
 
-- name: AgoraGui, yarn link remove
+- name: sequent-ui, yarn link remove
   become: true
   file:
     path: /usr/bin/yarn

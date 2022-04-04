@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraElections, Downloading misc-tools, tally-pipes
+- name: ballot-box, Downloading misc-tools, tally-pipes
   become: true
   become_user: ballotbox
   git:
@@ -32,7 +32,7 @@
       force: "{{ repos.results.force }}"
       dest: tally-pipes
 
-- name: AgoraElections, update tally-pipes pipes whitelist
+- name: ballot-box, update tally-pipes pipes whitelist
   become: true
   become_user: ballotbox
   replace:
@@ -40,7 +40,7 @@
     regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
     replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
-- name: AgoraElections, misc-tools ensure working pip version (21.0)
+- name: ballot-box, misc-tools ensure working pip version (21.0)
   become: true
   become_user: ballotbox
   pip:
@@ -49,7 +49,7 @@
     state: present
     name: pip==21.0
 
-- name: AgoraElections, misc-tools virtualenv
+- name: ballot-box, misc-tools virtualenv
   become: true
   become_user: ballotbox
   pip:
@@ -58,7 +58,7 @@
     state: present
     requirements: /home/ballotbox/misc-tools/requirements.txt
 
-- name: AgoraElections, req.txt
+- name: ballot-box, req.txt
   become: true
   template:
     src: ballot-box/templates/results.req.txt
@@ -66,7 +66,7 @@
     owner: ballotbox
     mode: '0655'
 
-- name: AgoraResults, virtualenv
+- name: tally-pipes, virtualenv
   become: true
   become_user: ballotbox
   pip:
@@ -75,7 +75,7 @@
     state: present
     requirements: /home/ballotbox/tally-pipes/results.req.txt
 
-- name: AgoraResults, results.sh
+- name: tally-pipes, results.sh
   become: true
   template:
     src: ballot-box/templates/results.sh
@@ -83,7 +83,7 @@
     owner: ballotbox
     mode: '0755'
 
-- name: AgoraResults, misc-tools config.json
+- name: tally-pipes, misc-tools config.json
   become: true
   template:
     src: ballot-box/templates/misc-tools-config.json

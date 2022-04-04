@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Downloading frestq, election-orchestra and mixnet
+- name: election-orchestra, Downloading frestq, election-orchestra and mixnet
   become: true
   become_user: eorchestra
   git:

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Sentry, Creating default user
+- name: sentry, Creating default user
   become: true
   user:
     name: sentry
@@ -22,7 +22,7 @@
     groups: tlscert
     append: true
 
-- name: Sentry, Creating /home/sentry/.ansible/tmp dir
+- name: sentry, Creating /home/sentry/.ansible/tmp dir
   become: true
   become_user: sentry
   file:

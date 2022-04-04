@@ -14,13 +14,13 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, Creating default user
+- name: sequent-ui, Creating default user
   become: true
   user:
     name: ui_user
     shell: /bin/bash
 
-- name: AgoraGui, Creating /home/ui_user/.ansible/tmp dir
+- name: sequent-ui, Creating /home/ui_user/.ansible/tmp dir
   become: true
   become_user: ui_user
   file:

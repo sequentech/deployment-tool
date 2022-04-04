@@ -17,7 +17,7 @@
 - import_tasks: repo.yml
 - import_tasks: djangoapp.yml
 
-- name: AuthApi, Restarting service
+- name: iam, Restarting service
   become: true
   supervisorctl:
     name: "{{ item }}"

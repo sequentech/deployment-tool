@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
-- name: AgoraElections, Creating nginx conf
+- name: ballot-box, Creating nginx conf
   become: true
   template:
     src: ballot-box/templates/nginx.conf
@@ -21,7 +21,7 @@
     owner: root
     mode: '0644'
 
-- name: OneServer, secure.conf
+- name: one-server, secure.conf
   become: true
   template:
     src: "oneserver/templates/{{ item }}"
@@ -33,7 +33,7 @@
     - secure.conf
     - internal_secure.conf
 
-- name: AgoraElections, Restarting nginx
+- name: ballot-box, Restarting nginx
   become: true
   service:
     name: nginx

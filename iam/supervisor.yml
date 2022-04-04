@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AuthApi, Creating iam launch scripts
+- name: iam, Creating iam launch scripts
   become: true
   template: 
     src: "iam/templates/{{ item }}.sh"
@@ -26,7 +26,7 @@
     - iam_celery_beat
     - iam
 
-- name: AuthApi, Creating supervisord conf files
+- name: iam, Creating supervisord conf files
   become: true
   template:
     src: "iam/templates/supervisor_{{item}}.conf"
@@ -38,7 +38,7 @@
     - iam_celery_beat
     - iam
 
-- name: AuthApi, Restarting supervisord
+- name: iam, Restarting supervisord
   become: true
   service:
     name: supervisor

@@ -14,21 +14,21 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraVerifier, building election-verifier
+- name: election-verifier, building election-verifier
   become: true
   become_user: verifier_user
   command:
     cmd: /usr/bin/sbt clean proguard:proguard
     chdir: /home/verifier_user/election-verifier
 
-- name: AgoraVerifier, package election-verifier
+- name: election-verifier, package election-verifier
   become: true
   become_user: verifier_user
   command:
     cmd: sh ./package.sh
     chdir: /home/verifier_user/election-verifier
 
-- name: AgoraVerifier, create dist dir
+- name: election-verifier, create dist dir
   become: true
   become_user: verifier_user
   file:
@@ -38,7 +38,7 @@
     owner: verifier_user
     group: verifier_user
 
-- name: AgoraVerifier, link dist binary
+- name: election-verifier, link dist binary
   become: true
   become_user: verifier_user
   file:

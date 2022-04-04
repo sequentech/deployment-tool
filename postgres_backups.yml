@@ -183,7 +183,7 @@
     path: /home/eorchestra
   register: stat_result
 
-- name: EOrchestra, Restarting eorchestra service
+- name: election-orchestra, Restarting eorchestra service
   become: true
   supervisorctl:
     name: "{{ item }}"

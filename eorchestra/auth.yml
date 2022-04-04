@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Downloading misc-tools, tally-pipes
+- name: election-orchestra, Downloading misc-tools, tally-pipes
   become: true
   become_user: eorchestra
   git:
@@ -32,7 +32,7 @@
       force: "{{ repos.results.force }}"
       dest: tally-pipes
 
-- name: EOrchestra, update tally-pipes pipes whitelist
+- name: election-orchestra, update tally-pipes pipes whitelist
   become: true
   become_user: eorchestra
   replace:
@@ -40,7 +40,7 @@
     regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
     replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
-- name: EOrchestra, misc-tools ensure working pip version (21.0)
+- name: election-orchestra, misc-tools ensure working pip version (21.0)
   become: true
   become_user: eorchestra
   pip:
@@ -49,7 +49,7 @@
     state: present
     name: pip==21.0
 
-- name: EOrchestra, misc-tools virtualenv
+- name: election-orchestra, misc-tools virtualenv
   become: true
   become_user: eorchestra
   pip:
@@ -58,7 +58,7 @@
     state: present
     requirements: /home/eorchestra/misc-tools/requirements.txt
 
-- name: EOrchestra, misc-tools config_example.json
+- name: election-orchestra, misc-tools config_example.json
   become: true
   template:
     src: eorchestra/templates/config_example.json
@@ -66,7 +66,7 @@
     owner: eorchestra
     mode: 0600
 
-- name: EOrchestra, tally-pipes req.txt
+- name: election-orchestra, tally-pipes req.txt
   become: true
   template:
     src: ballot-box/templates/results.req.txt
@@ -78,14 +78,14 @@
 # 2.2.1 should have a fix for the issue, see
 # https://github.com/ansible/ansible-modules-core/issues/5347
 - block:
-    - name: EOrchestra, tally-pipes virtualenv
+    - name: election-orchestra, tally-pipes virtualenv
       pip:
         requirements: /home/eorchestra/tally-pipes/results.req.txt
         virtualenv: /home/eorchestra/renv
         virtualenv_python: python3
 
   rescue:
-    - name: EOrchestra, tally-pipes virtualenv
+    - name: election-orchestra, tally-pipes virtualenv
       pip:
         requirements: /home/eorchestra/tally-pipes/results.req.txt
         virtualenv_python: python3
@@ -93,7 +93,7 @@
   become: true
   become_user: eorchestra
 
-- name: EOrchestra, tally-pipes results.sh
+- name: election-orchestra, tally-pipes results.sh
   become: true
   template:
     src: eorchestra/templates/results.sh

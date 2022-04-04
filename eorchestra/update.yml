@@ -17,7 +17,7 @@
 - import_tasks: repo.yml
 - import_tasks: app.yml
 
-- name: EOrchestra, Restarting eorchestra service
+- name: election-orchestra, Restarting eorchestra service
   become: true
   supervisorctl:
     name: "{{ item }}"

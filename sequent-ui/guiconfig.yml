@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, copy logo image
+- name: sequent-ui, copy logo image
   when: config.sequent_ui.organization.logo_path != ''
   become: true
   copy:
@@ -24,7 +24,7 @@
     group: ui_user
     mode: u=rw,g=r,o=r
 
-- name: AgoraGui, config beautify options
+- name: sequent-ui, config beautify options
   become: true
   become_user: ui_user
   replace:
@@ -36,7 +36,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, config compress options
+- name: sequent-ui, config compress options
   become: true
   become_user: ui_user
   replace:
@@ -48,7 +48,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraGui, copy static_extra_path
+- name: sequent-ui, copy static_extra_path
   when: config.sequent_ui.static_extra_path != ''
   become: true
   copy:
@@ -57,7 +57,7 @@
     owner: ui_user
     group: ui_user
 
-- name: AgoraGui, config election limits
+- name: sequent-ui, config election limits
   become: true
   become_user: ui_user
   replace:
@@ -77,7 +77,7 @@
     - key: maxLongStringLength
       value: "{{ config.election_limits.max_long_string_length }}"
 
-- name: AgoraGui, config custom html body include
+- name: sequent-ui, config custom html body include
   become: true
   become_user: ui_user
   replace:
@@ -85,7 +85,7 @@
     regexp: 'admin_html_body_include:.*'
     replace: 'admin_html_body_include:"{{ config.sequent_ui.texts.admin_html_body_include | regex_replace("\n", "") }}",'
 
-- name: AgoraGui, config custom html body include for voting-booth
+- name: sequent-ui, config custom html body include for voting-booth
   become: true
   become_user: ui_user
   replace:
@@ -93,7 +93,7 @@
     regexp: 'booth_html_body_include:.*'
     replace: 'booth_html_body_include:"{{ config.sequent_ui.texts.booth_html_body_include | regex_replace("\n", "") }}",'
 
-- name: AgoraGui, config custom html body include for election-portal
+- name: sequent-ui, config custom html body include for election-portal
   become: true
   become_user: ui_user
   replace:
@@ -101,28 +101,28 @@
     regexp: 'elections_html_body_include:.*'
     replace: 'elections_html_body_include:"{{ config.sequent_ui.texts.elections_html_body_include | regex_replace("\n", "") }}",'
 
-- name: AgoraGui, check SequentPluginsConfig.js exists
+- name: sequent-ui, check SequentPluginsConfig.js exists
   become: true
   become_user: ui_user
   stat:
     path: /home/ui_user/admin-console/SequentPluginsConfig.js
   register: avpluginsconfig_file
 
-- name: AgoraGui, check SequentConfig version
+- name: sequent-ui, check SequentConfig version
   become: true
   become_user: ui_user
   shell: cat /home/ui_user/admin-console/SequentConfig.js | grep SEQUENT_CONFIG_VERSION | sed 's/\s*var\s*SEQUENT_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9a-zA-Z\.\-]*\)["|\x27]\s*;\s*/\1/'
   register: config_version
   when: avpluginsconfig_file.stat.exists
 
-- name: AgoraGui, check SequentPluginsConfig version
+- name: sequent-ui, check SequentPluginsConfig version
   become: true
   become_user: ui_user
   shell: cat /home/ui_user/admin-console/SequentPluginsConfig.js | grep SEQUENT_PLUGINS_CONFIG_VERSION | sed 's/\s*var\s*SEQUENT_PLUGINS_CONFIG_VERSION\s*=\s*[\x27|"]\([0-9a-zA-Z\.\-]*\)["|\x27]\s*;\s*/\1/'
   register: plugins_version
   when: avpluginsconfig_file.stat.exists
 
-- name: AgoraGui, remove SequentPluginsConfig.js (a new stub will be automatically generated)
+- name: sequent-ui, remove SequentPluginsConfig.js (a new stub will be automatically generated)
   become: true
   become_user: ui_user
   file: 

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraVerifier, Downloading election-verifier repo
+- name: election-verifier, Downloading election-verifier repo
   become: true
   become_user: verifier_user
   git:
@@ -23,9 +23,9 @@
     dest: /home/verifier_user/election-verifier
     force: "{{ repos.election_verifier.force }}"
 
-- name: AgoraVerifier, setting up election-verifier repo
+- name: election-verifier, setting up election-verifier repo
   block:
-    - name: AgoraVerifier, Downloading election-verifier repo
+    - name: election-verifier, Downloading election-verifier repo
       become: true
       become_user: verifier_user
       git:
@@ -34,13 +34,13 @@
         dest: /home/verifier_user/election-verifier
         force: "{{ repos.election_verifier.force }}"
   rescue:
-    - name: AgoraVerifier, Downloading election-verifier repo (force fetch)
+    - name: election-verifier, Downloading election-verifier repo (force fetch)
       become: true
       become_user: verifier_user
       command:
         chdir: /home/verifier_user/election-verifier
         cmd: git fetch --tags --force
-    - name: AgoraVerifier, Downloading election-verifier repo
+    - name: election-verifier, Downloading election-verifier repo
       become: true
       become_user: verifier_user
       git:
@@ -49,7 +49,7 @@
         dest: /home/verifier_user/election-verifier
         force: "{{ repos.election_verifier.force }}"
 
-- name: AgoraVerifier, Downloading tally-methods repo
+- name: election-verifier, Downloading tally-methods repo
   become: true
   become_user: verifier_user
   git:
@@ -58,7 +58,7 @@
     dest: /home/verifier_user/tally-methods
     force: "{{ repos.tally.force }}"
 
-- name: AgoraVerifier, Downloading tally-pipes repo
+- name: election-verifier, Downloading tally-pipes repo
   become: true
   become_user: verifier_user
   git:
@@ -67,7 +67,7 @@
     dest: /home/verifier_user/tally-pipes
     force: "{{ repos.results.force }}"
 
-- name: AgoraVerifier, update pipes whitelist
+- name: election-verifier, update pipes whitelist
   become: true
   become_user: verifier_user
   replace:
@@ -75,7 +75,7 @@
     regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
     replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
-- name: AgoraVerifier, fresh start
+- name: election-verifier, fresh start
   become: true
   become_user: verifier_user
   file:
@@ -86,7 +86,7 @@
     - /home/verifier_user/election-verifier/tally_pipes
     - /home/verifier_user/election-verifier/tally-pipes
 
-- name: AgoraVerifier, copy dirs/files
+- name: election-verifier, copy dirs/files
   become: true
   become_user: verifier_user
   command: cp -rf '{{ item.src }}' '{{ item.dest }}'
@@ -100,7 +100,7 @@
     - src: '/home/verifier_user/tally-pipes/tally-pipes'
       dest: '/home/verifier_user/election-verifier/tally-pipes'
 
-- name: AgoraVerifier, executable bits
+- name: election-verifier, executable bits
   become: true
   become_user: verifier_user
   file:

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AuthApi, Create Database User
+- name: iam, Create Database User
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -23,7 +23,7 @@
     password: "{{config.election_orchestra.eorchestra_password}}"
     port: 5432
 
-- name: AuthApi, Create Database Test User
+- name: iam, Create Database Test User
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -32,7 +32,7 @@
     password: "{{config.election_orchestra.eorchestra_password}}"
     port: 5432
 
-- name: AuthApi, Create Database
+- name: iam, Create Database
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -45,7 +45,7 @@
     template: 'template0'
     state: present
 
-- name: AuthApi, Create Test Database
+- name: iam, Create Test Database
   become: true
   become_user: postgres
   when: config.load_balancing.is_master

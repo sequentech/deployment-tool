@@ -14,13 +14,13 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraElections, Start postgresql
+- name: ballot-box, Start postgresql
   become: true
   service:
     name: postgresql
     state: started
 
-- name: EOrchestra, Creating /var/lib/postgresql/.ansible/tmp
+- name: election-orchestra, Creating /var/lib/postgresql/.ansible/tmp
   become: true
   become_user: postgres
   file:
@@ -28,7 +28,7 @@
     state: directory
     mode: '0700'
 
-- name: AgoraElections, Create Database User
+- name: ballot-box, Create Database User
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -37,7 +37,7 @@
     password: "{{config.ballot_box.db_password}}"
     port: 5432
 
-- name: AgoraElections, Create Database
+- name: ballot-box, Create Database
   become: true
   become_user: postgres
   when: config.load_balancing.is_master

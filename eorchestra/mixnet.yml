@@ -14,12 +14,12 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Vfork check Makefile
+- name: election-orchestra, Vfork check Makefile
   stat:
     path: /home/eorchestra/mixnet/Makefile
   register: Makefile
 
-- name: EOrchestra, mixnet clean
+- name: election-orchestra, mixnet clean
   become: true
   become_user: eorchestra
   shell:
@@ -28,7 +28,7 @@
   when: Makefile.stat.exists == True
 
 # TODO: we need a real fix for this, in the future when we have more time...
-- name: EOrchestra, mixnet fix
+- name: election-orchestra, mixnet fix
   become: true
   become_user: eorchestra
   file:
@@ -38,14 +38,14 @@
     - mixnet/classes/mixnet/protocol/Protocol.class
     - mixnet/classes/mixnet/protocol/mixnet/MixNetElGamalInterfaceJSON.class
 
-- name: EOrchestra, mixnet configure
+- name: election-orchestra, mixnet configure
   become: true
   become_user: eorchestra
   shell:
     cmd: ./configure --enable-jgmpmee --enable-jecn
     chdir: /home/eorchestra/mixnet
 
-- name: EOrchestra, mixnet make
+- name: election-orchestra, mixnet make
   become: true
   become_user: eorchestra
   shell:
@@ -55,13 +55,13 @@
 # fix wikstrom special o screwing things up
 # http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding/623036#623036
 # alternatively modify the makefile.am and makefile.in files
-- name: EOrchestra, mixnet make install
+- name: election-orchestra, mixnet make install
   become: true
   shell:
     cmd: export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8; make install
     chdir: /home/eorchestra/mixnet
 
-- name: EOrchestra, mixnet max heap size configuration
+- name: election-orchestra, mixnet max heap size configuration
   become: true
   lineinfile:
     dest: "{{item}}"
@@ -75,21 +75,21 @@
     - /usr/local/bin/vmnd
     - /usr/local/bin/vmnv
 
-- name: EOrchestra, mixnet copy .mixnet_env
+- name: election-orchestra, mixnet copy .mixnet_env
   become: true
   become_user: eorchestra
   shell: 
     cmd: cp .mixnet_env /home/eorchestra
     chdir: /home/eorchestra/mixnet
 
-- name: EOrchestra, mixnet bashrc line
+- name: election-orchestra, mixnet bashrc line
   become: true
   lineinfile:
     dest: /home/eorchestra/.bashrc
     line: "source /home/eorchestra/.mixnet_env"
     state: present
 
-- name: EOrchestra, mixnet init random device
+- name: election-orchestra, mixnet init random device
   become: true
   become_user: eorchestra
   shell:

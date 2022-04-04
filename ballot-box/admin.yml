@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraElections, Ensure using https in git clone
+- name: ballot-box, Ensure using https in git clone
   become: true
   become_user: ballotbox
   shell: 'git config --global url."https://".insteadOf git://'
@@ -24,7 +24,7 @@
   # http://stackoverflow.com/questions/128035/how-do-i-pull-from-a-git-repository-through-an-http-proxy/32744849#32744849
   # http://jgoodall.me/posts/2013/05/29/git-use-https/
 
-- name: AgoraElections, installing admin requierements
+- name: ballot-box, installing admin requierements
   become: true
   become_user: ballotbox
   pip:

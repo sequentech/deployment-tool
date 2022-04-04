@@ -15,7 +15,7 @@
 
 ---
 # git stash
-- name: AgoraElections, git stash
+- name: ballot-box, git stash
   become: true
   become_user: ballotbox
   shell:
@@ -25,7 +25,7 @@
 - import_tasks: repo.yml
 
 # git stash pop
-- name: AgoraElections, git stash pop
+- name: ballot-box, git stash pop
   become: true
   become_user: ballotbox
   shell:
@@ -37,7 +37,7 @@
 
 - import_tasks: results.yml
 
-- name: AgoraElections, Restarting ballot-box service
+- name: ballot-box, Restarting ballot-box service
   become: true
   supervisorctl:
     name: "{{ item }}"

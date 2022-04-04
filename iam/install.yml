@@ -16,7 +16,7 @@
 ---
 - import_tasks: repo.yml
 
-- name: AuthApi, Creating deploy settings
+- name: iam, Creating deploy settings
   become: true
   template:
     src: iam/templates/deploy.py
@@ -24,7 +24,7 @@
     owner: iam
     mode: '0600'
   
-- name: AuthApi, Creating test settings
+- name: iam, Creating test settings
   become: true
   template:
     src: iam/templates/test_settings.py
@@ -33,7 +33,7 @@
     mode: '0600'
     force: yes
 
-- name: AuthApi, Creating uwsgi settings
+- name: iam, Creating uwsgi settings
   become: true
   template:
     src: iam/templates/uwsgi.ini
@@ -41,7 +41,7 @@
     owner: iam
     mode: '0644'
 
-- name: AuthApi, creating some shell commands
+- name: iam, creating some shell commands
   become: true
   template:
     src: "iam/templates/{{item.name}}"
@@ -58,14 +58,14 @@
     - name: fixture.json
       perm: "0600"
 
-- name: AuthApi, Creates webstatic directory
+- name: iam, Creates webstatic directory
   become: true
   become_user: iam
   file:
     path: /home/iam/webstatic
     state: directory
 
-- name: AuthApi, Installing python uwsgi, psycopg2
+- name: iam, Installing python uwsgi, psycopg2
   become: true
   become_user: iam
   pip:
@@ -79,7 +79,7 @@
 
 - import_tasks: djangoapp.yml
 
-- name: AuthApi, Load fixture (admin user)
+- name: iam, Load fixture (admin user)
   become: true
   become_user: iam
   django_manage:
@@ -90,7 +90,7 @@
     virtualenv: /home/iam/env
     settings: "iam.deploy"
 
-- name: AuthApi, set password
+- name: iam, set password
   become: true
   become_user: iam
   shell: /home/iam/changepassword.sh admin "{{config.iam.admin_user.password}}"
@@ -118,7 +118,7 @@
     owner: iam
     group: iam
 
-- name: AuthApi, upsert users
+- name: iam, upsert users
   become: true
   become_user: iam
   when: config.iam.upsert_file != ''

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Sentry, pip update
+- name: sentry, pip update
   become: true
   become_user: sentry
   pip:
@@ -24,7 +24,7 @@
     virtualenv_python: python2
     state: latest
 
-- name: Sentry, Sentry installation
+- name: sentry, Sentry installation
   become: true
   become_user: sentry
   pip:
@@ -39,7 +39,7 @@
     virtualenv_python: python2
     state: latest
 
-- name: Sentry, Creating conf
+- name: sentry, Creating conf
   become: true
   template:
     src: sentry/templates/sentry.conf.py
@@ -47,7 +47,7 @@
     owner: sentry
     mode: '0644'
 
-- name: Sentry, Create Database User
+- name: sentry, Create Database User
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -59,7 +59,7 @@
     # https://github.com/getsentry/sentry/issues/6153
     role_attr_flags: SUPERUSER
 
-- name: Sentry, Create Database
+- name: sentry, Create Database
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -80,7 +80,7 @@
 
 # sentry upgrade bug #6153 workaround
 # https://github.com/getsentry/sentry/issues/6153
-- name: Sentry, Remove superuser permissions to sentry db user
+- name: sentry, Remove superuser permissions to sentry db user
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
@@ -88,7 +88,7 @@
     user: sentry
     role_attr_flags: NOSUPERUSER
 
-- name: Sentry, creating the first user
+- name: sentry, creating the first user
   become: true
   become_user: sentry
   when: config.load_balancing.is_master

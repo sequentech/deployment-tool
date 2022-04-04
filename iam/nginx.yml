@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AuthApi, Creating nginx conf
+- name: iam, Creating nginx conf
   become: true
   template:
     src: iam/templates/nginx.conf
@@ -22,7 +22,7 @@
     owner: root
     mode: 0644
 
-- name: AuthApi, Restarting nginx
+- name: iam, Restarting nginx
   become: true
   service:
     name: nginx

@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AuthApi, Creating default user
+- name: iam, Creating default user
   become: true
   user:
     name: iam
@@ -22,7 +22,7 @@
     groups: tlscert
     append: true
 
-- name: AuthApi, Creating /home/iam/.ansible/tmp dir
+- name: iam, Creating /home/iam/.ansible/tmp dir
   become: true
   become_user: iam
   file:
@@ -30,7 +30,7 @@
     state: directory
     mode: '0700'
 
-- name: AuthApi, add sudoers file to be able to launch self-tests
+- name: iam, add sudoers file to be able to launch self-tests
   become: true
   when: config.sequent_ui.enable_self_testing
   template:

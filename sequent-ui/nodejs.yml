@@ -14,12 +14,12 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, configure npm proxy settings
+- name: sequent-ui, configure npm proxy settings
   become: true
   when: config.has_https_proxy
   shell: npm --global set proxy $http_proxy && npm --global set https-proxy $https_proxy
 
-- name: AgoraGui, Install Nodejs (with proxy), dependencies
+- name: sequent-ui, Install Nodejs (with proxy), dependencies
   become: true
   shell: npm --https-proxy=$http_proxy --registry=https://registry.npmjs.org/ --global --force install {{item}}
   when: config.has_https_proxy
@@ -29,7 +29,7 @@
     - yarn
 
 # because we need to use --force, we cannot use the npm module
-- name: AgoraGui, Install Nodejs, dependencies
+- name: sequent-ui, Install Nodejs, dependencies
   become: true
   shell: npm --global --force install {{item}}
   when: not config.has_https_proxy

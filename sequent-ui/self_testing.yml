@@ -14,14 +14,14 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraGui, Add Apt signing key for google-chrome
+- name: sequent-ui, Add Apt signing key for google-chrome
   when: config.sequent_ui.enable_self_testing
   become: true
   ansible.builtin.apt_key:
     url: "https://dl.google.com/linux/linux_signing_key.pub"
     state: present
 
-- name: AgoraGui, Add google-chrome repository into sources list
+- name: sequent-ui, Add google-chrome repository into sources list
   when: config.sequent_ui.enable_self_testing
   become: true
   ansible.builtin.apt_repository:
@@ -29,14 +29,14 @@
     state: present
     filename: google-chrome
 
-- name: AgoraGui, Install google-chrome
+- name: sequent-ui, Install google-chrome
   become: true
   ansible.builtin.apt:
     name: google-chrome-stable
     state: latest
     update_cache: true
 
-- name: AgoraGui, Creating selenium service runner
+- name: sequent-ui, Creating selenium service runner
   become: true
   ansible.builtin.template:
     src: sequent-ui/templates/selenium.sh
@@ -45,7 +45,7 @@
     group: ui_user
     mode: '0744'
 
-- name: AgoraGui, set e2e tests baseUrl setting
+- name: sequent-ui, set e2e tests baseUrl setting
   become: true
   become_user: ui_user
   replace:
@@ -53,7 +53,7 @@
     regexp: 'baseUrl:.*'
     replace: 'baseUrl: "https://{{config.sequent_ui.domain}}"'
 
-- name: AgoraGui, Creating selenium service
+- name: sequent-ui, Creating selenium service
   become: true
   ansible.builtin.template:
     src: sequent-ui/templates/selenium.conf
@@ -61,7 +61,7 @@
     owner: root
     mode: '0600'
 
-- name: AgoraGui, Creating launch_selftest.sh executable
+- name: sequent-ui, Creating launch_selftest.sh executable
   become: true
   ansible.builtin.template:
     src: sequent-ui/templates/launch_selftest.sh
@@ -69,7 +69,7 @@
     owner: ui_user
     mode: '0700'
 
-- name: AgoraGui, Creating kill_selftest.sh executable
+- name: sequent-ui, Creating kill_selftest.sh executable
   become: true
   ansible.builtin.template:
     src: sequent-ui/templates/kill_selftest.sh
@@ -77,14 +77,14 @@
     owner: ui_user
     mode: '0700'
 
-- name: AgoraGui, updating web-driver
+- name: sequent-ui, updating web-driver
   become: true
   become_user: ui_user
   ansible.builtin.shell:
     cmd: ./node_modules/webdriver-manager/bin/webdriver-manager update --ignore_ssl
     chdir: /home/ui_user/admin-console/
 
-- name: AgoraGui, restarting supervisor
+- name: sequent-ui, restarting supervisor
   become: true
   ansible.builtin.service:
     name: supervisor

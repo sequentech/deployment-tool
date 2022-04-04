@@ -14,19 +14,19 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: AgoraVerifier, check if SequentConfig.js exists
+- name: election-verifier, check if SequentConfig.js exists
   stat:
     path: /home/ui_user/admin-console/SequentConfig.js
   register: SequentConfig
 
-- name: AgoraVerifier, get hash of verifier
+- name: election-verifier, get hash of verifier
   when: SequentConfig.stat.exists == True
   shell: sha256sum /home/verifier_user/election-verifier/election-verifier | cut -d' ' -f 1
   become: true
   become_user: verifier_user
   register: sha256sum
 
-- name: AgoraVerifier, replacing hash in SequentConfig.js files
+- name: election-verifier, replacing hash in SequentConfig.js files
   when: SequentConfig.stat.exists == True
   become: true
   become_user: ui_user
@@ -39,7 +39,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraVerifier, replacing link in SequentConfig.js files
+- name: election-verifier, replacing link in SequentConfig.js files
   when: SequentConfig.stat.exists == True
   become: true
   become_user: ui_user
@@ -52,7 +52,7 @@
     - election-portal
     - voting-booth
 
-- name: AgoraVerifier, building AgoraGui
+- name: election-verifier, building AgoraGui
   when: SequentConfig.stat.exists == True
   become: true
   become_user: ui_user

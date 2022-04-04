@@ -14,7 +14,7 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: Sentry, creating sentryconf.py
+- name: sentry, creating sentryconf.py
   become: true
   become_user: sentry
   template:
@@ -24,7 +24,7 @@
     mode: '0700'
 
 # sentryconf.py creates default project and set the dsn in a file
-- name: Sentry, running sentryconf.py
+- name: sentry, running sentryconf.py
   become: true
   become_user: sentry
   shell:
@@ -40,7 +40,7 @@
       - raven==6.10.0
     virtualenv: /home/iam/env
 
-- name: Sentry, creating deploy_sentry.py
+- name: sentry, creating deploy_sentry.py
   become: true
   become_user: iam
   template:
@@ -49,7 +49,7 @@
     owner: iam
     mode: '0600'
 
-- name: Sentry, Configuring iam
+- name: sentry, Configuring iam
   become: true
   become_user: iam
   lineinfile:
@@ -57,13 +57,13 @@
     line: "import iam.deploy_sentry; iam.deploy_sentry.update(globals())"
     state: present
 
-- name: Sentry, restarting iam
+- name: sentry, restarting iam
   become: true
   supervisorctl:
     name: iam
     state: restarted
 
-- name: Sentry, restarting iam_celery
+- name: sentry, restarting iam_celery
   become: true
   supervisorctl:
     name: iam_celery
