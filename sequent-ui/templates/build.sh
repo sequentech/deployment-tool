@@ -37,7 +37,7 @@ then
     echo "build error in admin-console"
     exit 1
   fi
-elif [ -z $TASK ] || test "$TASK" = "booth"
+if [ -z $TASK ] || test "$TASK" = "booth"
 then
   echo "Building voting-booth.."
   cd $guib/voting-booth/
@@ -47,7 +47,7 @@ then
     echo "build error in voting-booth"
     exit 1
   fi
-elif [ -z $TASK ] || test "$TASK" = "elections"
+if [ -z $TASK ] || test "$TASK" = "elections"
 then
   echo "Building election-portal.."
   cd $guib/election-portal/

@@ -178,7 +178,7 @@
   with_items:
     - line: "node_id={{config.load_balancing.repmgr_node_id}}"
       regexp: "node_id=.*"
-    - line: "node_name={{config.hostname}}"
+    - line: "node_name='{{config.hostname}}'"
       regexp: "node_name=.*"
     - line: "conninfo='host={{config.hostname}} user=repmgr dbname=repmgr'"
       regexp: "conninfo='host=.* user=repmgr dbname=repmgr'"
