@@ -37,6 +37,7 @@ then
     echo "build error in admin-console"
     exit 1
   fi
+fi
 if [ -z $TASK ] || test "$TASK" = "booth"
 then
   echo "Building voting-booth.."
@@ -47,6 +48,7 @@ then
     echo "build error in voting-booth"
     exit 1
   fi
+fi
 if [ -z $TASK ] || test "$TASK" = "elections"
 then
   echo "Building election-portal.."
@@ -57,9 +59,6 @@ then
     echo "build error in election-portal"
     exit 1
   fi
-else 
-  echo "Invalid task to build: $TASK"
-  exit 1
 fi
 
 # only switch to the new build if everything was built correctly
