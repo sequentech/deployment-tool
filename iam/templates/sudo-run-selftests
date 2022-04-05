@@ -1,0 +1,2 @@
+iam ALL = (ui_user) NOPASSWD: /home/ui_user/launch_selftest.sh
+iam ALL = (root) NOPASSWD: /home/ui_user/kill_selftest.sh

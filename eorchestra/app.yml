@@ -1,20 +1,20 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Ensure using https in git clone
+- name: election-orchestra, Ensure using https in git clone
   become: true
   become_user: eorchestra
   shell: 'git config --global url."https://".insteadOf git://'
@@ -24,7 +24,7 @@
   # http://stackoverflow.com/questions/128035/how-do-i-pull-from-a-git-repository-through-an-http-proxy/32744849#32744849
   # http://jgoodall.me/posts/2013/05/29/git-use-https/
 
-- name: EOrchestra, ensure working pip version (21.0)
+- name: election-orchestra, ensure working pip version (21.0)
   become: true
   become_user: eorchestra
   pip:
@@ -33,7 +33,7 @@
     state: present
     name: pip==21.0
 
-- name: EOrchestra, frestq python packages
+- name: election-orchestra, frestq python packages
   become: true
   become_user: eorchestra
   pip:
@@ -42,7 +42,7 @@
     state: present
     requirements: /home/eorchestra/frestq/requirements.txt
 
-- name: EOrchestra, frestq repository in eo requirements.txt setup
+- name: election-orchestra, frestq repository in eo requirements.txt setup
   become: true
   become_user: eorchestra
   replace:
@@ -50,7 +50,7 @@
     regexp: ".*frestq.*"
     replace: "git+{{ repos.frestq.repo }}.git@{{ repos.frestq.version }}"
 
-- name: EOrchestra, eorchestra python packages
+- name: election-orchestra, eorchestra python packages
   become: true
   become_user: eorchestra
   pip:

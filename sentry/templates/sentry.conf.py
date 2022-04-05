@@ -1,17 +1,17 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 # This file is just Python, with a touch of Django which means
 # you can inherit and tweak settings to your hearts content.
@@ -25,7 +25,7 @@ CONF_ROOT = os.path.dirname(__file__)
 # unless you have altered all schemas first
 SENTRY_USE_BIG_INTS = True
 
-# If you're expecting any kind of real traffic on Sentry, we highly recommend
+# If you're expecting any kind of real traffic on sentry, we highly recommend
 # configuring the CACHES and Redis settings
 
 ###########
@@ -118,7 +118,7 @@ SENTRY_RATELIMITER = 'sentry.ratelimits.redis.RedisRateLimiter'
 # Buffers (combined with queueing) act as an intermediate layer between the
 # database and the storage API. They will greatly improve efficiency on large
 # numbers of the same events being sent to the API in a short amount of time.
-# (read: if you send any kind of real data to Sentry, you should enable buffers)
+# (read: if you send any kind of real data to sentry, you should enable buffers)
 
 SENTRY_BUFFER = 'sentry.buffer.redis.RedisBuffer'
 

@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 
-# This file is part of agora-dev-box.
-# Copyright (C) 2017  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2017  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>. 
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>. 
 
 import string
 from os import urandom
@@ -28,7 +28,7 @@ def gen_pass(length):
   return ''.join(alphabet[c % len(alphabet)] for c in urandom(length))
 
 # read arguments
-parser = argparse.ArgumentParser(description="Populate config.yml on agora-dev-box with random passwords. WARNING: This WILL delete your passwords, please make a copy of config.yml before executing it.")
+parser = argparse.ArgumentParser(description="Populate config.yml on deployment-tool with random passwords. WARNING: This WILL delete your passwords, please make a copy of config.yml before executing it.")
 parser.add_argument('-c', '--config', help='Path to config.yml', default='config.yml')
 parser.add_argument('-l', '--length', help='Passwords length, as number of characters (default: 22)', default=22, type=int)
 parser.add_argument('-b', '--blank', help='Create a copy of config.yml with void passwords. Specify the path to the config.yml copy', default=False, action='store_true')

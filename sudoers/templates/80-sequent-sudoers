@@ -1,0 +1,6 @@
+User_Alias SEQUENTADMINS = {{ config.sudoers.sequent_users }}
+
+Runas_Alias SEQUENTUSERS = ballotbox, ui_user, verifier_user, eorchestra, iam, repmgr, sentry, www-data, nginx
+
+SEQUENTADMINS ALL = (SEQUENTUSERS) NOPASSWD: ALL
+

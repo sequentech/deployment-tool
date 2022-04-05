@@ -1,17 +1,17 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 # debug, set to false on production deployment
 DEBUG = False
@@ -24,14 +24,14 @@ ROOT_URL = 'https://{{ config.hostname }}:{{ config.election_orchestra.port }}/a
 # URL to our HTTP server
 VFORK_SERVER_URL = 'http://{{ config.hostname }}'
 
-VFORK_SERVER_PORT_RANGE = {{ config.election_orchestra.vfork_server_ports }}
+VFORK_SERVER_PORT_RANGE = {{ config.election_orchestra.mixnet_server_ports }}
 
 # Socket address given as <hostname>:<port> to our hint server.
 # A hint server is a simple UDP server that reduces latency and
 # traffic on the HTTP servers.
 VFORK_HINT_SERVER_SOCKET = '{{ config.hostname }}'
 
-VFORK_HINT_SERVER_PORT_RANGE = {{ config.election_orchestra.vfork_hint_server_ports }}
+VFORK_HINT_SERVER_PORT_RANGE = {{ config.election_orchestra.mixnet_hint_server_ports }}
 
 import os
 ROOT_PATH = os.path.split(os.path.abspath(__file__))[0]
@@ -57,7 +57,7 @@ KILL_ALL_VFORK_BEFORE_START_NEW = True
 MAX_NUM_QUESTIONS_PER_ELECTION = {{ config.election_limits.max_num_questions }}
 
 QUEUES_OPTIONS = {
-    'vfork_queue': {
+    'mixnet_queue': {
         'max_threads': 1,
     }
 }

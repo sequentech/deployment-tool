@@ -1,20 +1,20 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- name: EOrchestra, Downloading agora-tools, agora-results
+- name: election-orchestra, Downloading misc-tools, tally-pipes
   become: true
   become_user: eorchestra
   git:
@@ -23,24 +23,24 @@
     dest: "/home/eorchestra/{{ item.dest }}"
     force: "{{ item.force }}"
   with_items:
-    - repo: "{{ repos.atools.repo }}"
-      version: "{{ repos.atools.version }}"
-      force: "{{ repos.atools.force }}"
-      dest: agora-tools
+    - repo: "{{ repos.misc_tools.repo }}"
+      version: "{{ repos.misc_tools.version }}"
+      force: "{{ repos.misc_tools.force }}"
+      dest: misc-tools
     - repo: "{{ repos.results.repo }}"
       version: "{{ repos.results.version }}"
       force: "{{ repos.results.force }}"
-      dest: agora-results
+      dest: tally-pipes
 
-- name: EOrchestra, update agora-results pipes whitelist
+- name: election-orchestra, update tally-pipes pipes whitelist
   become: true
   become_user: eorchestra
   replace:
-    dest: /home/eorchestra/agora-results/agora-results
+    dest: /home/eorchestra/tally-pipes/tally-pipes
     regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
-    replace: '\1\n{% for pipe in config.agora_results.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+    replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
-- name: EOrchestra, agora-tools ensure working pip version (21.0)
+- name: election-orchestra, misc-tools ensure working pip version (21.0)
   become: true
   become_user: eorchestra
   pip:
@@ -49,28 +49,28 @@
     state: present
     name: pip==21.0
 
-- name: EOrchestra, agora-tools virtualenv
+- name: election-orchestra, misc-tools virtualenv
   become: true
   become_user: eorchestra
   pip:
     virtualenv: /home/eorchestra/tenv
     virtualenv_python: python3
     state: present
-    requirements: /home/eorchestra/agora-tools/requirements.txt
+    requirements: /home/eorchestra/misc-tools/requirements.txt
 
-- name: EOrchestra, agora-tools config_example.json
+- name: election-orchestra, misc-tools config_example.json
   become: true
   template:
     src: eorchestra/templates/config_example.json
-    dest: /home/eorchestra/agora-tools/config/config_example.json
+    dest: /home/eorchestra/misc-tools/config/config_example.json
     owner: eorchestra
     mode: 0600
 
-- name: EOrchestra, agora-results req.txt
+- name: election-orchestra, tally-pipes req.txt
   become: true
   template:
-    src: agora-elections/templates/results.req.txt
-    dest: /home/eorchestra/agora-results/results.req.txt
+    src: ballot-box/templates/results.req.txt
+    dest: /home/eorchestra/tally-pipes/results.req.txt
     owner: eorchestra
     mode: 0600
 
@@ -78,25 +78,25 @@
 # 2.2.1 should have a fix for the issue, see
 # https://github.com/ansible/ansible-modules-core/issues/5347
 - block:
-    - name: EOrchestra, agora-results virtualenv
+    - name: election-orchestra, tally-pipes virtualenv
       pip:
-        requirements: /home/eorchestra/agora-results/results.req.txt
+        requirements: /home/eorchestra/tally-pipes/results.req.txt
         virtualenv: /home/eorchestra/renv
         virtualenv_python: python3
 
   rescue:
-    - name: EOrchestra, agora-results virtualenv
+    - name: election-orchestra, tally-pipes virtualenv
       pip:
-        requirements: /home/eorchestra/agora-results/results.req.txt
+        requirements: /home/eorchestra/tally-pipes/results.req.txt
         virtualenv_python: python3
         executable: /home/eorchestra/renv/bin/pip
   become: true
   become_user: eorchestra
 
-- name: EOrchestra, agora-results results.sh
+- name: election-orchestra, tally-pipes results.sh
   become: true
   template:
     src: eorchestra/templates/results.sh
-    dest: /home/eorchestra/agora-tools/results.sh
+    dest: /home/eorchestra/misc-tools/results.sh
     owner: eorchestra
     mode: 0700

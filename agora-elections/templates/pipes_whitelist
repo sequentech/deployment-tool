@@ -1,2 +1,0 @@
-{% for pipe in config.agora_results.pipes_whitelist %}{{pipe}}
-{% endfor %}

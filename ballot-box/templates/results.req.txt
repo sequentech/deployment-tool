@@ -1,0 +1,5 @@
+-e git+{{ repos.tally.repo }}@{{ repos.tally.version }}#egg=tally-methods
+reportlab==3.5.55
+requests==2.20.0
+pytz==2021.3
+Babel==2.9.1

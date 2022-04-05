@@ -1,0 +1,114 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: election-verifier, Downloading election-verifier repo
+  become: true
+  become_user: verifier_user
+  git:
+    repo: "{{ repos.election_verifier.repo }}"
+    version: "{{ repos.election_verifier.version }}"
+    dest: /home/verifier_user/election-verifier
+    force: "{{ repos.election_verifier.force }}"
+
+- name: election-verifier, setting up election-verifier repo
+  block:
+    - name: election-verifier, Downloading election-verifier repo
+      become: true
+      become_user: verifier_user
+      git:
+        repo: "{{ repos.election_verifier.repo }}"
+        version: "{{ repos.election_verifier.version }}"
+        dest: /home/verifier_user/election-verifier
+        force: "{{ repos.election_verifier.force }}"
+  rescue:
+    - name: election-verifier, Downloading election-verifier repo (force fetch)
+      become: true
+      become_user: verifier_user
+      command:
+        chdir: /home/verifier_user/election-verifier
+        cmd: git fetch --tags --force
+    - name: election-verifier, Downloading election-verifier repo
+      become: true
+      become_user: verifier_user
+      git:
+        repo: "{{ repos.election_verifier.repo }}"
+        version: "{{ repos.election_verifier.version }}"
+        dest: /home/verifier_user/election-verifier
+        force: "{{ repos.election_verifier.force }}"
+
+- name: election-verifier, Downloading tally-methods repo
+  become: true
+  become_user: verifier_user
+  git:
+    repo: "{{ repos.tally.repo }}"
+    version: "{{ repos.tally.version }}"
+    dest: /home/verifier_user/tally-methods
+    force: "{{ repos.tally.force }}"
+
+- name: election-verifier, Downloading tally-pipes repo
+  become: true
+  become_user: verifier_user
+  git:
+    repo: "{{ repos.results.repo }}"
+    version: "{{ repos.results.version }}"
+    dest: /home/verifier_user/tally-pipes
+    force: "{{ repos.results.force }}"
+
+- name: election-verifier, update pipes whitelist
+  become: true
+  become_user: verifier_user
+  replace:
+    dest: /home/verifier_user/tally-pipes/tally-pipes
+    regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
+    replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
+
+- name: election-verifier, fresh start
+  become: true
+  become_user: verifier_user
+  file:
+    path: '{{ item }}'
+    state: absent
+  with_items:
+    - /home/verifier_user/election-verifier/tally_methods
+    - /home/verifier_user/election-verifier/tally_pipes
+    - /home/verifier_user/election-verifier/tally-pipes
+
+- name: election-verifier, copy dirs/files
+  become: true
+  become_user: verifier_user
+  command: cp -rf '{{ item.src }}' '{{ item.dest }}'
+  with_items:
+    - src: '/home/verifier_user/tally-methods/tally_methods'
+      dest: '/home/verifier_user/election-verifier/tally_methods'
+
+    - src: '/home/verifier_user/tally-pipes/tally_pipes'
+      dest: '/home/verifier_user/election-verifier/tally_pipes'
+
+    - src: '/home/verifier_user/tally-pipes/tally-pipes'
+      dest: '/home/verifier_user/election-verifier/tally-pipes'
+
+- name: election-verifier, executable bits
+  become: true
+  become_user: verifier_user
+  file:
+    path: "{{ item }}"
+    state: file
+    mode: '0744'
+    owner: verifier_user
+  with_items:
+      - /home/verifier_user/election-verifier/package.sh
+      - /home/verifier_user/election-verifier/pverify.sh
+      - /home/verifier_user/election-verifier/vmnc.sh

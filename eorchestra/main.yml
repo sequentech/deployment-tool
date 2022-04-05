@@ -1,31 +1,31 @@
-# This file is part of agora-dev-box.
-# Copyright (C) 2014-2016  Agora Voting SL <agora@agoravoting.com>
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
 
-# agora-dev-box is free software: you can redistribute it and/or modify
+# deployment-tool is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License.
 
-# agora-dev-box  is distributed in the hope that it will be useful,
+# deployment-tool  is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with agora-dev-box.  If not, see <http://www.gnu.org/licenses/>.
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
 - import_tasks: users.yml
 - import_tasks: commands.yml
 - import_tasks: postgres.yml
 - import_tasks: repo.yml
-- import_tasks: vfork.yml
+- import_tasks: mixnet.yml
 
-- name: EOrchestra, Updating packages
+- name: election-orchestra, Updating packages
   become: true
   apt:
     update_cache: yes
 
-- name: EOrchestra, Installing packages
+- name: election-orchestra, Installing packages
   become: true
   apt:
     pkg:
@@ -37,7 +37,7 @@
     state: present
     force: yes
 
-- name: EOrchestra, configure settings
+- name: election-orchestra, configure settings
   become: true
   template:
     src: eorchestra/templates/base_settings.py
@@ -47,14 +47,14 @@
 
 - import_tasks: app.yml
 
-- name: EOrchestra, createdb
+- name: election-orchestra, createdb
   become: true
   become_user: eorchestra
   shell: export FRESTQ_SETTINGS=base_settings.py; /home/eorchestra/venv/bin/python app.py --createdb
          chdir=/home/eorchestra/election-orchestra
 
 # post inst files
-- name: EOrchestra, postinst files
+- name: election-orchestra, postinst files
   become: true
   template:
     src: "eorchestra/templates/{{item.f}}"
@@ -82,7 +82,7 @@
       owner: root
       mode: '0640'
 
-- name: EOrchestra, directories creation
+- name: election-orchestra, directories creation
   become: true
   file:
     path: "{{ item }}"
@@ -93,7 +93,7 @@
   with_items:
     - /srv/election-orchestra/server1/public/
 
-- name: EOrchestra, restarting supervisor
+- name: election-orchestra, restarting supervisor
   become: true
   service:
     name: "{{ item }}"

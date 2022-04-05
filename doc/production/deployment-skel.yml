@@ -28,30 +28,30 @@ windows:
   - ae:
     - ssh BASE-s1
     - sudo -s
-    - su - agoraelections
+    - su - ballotbox
 
   - at:
     - ssh BASE-s1
     - sudo -s
-    - su - agoraelections
+    - su - ballotbox
     - source ~/tenv/bin/activate
-    - cd ~/agora-tools
+    - cd ~/misc-tools
 
   - adm:
     - ssh BASE-s1
     - sudo -s
-    - su - agoraelections
+    - su - ballotbox
     - source ~/env/bin/activate
-    - cd ~/agora-elections/admin
+    - cd ~/ballot-box/admin
 
   - nx-l:
     - ssh BASE-s1 sudo tail -F /var/log/nginx/access.log
 
   - ae-l:
-    - ssh BASE-s1 sudo supervisorctl tail -f agora-elections
+    - ssh BASE-s1 sudo supervisorctl tail -f ballot-box
 
   - ath-l:
-    - ssh BASE-s1 sudo supervisorctl tail -f authapi
+    - ssh BASE-s1 sudo supervisorctl tail -f iam
 
   - cel-l:
-    - ssh BASE-s1 sudo supervisorctl tail -f authapi_celery
+    - ssh BASE-s1 sudo supervisorctl tail -f iam_celery

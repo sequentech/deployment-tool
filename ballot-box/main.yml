@@ -1,0 +1,276 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- import_tasks: packages.yml
+
+- name: ballot-box, Creating default user
+  become: true
+  user:
+    name: ballotbox
+    shell: /bin/bash
+    groups: tlscert
+    append: true
+
+- name: ballot-box, Creating /etc/eopeers
+  become: true
+  file:
+    path: /etc/eopeers
+    state: directory
+    mode: '0755'
+
+- name: ballot-box, Creating /home/ballotbox/.ansible/tmp dir
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/.ansible/tmp
+    state: directory
+    mode: '0700'
+
+- import_tasks: postgres.yml
+- import_tasks: repo.yml
+- import_tasks: admin.yml
+- import_tasks: results.yml
+
+# Config files
+- name: ballot-box, Default conf
+  become: true
+  become_user: ballotbox
+  template:
+    src: ballot-box/templates/application.local.conf
+    dest: /home/ballotbox/ballot-box/conf/application.local.conf
+    owner: ballotbox
+    mode: '0600'
+
+- name: ballot-box, Base configuration chmod
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/ballot-box/conf/application.conf
+    mode: '0600'
+
+- name: ballot-box, Test configuration chmod
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/ballot-box/conf/application.test.conf
+    mode: '0600'
+
+- name: ballot-box, Pipes whitelist
+  become: true
+  become_user: ballotbox
+  template:
+    src: ballot-box/templates/pipes_whitelist
+    dest: /home/ballotbox/ballot-box/conf/pipes_whitelist
+    owner: ballotbox
+    mode: '0600'
+
+- name: ballot-box, postgres connection password setup
+  become: true
+  become_user: ballotbox
+  template:
+    src: ballot-box/templates/.pg_service.conf
+    dest: /home/ballotbox/.pg_service.conf
+    owner: ballotbox
+    mode: '0600'
+
+- name: ballot-box, Test conf
+  become: true
+  become_user: ballotbox
+  template:
+    src: ballot-box/templates/test.local.conf
+    dest: /home/ballotbox/ballot-box/conf/test.local.conf
+    owner: ballotbox
+    mode: '0600'
+
+- name: ballot-box, datastore dir
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/datastore
+    state: directory
+    owner: ballotbox
+    group: ballotbox
+
+- name: ballot-box, public datastore dir
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/datastore/public
+    state: directory
+    owner: ballotbox 
+    group: ballotbox
+    recurse: true
+
+- name: ballot-box, private datastore dir
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/datastore/private
+    state: directory
+    owner: ballotbox
+    group: ballotbox
+
+# Key store set up
+- name: ballot-box, Key store setup (1)
+  become: true
+  shell:
+    cmd: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.ballot_box.keystore_pass }}"
+    chdir: /home/ballotbox/
+
+- name: ballot-box, Key store setup (3)
+  become: true
+  file:
+    path: /home/ballotbox/certs.p12
+    owner: ballotbox
+    group: ballotbox
+
+- name: ballot-box, Key store setup (2)
+  become: true
+  become_user: ballotbox
+  shell:
+    cmd: yes | keytool -importkeystore -deststorepass "{{ config.ballot_box.keystore_pass }}" -destkeypass "{{ config.ballot_box.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.ballot_box.keystore_pass }}" -alias client
+    chdir: /home/ballotbox/
+
+# Admin tool setup
+- name: ballot-box, Admin chmod
+  become: true
+  become_user: ballotbox
+  file:
+    path: /home/ballotbox/ballot-box/admin/admin.py
+    mode: "700"
+
+- name: ballot-box, Admin setup (1)
+  become: true
+  become_user: ballotbox
+  replace: 
+    dest: /home/ballotbox/ballot-box/admin/admin.py
+    regexp: "shared_secret = .*$"
+    replace: "shared_secret = '{{config.ballot_box.shared_secret}}'"
+
+- name: ballot-box, Admin setup (2)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/admin.py
+    regexp: "db_password = .*$"
+    replace: "db_password = '{{config.ballot_box.db_password}}'"
+
+- name: ballot-box, Admin setup (3)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/admin.py
+    regexp: "app_host = .*$"
+    replace: "app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
+
+- name: ballot-box, Admin setup (4)
+  become: true
+  become_user: ballotbox
+  replace: 
+    dest: /home/ballotbox/ballot-box/admin/encrypt.sh
+    regexp: "IVY=.*$"
+    replace: "IVY=$HOME/.ivy2/cache"
+
+- name: ballot-box, Admin setup (5)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/encrypt.sh
+    regexp: "SEQUENT_HOME=.*$"
+    replace: "SEQUENT_HOME=$HOME/ballot-box"
+
+- name: ballot-box, Admin setup (6)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/cycle.py
+    regexp: "public_ds = .*$"
+    replace: "public_ds = '/home/ballotbox/datastore/public'"
+
+- name: ballot-box, Admin setup (7)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/cycle.py
+    regexp: "private_ds = .*$"
+    replace: "private_ds = '/home/ballotbox/datastore/private'"
+
+- name: ballot-box, Admin setup (8)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/admin.py
+    regexp: "iam_port = .*$"
+    replace: "iam_port = 10081"
+
+- name: ballot-box, Admin setup (9)
+  become: true
+  become_user: ballotbox
+  when: config.iam.auth_method == 'user-and-password'
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/admin.py
+    regexp: "iam_credentials = .*$"
+    replace: "iam_credentials = dict(username='admin',password='{{config.iam.admin_user.password}}')"
+
+- name: ballot-box, Admin setup (10)
+  become: true
+  become_user: ballotbox
+  replace:
+    dest: /home/ballotbox/ballot-box/admin/admin.py
+    regexp: "iam_db_password = .*$"
+    replace: "iam_db_password = '{{config.election_orchestra.eorchestra_password}}'"
+
+- import_tasks: app.yml
+
+# Run script
+- name: ballot-box, ensure memcached service is restarted
+  become: true
+  service:
+    name: memcached
+    state: restarted
+
+- name: ballot-box, Run script
+  become: true
+  become_user: ballotbox
+  template:
+    src: ballot-box/templates/run.sh
+    dest: /home/ballotbox/run.sh
+    owner: ballotbox
+    mode: '0700'
+
+- import_tasks: nginx.yml
+
+- name: ballot-box, supervisor file
+  become: true
+  template:
+    src: "ballot-box/templates/{{item.f}}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - f: ballot-box.conf
+      dest: /etc/supervisor/conf.d/ballot-box.conf
+      owner: root
+      mode: '0600'
+
+- name: ballot-box, restarting supervisor
+  become: true
+  service:
+    name: supervisor
+    state: restarted
+
+# jmeter for testing
+- import_tasks: jmeter.yml

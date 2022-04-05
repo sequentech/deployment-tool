@@ -1,0 +1,135 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: sequent-ui, Git clone common-ui
+  become: true
+  become_user: ui_user
+  git:
+    repo: "{{ repos.common_ui.repo }}"
+    version: "{{ repos.common_ui.version }}"
+    dest: /home/ui_user/common-ui
+    force: "{{ repos.common_ui.force }}"
+
+- name: sequent-ui, Git clone admin-console
+  become: true
+  become_user: ui_user
+  git:
+    repo: "{{ repos.admin_console.repo }}"
+    version: "{{ repos.admin_console.version }}"
+    dest: /home/ui_user/admin-console
+    force: "{{ repos.admin_console.force }}"
+
+- name: sequent-ui, Git clone election-portal
+  become: true
+  become_user: ui_user
+  git:
+    repo: "{{ repos.election_portal.repo }}"
+    version: "{{ repos.election_portal.version }}"
+    dest: /home/ui_user/election-portal
+    force: "{{ repos.election_portal.force }}"
+
+- name: sequent-ui, Git clone voting-booth
+  become: true
+  become_user: ui_user
+  git:
+    repo: "{{ repos.voting_booth.repo }}"
+    version: "{{ repos.voting_booth.version }}"
+    dest: /home/ui_user/voting-booth
+    force: "{{ repos.voting_booth.force }}"
+
+- name: sequent-ui, copying SequentConfig.js in user election-portal and voting-booth
+  become: true
+  become_user: ui_user
+  template:
+    src: sequent-ui/templates/SequentConfig.js
+    dest: /home/ui_user/{{ item }}/SequentConfig.js
+    owner: ui_user
+    group: ui_user
+    mode: '0600'
+  with_items:
+    - admin-console
+    - election-portal
+    - voting-booth
+
+- name: sequent-ui, setting admin timeout correctly in admin-console
+  become: true
+  become_user: ui_user
+  replace:
+    dest: /home/ui_user/admin-console/SequentConfig.js
+    regexp: " timeoutSeconds:.*"
+    replace: ' timeoutSeconds: {{config.iam.admin_auth_token_expiration_seconds}},'
+
+- name: sequent-ui, setting admin timeout correctly in admin-console, 2
+  become: true
+  become_user: ui_user
+  replace:
+    dest: /home/ui_user/admin-console/SequentConfig.js
+    regexp:  "expires:.*"
+    replace: ' expires: {{ (config.iam.admin_auth_token_expiration_seconds / 60) | int }},'
+
+- name: sequent-ui, modifying admin-console SequentConfig.js for securing the api calls
+  become: true
+  become_user: ui_user
+  replace:
+    dest: /home/ui_user/admin-console/SequentConfig.js
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - regexp: 'baseUrl:.*$'
+      replace: 'baseUrl: "https://{{config.ballot_box.domain}}/admin-api/elections/api/",'
+    - regexp: 'publicURL:.*$'
+      replace: 'publicURL: "https://{{config.ballot_box.domain}}/admin-api/elections/public/",'
+    - regexp: 'authAPI:.*$'
+      replace: 'authAPI: "https://{{config.ballot_box.domain}}/admin-api/iam/api/",'
+    - regexp: 'dnieUrl:.*$'
+      replace: 'dnieUrl: "https://{{config.ballot_box.domain}}/admin-api/iam/api/authmethod/dnie/auth/",'
+    - regexp: 'electionsAPI:.*$'
+      replace: 'electionsAPI: "https://{{config.ballot_box.domain}}/admin-api/elections/api/",'
+
+# this is not slow because yarn caches dependencies
+- name: sequent-ui, removing node_modules directory to start fresh
+  become: true
+  become_user: ui_user
+  file:
+    path: "/home/ui_user/{{item}}/node_modules"
+    state: absent
+  with_items:
+    - admin-console
+    - election-portal
+    - voting-booth
+
+- name: sequent-ui, configuring common-ui version in sequent-ui-*
+  become: true
+  become_user: ui_user
+  replace:
+    dest: /home/ui_user/{{item}}/package.json
+    regexp: '"common-ui"(.) "[^"]+(".*)$'
+    replace: '"common-ui"\1 "{{repos.common_ui.repo}}#{{repos.common_ui.version}}\2'
+  with_items:
+    - admin-console
+    - election-portal
+    - voting-booth
+
+- name: sequent-ui, make sure to upgrade common-ui dependency repo
+  become: true
+  become_user: ui_user
+  shell:
+    chdir: "/home/ui_user/{{item}}/"
+    cmd: yarn && yarn upgrade common-ui
+  with_items:
+    - admin-console
+    - election-portal
+    - voting-booth

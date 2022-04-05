@@ -1,0 +1,24 @@
+# This file is part of deployment-tool.
+# Copyright (C) 2014-2016  Sequent Tech Inc <legal@sequentech.io>
+
+# deployment-tool is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+
+# deployment-tool  is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+- name: ballot-box, Git clone
+  become: true
+  become_user: ballotbox
+  git:
+    repo: "{{ repos.ballot_box.repo }}"
+    version: "{{ repos.ballot_box.version }}"
+    dest: /home/ballotbox/ballot-box
+    force: "{{ repos.ballot_box.force }}"
