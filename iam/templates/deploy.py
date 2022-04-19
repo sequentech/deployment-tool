@@ -220,8 +220,10 @@ TASK_SELF_TEST_COMMAND = [
 
 AWS_SNS_MESSAGE_ATTRIBUTES = {
 {% for key, value in config.iam.aws.sns_message_attributes.items() %}
-    "{{key}}": "{{value}}"{% if not loop.last %},{% endif %}
+    "{{key}}": {{value}}{% if not loop.last %},{% endif %}
+
 {% endfor %}
+
 }
 
 {% for extra_option in config.iam.extra_options %}

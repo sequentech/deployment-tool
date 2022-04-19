@@ -1169,8 +1169,8 @@ config:
       # Sets the configuration for authentication messages sent by the AWS SNS
       # provider
       sns_message_attributes:
-        AWS.SNS.SMS.SenderID: SEQUENT
-        AWS.SNS.SMS.SMSType: Transactional
+        AWS.SNS.SMS.SenderID: "{'DataType': 'String', 'StringValue': 'SEQUENT'}"
+        AWS.SNS.SMS.SMSType: "{'DataType': 'String', 'StringValue': 'Transactional'}"
 
     # Defines the extra fields used in authentication and registration
     extra_fields: >
