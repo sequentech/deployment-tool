@@ -164,7 +164,7 @@
   ansible.builtin.file:
     dest: /home/iam/.aws/credentials
     content: "{{ config.iam.aws.credentials }}"
-    state: file
+    state: touch
     group: iam
     owner: iam
     mode: '0600'
@@ -174,7 +174,7 @@
   ansible.builtin.file:
     dest: /home/iam/.aws/config
     content: "{{ config.iam.aws.config }}"
-    state: file
+    state: touch
     group: iam
     owner: iam
     mode: '0600'
