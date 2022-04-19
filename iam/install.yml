@@ -161,20 +161,18 @@
 
 - name: iam, generate /home/iam/.aws/credentials
   become: true
-  ansible.builtin.file:
+  ansible.builtin.copy:
     dest: /home/iam/.aws/credentials
     content: "{{ config.iam.aws.credentials }}"
-    state: touch
     group: iam
     owner: iam
     mode: '0600'
 
 - name: iam, generate /home/iam/.aws/config
   become: true
-  ansible.builtin.file:
+  ansible.builtin.copy:
     dest: /home/iam/.aws/config
     content: "{{ config.iam.aws.config }}"
-    state: touch
     group: iam
     owner: iam
     mode: '0600'

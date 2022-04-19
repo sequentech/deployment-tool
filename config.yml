@@ -1158,12 +1158,12 @@ config:
     # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#using-boto3
     aws:
       # configures the content of the `~/.aws/credentials` file:
-      credentials: >
+      credentials: |
         [default]
         aws_access_key_id = AWS_ACCESS_KEY_ID
         aws_secret_access_key = AWS_SECRET_ACCESS_KEY
       # configures the content of the `~/.aws/config` file:
-      config: >
+      config: |
         [default]
         region=eu-west-1
 
