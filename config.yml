@@ -1166,6 +1166,11 @@ config:
       config: |
         [default]
         region=eu-west-1
+      # Sets the configuration for authentication messages sent by the AWS SNS
+      # provider
+      sns_message_attributes:
+        AWS.SNS.SMS.SenderID: SEQUENT
+        AWS.SNS.SMS.SMSType: Transactional
 
     # Defines the extra fields used in authentication and registration
     extra_fields: >
