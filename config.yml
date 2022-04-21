@@ -506,10 +506,7 @@ config:
 
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
-    mainVersion: '6.0.0-beta.1'
-
-    # Login session cookies expiration in minutes. set to 'false' to be 
-    # unlimited. Does not apply to admin-console cookies (which use the value
+    mainVersion: '6.0.1'
     # from `config.iam.admin_auth_token_expiration_seconds`), except if this
     # setting is set to 'false' then the expiration of cookies will be set
     # the same value as for other sequent-ui modules (unlimited).
