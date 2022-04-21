@@ -67,14 +67,6 @@
     dest: /home/verifier_user/tally-pipes
     force: "{{ repos.results.force }}"
 
-- name: election-verifier, update pipes whitelist
-  become: true
-  become_user: verifier_user
-  replace:
-    dest: /home/verifier_user/tally-pipes/tally-pipes
-    regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
-    replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
-
 - name: election-verifier, fresh start
   become: true
   become_user: verifier_user
@@ -99,6 +91,14 @@
 
     - src: '/home/verifier_user/tally-pipes/tally-pipes'
       dest: '/home/verifier_user/election-verifier/tally-pipes'
+
+- name: election-verifier, update pipes whitelist
+  become: true
+  become_user: verifier_user
+  replace:
+    dest: /home/verifier_user/election-verifier/tally_pipes/main.py
+    regexp: '(DEFAULT_PIPES_WHITELIST = \[)[^\]]*(\])'
+    replace: '\1\n{% for pipe in config.tally_pipes.pipes_whitelist %}    "{{pipe}}",\n{% endfor %}\2'
 
 - name: election-verifier, executable bits
   become: true
