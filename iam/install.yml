@@ -97,19 +97,19 @@
 
 # pgcrypto extension is used for being able to set user passwords directly with 
 # SQL statements
-- name: Authapi, load pgcrypto postgresql extension
+- name: iam, load pgcrypto postgresql extension
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
   shell: psql iam -tAc "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
 
-- name: Authapi, set iam election start id
+- name: iam, set iam election start id
   become: true
   become_user: postgres
   when: config.load_balancing.is_master
   shell: psql iam -tAc "select setval('api_authevent_id_seq', GREATEST((SELECT MAX(id)+1 FROM api_authevent),{{config.iam.election_start_id}}));"
 
-- name: Authapi, copy usersdata file
+- name: iam, copy usersdata file
   when: config.iam.upsert_file != ''
   become: true
   copy:
@@ -129,12 +129,12 @@
     virtualenv: /home/iam/env
     settings: iam.deploy
 
-- name: Authapi, allow iam user to create databases (for example the test db)
+- name: iam, allow iam user to create databases (for example the test db)
   become: true
   become_user: postgres
   shell: psql iam -tAc "ALTER USER iam CREATEDB;"
 
-- name: Authapi, create reports config files
+- name: iam, create reports config files
   become: true
   become_user: iam
   copy:
@@ -142,7 +142,7 @@
     content: "{{ item.config | to_nice_json }}"
   with_items: "{{ config.iam.participation_reports }}"
 
-- name: Authapi, copy static_extra_path
+- name: iam, copy static_extra_path
   when: config.iam.static_extra_path != ''
   become: true
   copy:
@@ -151,7 +151,33 @@
     owner: iam
     group: iam
 
-- name: Authapi, configure report crontab configuration
+- name: iam, ensure /home/iam/.aws/ dir exists with proper permissions
+  become: true
+  ansible.builtin.file:
+    path: /home/iam/.aws
+    state: directory
+    group: iam
+    owner: iam
+
+- name: iam, generate /home/iam/.aws/credentials
+  become: true
+  ansible.builtin.copy:
+    dest: /home/iam/.aws/credentials
+    content: "{{ config.iam.aws.credentials }}"
+    group: iam
+    owner: iam
+    mode: '0600'
+
+- name: iam, generate /home/iam/.aws/config
+  become: true
+  ansible.builtin.copy:
+    dest: /home/iam/.aws/config
+    content: "{{ config.iam.aws.config }}"
+    group: iam
+    owner: iam
+    mode: '0600'
+
+- name: iam, configure report crontab configuration
   become: true
   cron:
     state: present

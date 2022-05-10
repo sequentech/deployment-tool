@@ -1153,6 +1153,25 @@ config:
     # Allowed values: (user-and-password|email|email-otp|sms|sms-otp|openid-connect)
     auth_method: 'user-and-password'
 
+    # Enter the AWS credentials and configuration. Used for sending SMS using
+    # the 'aws-sns' SMS Provider. For more information, see
+    # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#using-boto3
+    aws:
+      # configures the content of the `~/.aws/credentials` file:
+      credentials: |
+        [default]
+        aws_access_key_id = AWS_ACCESS_KEY_ID
+        aws_secret_access_key = AWS_SECRET_ACCESS_KEY
+      # configures the content of the `~/.aws/config` file:
+      config: |
+        [default]
+        region=eu-west-1
+      # Sets the configuration for authentication messages sent by the AWS SNS
+      # provider
+      sns_message_attributes:
+        AWS.SNS.SMS.SenderID: "{'DataType': 'String', 'StringValue': 'SEQUENT'}"
+        AWS.SNS.SMS.SMSType: "{'DataType': 'String', 'StringValue': 'Transactional'}"
+
     # Defines the extra fields used in authentication and registration
     extra_fields: >
       [
@@ -1271,7 +1290,7 @@ config:
       enabled: false
 
       # sms provider
-      # allowed values: esendex|twilio
+      # allowed values: aws-sns|esendex|twilio|console|altiria
       provider: esendex
 
       # Each user might have different domain ids. This settings depends on
