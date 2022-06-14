@@ -21,9 +21,9 @@ import sys
 import argparse
 import re
 
-INPUT_PROD_VERSION="6.1.0"
-INPUT_PRE_VERSION="6.1.1"
-OUTPUT_PROD_VERSION="6.1.1"
+INPUT_PROD_VERSION="6.1.1"
+INPUT_PRE_VERSION="6.1.2"
+OUTPUT_PROD_VERSION="6.1.2"
 def store_keyvalue(prod_config, generated_config, keystore, pipe):
   '''
   Updates the keyvalue store
