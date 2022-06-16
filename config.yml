@@ -26,7 +26,7 @@ params:
 # global configuration
 config:
   backup_password: '<PASSWORD>'
-  version: '6.1.2'
+  version: '6.1.3'
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
 
@@ -506,7 +506,7 @@ config:
 
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
-    mainVersion: '6.1.2'
+    mainVersion: '6.1.3'
     # from `config.iam.admin_auth_token_expiration_seconds`), except if this
     # setting is set to 'false' then the expiration of cookies will be set
     # the same value as for other sequent-ui modules (unlimited).
@@ -652,7 +652,7 @@ config:
     # default configuration for calculate results on admin-console
     calculate_results_default: >-
       {
-        "version": "6.1.2",
+        "version": "6.1.3",
         "pipes": [
           {
             "type": "tally_pipes.pipes.pdf.configure_pdf",
@@ -688,7 +688,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         tallyPipesConfig: {
-          version: '6.1.2',
+          version: '6.1.3',
           pipes: [
             {
               type: 'tally_pipes.pipes.results.do_tallies',
