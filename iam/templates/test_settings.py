@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'api',
     'authmethods',
     'captcha',
+    'tasks',
 
     #3rd party
     'corsheaders',
@@ -176,7 +177,24 @@ CORS_ORIGIN_WHITELIST = (
         'http://localhost:9001',
 )
 
+ENFORCE_STATE_CONTROLS = True
+
 OPENID_CONNECT_PROVIDERS_CONF = []
+
+# When a task is performed by launching a subprocess, the output of this process
+# is going to be written to the database. We use this setting to prevent too
+# many updates per second, by setting a minimum elapsed time between DB updates.
+TASK_PROCESS_UPDATE_DEBOUNCE_SECS = 2.0
+
+# This is the command to be executed to launch a self-test
+TASK_SELF_TEST_COMMAND = ["/home/iam/launch_selftest.sh"]
+
+# This is the command to be executed to kill a self-test
+TASK_SELF_TEST_KILL_COMMAND = ["sudo", "/home/ui_user/kill_selftest.sh"]
+
+# Default maximum amount of time in seconds that a task should last. After this,
+# amount of time, the task is killed
+TASK_DEFAULT_TIMEOUT_SECS = 60
 
 ENABLE_CAPTCHA = True
 PREGENERATION_CAPTCHA = 100
