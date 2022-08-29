@@ -125,6 +125,12 @@ ALLOW_ADMIN_AUTH_REGISTRATION = {% if config.iam.allow_admin_registration %}True
 # default: true
 ALLOW_DEREGISTER = {% if config.iam.allow_deregister %}True{% else %}False{% endif %}
 
+# For admins:
+# Allow sending custom html in the email messages sent from the admin console.
+# Allowed values: True|False
+# Default: False
+ALLOW_HTML_EMAILS = {% if config.iam.allow_html_emails %}True{% else %}False{% endif %}
+
 # If this option is true, when an user tries to register and the user is
 # already registered, iam will return an error with the 'user_exists'
 # codename. Otherwise, on error, iam will always return the same generic
