@@ -79,6 +79,11 @@ var SequentConfigData = {
   // Allowed values: true|false
   allowAdminRegistration: {% if config.iam.allow_admin_registration %}true{% else %}false{% endif %},
 
+  // For admins:
+  // Allow sending custom html in the email messages sent from the admin console.
+  // Allowed values: true|false
+  allowHtmlEmails: {% if config.iam.allow_html_emails %}true{% else %}false{% endif %},
+
   // show the documentation links after successfully casting a vote
   // allowed values: true| false
   showDocOnVoteCast: {% if config.sequent_ui.show_doc_on_vote_cast %}true{% else %}false{% endif %},

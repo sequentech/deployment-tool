@@ -1115,6 +1115,11 @@ config:
     # Default: false
     allow_admin_registration: false
 
+    # For admins:
+    # Allow sending custom html in the email messages sent from the admin console.
+    # Allowed values: true|false
+    allow_html_emails: false
+
     # Number of seconds after which an authentication token expires.
     auth_token_expiration_seconds: 600
 
