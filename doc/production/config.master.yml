@@ -1122,6 +1122,11 @@ config:
     # Default: false
     allow_admin_registration: false
 
+    # For admins:
+    # Allow sending custom html in the email messages sent from the admin console.
+    # Allowed values: true|false
+    allow_html_emails: false
+
     # callbacks given to ballot_box instances, for now related to sending
     # the result of uploading tally sheets only. It's a list so that it can
     # upload multiple ballot_box instances
