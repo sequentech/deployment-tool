@@ -489,6 +489,19 @@ config:
     # installations.
     virtualElectionsAllowed: false
 
+    # Users and passwords used by trustees to directly manage the authorities.
+    # This can be used for the Electoral board ceremonies.
+    #
+    # trustee_users:
+    #  # The authority id corresponds to the one defined in config.authorities
+    #  - authority_id: auth1
+    #    username: <USERNAME>
+    #    password: <PASSWORD>
+    #  - authority_id: auth2
+    #    username: <USERNAME>
+    #    password: <PASSWORD>
+    trustee_users: []
+
   # sequent-ui
   sequent_ui:
     domain: sequent
