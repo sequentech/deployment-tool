@@ -61,7 +61,7 @@
 
 - name: High Availability & Load Balancing [master], Authorizing ballotbox slave keys
   become: true
-  when: config.load_balancing.enabled and is_master
+  when: config.load_balancing.enabled and config.load_balancing.is_master
   authorized_key:
     user: ballotbox
     key: "{{ item }}"
