@@ -14,6 +14,18 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
+- name: High Availability & Load Balancing [master], configure postgresql to accept localhost connections (from repmgr)
+  become: true
+  become_user: postgres
+  when: config.load_balancing.enabled and config.load_balancing.is_master
+  lineinfile:
+    dest: /etc/postgresql/12/main/pg_hba.conf
+    line: "{{item}}"
+    state: "{{ 'present' if config.load_balancing.is_master else 'absent'  }}"
+    insertbefore: "host    all             all             127.0.0.1/32            md5"
+  with_items:
+    - "host    repmgr          repmgr          127.0.0.1/32            trust"
+
 - name: High Availability & Load Balancing [master], configure postgresql to accept external connections (from slaves)
   become: true
   become_user: postgres

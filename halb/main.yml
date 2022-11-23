@@ -14,8 +14,11 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-- import_tasks: cache.yml
+- include_tasks: cache.yml
+  when: config.load_balancing.enabled
 - import_tasks: packages.yml
 - import_tasks: rsync.yml
-- import_tasks: repmgr.yml
-- import_tasks: sentry.yml
+- include_tasks: repmgr.yml
+  when: config.load_balancing.enabled
+- include_tasks: sentry.yml
+  when: config.load_balancing.enabled

@@ -61,7 +61,7 @@
 
 - name: High Availability & Load Balancing [master], Authorizing ballotbox slave keys
   become: true
-  when: config.load_balancing.is_master
+  when: config.load_balancing.enabled and is_master
   authorized_key:
     user: ballotbox
     key: "{{ item }}"
@@ -69,7 +69,7 @@
 
 - name: High Availability & Load Balancing [master], Authorizing postgres slave keys
   become: true
-  when: config.load_balancing.is_master
+  when: config.load_balancing.enabled and config.load_balancing.is_master
   authorized_key:
     user: postgres
     key: "{{ item }}"
@@ -78,7 +78,7 @@
 - name: High Availability & Load Balancing [slave], Authorizing postgres slave keys
   become: true
   become_user: postgres
-  when: not config.load_balancing.is_master
+  when: config.load_balancing.enabled and not config.load_balancing.is_master
   shell: |
     expect -c '
     spawn ssh postgres@{{config.load_balancing.slave.master_hostname}} echo hola
@@ -91,7 +91,7 @@
 - name: High Availability & Load Balancing [slave], Authorizing ballotbox slave keys
   become: true
   become_user: ballotbox
-  when: not config.load_balancing.is_master
+  when: config.load_balancing.enabled and not config.load_balancing.is_master
   shell: |
     expect -c '
     spawn ssh ballotbox@{{config.load_balancing.slave.master_hostname}} echo hola
