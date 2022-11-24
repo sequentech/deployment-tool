@@ -224,18 +224,18 @@
   register: register_master_cmd
   failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
 
+- name: High Availability & Load Balancing [master], promote to master
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find(' primary | * running ') == -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and not (repmgr_cluster_show.stdout | regex_search(' primary \| .* \| host=' + config.hostname  + ' user=repmgr dbname=repmgr'))
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
+
 - name: High Availability & Load Balancing, checking repmgr cluster state after potentially registering the master
   become: true
   become_user: postgres
   ignore_errors: true
   register: repmgr_cluster_show
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
-
-- name: High Availability & Load Balancing [master], promote to master
-  become: true
-  become_user: postgres
-  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find(' primary | * running ') == -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and not (repmgr_cluster_show.stdout | regex_search(' primary \| .* \| host=' + config.hostname  + ' user=repmgr dbname=repmgr'))
-  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
   become: true
