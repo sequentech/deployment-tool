@@ -14,6 +14,17 @@
 # along with deployment-tool.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
+- name: High Availability & Load Balancing, configure postgresql to accept localhost connections (from repmgr)
+  become: true
+  become_user: postgres
+  lineinfile:
+    dest: /etc/postgresql/12/main/pg_hba.conf
+    line: "{{item}}"
+    state: present
+    insertbefore: "host    all             all             127.0.0.1/32            md5"
+  with_items:
+    - "host    repmgr          repmgr          127.0.0.1/32            trust"
+
 - name: High Availability & Load Balancing [master], configure postgresql to accept external connections (from slaves)
   become: true
   become_user: postgres
@@ -28,6 +39,19 @@
     - "host    ballot_box ballot_box {{config.load_balancing.master.slave_cidr_address}}         md5"
     - "host    iam iam {{config.load_balancing.master.slave_cidr_address}}         md5"
     - "host    sentry sentry {{config.load_balancing.master.slave_cidr_address}}         md5"
+
+- name: High Availability & Load Balancing [slave], configure postgresql.conf
+  become: true
+  become_user: postgres
+  when: not config.load_balancing.is_master
+  lineinfile:
+    dest: /etc/postgresql/12/main/postgresql.conf
+    line: "{{item.line}}"
+    regexp: "{{item.rx}}"
+    state: present
+  with_items:
+    - line: "max_wal_senders = 10"
+      rx: "max_wal_senders[ \t]*="
 
 - name: High Availability & Load Balancing [master], configure postgresql.conf
   become: true
@@ -198,7 +222,13 @@
   when: config.load_balancing.is_master and repmgr_cluster_show.stdout.find(' primary | * running ') == -1
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf master register
   register: register_master_cmd
-  failed_when: "'server is in standby mode and cannot be registered as a master' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
+  failed_when: "'server is in standby mode and cannot be registered as a primary' not in register_master_cmd.stderr and register_master_cmd.rc != 0"
+
+- name: High Availability & Load Balancing [master], promote to master
+  become: true
+  become_user: postgres
+  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find(' primary | * running ') == -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and not (repmgr_cluster_show.stdout | regex_search(' primary \| .* \| host=' + config.hostname  + ' user=repmgr dbname=repmgr'))
+  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing, checking repmgr cluster state after potentially registering the master
   become: true
@@ -206,12 +236,6 @@
   ignore_errors: true
   register: repmgr_cluster_show
   shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf cluster show
-
-- name: High Availability & Load Balancing [master], promote to master
-  become: true
-  become_user: postgres
-  when: config.load_balancing.is_master and (repmgr_cluster_show.stdout.find(' primary | * running ') == -1 or repmgr_cluster_show.stderr.find('[ERROR] connection to database failed') != -1) and not (repmgr_cluster_show.stdout | regex_search(' primary \| .* \| host=' + config.hostname  + ' user=repmgr dbname=repmgr'))
-  shell: /usr/lib/postgresql/12/bin/repmgr -f /etc/repmgr/repmgr.conf --verbose --force standby promote
 
 - name: High Availability & Load Balancing [slave], stopping postgresql
   become: true
