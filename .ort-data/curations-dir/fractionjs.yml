@@ -1,7 +1,0 @@
-# SPDX-FileCopyrightText: 2021 Sequent Tech Inc <legal@sequentech.io>
-#
-# SPDX-License-Identifier: AGPL-3.0-only
-- id: "NPM::fraction.js"
-  curations:
-    comment: "The package is detected as GPL because it's double licensed with GPL and MIT, so we use the MIT"
-    concluded_license: "MIT"
