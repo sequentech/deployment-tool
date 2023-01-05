@@ -1,3 +1,4 @@
+
 # SPDX-FileCopyrightText: 2014-2022 Sequent Tech Inc <legal@sequentech.io>
 #
 # SPDX-License-Identifier: AGPL-3.0-only
@@ -17,31 +18,9 @@ on:
 
 jobs:
   ort:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Use HTTPS instead of SSH for Git cloning
-        run: git config --global url.https://github.com/.insteadOf ssh://git@github.com/
-
-      - uses: actions/checkout@v3
-
-      - name: Run GitHub Action for ORT
-        uses: oss-review-toolkit/ort-ci-github-action@main
-        with:
-          run: > # remove the advisor step since we are not using it
-            cache-dependencies,
-            labels,
-            analyzer,
-            evaluator,
-            reporter,
-            upload-results
-          log-level: debug
-          ort-config-repository: 'https://github.com/sequentech/ort-config.git'
-          fail-on: issues,violations
-          report-formats: SpdxDocument,Excel,StaticHtml,WebApp
-          ort-cli-args: > # using the default plus the package managers setting
-            --force-overwrite
-            --stacktrace
-            -P ort.analyzer.enabledPackageManagers=PIP
-          ort-cli-evaluate-args: >
-            --rules-file /home/runner/.ort/config/rules.kts
-            --license-classifications-file /home/runner/.ort/config/license-classifications.yml
+    uses: sequentech/ort-config/.github/workflows/ort.yml@main
+    with:
+      ort-cli-args: > # using the default plus the package managers setting
+        --force-overwrite
+        --stacktrace
+        -P ort.analyzer.enabledPackageManagers=PIP
