@@ -152,86 +152,14 @@
     path: /home/ballotbox/ballot-box/admin/admin.py
     mode: "700"
 
-- name: ballot-box, Admin setup (1)
+- name: ballot-box, admin settings.json
   become: true
   become_user: ballotbox
-  replace: 
-    dest: /home/ballotbox/ballot-box/admin/admin.py
-    regexp: "shared_secret = .*$"
-    replace: "shared_secret = '{{config.ballot_box.shared_secret}}'"
-
-- name: ballot-box, Admin setup (2)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/admin.py
-    regexp: "db_password = .*$"
-    replace: "db_password = '{{config.ballot_box.db_password}}'"
-
-- name: ballot-box, Admin setup (3)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/admin.py
-    regexp: "app_host = .*$"
-    replace: "app_host = '{{ config.load_balancing.slave.master_hostname if not config.load_balancing.is_master else 'localhost' }}'"
-
-- name: ballot-box, Admin setup (4)
-  become: true
-  become_user: ballotbox
-  replace: 
-    dest: /home/ballotbox/ballot-box/admin/encrypt.sh
-    regexp: "IVY=.*$"
-    replace: "IVY=$HOME/.ivy2/cache"
-
-- name: ballot-box, Admin setup (5)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/encrypt.sh
-    regexp: "SEQUENT_HOME=.*$"
-    replace: "SEQUENT_HOME=$HOME/ballot-box"
-
-- name: ballot-box, Admin setup (6)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/cycle.py
-    regexp: "public_ds = .*$"
-    replace: "public_ds = '/home/ballotbox/datastore/public'"
-
-- name: ballot-box, Admin setup (7)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/cycle.py
-    regexp: "private_ds = .*$"
-    replace: "private_ds = '/home/ballotbox/datastore/private'"
-
-- name: ballot-box, Admin setup (8)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/admin.py
-    regexp: "iam_port = .*$"
-    replace: "iam_port = 10081"
-
-- name: ballot-box, Admin setup (9)
-  become: true
-  become_user: ballotbox
-  when: config.iam.auth_method == 'user-and-password'
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/admin.py
-    regexp: "iam_credentials = .*$"
-    replace: "iam_credentials = dict(username='admin',password='{{config.iam.admin_user.password}}')"
-
-- name: ballot-box, Admin setup (10)
-  become: true
-  become_user: ballotbox
-  replace:
-    dest: /home/ballotbox/ballot-box/admin/admin.py
-    regexp: "iam_db_password = .*$"
-    replace: "iam_db_password = '{{config.election_orchestra.eorchestra_password}}'"
+  template:
+    src: ballot-box/templates/ballot-box-admin-settings.json
+    dest: /home/ballotbox/ballot-box/admin/settings.json
+    owner: ballotbox
+    mode: '0600'
 
 - import_tasks: app.yml
 
