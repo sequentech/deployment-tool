@@ -167,6 +167,13 @@ config:
     # client_max_body_size (in nginx)
     max_body_size: 2m
 
+    # When creating an election from the admin-console, the election config
+    # is passed through the url query parameters. If the configuration is
+    # large, it will hit the maximum client header size for NGINX. In that
+    # case you may want to increase its value here. Note that the default
+    # value is low to avoid denial of service attacks.
+    client_max_header_size: 8k
+
     # Path of the TLS PEM public certificate.
     #
     # Requirements:
