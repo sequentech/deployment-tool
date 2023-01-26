@@ -581,6 +581,7 @@ config:
     languagesWhitelist:
       - en
       - es
+      - fr
       - gl
       - ca
 
