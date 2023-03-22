@@ -578,6 +578,9 @@ config:
       - es
       - gl
       - ca
+    
+    # Prevents site translation using the translation=off html attribute
+    prevent_site_translation: false
 
     defaultRoute: /admin/login
 

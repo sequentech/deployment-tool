@@ -52,6 +52,9 @@ var SequentConfigData = {
   // Show 'Success Action' tab in admin sequent_ui
   showSuccessAction: {% if config.sequent_ui.show_success_action %}true{% else %}false{% endif %},
 
+  // Prevents site translation using the translation=off html attribute
+  preventSiteTranslation: {% if config.sequent_ui.prevent_site_translation %}true{% else %}false{% endif %},
+
   // AuthApi base url
   authAPI: "https://{{config.ballot_box.domain}}/iam/api/",
   dnieUrl: "https://{{config.ballot_box.domain}}/iam/api/authmethod/dnie/auth/",
