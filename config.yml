@@ -406,8 +406,8 @@ config:
     ssl_port: 14453
 
     # Numbers of seconds memcached mantains a cached item (an election)
-    # in the cache. By default it's 60 seconds.
-    cache_expiration_seconds: 60
+    # in the cache. By default it's 5 seconds.
+    cache_expiration_seconds: 5
 
     # allow and deny nginx ips specific for this service
     ips:
