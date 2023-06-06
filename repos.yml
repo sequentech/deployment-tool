@@ -17,53 +17,53 @@
 repos:
     ballot_box:
         repo: https://github.com/sequentech/ballot-box.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     results:
         repo: https://github.com/sequentech/tally-pipes.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     tally:
         repo: https://github.com/sequentech/tally-methods.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     iam:
         repo: https://github.com/sequentech/iam.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     misc_tools:
         repo: https://github.com/sequentech/misc-tools.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     frestq:
         repo: https://github.com/sequentech/frestq
-        version: 'master'
+        version: '8.0.0'
         force: yes
     eorchestra:
         repo: https://github.com/sequentech/election-orchestra
-        version: 'master'
+        version: '8.0.0'
         force: yes
     mixnet:
         repo: https://github.com/sequentech/mixnet
-        version: 'master'
+        version: '8.0.0'
         force: yes
     election_verifier:
         repo: https://github.com/sequentech/election-verifier.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     common_ui:
         repo: https://github.com/sequentech/common-ui.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     admin_console:
         repo: https://github.com/sequentech/admin-console.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     voting_booth:
         repo: https://github.com/sequentech/voting-booth.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
     election_portal:
         repo: https://github.com/sequentech/election-portal.git
-        version: 'master'
+        version: '8.0.0'
         force: yes
