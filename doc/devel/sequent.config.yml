@@ -25,7 +25,7 @@ params:
 
 # global configuration
 config:
-  version: '8.0.0'
+  version: '8.0.1'
   backup_password: '<PASSWORD>'
 
   # global config. Note: currently some other keys are used as global conf
@@ -685,7 +685,7 @@ config:
     # default configuration for calculate results on admin-console
     calculate_results_default: >-
       {
-        "version": "8.0.0",
+        "version": "8.0.1",
         "pipes": [
           {
             "type": "tally_pipes.pipes.pdf.configure_pdf",
@@ -721,7 +721,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         tallyPipesConfig: {
-          version: '8.0.0',
+          version: '8.0.1',
           pipes: [
             {
               type: 'tally_pipes.pipes.results.do_tallies',
