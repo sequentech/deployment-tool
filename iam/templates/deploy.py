@@ -221,6 +221,8 @@ OPENID_CONNECT_PROVIDERS_CONF = [
 
 OTL_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/otl/__SECRET__"
 
+ALT_AUTH_BASE_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/login-alt/__AUTH_METHOD_ID__"
+
 # This is the command to be executed to launch a self-test
 TASK_SELF_TEST_COMMAND = [
     "sudo", "-u", "ui_user", "/home/ui_user/launch_selftest.sh"
