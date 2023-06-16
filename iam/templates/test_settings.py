@@ -231,6 +231,7 @@ HOME_URL = "https://sequent.example.com/#/election/__EVENT_ID__/public/home"
 SMS_AUTH_CODE_URL = "https://sequent.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 EMAIL_AUTH_CODE_URL = "https://sequent.example.com/#/election/__EVENT_ID__/public/login/__RECEIVER__"
 OTL_URL = "https://sequent.example.com/election/__EVENT_ID__/otl/__SECRET__"
+ALT_AUTH_BASE_URL = "https://sequent.example.com/election/__EVENT_ID__/public/login/__AUTH_METHOD_ID__"
 
 SEQUENT_ELECTIONS_BASE = []
 
