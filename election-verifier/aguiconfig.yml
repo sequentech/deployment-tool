@@ -46,7 +46,7 @@
   replace:
     dest: /home/ui_user/{{ item }}/SequentConfig.js
     regexp: "link:.*"
-    replace: 'link: "https://{{config.ballot_box.domain}}/verifier/election-verifier",'
+    replace: 'link: "https://{{config['ballot-box']domain}}/verifier/election-verifier",'
   with_items:
     - admin-console
     - election-portal

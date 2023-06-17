@@ -34,7 +34,7 @@
   when: config.load_balancing.is_master
   postgresql_user:
     user: ballot_box
-    password: "{{config.ballot_box.db_password}}"
+    password: "{{config['ballot-box']db_password}}"
     port: 5432
 
 - name: ballot-box, Create Database
