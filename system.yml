@@ -30,7 +30,7 @@
   become: true
   lineinfile:
     dest: /etc/hosts
-    line: line: "{{ config.private_ipaddress }} {{ config['ballot-box'].domain }}"
+    line: "{{ config.private_ipaddress }} {{ config['ballot-box'].domain }}"
     state: present
 
 - name: System, Creating nginx group
