@@ -28,7 +28,7 @@ var SequentConfigData = {
   // 'https://foo/api/v3/' and always ends in '/'.
   base: '',
   theme: "{{ config.sequent_ui.theme }}",
-  baseUrl: "https://{{config['ballot-box']domain}}/elections/api/",
+  baseUrl: "https://{{config['ballot-box'].domain}}/elections/api/",
   freeAuthId: 1,
 
   // Configurable Sign Up link
@@ -57,10 +57,10 @@ var SequentConfigData = {
   preventSiteTranslation: {% if config.sequent_ui.prevent_site_translation %}true{% else %}false{% endif %},
 
   // AuthApi base url
-  authAPI: "https://{{config['ballot-box']domain}}/iam/api/",
-  dnieUrl: "https://{{config['ballot-box']domain}}/iam/api/authmethod/dnie/auth/",
+  authAPI: "https://{{config['ballot-box'].domain}}/iam/api/",
+  dnieUrl: "https://{{config['ballot-box'].domain}}/iam/api/authmethod/dnie/auth/",
   // Agora Elections base url
-  electionsAPI: "https://{{config['ballot-box']domain}}/elections/api/",
+  electionsAPI: "https://{{config['ballot-box'].domain}}/elections/api/",
 
   // Agora Admin help url
   helpUrl: "{{ config.sequent_ui.technology.documentation }}",
@@ -94,7 +94,7 @@ var SequentConfigData = {
 
   // if true, the calculated results are always automatically published
   // valid values: true, false
-  always_publish: {% if config['ballot-box']always_publish %}true{% else %}false{% endif %},
+  always_publish: {% if config['ballot-box'].always_publish %}true{% else %}false{% endif %},
 
   calculateResultsDefault: {{ config.sequent_ui.calculate_results_default }},
 
@@ -285,7 +285,7 @@ var SequentConfigData = {
   {% if config.sequent_ui.custom_public_download_url %}
   publicURL: "{{ config.sequent_ui.custom_public_download_url }}",
   {% else %}
-  publicURL: "https://{{config['ballot-box']domain}}/elections/public/",
+  publicURL: "https://{{config['ballot-box'].domain}}/elections/public/",
   {% endif %}
 
   // if we are in debug mode or not

@@ -5,7 +5,7 @@
     "PRIVATE_IP_ADDRESS": "{{ config.private_ipaddress }}",
     "HOSTNAME": "{{ config.hostname }}",
     "PORT": {{ config.election_orchestra.port }},
-    "KEYSTORE_PASS": "{{ config['ballot-box']keystore_pass }}",
+    "KEYSTORE_PASS": "{{ config['ballot-box'].keystore_pass }}",
     "TLS_CERT_PATH": "{{ config.http.internal_tls_cert_path }}",
     "TLS_CERT_KEY_PATH": "{{ config.http.internal_tls_cert_key_path }}",
     "TLS_CALIST_PATH": "{{ config.http.internal_tls_calist_path }}"

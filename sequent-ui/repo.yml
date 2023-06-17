@@ -89,15 +89,15 @@
     replace: '{{ item.replace }}'
   with_items:
     - regexp: 'baseUrl:.*$'
-      replace: 'baseUrl: "https://{{config['ballot-box']domain}}/admin-api/elections/api/",'
+      replace: 'baseUrl: "https://{{config['ballot-box'].domain}}/admin-api/elections/api/",'
     - regexp: 'publicURL:.*$'
-      replace: 'publicURL: "https://{{config['ballot-box']domain}}/admin-api/elections/public/",'
+      replace: 'publicURL: "https://{{config['ballot-box'].domain}}/admin-api/elections/public/",'
     - regexp: 'authAPI:.*$'
-      replace: 'authAPI: "https://{{config['ballot-box']domain}}/admin-api/iam/api/",'
+      replace: 'authAPI: "https://{{config['ballot-box'].domain}}/admin-api/iam/api/",'
     - regexp: 'dnieUrl:.*$'
-      replace: 'dnieUrl: "https://{{config['ballot-box']domain}}/admin-api/iam/api/authmethod/dnie/auth/",'
+      replace: 'dnieUrl: "https://{{config['ballot-box'].domain}}/admin-api/iam/api/authmethod/dnie/auth/",'
     - regexp: 'electionsAPI:.*$'
-      replace: 'electionsAPI: "https://{{config['ballot-box']domain}}/admin-api/elections/api/",'
+      replace: 'electionsAPI: "https://{{config['ballot-box'].domain}}/admin-api/elections/api/",'
 
 # this is not slow because yarn caches dependencies
 - name: sequent-ui, removing node_modules directory to start fresh

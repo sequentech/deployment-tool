@@ -23,7 +23,7 @@ OU="{{ config.cert.OU }}"
 HOST=$(hostname)
 CN=$(hostname)
 EMAIL={{ config.cert.EMAIL }}
-DNS1={{ config['ballot-box']domain }}
+DNS1={{ config['ballot-box'].domain }}
 
 CERT_DIR="/srv/certs/selfsigned"
 CERT_PREFIX="cert"
