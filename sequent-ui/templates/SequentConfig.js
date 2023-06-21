@@ -414,6 +414,8 @@ var SequentConfigData = {
     {% endfor %}
   ],
 
+  authTokenExpirationSeconds: {{ config.iam.auth_token_expiration_seconds }},
+
   {% if config.sequent_ui.cookies_expires %}
     cookies: {
       expires: {{ config.sequent_ui.cookies_expires }},
