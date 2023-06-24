@@ -428,7 +428,7 @@ var SequentConfigData = {
 };
 
 angular.module('SequentConfig', [])
-  .factory('ConfigService', function() {
+  .factory('ConfigService', function($location) {
     baseUrl = $location.protocol() + "://" + $location.host;
     SequentConfigData.publicURL = baseUrl + SequentConfigData.publicURL;
     SequentConfigData.electionsAPI = baseUrl + SequentConfigData.electionsAPI;
