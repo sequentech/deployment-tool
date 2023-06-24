@@ -28,7 +28,7 @@ var SequentConfigData = {
   // 'https://foo/api/v3/' and always ends in '/'.
   base: '',
   theme: "{{ config.sequent_ui.theme }}",
-  baseUrl: "https://{{config.ballot_box.domain}}/elections/api/",
+  baseUrl: "/elections/api/",
   freeAuthId: 1,
 
   // Configurable Sign Up link
@@ -57,10 +57,10 @@ var SequentConfigData = {
   preventSiteTranslation: {% if config.sequent_ui.prevent_site_translation %}true{% else %}false{% endif %},
 
   // AuthApi base url
-  authAPI: "https://{{config.ballot_box.domain}}/iam/api/",
-  dnieUrl: "https://{{config.ballot_box.domain}}/iam/api/authmethod/dnie/auth/",
+  authAPI: "/iam/api/",
+  dnieUrl: "/iam/api/authmethod/dnie/auth/",
   // Agora Elections base url
-  electionsAPI: "https://{{config.ballot_box.domain}}/elections/api/",
+  electionsAPI: "/elections/api/",
 
   // Agora Admin help url
   helpUrl: "{{ config.sequent_ui.technology.documentation }}",
@@ -285,7 +285,7 @@ var SequentConfigData = {
   {% if config.sequent_ui.custom_public_download_url %}
   publicURL: "{{ config.sequent_ui.custom_public_download_url }}",
   {% else %}
-  publicURL: "https://{{config.ballot_box.domain}}/elections/public/",
+  publicURL: "/elections/public/",
   {% endif %}
 
   // if we are in debug mode or not
