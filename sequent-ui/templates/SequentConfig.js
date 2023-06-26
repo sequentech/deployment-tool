@@ -429,7 +429,7 @@ var SequentConfigData = {
 
 angular.module('SequentConfig', [])
   .factory('ConfigService', function($location) {
-    baseUrl = $location.protocol() + "://" + $location.host;
+    var baseUrl = $location.protocol() + "://" + $location.host;
     SequentConfigData.publicURL = baseUrl + SequentConfigData.publicURL;
     SequentConfigData.electionsAPI = baseUrl + SequentConfigData.electionsAPI;
     SequentConfigData.dnieUrl = baseUrl + SequentConfigData.dnieUrl;
