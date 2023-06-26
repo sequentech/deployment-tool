@@ -80,24 +80,24 @@
     regexp: "expires:.*"
     replace: " expires: {{ (config.iam.admin_auth_token_expiration_seconds / 60) | int }},"
 
-#- name: sequent-ui, modifying admin-console SequentConfig.js for securing the api calls
-#  become: true
-#  become_user: ui_user
-#  replace:
-#    dest: /home/ui_user/admin-console/SequentConfig.js
-#    regexp: '{{ item.regexp }}'
-#    replace: '{{ item.replace }}'
-#  with_items:
-#    - regexp: 'baseUrl:.*$'
-#      replace: 'baseUrl: "https://{{config.ballot_box.domain}}/admin-api/elections/api/",'
-#    - regexp: 'publicURL:.*$'
-#      replace: 'publicURL: "https://{{config.ballot_box.domain}}/admin-api/elections/public/",'
-#    - regexp: 'authAPI:.*$'
-#      replace: 'authAPI: "https://{{config.ballot_box.domain}}/admin-api/iam/api/",'
-#    - regexp: 'dnieUrl:.*$'
-#      replace: 'dnieUrl: "https://{{config.ballot_box.domain}}/admin-api/iam/api/authmethod/dnie/auth/",'
-#    - regexp: 'electionsAPI:.*$'
-#      replace: 'electionsAPI: "https://{{config.ballot_box.domain}}/admin-api/elections/api/",'
+- name: sequent-ui, modifying admin-console SequentConfig.js for securing the api calls
+  become: true
+  become_user: ui_user
+  replace:
+    dest: /home/ui_user/admin-console/SequentConfig.js
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - regexp: "baseUrl:.*$"
+      replace: 'baseUrl: "/admin-api/elections/api/",'
+    - regexp: "publicURL:.*$"
+      replace: 'publicURL: "/admin-api/elections/public/",'
+    - regexp: "authAPI:.*$"
+      replace: 'authAPI: "/admin-api/iam/api/",'
+    - regexp: "dnieUrl:.*$"
+      replace: 'dnieUrl: "/admin-api/iam/api/authmethod/dnie/auth/",'
+    - regexp: "electionsAPI:.*$"
+      replace: 'electionsAPI: "/admin-api/elections/api/",'
 
 # this is not slow because yarn caches dependencies
 - name: sequent-ui, removing node_modules directory to start fresh
