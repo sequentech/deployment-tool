@@ -520,13 +520,6 @@ config:
     # want it to be shown.
     mainVersion: 'master'
 
-    # Login session cookies expiration in minutes. set to 'false' to be 
-    # unlimited. Does not apply to admin-console cookies (which use the value
-    # from `config.iam.admin_auth_token_expiration_seconds`), except if this
-    # setting is set to 'false' then the expiration of cookies will be set
-    # the same value as for other sequent-ui modules (unlimited).
-    cookies_expires: 10
-
     # Shows a dialog if the browser is too old to notify the user. Set this to
     # false to disable. See how to customize in
     #  http://browser-update.org/customize.html

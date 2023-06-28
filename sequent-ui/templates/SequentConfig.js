@@ -280,8 +280,6 @@ var SequentConfigData = {
   // Default: '/admin/login'
   defaultRoute: '{{ config.sequent_ui.defaultRoute }}',
 
-  timeoutSeconds: {% if config.sequent_ui.cookies_expires %}{{ config.sequent_ui.cookies_expires * 60 }}{% else %}3600{% endif %},
-
   {% if config.sequent_ui.custom_public_download_url %}
   publicURL: "{{ config.sequent_ui.custom_public_download_url }}",
   {% else %}
@@ -414,11 +412,8 @@ var SequentConfigData = {
     {% endfor %}
   ],
 
-  {% if config.sequent_ui.cookies_expires %}
-    cookies: {
-      expires: {{ config.sequent_ui.cookies_expires }},
-    },
-  {% endif %}
+  // Number of seconds after which an authentication token expires.
+  authTokenExpirationSeconds: {{ config.iam.auth_token_expiration_seconds }},
 
   {% if config.sequent_ui.browser_update_config %}
     // Browser update configuration. See https://browser-update.org
