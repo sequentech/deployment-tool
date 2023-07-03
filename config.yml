@@ -26,7 +26,7 @@ params:
 # global configuration
 config:
   backup_password: '<PASSWORD>'
-  version: 'master'
+  version: '9.0.0'
   # global config. Note: currently some other keys are used as global conf
   global_secret_key: '<PASSWORD>'
 
@@ -530,7 +530,7 @@ config:
 
     # Main version shown in the user interface. set to 'false' if you don't
     # want it to be shown.
-    mainVersion: 'master'
+    mainVersion: '9.0.0'
 
     # Shows a dialog if the browser is too old to notify the user. Set this to
     # false to disable. See how to customize in
@@ -676,7 +676,7 @@ config:
     # default configuration for calculate results on admin-console
     calculate_results_default: >-
       {
-        "version": "master",
+        "version": "9.0.0",
         "pipes": [
           {
             "type": "tally_pipes.pipes.pdf.configure_pdf",
@@ -712,7 +712,7 @@ config:
         layout: 'simple',
         num_successful_logins_allowed: 0,
         tallyPipesConfig: {
-          version: 'master',
+          version: '9.0.0',
           pipes: [
             {
               type: 'tally_pipes.pipes.results.do_tallies',
