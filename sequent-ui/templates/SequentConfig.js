@@ -197,6 +197,9 @@ var SequentConfigData = {
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.sequent_ui.min_loading_time }},
 
+  // Server timeout (seconds)
+  serverTimeoutSeconds: {{ config.http.nginx_timeout_secs }},
+
   // gui-admin allows to import users from a csv, importing users in batches
   // this parameter sets the batch size
   // 0 means doing the import in only one batch always
