@@ -109,6 +109,9 @@ config:
   #    # Month of the year the job should run ( 1-12, *, */2, etc )
   #    month: '9'
 
+  # enable multiple tallies. This enables multiple tallies even when the election is still open
+  enable_multiple_tallies: False
+
   # configuration related to the election orchestration service, only active in
   # election authorities
   election_orchestra:
