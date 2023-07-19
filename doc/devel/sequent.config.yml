@@ -175,6 +175,13 @@ config:
     # value is low to avoid denial of service attacks.
     client_max_header_size: 8k
 
+    # This changes proxy_connect_timeout/proxy_send_timeout/proxy_read_timeout
+    # in the nginx web server.
+    # Any request to the server will timeout with a 504 code if the server
+    # doesn't answer after this time.
+    # Note that this value is not higher to avoid denial of service attacks.
+    nginx_timeout_secs: 120
+
     # Path of the TLS PEM public certificate.
     #
     # Requirements:
@@ -624,7 +631,7 @@ config:
     # this parameter sets the batch size
     # 0 means doing the import in only one batch always
     # allowed values: integer number >= 0
-    census_import_batch: 500
+    census_import_batch: 200
 
     # If you want tallies to be linked and downloaded from a different URL,
     # change this variable from false to a string. This could be an example:
