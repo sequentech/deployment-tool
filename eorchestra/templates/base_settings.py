@@ -61,3 +61,5 @@ QUEUES_OPTIONS = {
         'max_threads': 1,
     }
 }
+
+ENABLE_MULTIPLE_TALLIES = {{config.enable_multiple_tallies}}

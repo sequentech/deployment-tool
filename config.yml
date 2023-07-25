@@ -75,7 +75,23 @@ config:
 
   # you can use this section to schedule crontab tasks. For example, it can be
   # used to schedule election start for example, as shown below.
-  crontab_tasks: []
+  crontab_tasks:
+  #  - name: progressive-tally
+  #    # job is the command to be run. The command should not contain line
+  #    # breaks.
+  #    job: 'bash -c "source /home/ballotbox/tenv/bin/activate; /home/ballotbox/ballot-box/admin/admin.py --children-election-ids 34562755,34562756 --force-tally force-all --mode active trigger_tally 34562754 >> /home/ballotbox/crontab.log 2>&1"'
+  #    # The specific user whose crontab should be modified.
+  #    user: 'ballotbox'
+  #    # minute when the job should run ( 0-59, *, */2, etc )
+  #    minute: '*/5'
+  #    # hour when the job should run ( 0-23, *, */2, etc )
+  #    hour: '*'
+  #    # Day of the month the job should run ( 1-31, *, */2, etc )
+  #    day: '*'
+  #    # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
+  #    weekday: '*'
+  #    # Month of the year the job should run ( 1-12, *, */2, etc )
+  #    month: '*'
   #  - name: start-election
   #    # job is the command to be run. The command should not contain line
   #    # breaks.
@@ -108,6 +124,9 @@ config:
   #    weekday: '*'
   #    # Month of the year the job should run ( 1-12, *, */2, etc )
   #    month: '9'
+
+  # enable multiple tallies. This enables multiple tallies even when the election is still open
+  enable_multiple_tallies: False
 
   # configuration related to the election orchestration service, only active in
   # election authorities

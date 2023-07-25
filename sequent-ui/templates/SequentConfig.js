@@ -418,6 +418,9 @@ var SequentConfigData = {
   // Number of seconds after which an authentication token expires.
   authTokenExpirationSeconds: {{ config.iam.auth_token_expiration_seconds }},
 
+  // Allow to tally multiple times and when election is open.
+  enableMultipleTallies: {% if config.enable_multiple_tallies %}true{% else %}false{% endif %},
+
   {% if config.sequent_ui.browser_update_config %}
     // Browser update configuration. See https://browser-update.org
     browserUpdate: {{ config.sequent_ui.browser_update_config }}

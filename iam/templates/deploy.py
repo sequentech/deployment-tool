@@ -228,6 +228,8 @@ TASK_SELF_TEST_COMMAND = [
     "sudo", "-u", "ui_user", "/home/ui_user/launch_selftest.sh"
 ]
 
+ENABLE_MULTIPLE_TALLIES = {{config.enable_multiple_tallies}}
+
 AWS_SNS_MESSAGE_ATTRIBUTES = {
 {% for key, value in config.iam.aws.sns_message_attributes.items() %}
     "{{key}}": {{value}}{% if not loop.last %},{% endif %}
