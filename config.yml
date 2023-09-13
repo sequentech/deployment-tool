@@ -601,6 +601,7 @@ config:
       - en
       - es
       - fr
+      - it
       - gl
       - ca
     
