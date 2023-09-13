@@ -75,7 +75,7 @@ config:
 
   # you can use this section to schedule crontab tasks. For example, it can be
   # used to schedule election start for example, as shown below.
-  crontab_tasks:
+  crontab_tasks: []
   #  - name: progressive-tally
   #    # job is the command to be run. The command should not contain line
   #    # breaks.
