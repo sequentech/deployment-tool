@@ -51,7 +51,7 @@ config:
     # cron tab configuration for base backups
     base_backups:
       # number of days base backups are kept/stored (0 means forever)
-      keep_days: 30
+      keep_days: 15
       # day of the week that the job should run ( 0-6 for Sunday-Saturday, *, etc )
       weekday: '*'
       # Day of the month the job should run ( 1-31, *, */2, etc )

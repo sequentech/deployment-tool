@@ -31,6 +31,7 @@ DATE_OLDEST=`echo "$DATE_NOW - (24*3600*$KEEP_DAYS)" | bc`
 
 LIST_BASE=`ls $BACKUP_DIR/base`
 LIST_DUMP=`ls $BACKUP_DIR/dump`
+LIST_WAL=`ls $BACKUP_DIR/wal`
 
 for FNAME in $LIST_BASE
 do
@@ -59,6 +60,18 @@ do
   if [ "$DATE_OLDEST" -gt "$FDATE" ]; then
     echo "deleting $BACKUP_DIR/base/$FNAME"
     rm -Rf $BACKUP_DIR/base/$FNAME
+  fi
+done
+
+for FNAME in $LIST_WAL
+do
+  # Get file's last modification time in seconds since the epoch
+  FDATE=`date -r "$BACKUP_DIR/wal/$FNAME" +%s`
+
+  # check date and remove if it's too old
+  if [ "$DATE_OLDEST" -gt "$FDATE" ]; then
+    echo "deleting $BACKUP_DIR/wal/$FNAME"
+    rm -f $BACKUP_DIR/wal/$FNAME
   fi
 done
 
