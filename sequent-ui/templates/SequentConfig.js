@@ -183,17 +183,6 @@ var SequentConfigData = {
 
   ],
 
-  // Information regarding OpenID Connect authentication
-  openIDConnectProviders: [
-      {% for provider in config.iam.openid_connect_providers %}
-      {
-        {% for key, value in provider.public_info.items() %}
-          "{{key}}": "{{value}}"{% if not loop.last %},{% endif %}
-        {% endfor %}
-      }{% if not loop.last %},{% endif %}
-      {% endfor %}
-  ],
-
   //Minimum loading time (milliseconds)
   minLoadingTime: {{ config.sequent_ui.min_loading_time }},
 
