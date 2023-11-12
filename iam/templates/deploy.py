@@ -93,14 +93,14 @@ DATABASES = {
     }
 }
 
-SHARED_SECRET = b'{{config.ballot_box.shared_secret}}'
+SHARED_SECRET = b'{{config['ballot-box'].shared_secret}}'
 
 TIMEOUT = {{config.iam.auth_token_expiration_seconds}}
 
 ADMIN_TIMEOUT = {{config.iam.admin_auth_token_expiration_seconds}}
 
 SECRET_KEY = '{{ config.global_secret_key }}'
-HOME_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/home"
+HOME_URL = "https://{{ config['ballot-box'].domain }}/election/__EVENT_ID__/public/home"
 
 ADMIN_AUTH_ID = 1
 
@@ -156,13 +156,13 @@ SMS_VOICE_LANG_CODE = {{config.iam.sms.voice_lang_code}}
 
 SMS_BASE_TEMPLATE = """{{config.iam.sms.base_template}}"""
 
-SMS_AUTH_CODE_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
+SMS_AUTH_CODE_URL = "https://{{ config['ballot-box'].domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
 
 {% endif %}
 
 {% if config.iam.email.enabled %}
 from django.core.mail.utils import DNS_NAME
-DNS_NAME._fqdn = "{{ config.ballot_box.domain }}"
+DNS_NAME._fqdn = "{{ config['ballot-box'].domain }}"
 
 DEFAULT_FROM_EMAIL = "{{config.iam.email.default_from_email}}"
 
@@ -174,9 +174,9 @@ EMAIL_BASE_TEMPLATE = """{{config.iam.email.base_template}}"""
 
 EMAIL_BASE_TITLE_TEMPLATE = """{{config.iam.email.base_title_template}}"""
 
-EMAIL_AUTH_CODE_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
+EMAIL_AUTH_CODE_URL = "https://{{ config['ballot-box'].domain }}/election/__EVENT_ID__/public/login/__RECEIVER__"
 
-{% if config.ballot_box.enforce_state_controls %}
+{% if config['ballot-box'].enforce_state_controls %}
 ENFORCE_STATE_CONTROLS = True
 {% else %}
 ENFORCE_STATE_CONTROLS = False
@@ -219,9 +219,9 @@ OPENID_CONNECT_PROVIDERS_CONF = [
 
 ]
 
-OTL_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/otl/__SECRET__"
+OTL_URL = "https://{{ config['ballot-box'].domain }}/election/__EVENT_ID__/public/otl/__SECRET__"
 
-ALT_AUTH_BASE_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/login-alt/__AUTH_METHOD_ID__"
+ALT_AUTH_BASE_URL = "https://{{ config['ballot-box'].domain }}/election/__EVENT_ID__/public/login-alt/__AUTH_METHOD_ID__"
 
 # This is the command to be executed to launch a self-test
 TASK_SELF_TEST_COMMAND = [

@@ -127,7 +127,7 @@
 - name: ballot-box, Key store setup (1)
   become: true
   shell:
-    cmd: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config.ballot_box.keystore_pass }}"
+    cmd: openssl pkcs12 -export -in '{{ config.http.internal_tls_cert_path }}' -inkey '{{ config.http.internal_tls_cert_key_path }}' -out certs.p12 -name client -password "pass:{{ config['ballot-box'].keystore_pass }}"
     chdir: /home/ballotbox/
 
 - name: ballot-box, Key store setup (3)
@@ -141,7 +141,7 @@
   become: true
   become_user: ballotbox
   shell:
-    cmd: yes | keytool -importkeystore -deststorepass "{{ config.ballot_box.keystore_pass }}" -destkeypass "{{ config.ballot_box.keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config.ballot_box.keystore_pass }}" -alias client
+    cmd: yes | keytool -importkeystore -deststorepass "{{ config['ballot-box'].keystore_pass }}" -destkeypass "{{ config['ballot-box'].keystore_pass }}" -destkeystore keystore.jks -srckeystore certs.p12 -srcstoretype PKCS12 -srcstorepass "{{ config['ballot-box'].keystore_pass }}" -alias client
     chdir: /home/ballotbox/
 
 # Admin tool setup
