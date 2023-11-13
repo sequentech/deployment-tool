@@ -199,26 +199,6 @@ SEQUENT_ELECTIONS_BASE = [
 
 SMS_OTP_EXPIRE_SECONDS = {{config.iam.sms_otp.expire_seconds}}
 
-OPENID_CONNECT_PROVIDERS_CONF = [
-{% for provider in config.iam.openid_connect_providers %}
-      dict(
-        public_info = dict(
-{% for key, value in provider.public_info.items() %}
-          {{key}}="{{value}}"{% if not loop.last %},{% endif %}
-
-{% endfor %}
-        ),
-        private_config = dict(
-{% for key, value in provider.private_config.items() %}
-          {{key}}="{{value}}"{% if not loop.last %},{% endif %}
-{% endfor %}
-
-        )
-      ){% if not loop.last %},{% endif %}
-{% endfor %}
-
-]
-
 OTL_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/otl/__SECRET__"
 
 ALT_AUTH_BASE_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/login-alt/__AUTH_METHOD_ID__"
