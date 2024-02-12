@@ -713,7 +713,7 @@ config:
     # default template election for gui-admin
     election_template: >-
       {
-        title: $i18next('avAdmin.sidebar.newel'),
+        title: $i18next.t('avAdmin.sidebar.newel'),
         description: 'This is the description of the election. You can add simple html like <strong>bold</strong> or <a href=\"https://sequentech.io\">links to websites</a>.\\n\\n<br><br>You need to use two br element for new paragraphs.',
         authorities: ConfigService.authorities,
         director: ConfigService.director,
@@ -758,8 +758,8 @@ config:
           admin_fields: ConfigService.adminFields,
           config: {
             allow_user_resend: false,
-            msg: $i18next(ConfigService.auth_msg.msg),
-            subject: $i18next(
+            msg: $i18next.t(ConfigService.auth_msg.msg),
+            subject: $i18next.t(
               ConfigService.auth_msg.subject,
               {
                 name: ConfigService.organization.orgName
