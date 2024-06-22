@@ -78,6 +78,7 @@ LOGGING = {
 }
 
 STATIC_ROOT = '/home/iam/webstatic'
+STATIC_PREVIEW_PATH = '/home/iam/webstatic/preview'
 MEDIA_ROOT = '/home/iam/webstatic/media'
 
 ALLOWED_HOSTS = ['*']
