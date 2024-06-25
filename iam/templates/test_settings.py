@@ -249,6 +249,10 @@ IMAGE_STORE_PATH = os.path.join(BASE_DIR, 'imgfields')
 
 ENABLE_MULTIPLE_TALLIES = False
 
+{% set max_body_size_bytes = (config.http.max_body_size[:-1] | int) * 1024 * 1024 %}
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = {{  max_body_size_bytes }}
+
 if not os.path.exists(IMAGE_STORE_PATH):
     os.mkdir(IMAGE_STORE_PATH)
 
