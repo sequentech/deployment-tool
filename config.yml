@@ -183,6 +183,7 @@ config:
     # play.http.parser.maxDiskBuffer (in ballot-box config)
     # play.http.parser.maxMemoryBuffer (in ballot-box config)
     # parsers.text.maxLength (in ballot-box config)
+    # DATA_UPLOAD_MAX_MEMORY_SIZE (in iam config)
     # client_max_body_size (in nginx)
     max_body_size: 2m
 
