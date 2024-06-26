@@ -78,6 +78,7 @@ LOGGING = {
 }
 
 STATIC_ROOT = '/home/iam/webstatic'
+STATIC_PREVIEW_PATH = '/home/iam/webstatic/preview'
 MEDIA_ROOT = '/home/iam/webstatic/media'
 
 ALLOWED_HOSTS = ['*']
@@ -222,4 +223,7 @@ AWS_SNS_MESSAGE_ATTRIBUTES = {
 {{extra_option}}
 {% endfor %}
 
+{% set max_body_size_bytes = (config.http.max_body_size[:-1] | int) * 1024 * 1024 %}
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = {{  max_body_size_bytes }}
 
