@@ -100,6 +100,8 @@ TIMEOUT = {{config.iam.auth_token_expiration_seconds}}
 
 ADMIN_TIMEOUT = {{config.iam.admin_auth_token_expiration_seconds}}
 
+REFRESH_TIMEOUT = {{config.iam.voter_auth_token_expiration_seconds}}
+
 SECRET_KEY = '{{ config.global_secret_key }}'
 HOME_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/home"
 
