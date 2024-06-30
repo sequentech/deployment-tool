@@ -1163,8 +1163,11 @@ config:
     # default: true
     allow_deregister: true
 
-    # Number of seconds after which an authentication token expires.
+    # Number of seconds after which an smartlink authentication token expires.
     auth_token_expiration_seconds: 600
+
+    # Session duration for a voter
+    voter_auth_token_expiration_seconds: 600
 
     # Number of seconds after which an authentication token expires for admin
     # users
