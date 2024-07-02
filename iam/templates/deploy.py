@@ -96,11 +96,14 @@ DATABASES = {
 
 SHARED_SECRET = b'{{config.ballot_box.shared_secret}}'
 
-TIMEOUT = {{config.iam.auth_token_expiration_seconds}}
+SMARTLINK_TIMEOUT = {{config.iam.smartlink_token_expiration_seconds}}
+
+ACCESS_TIMEOUT = {{config.iam.access_auth_token_expiration_seconds}}
+
+REFRESH_TIMEOUT = {{config.iam.refresh_auth_token_expiration_seconds}}
 
 ADMIN_TIMEOUT = {{config.iam.admin_auth_token_expiration_seconds}}
 
-REFRESH_TIMEOUT = {{config.iam.voter_auth_token_expiration_seconds}}
 
 SECRET_KEY = '{{ config.global_secret_key }}'
 HOME_URL = "https://{{ config.ballot_box.domain }}/election/__EVENT_ID__/public/home"
