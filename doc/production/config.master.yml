@@ -194,6 +194,13 @@ config:
     # value is low to avoid denial of service attacks.
     client_max_header_size: 8k
 
+    # This changes proxy_connect_timeout/proxy_send_timeout/proxy_read_timeout
+    # in the nginx web server.
+    # Any request to the server will timeout with a 504 code if the server
+    # doesn't answer after this time.
+    # Note that this value is not higher to avoid denial of service attacks.
+    nginx_timeout_secs: 120
+
     # Path of the TLS PEM public certificate.
     #
     # Requirements:
@@ -1202,6 +1209,25 @@ config:
     #
     # Allowed values: (user-and-password|email|email-otp|sms|sms-otp|openid-connect)
     auth_method: 'user-and-password'
+
+    # Enter the AWS credentials and configuration. Used for sending SMS using
+    # the 'aws-sns' SMS Provider. For more information, see
+    # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#using-boto3
+    aws:
+      # configures the content of the `~/.aws/credentials` file:
+      credentials: |
+        [default]
+        aws_access_key_id = AWS_ACCESS_KEY_ID
+        aws_secret_access_key = AWS_SECRET_ACCESS_KEY
+      # configures the content of the `~/.aws/config` file:
+      config: |
+        [default]
+        region=eu-west-1
+      # Sets the configuration for authentication messages sent by the AWS SNS
+      # provider
+      sns_message_attributes:
+        AWS.SNS.SMS.SenderID: "{'DataType': 'String', 'StringValue': 'SEQUENT'}"
+        AWS.SNS.SMS.SMSType: "{'DataType': 'String', 'StringValue': 'Transactional'}"
 
     # Defines the extra fields used in authentication and registration. Empty by
     # default
