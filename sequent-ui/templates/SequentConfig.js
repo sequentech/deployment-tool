@@ -20,7 +20,7 @@
  * in this same file, which you might want to edit and tune if needed.
  */
 
-var SEQUENT_CONFIG_VERSION = '10.5.1';
+var SEQUENT_CONFIG_VERSION = '10.5.2';
 
 var SequentConfigData = {
   // the base url path for ajax requests, for example for sending ballots or
